@@ -1,0 +1,110 @@
+<div class="setHeight">
+    <form [formGroup]="CategoryxMasterForm">
+        <div class="MasterHeader">
+            <div style="width: 50%;">
+                <h2>Category Master</h2>
+            </div>
+            <div class="text-end" style="width: 50%;">
+                <button class="btnbackLeft" (click)="backToPreviousPage()">Back</button>
+            </div>
+        </div>
+        <div class="MasterHeaderlable">
+            <div class="searchDiv">
+                <div class="form-group has-search" style="width: 50%;">
+                    <span class="bi bi-search form-control-feedback"></span>
+                    <input type="text" class="form-control search-input" placeholder="Search"
+                        formControlName="textsearch" [(ngModel)]="textsearch">
+                </div>
+            </div>
+            <div style="width: 50%;" class="text-end">
+                <button type="button" class="btn btn-sm default-btn" id='add-btn' data-toggle="tooltip"
+                    data-placement="top" title="Add Category" (click)="openModal()">Add Category</button>
+            </div>
+        </div>
+        <div class="justify-content-center">
+
+            <table class="talbeStyle CatTable2">
+                <tr>
+                    <th colspan="2">Category</th>
+                </tr>
+                <tr *ngFor="let c2 of CategoryTree  | search: textsearch:filterMetadata | groupBy:'Cat2' ">
+                    <td class="CatTable2td" (click)="handleRowClick(c2,1)">{{ c2.key }}</td>
+                    <td>
+                        <table style="width: 100%;">
+                            <tr *ngFor="let item of c2.value | groupBy:'Cat3' ">
+                                <td class="CatTable3td" (click)="handleRowClick(item,2)"> <span> {{ item.key }} </span>
+                                </td>
+                                <td>
+                                    <table class="CatTable4">
+                                        <tbody>
+                                            <tr *ngFor="let c4 of item.value">
+                                                <td class="CatTable4td" (click)="handleRowClick(c4,3)">{{ c4.Cat4 }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td class="CatTable5td"> <i class="bi bi-pencil-fill" style="color: #da291c; 
+                                font-size:larger;" ngbTooltip="Update"></i>
+                                    <i class="bi bi-trash-fill" style="color: #da291c; padding-left:4px;
+                                font-size:larger;" ngbTooltip="Delete"></i>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+    </form>
+</div>
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Category</h4>
+                <label class="close modal-close-icn" (click)="onCloseHandled()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                    </svg>
+                </label>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+
+                        <label for="engDis" class="default-lbl">Group Category</label>
+                        <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true" placeholder="Please select"
+                            [(ngModel)]='selectedGroupCategory' (change)="selectCategory()">
+                            <ng-option *ngFor="let item of ListGroupCat" [value]="item.name">{{item.Desc}}</ng-option>
+                        </ng-select>
+                        <br>
+                        <div *ngIf="selectedGroupCategory!='Cat2'">
+                            <label for="selectedCat2" class="default-lbl">Parent Category</label>
+                            <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
+                                placeholder="Please select" [(ngModel)]='selectedCat2'><ng-option
+                                    *ngFor="let c2 of GetChildList" [value]="c2">{{c2}}</ng-option>
+                            </ng-select>
+                        </div>
+                        <br>
+                        <label for="selectedCat2" class="default-lbl">Child Category</label>
+                        <!-- <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true" placeholder="Please select"
+                            [(ngModel)]='selectedChild' (change)="onOptionChange1()"><ng-option
+                                *ngFor="let child of GetChildList" [value]="child">{{child}}</ng-option>
+                        </ng-select> -->
+
+                        <input class="form-control form-control-sm" type="text" [(ngModel)]="selectedChild"
+                            placeholder="Please enter" [ngModelOptions]="{standalone: true}">
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismis="modal"
+                    (click)="onCloseHandled()">Close</button>
+                <button type="button" class="btn btn-sm  btn-default default-btn_popup"
+                    (click)="onSaveButton()">Save</button>
+            </div>

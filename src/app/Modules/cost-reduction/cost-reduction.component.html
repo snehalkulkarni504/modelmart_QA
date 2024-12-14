@@ -1,0 +1,115 @@
+<div style="text-align: center; padding: 20px;">
+  <h1>Welcome to Category Management Page - Exhaust Manifolds</h1>
+
+  <p>Your current SC Attainment is <strong>74%</strong></p>
+  <p>You have current opportunities worth <strong>$200M</strong></p>
+
+  <div style="margin-top: 30px;">
+    <!-- Button to toggle Commercial Arbitrage content visibility -->
+    <button class="custom-button" (click)="showContent = !showContent">
+      Commercial<br>Arbitrage
+    </button>
+
+    <!-- Button to toggle Regional Arbitrage content visibility -->
+    <button class="custom-button" (click)="showRegionalContent = !showRegionalContent">
+      Regional<br>Arbitrage
+    </button>
+
+    <button class="custom-button">Mfg Process<br>Arbitrage </button>
+    <button class="custom-button">Product Tech Spec<br>Arbitrage</button>
+  </div>
+</div>
+
+<!-- Conditionally displayed content based on showContent (Commercial Arbitrage) -->
+<div *ngIf="showContent" class="container-fluid" style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
+<div class="row" style="width: 100%; display: flex; justify-content: center;">
+  <div class="col-md-6" style="max-width: 100%; text-align: center;">
+    <img src="../../../assets/image4.png" style="width: 100%; max-width: 500px; height: 280px;" />
+  </div>
+  <div class="col-md-6" style="max-width: 100%; overflow-x: auto;">
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover" style="width: 100%; table-layout: 100%;">
+        <thead class="table-dark">
+          <tr>
+            <th>Sr<br>no</th>
+            <th>Part<br>Number</th>
+            <th>Part<br>Name</th>
+            <th>Supp<br>Manf Loc</th>
+            <th>Total<br>Shouldcost</th>
+            <th>Annual<br>volume</th>
+            <th>Supplier<br>Quoted/Invoice<br>Price($)</th>
+            <th>Supplier<br>name</th>
+            <th>Invoice($)</th>
+            <th>ShouldCost<br>Opportunity</th>
+            <th>SC<br>Attainment</th>
+          </tr>              
+        </thead>
+        <tbody>
+          <tr *ngFor="let opportunity of opportunities; let i=index">
+            <td>{{i + 1}}</td>
+            <td>{{opportunity.PartNumber}}</td>
+            <td>{{opportunity.PartName}}</td>
+            <td>{{opportunity.SuppManfLoc}}</td>
+            <td>{{opportunity.TotalShouldCost}}</td>
+            <td>{{opportunity.AnnualVolume}}</td>
+            <td>{{opportunity.SupplierQuoted_InvoicePrice}}</td>
+            <td>{{opportunity.SupplierName}}</td>
+            <td>{{opportunity.Invoice}}</td>
+            <td>{{opportunity.ShouldCostOpportunity}}</td>
+            <td>{{opportunity.SCAttainment}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Conditionally displayed content based on showRegionalContent (Regional Arbitrage) -->
+<div *ngIf="showRegionalContent" class="container-fluid" style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
+<div class="row" style="width: 100%; display: flex; justify-content: center;">
+  <div class="col-md-6" style="max-width: 100%; text-align: center;">
+    <img src="../../../assets/image3.jpg" style="width: 100%; max-width: 500px; height: 280px;" />
+  </div>
+  <div class="col-md-6" style="max-width: 100%; overflow-x: auto;">
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover" style="width: 100%; table-layout: 100%;">
+        <thead class="table-dark">
+          <tr>
+            <th>SrNo</th>
+            <th>Part<br>Number</th>
+            <th>PartName</th>
+            <th>Supp<br>Manf Loc</th>
+            <!-- <th>Total<br>Shouldcost</th> -->
+            <th>Annual<br>volume</th>
+            <th>Supplier<br>Quoted/Invoice<br>Price($)</th>
+            <th>SupplierName</th>
+            <!-- <th>Invoice($)</th> -->
+            <th>Best<br>Region<br>Cost</th>
+            <th>Best<br>Region</th>
+            <th>Region<br>Arbitrage</th>
+            <th>Region<br>Arbitrage<br>Value</th>
+            <th>From -> To</th>
+          </tr>              
+        </thead>
+        <tbody>
+          <tr *ngFor="let Region of Regional ; let i=index">
+            <td>{{i + 1}}</td>
+            <td>{{Region.partNumber}}</td>
+            <td>{{Region.partName}}</td>
+            <td>{{Region.suppManfLocation}}</td>
+            <td>{{Region.annualVolume}}</td>
+            <td>{{Region.supplierQuotedInvoicePrice}}</td>
+            <td>{{Region.supplierName}}</td>
+            <td>{{Region.bestRegion}}</td>
+            <td>{{Region.bestRegionCost}}</td>
+            <td>{{Region.regionArbitrage}}</td>
+            <td>{{Region.regionArbitrageValue}}</td>
+            <td>{{Region.fromTo}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>

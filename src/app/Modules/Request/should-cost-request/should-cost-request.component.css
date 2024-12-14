@@ -1,0 +1,132 @@
+* {
+    font-family: Helvetica, Arial !important;
+}
+
+.setHeight {
+
+    min-height: 100dvh;
+}
+
+.col-md-6 {
+    /* display: flex;
+    justify-content: center; */
+    /* align-items: center; */
+    margin-top: 1%;
+}
+
+.header {
+    height: 25px;
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+
+.container {
+    border: 2px solid black;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15%;
+    /* width: 60%; */
+    /* height: 100%; */
+}
+
+
+.MasterHeader {
+    width: 80%;
+    display: inline-flex;
+    height: 80px;
+    margin-left: 10%;
+    margin-right: 10%;
+    font-family: Helvetica, Arial;
+    border-bottom: 1px solid #da291c;
+    /* box-shadow: 0 6px 2px -6px #da291c; */
+}
+
+.MasterHeader h2 {
+    /* position: absolute; */
+    margin: 20px 0px;
+}
+
+.MasterDetails {
+    width: 80%;
+    margin-left: 10%;
+    height: auto;
+    font-family: Helvetica, Arial !important;
+    padding-top: 0px;
+}
+
+
+.MasterHeaderlable {
+    width: 80%;
+    display: inline-flex;
+    margin-left: 10%;
+    margin-right: 10%;
+    font-family: Helvetica, Arial;
+}
+
+input[type="file"]:focus {
+    box-shadow: none;
+    outline: none;
+    border: 1px solid #da291c;
+}
+
+input[type="text"]:focus {
+    box-shadow: none;
+    outline: none;
+    border: 1px solid #da291c;
+}
+
+textarea:focus {
+    box-shadow: none;
+    outline: none;
+    border: 1px solid #da291c;
+}
+select:focus {
+    box-shadow: none;
+    outline: none;
+    border: 1px solid #da291c;
+}
+
+
+textarea, input[type="text"],input[type="file"]{
+   font-size: 13px !important;
+}
+ 
+
+.labelDetails {
+    text-decoration: underline 1px solid;
+    text-decoration-color: #da291c;
+    font-size: 20px;
+    letter-spacing: 1px;
+
+    /* margin-bottom: 1px; */
+    /* font-weight: 600; */
+}
+
+.border {
+
+    margin-top: 20px;
+    padding: 15px 10px 25px 15px;
+    border: 2px solid rgb(107, 101, 101);
+    border-radius: 5px;
+
+}
+
+.RequestExelFormat {
+    width: 40px;
+    height: 40px;
+}
+
+.RequestExelFormat:hover {
+    cursor: pointer !important;
+}
+
+.RequestFormIcon {
+    font-size: 14px;
+    text-align: center;
+}
+
+.remark {
+    font-size: 12px;
+    color: #da291c;
+}

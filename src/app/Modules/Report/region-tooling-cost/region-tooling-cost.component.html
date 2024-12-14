@@ -1,0 +1,115 @@
+<div class="setHeight">
+    <ngx-spinner name="spinner" bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="square-jelly-box"
+        [fullScreen]="true">
+        <img alt="Loading Please Wait..." style="width:100px ; height:100px ;" src="../../../assets/Spin-2.gif" />
+    </ngx-spinner>
+
+    <form [formGroup]="RegionToolingForm">
+        <div class="MasterHeader">
+            <div style="width: 50%;">
+                <h2>Region Wise Tooling Cost Report</h2>
+            </div>
+            <div class="text-end" style="width: 50%;">
+                <button class="btnbackLeft" (click)="backToPreviousPage()">Back</button>
+            </div>
+        </div>
+
+        <div class="MasterHeaderlable">
+
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="dropdown6" class="default-lbl">Category 4</label>
+                    <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true" placeholder="Please select"
+                        [(ngModel)]="selectedCat4" (change)="ClearGird()" (change)="getRegionWiseShouldCost()">
+                        <ng-option *ngFor="let item of getCat4 "
+                            [value]="item.ChildCategory">{{item.ChildCategory}}</ng-option>
+                    </ng-select>
+                </div>
+                <div class="col-md-3">
+                    <label for="dropdown5" class="default-lbl"> Supp. Manf. Location</label>
+                    <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true" placeholder="Please select"
+                        [(ngModel)]='selectedSuppManuLoc' (change)="ClearGird()" (change)="getRegionWiseShouldCost()">
+                        <ng-option *ngFor="let item of locArr"
+                            [value]="item.LocationName">{{item.LocationName}}</ng-option>
+                    </ng-select>
+
+                </div>
+
+                <div class="col-md-2">
+                    <label for="datepicker1" class="default-lbl">From Debrief Date</label>
+                    <br>
+                    <input type="date" formControlName="currentDate" [(ngModel)]="selectedFromDate"
+                        class="form-control form-control-sm">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="datepicker1" class="default-lbl">To Debrief Date</label>
+                    <br>
+                    <input type="date" formControlName="currentDate" [(ngModel)]="selectedToDate"
+                        class="form-control form-control-sm">
+                </div>
+
+                <div class="col-md-1 text-center">
+                    <button type="button" class="btn btn-sm default-btn" data-bs-dismis="modal"
+                        (click)="getRegionWiseShouldCost()">View</button>
+                </div>
+                <div class="col-md-1 text-center">
+                    <!-- <button type="button" class="btn btn-sm default-btn" data-bs-dismis="modal" (click)="exportToExcel()">Download</button> -->
+                    <br>
+                    <img src="../../../../assets/exportexcel.png" class="exportToExcel" (click)="exportToExcel()"
+                        title="Export to Excel">
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center" style="font-size: 12px !important;">
+            <table class="table table-bordered table-striped ">
+                <thead>
+                    <tr>
+                        <th hidden></th>
+                        <th><input id="MainCheckbox" class="form-check-input" type="checkbox"
+                                (change)="onChangeMainCheckbox($event)"></th>
+                        <th>Part No</th>
+                        <th>Part Name</th>
+                        <th>ModelMart ID</th>
+                        <th (click)="sortData('DebriefDate')"  class="THDebriefDate"  style="width: 10%;"> Defrief Date <i
+                                *ngIf="activeSortColumn === 'DebriefDate'" [ngClass]="{'bi bi-chevron-up': sortDirection, 'bi bi-chevron-down':
+                             !sortDirection}"></i></th>
+                        <th>Category 4</th>
+                        <th (click)="sortData('MfgRegion')"  class="THDebriefDate" > Supp. Manf. Location <i
+                                *ngIf="activeSortColumn === 'MfgRegion'" [ngClass]="{'bi bi-chevron-up': sortDirection, 'bi bi-chevron-down':
+                             !sortDirection}"></i></th>
+                        <th>Total Tooling Cost ($)</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let val of getData; let i=index">
+                        <td hidden>{{val.SrNo}}</td>
+                        <td><input class="form-check-input" type="checkbox" [value]="val.SrNo" [checked]="val.isChecked"
+                                class="" (change)="onChangeCheckbox($event)" id="checkbox"></td>
+                        <td>{{val.PartNumber}}</td>
+                        <td>{{val.PartName}}</td>
+                        <td>{{val.UniqueId}}</td>
+                        <td>{{val.DebriefDate | date :'dd-MMM-yyyy'}}</td>
+                        <td>{{val.CAT4}}</td>
+                        <td style="text-transform: uppercase;">{{val.MfgRegion}}</td>
+                        <td *ngIf="val.ToolingCost === null">0.0</td>
+                        <td *ngIf="val.ToolingCost !== null">{{val.ToolingCost | number:'1.2-2'}}</td>
+
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="7" class="footer-color"><b>Total</b></td>
+                        <td colspan="1" class="footer-color"><b>{{sumT | number:'1.2-2'}}</b> </td>
+
+
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+
+    </form>
+</div>

@@ -1,0 +1,247 @@
+.static-column {
+    position: sticky;
+    left: 0;
+    background-color: #ffffff;
+    font-weight: 500;
+}
+
+* {
+    font-family: Helvetica, Arial !important;
+}
+
+.tooltip-cmn {
+    background-color: #f00;
+}
+
+.table {
+    width: 80% !important;
+    margin-top: 15px;
+    /* border-left: 1px rgba(234, 7, 7, 0.898); */
+}
+
+.table td {
+    text-align: center;
+}
+
+.table th {
+    text-align: center;
+    background-color: #da291c;
+    color: #fff;
+}
+
+.tablerow {
+    text-align: center;
+    background-color: #da9b1c;
+    color: #fff;
+    /* border: 1px solid #fff; */
+    border: 1px solid #8080804e;
+    border-bottom: none;
+}
+/* 
+.tablerow:hover{
+    cursor: pointer !important;
+    text-decoration: underline;
+} */
+
+.setheadernone{
+    visibility: hidden;
+}
+
+.hideCsHeaderId{
+    display: none;
+}
+
+.linebreak{
+    white-space: pre-wrap
+}
+
+.setHeaderColor{
+    background-color:#da9b1c !important;
+    color: #fff;
+    border: 1px solid #8080804e;
+}
+
+.setRowColor3{
+    background-color: rgba(243, 215, 203, 0.455);
+    color: #000;
+    border: 1px solid #8080804e;
+}
+
+.setRowColor4{
+    background-color: rgba(243, 215, 203, 0.455);
+    color: #000;
+    border: 1px solid #8080804e;
+    font-size: 12px !important;
+    white-space: pre-wrap
+}
+
+.setRowColor5{
+    background-color: rgba(243, 215, 203, 0.455);
+    color: #000;
+    border: 1px solid #8080804e;
+}
+
+.setRowColor{
+    background-color: #f3e6cb;
+    color: #000;
+    border: 1px solid #8080804e;
+}
+
+.setRowColor2{
+    background-color: #cdf3cb;
+    color: #000;
+    border: 1px solid #8080804e;
+}
+
+
+.setRowColorTotalCost{
+    background-color: #b0b0b0;
+    color: #000;
+    font-weight: 600;
+    border: 1px solid #8080804e;
+}
+
+.setRowColorShouldCost{
+    background-color: #da291c57;
+    color: #000;
+    border: 1px solid #8080804e;
+}
+
+.setCoulnmfontfirst{
+    font-weight:600; text-align:start;
+    padding:5px 5px; margin: 5px 5px;
+    border-bottom: 1px solid #80808044;
+    font-size: 13px;
+    padding-left: 20px;
+}
+
+.setCoulnmfont{
+    padding: 5px 5px; margin: 5px 5px; font-size: 13px;
+    border-bottom: 1px solid #80808044;
+}
+
+.modal-close-icn {
+    border: 0px;
+    background-color: #fff;
+}
+
+.modal {
+    background: rgba(0, 0, 0, .5);
+}
+
+.default-lbl {
+    margin: 0px 0px 3px 2px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 15px;
+}
+
+.searchDiv {
+    width: 25%;
+    height: 2%;
+    margin-left: 10%;
+}
+
+.has-search .form-control {
+    padding-left: 2.8rem;
+}
+
+.form-group.has-error input {
+    border: 2px solid red !important;
+    background-color: #ffeeee;
+}
+
+/* Style for the error message */
+
+.error-message {
+    color: red;
+    font-size: 11px;
+    margin-left: 8px;
+}
+
+.search-input {
+    height: 38px;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 38px;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #f8f6f6;
+    background-color: #da291c;
+}
+
+
+.setHeight{
+    min-height: 100dvh;
+}
+
+.setimage{
+    background-image: url("/assets/seachbackground.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
+}
+
+
+.MasterHeader {
+    width: 80%;
+    display: inline-flex;
+    /* height: 80px; */
+    margin-left: 10%;
+    margin-right: 10%;
+    font-family: Helvetica, Arial;
+  }
+
+  
+
+.btnback {
+    margin-top: 10px;
+    font-size: 15px !important;
+    background-color: #da291c;
+    color: #fff;
+    border: 1px solid #da291c;
+    padding: 5px 15px;
+    font-family: Helvetica, Arial !important;
+    border-radius: 5px;
+}
+
+.btnback:hover{
+    background-color: #fff;
+    color: #da291c;
+}
+
+ /* ------------- popup -------------- */
+
+.popup {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+    width: 300px !important;
+    height: 300px ;
+    overflow-y: scroll;
+    background-color: #fff;
+    padding: 5px !important;
+    box-shadow: 0px 0px 10px #000000;
+    z-index: 40;
+    pointer-events: auto;
+    border-radius: 5px;
+  }
+  
+  .setcursorpointer{
+    cursor: pointer;
+  }
+
+  
+.CostHeading{
+    text-align: center;
+    font-family: Helvetica ,  Arial !important;
+    color: #da291c;
+    font-size: 14px;
+    font-weight: 600;
+}
+ 
+  

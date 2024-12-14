@@ -1,0 +1,114 @@
+<div class="setHeight">
+    <form [formGroup]="BUnitMasterForm">
+        <div class="MasterHeader">
+            <div style="width: 50%;">
+                <h2>Business Unit</h2>
+            </div>
+            <div  class="text-end" style="width: 50%;">
+                <button class="btnbackLeft" (click)="backToPreviousPage()">Back</button>
+              </div>
+        </div>
+        <div class="MasterHeaderlable">
+            <div class="searchDiv" >
+                <div class="form-group has-search" style="width: 50%;">
+                    <span class="bi bi-search form-control-feedback"></span>
+                    <input type="text" class="form-control search-input" placeholder="Search"
+                        formControlName="textsearch" [(ngModel)]="textsearch" >
+                </div>
+            </div>
+            <div style="width: 50%;" class="text-end">
+                <button type="button" class="btn btn-sm default-btn" id='add-btn' data-toggle="tooltip"
+                    data-placement="top" title="Add Business Unit" (click)="editModal=false" (click)="openModal()">Add Business Unit</button>
+            </div>
+        </div>
+<!--  <div class="searchDiv">
+            <div class="form-group has-search">
+                <span class="bi bi-search form-control-feedback"></span>
+                <input type="text" class="form-control search-input" placeholder="Search" formControlName="textsearch"
+                    [(ngModel)]="textsearch">
+
+            </div>
+        </div> -->
+        <div class="d-flex justify-content-center"  style="font-size: 13px !important;">
+            <table class="table table-bordered table-striped ">
+                <thead>
+                    <tr>
+                        <th hidden>ID</th>
+                        <th>Sr. No.</th>
+                        <th>BU Name</th>
+                        <th>Sub-Unit Name</th>
+                        <th>Status</th>
+                        <th>Created By</th>
+                        <th>Created Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of BUnitMaster | search: textsearch:filterMetadata | paginate: { itemsPerPage: 10, currentPage: page }  let i=index">
+                        <td hidden>{{data.BUId}}</td>
+                        <td>{{i+1}}</td>
+                        <td>{{data.Name}}</td>
+                        <td>{{data.SubUnit}}</td>
+                        <td>{{data.IsActive}}</td>
+                        <td>{{data.CreatedBy}}</td>
+                        <td>{{data.CreatedOn | date:'dd-MMM-yyyy'}}</td>
+                        <td><i class="bi bi-trash-fill" style="color: #da291c; font-size:larger;" (click)="deleteRow(data.BUId)"></i>
+                            <i class="bi bi-pencil-fill" style="padding-left: 20px; color: #da291c; font-size:larger;"
+                                (click)="editModalMethod(data)"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="d-flex justify-content-between p-2 pagination">
+                             
+            <ngb-pagination [collectionSize]="filterMetadata.count" [(page)]="page" [pageSize]="pageSize"
+                [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm" >
+                <ng-template ngbPaginationPrevious>Prev</ng-template>
+                <ng-template ngbPaginationNext>Next</ng-template>
+            </ngb-pagination>
+            <br>
+        </div>
+
+    </form>
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{header}}</h4>
+                    <label class="close modal-close-icn" (click)="onCloseHandled()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x" viewBox="0 0 16 16">
+                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                          </svg>
+                    </label>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="bUName" class="default-lbl">BU Name</label>
+                            <input class="form-control form-control-sm" type="text" name="bUName" id="bUName"
+                                 placeholder="Please enter BU Name"
+                                (blur)="  bUNameOnBlur($event)" value="{{bUName}}">
+                            <div class="error-message" *ngIf="showError1"> Please enter Business Unit.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInput" class="default-lbl">Sub-Unit Name</label>
+                            <input class="form-control form-control-sm" type="text"
+                                name="subUName"  id="subUName"
+                                placeholder="Please enter Sub-Unit Name" (blur)="subUNameOnBlur($event)" value="{{subUName}}" >
+                            <div class="error-message" *ngIf="showError2"> Please enter SubUnit name.</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismis="modal"
+                        (click)="onCloseHandled()">Close</button>
+                    <button type="button" class="btn btn-sm  btn-default default-btn_popup"
+                        (click)="onSaveButton()">{{txt_btn}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

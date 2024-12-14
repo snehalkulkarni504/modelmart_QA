@@ -1,0 +1,625 @@
+<div class="container-fluid maxheight">
+
+    <ngx-spinner name="spinner" bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="square-jelly-box"
+        [fullScreen]="true">
+        <img alt="Loading Please Wait..." style="width:100px ; height:100px ;" src="../../../assets/Spin-2.gif" />
+    </ngx-spinner>
+
+    <!-- <div class="row">
+        <div class="col-md-2 text-center"> 
+            <button class="btnback" (click)="backToPreviousPage()">Back</button>
+            </div>
+        <div class="col-md-10 text-center">
+        </div>
+    </div> -->
+    <div class="MasterHeader">
+        <div style="width: 33.33%;">
+            <button class="btnback" (click)="backToPreviousPage()">Back</button>
+        </div>
+        <div class="text-center" style="width: 33.33%;">
+            <h2>Model Simulation Page</h2>
+        </div>
+        <div style="width: 33.33%;"></div>
+    </div>
+    <div class="datapanal">
+        <form [formGroup]="ShouldCostReoprt">
+
+            <div class="ShouldCostBreakdown" id="ShouldCostBreakdown">
+                <div class="row">
+                    <!-- <div class="col-md-12 text-end" style="margin-bottom: 10px;">
+                        <input type="button" class="btn btn-outline-danger btn-GetReport" name="GetReport"
+                            value="Get Report" (click)="GetReport()">
+                    </div> -->
+
+                    <div class="col-md-12 " style="border-bottom: 1px solid #da291c; margin-bottom: 10px; ">
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8" style="padding: 10px 0px;">
+                                <table>
+                                    <tr>
+                                        <td style="width: 13%;"><label for="PartName" class="default-lbl">Part Name
+                                                :</label></td>
+                                        <td style="width: 32%;"><label for="PartName"
+                                                class="default-lblvalue">{{PartName}}</label></td>
+                                        <td style="width: 13%;"> <label for="PartNumber" class="default-lbl">Part Number
+                                                :</label>
+                                        </td>
+                                        <td style="width: 32%;"><label for="PartNumber"
+                                                class="default-lblvalue">{{PartNumber}}</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 13%;"><label for="ProjectName" class="default-lbl">Program
+                                                Name
+                                                :</label></td>
+                                        <td style="width: 32%;"><label for="ProjectName"
+                                                class="default-lblvalue">{{ProjectName}}</label></td>
+                                        <td style="width: 13%;"> <label for="DebriefDate" class="default-lbl">Debrief
+                                                Date
+                                                :</label></td>
+                                        <td style="width: 32%;"><label for="DebriefDate"
+                                                class="default-lblvalue">{{DebriefDate}}</label></td>
+
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="button" class="btn btn-outline-danger btn-GetReport" name="GetReport"
+                                    value="Update & Get Report" (click)="GetReport()">
+                            </div>
+                        </div>
+                    </div>
+                    <div [hidden]="IsHiddenDiv" class="col-md-2"></div>
+                    <div class="col-md-6" id="Tier1Box">
+                        <label class="CostHeading">Finish Part Cost</label>
+                        <table class="table border">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40%;" class="ShouldCostBreakdowntableth">Cost Header </th>
+                                    <th style="width: 25%;" class="ShouldCostBreakdowntableth text-end">Cost ($)</th>
+                                    <th style="width: 0%;" class="ShouldCostBreakdowntableth text-center"></th>
+                                    <th style="width: 25%;" class="ShouldCostBreakdowntableth text-center">Updated
+                                        Cost ($)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let val of TierCostReportList; let i=index"
+                                    class="ShouldCostBreakdowntabletr">
+                                    <td style="padding: 10px 10px; padding-right: 0px;" class="TierCostReportTextT1">
+                                        {{val.particular}}
+                                        <input [class.hideTextBox]="val.updateValue == 0" id="getdataTier1"
+                                            type="button" class="btn btn-sm btn-outline-danger" name="GetData"
+                                            value="Update" (click)="openModal('T1',val,i)">
+                                    </td>
+                                    <td style="padding: 12px 8px 0px 0px;" class="text-end TierCostReportListusdValueT1"
+                                        id="UpdateCostTD{{i}}">
+                                        {{val.usdValue |
+                                        number:'1.2-2' }}</td>
+                                    <!-- class="hideTextBox" [class.hideTextBox]="val.particular != 'Direct Labor Cost'" -->
+                                    <td class="hideTextBox">
+                                        <input type="text" class="form-control percentText T1" maxlength="4" id="{{i}}"
+                                            name="{{i}}" (keypress)="keyPressDecimal($event)"
+                                            (keyup)="CalculatePercent($event, val, 1)">
+                                    </td>
+                                    <td> <input #UpdateCost0 type="text"
+                                            class="form-control UpdateText disabled NotNon T1" id="UpdateCost{{i}}"
+                                            name="UpdateCost{{i}}" readonly value="{{val.usdValue  | number:'1.2-2'}}">
+                                    </td>
+
+                                </tr>
+                                <!-- ----- Total Manufacturing Cost ------ -->
+                                <tr>
+                                    <td colspan="1" class="footer-color"><b>Total Manufacturing Cost</b></td>
+                                    <td colspan="1" class="footer-color text-end"><b>{{Manu_TotalInUSD |
+                                            number:'1.2-2'}}</b>
+                                    </td>
+                                    <td class="footer-color"></td>
+                                    <td colspan="1" class="footer-color text-center"><b>{{Manu_TotalInLocal |
+                                            number:'1.2-2'}}</b>
+                                    </td>
+                                </tr>
+                                <tr *ngFor="let val of TierCostReportNonList; let i=index"
+                                    class="ShouldCostBreakdowntabletr">
+                                    <td *ngIf="val.totalCostPer > 0 || val.compul == 1"
+                                        class="particular_perValue TierCostReportNonTextT1" style="padding: 10px 10px;">
+                                        {{val.particular}}
+                                        <span style="display: none;" *ngIf="val.perValue > 0"> ({{val.perValue |
+                                            number:'1.2-2'}} %) </span>
+                                        <span style="display: none;">{{val.perValue}}</span>
+                                        <input [class.hideTextBox]="val.updateValue == 0" id="getdataTierNon1"
+                                            type="button" class="btn btn-sm btn-outline-danger" name="GetData"
+                                            value="Update" (click)="openModal('T1',val,i)">
+                                    </td>
+                                    <td *ngIf="val.totalCostPer > 0 || val.compul == 1"
+                                        style="padding: 12px 8px 0px 0px;" class="text-end NonusdValueT1"
+                                        id="UpdateCostTDdata{{i}}">{{val.usdValue | number:'1.2-2' }}</td>
+
+                                    <td class="hideTextBox" *ngIf="val.totalCostPer > 0 || val.compul == 1">
+                                        <input type="text" class="form-control percentText Non T1" maxlength="5"
+                                            id="UpdateCostNonPer{{i}}" name="{{i}}" (keypress)="keyPressDecimal($event)"
+                                            (keyup)="CalculatePercentNon($event, val, 2,i)" tabindex="1">
+                                    </td>
+                                    <td *ngIf="val.totalCostPer > 0 || val.compul == 1">
+                                        <input type="text" class="form-control UpdateText Notdisabled Non T1"
+                                            style="background-color: #8080801a;" id="UpdateCostNon{{i}}"
+                                            value="{{val.usdValue  | number:'1.2-2'}}" name="{{val.particular}}"
+                                            (keypress)="keyPressDecimal($event)" tabindex="2" readonly>
+                                        <!-- (keyup)="CalculateAmount($event, val,2,i)" -->
+                                    </td>
+                                </tr>
+                                <!-- ----- Total Non-Manufacturing Cost ------ -->
+                                <!-- <tr>
+                                    <td colspan="1" class="footer-color"><b>Total Non-Manufacturing Cost</b></td>
+                                    <td colspan="1" class="footer-color text-end"><b>{{Non_TotalInUSD |
+                                            number:'1.2-2'}}</b></td>
+                                    <td class="footer-color"></td>
+                                    <td colspan="1" class="footer-color text-center"><b>{{Non_TotalInLocal |
+                                            number:'1.2-2'}}</b>
+                                    </td>
+                                </tr> -->
+                                <!-- ----- Total Cost ------ -->
+                                <tr>
+                                    <td colspan="1" class="footer-color tfoot"><b>Part Cost</b></td>
+                                    <td colspan="1" class="footer-color tfoot text-end"><b>{{TotalInUSD |
+                                            number:'1.2-2'}}</b>
+                                    </td>
+                                    <td class="footer-color tfoot"></td>
+                                    <td colspan="1" class="footer-color tfoot text-center"><b>{{TotalInLocal |
+                                            number:'1.2-2'}}</b>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- -----------  Tier 2 ----------------------------------------------- -->
+                    <div class="col-md-6 " id="hideTier2Box">
+                        <label class="CostHeading">Tier#2 Cost or Rough Part Cost or Casting Cost</label>
+                        <table class="table border">
+                            <thead>
+                                <tr>
+                                    <th style="width: 45%;" class="ShouldCostBreakdowntableth">Cost Header </th>
+                                    <th style="width: 20%;" class="ShouldCostBreakdowntableth text-end">Cost ($)</th>
+                                    <th style="width: 0%;" class="ShouldCostBreakdowntableth text-center"></th>
+                                    <th style="width: 20%;" class="ShouldCostBreakdowntableth text-center">Updated
+                                        Cost ($)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let val of Tier2CostReportList; let i=index"
+                                    class="ShouldCostBreakdowntabletr">
+                                    <td style="padding: 10px 10px;" class="TierCostReportTextT2">{{val.particular}}
+                                        <input [class.hideTextBox]="val.updateValue == 0" id="getdataTier2"
+                                            type="button" class="btn btn-sm btn-outline-danger" name="GetData"
+                                            value="Update" (click)="openModal('T2',val,i)">
+                                    </td>
+                                    <td style="padding: 12px 8px 0px 0px;" class="text-end TierCostReportListusdValueT2"
+                                        id="UpdateCostT2TD{{i}}">
+                                        {{val.usdValue |
+                                        number:'1.2-2' }}</td>
+                                    <!-- class="hideTextBox" [class.hideTextBox]="val.particular != 'Direct Labor Cost'" -->
+                                    <td class="hideTextBox">
+                                        <input type="text" class="form-control percentText T2" maxlength="4" id="{{i}}"
+                                            name="{{i}}" (keypress)="keyPressDecimal($event)"
+                                            (keyup)="CalculatePercentT2($event, val, 1)">
+                                    </td>
+                                    <td> <input type="text" class="form-control UpdateText disabled NotNon T2"
+                                            id="UpdateCostT2{{i}}" name="UpdateCostT2{{i}}" readonly
+                                            value="{{val.usdValue  | number:'1.2-2'}}"> </td>
+
+                                </tr>
+                                <!-- ----- Total Manufacturing Cost Tier 2 ------ -->
+                                <tr>
+                                    <td colspan="1" class="footer-color"><b>Total Manufacturing Cost</b></td>
+                                    <td colspan="1" class="footer-color text-end"><b>{{Manu_TotalInUSDT2 |
+                                            number:'1.2-2'}}</b>
+                                    </td>
+                                    <td class="footer-color"></td>
+                                    <td colspan="1" class="footer-color text-center"><b>{{Manu_TotalInLocalT2 |
+                                            number:'1.2-2'}}</b>
+                                    </td>
+                                </tr>
+                                <tr *ngFor="let val of Tier2CostReportNonList; let i=index"
+                                    class="ShouldCostBreakdowntabletr">
+                                    <td *ngIf="val.totalCostPer > 0 || val.compul == 1"
+                                        class="particular_perValueT2 TierCostReportNonTextT2"
+                                        style="padding: 10px 10px;">{{val.particular}}
+                                        <span style="display: none;" *ngIf="val.perValue > 0"> ({{val.perValue |
+                                            number:'1.2-2'}} %) </span>
+                                        <span style="display: none;">{{val.perValue}}</span>
+                                        <input [class.hideTextBox]="val.updateValue == 0" id="getdataTierNon1"
+                                            type="button" class="btn btn-sm btn-outline-danger" name="GetData"
+                                            value="Update" (click)="openModal('T2',val,i)">
+                                    </td>
+                                    <td *ngIf="val.totalCostPer > 0 || val.compul == 1"
+                                        style="padding: 12px 8px 0px 0px;" class="text-end NonusdValueT2">{{val.usdValue
+                                        | number:'1.2-2' }}</td>
+                                    <td class="hideTextBox" *ngIf="val.totalCostPer > 0 || val.compul == 1">
+                                        <input type="text" class="form-control percentText Non T2" maxlength="5"
+                                            id="UpdateCostNonPerT2{{i}}" name="{{i}}"
+                                            (keypress)="keyPressDecimal($event)"
+                                            (keyup)="CalculatePercentNonT2($event, val, 2,i)" tabindex="1">
+                                    </td>
+                                    <td *ngIf="val.totalCostPer > 0 || val.compul == 1">
+                                        <input type="text" class="form-control UpdateText Notdisabled Non T2"
+                                            style="background-color: #8080801a;" id="UpdateCostNonT2{{i}}"
+                                            value="{{val.usdValue  | number:'1.2-2'}}" name="{{val.particular}}"
+                                            (keypress)="keyPressDecimal($event)" tabindex="2" readonly>
+                                        <!-- (keyup)="CalculateAmountT2($event, val,2,i)" -->
+
+
+                                    </td>
+                                </tr>
+                                <!-- ----- Total Non-Manufacturing Cost Tier 2 ------ -->
+                                <!-- <tr>
+                                    <td colspan="1" class="footer-color"><b>Total Non-Manufacturing Cost</b></td>
+                                    <td colspan="1" class="footer-color text-end"><b>{{Non_TotalInUSDT2 |
+                                            number:'1.2-2'}}</b></td>
+                                    <td class="footer-color"></td>
+                                    <td colspan="1" class="footer-color text-center"><b>{{Non_TotalInLocalT2 |
+                                            number:'1.2-2'}}</b>
+                                    </td>
+                                </tr> -->
+                                <!-- ----- Total Cost Tier 2 ------ -->
+                                <tr>
+                                    <td colspan="1" class="footer-color tfoot"><b>Part Cost</b></td>
+                                    <td colspan="1" class="footer-color tfoot text-end"><b>{{TotalInUSDT2 |
+                                            number:'1.2-2'}}</b>
+                                    </td>
+                                    <td class="footer-color tfoot"></td>
+                                    <td colspan="1" class="footer-color tfoot text-center"><b>{{TotalInLocalT2 |
+                                            number:'1.2-2'}}</b>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <!-- <div class="row">
+                    <div class="col-md-12 text-center">
+                        <input type="button" class="btn btn-outline-danger btn-GetReport" name="GetReport"
+                            value="Get Report" (click)="GetReport()">
+                    </div>
+                </div> -->
+            </div>
+        </form>
+    </div>
+
+    <!-- new code -->
+    <!-- <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
+        <div class="modelsize" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Update Direct Material Cost</h3>
+                    <label class="close modal-close-icn" (click)="onCloseHandled()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                        </svg>
+                    </label>
+                </div>
+                <div class="tableFixHead">
+                    <form>
+                        <table class="table table-bordered ">
+                            <thead>
+                                <tr>
+                                    <th style="width: 20%;" class="ShouldCostBreakdowntableth">Material Grade</th>
+                                    <th class="ShouldCostBreakdowntableth">Quantity</th>
+                                    <th class="ShouldCostBreakdowntableth">Net Weight (kg)</th>
+                                    <th class="ShouldCostBreakdowntableth">Gross Net Weight (kg)</th>
+                                    <th class="ShouldCostBreakdowntableth">unit Material Rate($)</th>
+                                    <th class="ShouldCostBreakdowntableth">Unit Scrap Rate ($)</th>
+                                    <th class="ShouldCostBreakdowntableth">Matl Consum Cost perPiece</th>
+                                    <th class="ShouldCostBreakdowntableth">Direct Material Cost</th>
+                                    <th class="ShouldCostBreakdowntableth">supplyLevel</th>
+                                    <th class="ShouldCostBreakdowntableth">Existing Material Cost</th>
+                                    <th class="ShouldCostBreakdowntableth">To Be Update Material Rate ($)</th>
+                                    <th class="ShouldCostBreakdowntableth">Updated Material Cost ($)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let val of MaterialGrade; let i=index">
+
+                                    <td class="ShouldCostBreakdowntabletr">{{val.materialType }}</td>
+                                    <td class="ShouldCostBreakdowntabletr">{{val.quantity }}</td>
+                                    <td class="ShouldCostBreakdowntabletr">{{val.netWeightKG | number:'1.4-4' }}</td>
+                                    <td class="ShouldCostBreakdowntabletr">{{val.grossWeightKG | number:'1.4-4' }}</td>
+                                    <td class="ShouldCostBreakdowntabletr">{{val.unitMaterialRate | number:'1.4-4' }}</td>
+                                    <td class="ShouldCostBreakdowntabletr">{{val.unitScrapRate | number:'1.4-4' }}</td>
+                                    <td class="ShouldCostBreakdowntabletr">{{val.matlConsumCostperPiece | number:'1.4-4' }}</td>
+                                    <td class="ShouldCostBreakdowntabletr">{{val.directMaterialCost | number:'1.4-4' }}</td>
+                                    <td class="ShouldCostBreakdowntabletr">{{val.supplyLevel}}</td>
+                                    <td >
+                                        <input type="text" class="form-control PopupText disabled Existing"
+                                            id="PopUpResultExisting{{i}}" name="PopUpResultExisting{{i}}"
+                                            value="{{val.updateMaterialCostExisting}}" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control PopupText RMText" id="PopUp{{i}}"
+                                            name="PopUp{{i}}" (keypress)="keyPressDecimal($event)"
+                                            value="{{val.updateMaterialRate}}"
+                                            (keyup)="CalculateMaterialRate($event, val, i)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control PopupText RMUpdateRate disabled"
+                                            id="PopUpResult{{i}}" name="PopUpResult{{i}}"
+                                            value="{{val.updateMaterialCost}}" readonly>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="11" class="footer-color tfoot text-end"><b>Total Material cost</b></td>
+                                    <td colspan="1" class="footer-color tfoot text-center"><b>{{TotalMaterialRate_Update
+                                            | number:'1.2-2'}} ($)
+                                        </b>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <input [hidden]="IsHiddenT1" type="button" class="btn btn-outline-danger btn-save" name="GetData"
+                        id="btnT1" value="Update" (click)="GetMaterialData('T1')">
+                    <input [hidden]="IsHiddenT2" type="button" class="btn btn-outline-danger btn-save" name="GetData"
+                        id="btnT2" value="Update" (click)="GetMaterialData('T2')">
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- existing code -->
+    <!-- modal-dialog modal-dialog-centered -->
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display_Material}">
+        <div class="modelsize" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Update Direct Material Cost¹</h3>
+                    <label class="close modal-close-icn" (click)="onCloseHandled()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                        </svg>
+                    </label>
+                </div>
+                <div class="tableFixHead">
+                    <form>
+                        <table class="table table-bordered ">
+                            <thead>
+                                <tr>
+                                    <th style="display: none" class="ShouldCostBreakdowntableth">supplyLevel</th>
+                                    <!-- <th style="width: 5%;" class="ShouldCostBreakdowntableth">Sr. No.</th> -->
+                                    <th style="width: 35%;" class="ShouldCostBreakdowntableth">Material Grade</th>
+                                    <th style="width: 10%;" class="ShouldCostBreakdowntableth">Model Material Rate² ($ /
+                                        kg) </th>
+                                    <th style="display: none" class="ShouldCostBreakdowntableth">Material Scrap Rate
+                                        ($)
+                                    </th>
+                                    <th style="display: none" class="ShouldCostBreakdowntableth">Part Finish Weight
+                                        (kg)
+                                    </th>
+                                    <th style="width: 15%;" class="ShouldCostBreakdowntableth">Gross Weight of Material
+                                        used (kg)</th>
+                                    <th style="display: none" class="ShouldCostBreakdowntableth">Current Material Rate
+                                        ($)</th>
+                                    <th style="display: none" class="ShouldCostBreakdowntableth">Not quantity Net Weight
+                                        of material
+                                        used (kg)</th>
+                                    <th style="width: 15%;" class="ShouldCostBreakdowntableth">Net Weight of Material
+                                        used (kg)</th>
+                                    <th style="display: none" class="ShouldCostBreakdowntableth">Scrap Rate ($)</th>
+                                    <th style="display: none" class="ShouldCostBreakdowntableth">Unit Scrap Rate ($)
+                                    </th>
+                                    <th style="display: none" class="ShouldCostBreakdowntableth">Existing Material Cost
+                                        ($)</th>
+                                    <th style="width: 10%;" class="ShouldCostBreakdowntableth">New Material Rate³ ($ /
+                                        kg)
+                                    </th>
+                                    <th style="width: 10%;" class="ShouldCostBreakdowntableth">Updated Material Cost ($)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let val of MaterialGrade; let i=index">
+
+                                    <td class="HideRow"
+                                        [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
+                                        class="ShouldCostBreakdowntabletr" style="display: none ">
+                                        {{val.supplyLevel}}</td>
+                                    <!-- <td class="HideRow"
+                                        [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
+                                        class="ShouldCostBreakdowntabletr" style="text-align: right;">{{i + 1}}</td> -->
+                                    <td class="HideRow"
+                                        [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
+                                        class="ShouldCostBreakdowntabletr">{{val.materialType }}</td>
+                                    <td class="HideRow"
+                                        [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
+                                        class="ShouldCostBreakdowntabletr" style="text-align: right;">
+                                        {{val.unitMaterialRate | number:'1.2-2' }}</td>
+                                    <td class="HideRow"
+                                        [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
+                                        class="ShouldCostBreakdowntabletr" style="text-align: right; display: none ">
+                                        {{val.materialScrapRate | number:'1.4-4' }}</td>
+                                    <td class="HideRow"
+                                        [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
+                                        class="ShouldCostBreakdowntabletr" style="text-align: right; display: none ">
+                                        {{val.partFinishWeight | number:'1.4-4' }}</td>
+                                    <td class="HideRow"
+                                        [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
+                                        class="ShouldCostBreakdowntabletr" style="text-align: right;">
+                                        {{val.grossWeightKG | number:'1.4-4' }}</td>
+                                    <td class="HideRow"
+                                        [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
+                                        class="ShouldCostBreakdowntabletr" style="text-align: right; display: none ">
+                                        {{val.materialCost | number:'1.4-4' }}</td>
+                                    <td class="HideRow"
+                                        [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
+                                        class="ShouldCostBreakdowntabletr" style="text-align: right;display: none">
+                                        {{val.netWeightKG | number:'1.4-4' }}</td>
+                                    <td class="HideRow"
+                                        [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
+                                        class="ShouldCostBreakdowntabletr" style="text-align: right; ">
+                                        {{val.grossNetWeightKG | number:'1.4-4' }}</td>
+                                    <td class="HideRow"
+                                        [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
+                                        class="ShouldCostBreakdowntabletr" style="text-align: right; display: none ">
+                                        {{val.scrapRate | number:'1.4-4' }}</td>
+                                    <td class="HideRow"
+                                        [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
+                                        class="ShouldCostBreakdowntabletr" style="text-align: right; display: none ">
+                                        {{val.unitScrapRate | number:'1.4-4' }}</td>
+                                    <td class="HideRow"
+                                        [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
+                                        style="display: none ">
+                                        <input type="text" class="form-control PopupText disabled Existing"
+                                            id="PopUpResultExisting{{i}}" name="PopUpResultExisting{{i}}"
+                                            value="{{val.updateMaterialCostExisting}}" readonly>
+                                    </td>
+                                    <td class="HideRow"
+                                        [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null">
+                                        <input type="text" class="form-control PopupText RMText" id="PopUp{{i}}"
+                                            name="PopUp{{i}}" (keypress)="keyPressDecimal($event)"
+                                            value="{{val.updateMaterialRate}}"
+                                            (keyup)="CalculateMaterialRate($event, val, i)" maxlength="8">
+                                    </td>
+                                    <!-- [class.HideRow]="val.supplyLevel == 'T1' && IsCastingSheet == true" -->
+                                    <td class="HideRow"
+                                        [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null">
+                                        <input type="text" class="form-control PopupText RMUpdateRate disabled"
+                                            id="PopUpResult{{i}}" name="PopUpResult{{i}}"
+                                            value="{{val.updateMaterialCost}}" readonly>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="footer-color tfoot text-end"><b>Total Material cost</b></td>
+                                    <td colspan="1" class="footer-color tfoot text-center"><b>{{TotalMaterialRate_Update
+                                            | number:'1.2-2'}} ($)
+                                        </b>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-9 Remark_nopadding">
+                            <b>Remarks : </b>
+                            <ol type="1">
+                                <li>Use this pop-up window to update direct
+                                    material rates used in previously costed models to
+                                    recent market rates. If you are not aware on recent market rates, please reach out
+                                    to COE team through Help & Support or send the model for refresh through "Refresh
+                                    Model" button
+                                    on previous page.</li>
+                                <li>Material rate used during model execution</li>
+                                <li>If you are unsure of current rates, reach out to COE or send the model for
+                                    refresh</li>
+                                <li>This model was costed on {{DebriefDate}}</li>
+                            </ol>
+                        </div>
+                        <div class="col-md-3 text-center">
+
+                            <button type="button" class="btn btn-outline-dark btn-save" data-bs-dismis="modal"
+                                (click)="onCloseHandled()">Close</button>
+                            <input [hidden]="IsHiddenT1" type="button" class="btn btn-outline-danger btn-save"
+                                name="GetData" id="btnT1" value="Update" (click)="GetMaterialData('T1')">
+                            <input [hidden]="IsHiddenT2" type="button" class="btn btn-outline-danger btn-save"
+                                name="GetData" id="btnT2" value="Update" (click)="GetMaterialData('T2')">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
+        <div class="modelsize_DirectCost" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Update {{ModelPopUpheaderLable}}</h3>
+                    <label class="close modal-close-icn" (click)="onCloseHandled_Popup()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                        </svg>
+                    </label>
+                </div>
+                <div class="tableFixHead_DirectCost">
+                    <form>
+                        <table class="table table-bordered ">
+                            <thead>
+                                <tr>
+                                    <th style="width: 30%;" class="ShouldCostBreakdowntableth">Cost Header </th>
+                                    <th style="width: 15%;" class="ShouldCostBreakdowntableth text-end">
+                                        {{Direct_haeder2}} ($)</th>
+                                    <th [class.HideRow]="Direct_haeder1 == Direct_Labor_Cost " style="width: 15%;"
+                                        class="ShouldCostBreakdowntableth text-center">
+                                        {{Direct_haeder5}} </th>
+                                    <th style="width: 15%;" class="ShouldCostBreakdowntableth text-center">
+                                        {{Direct_haeder3}} </th>
+                                    <th style="width: 20%;" class="ShouldCostBreakdowntableth text-center">
+                                        {{Direct_haeder4}} ($)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="ShouldCostBreakdowntabletr">
+                                    <td style="padding: 10px 10px;">{{Direct_haeder1}}</td>
+                                    <td style="padding: 12px 8px 0px 0px;" class="text-end">
+                                        {{ModelPopUp_usdValue |
+                                        number:'1.2-2' }}</td>
+                                    <td [class.HideRow]="Direct_haeder1 == Direct_Labor_Cost "
+                                        style="padding: 12px 8px 0px 0px;" class="text-end">
+                                        {{perValue |
+                                        number:'1.2-2' }}</td>
+                                    <td>
+                                        <input autofocus type="text" class="form-control percentText DirectCost"
+                                            maxlength="4" id="UpdateCostNonPer_Popup"
+                                            (keypress)="keyPressDecimal($event)"
+                                            (keyup)="CalculatePercentNon_DirectCost()">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control UpdateText disabled DirectCost"
+                                            value="{{ModelPopUp_usdValue_Updated  | number:'1.2-2'}}" readonly>
+                                    </td>
+
+                                </tr>
+                        </table>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="row" style="width: 100%;">
+                        <div class="col-md-9 Remark_nopadding">
+                            <b>Remarks : </b>
+                            <ol type="1">
+                                <li>{{Notes1}}</li>
+                                <li>{{Notes2}}</li>
+                                <li>{{Notes3}}</li>
+                                <li>{{Notes4}}</li>
+                                <li class="HideRow" [class.HideRow]="IsNotes == true">{{Notes5}}</li>
+                                <li class="HideRow" [class.HideRow]="IsNotes == false">{{Notes6}}</li>
+                            </ol>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <button type="button" class="btn btn-outline-dark  btn-save" data-bs-dismis="modal"
+                                (click)="onCloseHandled_Popup()">Close</button>
+                            <input [hidden]="IsHiddenT1_DirectCost" type="button"
+                                class="btn btn-outline-danger btn-save" name="GetData" id="btn_DirectCost_T1"
+                                value="Update" (click)="UpdateCost('T1')">
+                            <input [hidden]="IsHiddenT2_DirectCost" type="button"
+                                class="btn btn-outline-danger btn-save" name="GetData" id="btn_DirectCost_T2"
+                                value="Update" (click)="UpdateCost('T2')">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

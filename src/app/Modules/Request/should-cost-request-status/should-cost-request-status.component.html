@@ -1,0 +1,157 @@
+<div class="setHeight">
+    <ngx-spinner name="spinner" bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="square-jelly-box"
+        [fullScreen]="true">
+        <img alt="Loading Please Wait..." style="width:100px ; height:100px ;" src="../../../assets/Spin-2.gif" />
+    </ngx-spinner>
+
+
+    <form [formGroup]="ShouldCostStatus">
+        <div class="MasterHeader">
+            <div style="width: 50%;">
+                <h2>Request Status</h2>
+            </div>
+            <div class="text-end" style="width: 50%;">
+                <button class="btnbackLeft" (click)="backToPreviousPage()">Back</button>
+            </div>
+        </div>
+        <div class="MasterHeaderlable">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="datepicker1" class="default-lbl">From Date</label>
+                    <br>
+                    <input type="date" formControlName="FromDate" [(ngModel)]="FromDate"
+                        class="form-control form-control-sm">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="datepicker1" class="default-lbl">To Date</label>
+                    <br>
+                    <input type="date" formControlName="ToDate" [(ngModel)]="ToDate"
+                        class="form-control form-control-sm">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="dropdown" class="default-lbl">Status</label>
+                    <select id="dropdown1" class="form-select form-select-sm custom-dropdown"
+                        (change)="GetStatus($event)">
+                        <option value="All">All</option>
+                        <option value="Submitted">Submitted</option>
+                        <option value="Under Review">Under Review</option>
+                        <option value="Returned">Returned</option>
+                        <option value="In Queue">In Queue</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Partially Completed">Partially Completed</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-sm default-btn" data-bs-dismis="modal"
+                        (click)="View()">View</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="MasterHeaderlableSearch">
+            <div class="row">
+                <div class="col-md-6 form-group has-search">
+                    <span class="bi bi-search form-control-feedback"></span>
+                    <input type="text" class="form-control search-input" placeholder="Search"
+                        formControlName="textsearch" [(ngModel)]="textsearch">
+                </div>
+                <div class="col-md-6 text-end d-flex justify-content-center " style="font-size: 13px;">
+                    <!-- <div class="set_trcolor" style="width: 30px; height:  30px;"></div>
+                    <label>Refresh Request</label> -->
+                </div>
+            </div>
+            <!-- <div class="form-group has-search" style="width: 50%; float: left;">
+                    <span class="bi bi-search form-control-feedback"></span>
+                    <input type="text" class="form-control search-input" placeholder="Search"
+                        formControlName="textsearch" [(ngModel)]="textsearch">
+                </div>
+                <div style="width: 50%; float: right; background-color: bisque;">
+                    <div class="set_trcolor" style="width: 30px; height:  30px;"></div>
+                </div> -->
+        </div>
+
+
+        <div class="MasterHeaderlable" style="font-size: 12px !important;">
+            <div class="d-flex justify-content-center">
+                <div class="col-md-12">
+                    <!-- <div class="d-flex justify-content-center pt-2 mt-3"> -->
+                    <!-- <table class="table table-bordered table-striped  align-middle ml-6"> -->
+                    <table class="table table-bordered table-striped ">
+                        <thead>
+                            <tr class="">
+                                <th style="width: 10%;">Request ID</th>
+                                <th style="width: 150px !important">Requester Name</th>
+                                <th style="width: 100px !important;">Request Date</th>
+                                <th style="width: 50%;">File</th>
+                                <th style="width: 10%;">Status</th>
+                                <th>COE Comments</th>
+                                <th>Requester Comments</th>
+                                <th *ngIf="this.RoleID == 8">Update Status</th>
+                                <th *ngIf="this.RoleID != 8">Resubmit Request</th>
+                                <th hidden>CreatedBy</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <tr
+                                *ngFor="let data of Reportdata | search: textsearch:filterMetadata | paginate: { itemsPerPage: 10, currentPage: page } ">
+                                <td [class.set_trcolor]="data.IsRefresh == true" class="text-end">
+                                    {{data.RequestHeaderId}}</td>
+                                <td [class.set_trcolor]="data.IsRefresh == true" class="text-start">{{data.UserName}}
+                                </td>
+                                <td [class.set_trcolor]="data.IsRefresh == true">{{data.CreatedOn | date:
+                                    'dd-MMM-YYYY'}}</td>
+                                <td [class.set_trcolor]="data.IsRefresh == true" class="text-start">
+                                    <a class="DownloadExcel" (click)="DownloadExcel(data)"
+                                        target="_blank">{{data.ExcelFileNameNew}}</a>
+                                </td>
+                                <td [class.set_trcolor]="data.IsRefresh == true" class="text-start">{{data.Status}}</td>
+                                <td [class.set_trcolor]="data.IsRefresh == true"><span
+                                        ngbTooltip={{data.SCTeamComments}}>{{data.SCTeamComments_new}}</span> </td>
+                                <td [class.set_trcolor]="data.IsRefresh == true"><span
+                                        ngbTooltip={{data.SMComments}}>{{data.SMComments_new}}</span> </td>
+                                <td [class.set_trcolor]="data.IsRefresh == true" *ngIf="this.RoleID == 8">
+                                    <button class="btn outline-none" style="padding: 0px;"
+                                        [routerLink]="['/home/shouldcostview',data.RequestHeaderId]"><i
+                                            class="bi bi-chevron-right"></i>
+                                    </button>
+
+                                    <!-- <i *ngIf="data.Status == 'Submitted' || data.Status == 'Rejected' || data.Status == 'Returned'" class="bi bi-pencil-fill" style="color: #da291c; 
+                                            font-size:larger;"(click)="UpdateRequest(data.UserName,data.RequestHeaderId,data.Status,data.CreatedOn)" ngbTooltip="Update Model"></i> -->
+                                </td>
+                                <td [class.set_trcolor]="data.IsRefresh == true" *ngIf="this.RoleID != 8">
+
+                                    <i *ngIf="data.Status == 'Submitted' || data.Status == 'Rejected' || data.Status == 'Returned'"
+                                        class="bi bi-pencil-fill" style="color: #da291c; 
+                                            font-size:larger;" (click)="UpdateRequest(data.RequestHeaderId)"
+                                        ngbTooltip="Update Model"></i>
+                                </td>
+                                <td hidden [class.set_trcolor]="data.IsRefresh == true">{{data.CreatedBy}}</td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between p-2 pagination">
+
+                <ngb-pagination [collectionSize]="filterMetadata.count" [(page)]="page" [pageSize]="pageSize"
+                    [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm">
+                    <ng-template ngbPaginationPrevious>Prev</ng-template>
+                    <ng-template ngbPaginationNext>Next</ng-template>
+                </ngb-pagination>
+                <br>
+                <div class="justify-content-center" style=" width: 200px;">
+                    <div class="set_trcolor" style="float: left; width: 30px; height:  30px; margin-right: 10px;"></div>
+                    <label  style="float: left;">Refresh Request</label>
+                </div>
+               
+            </div>
+        </div>
+    </form>
+</div>

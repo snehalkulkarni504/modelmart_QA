@@ -1,0 +1,183 @@
+.setHeight{
+    min-height: 160dvh;
+}
+
+* {
+    font-family: Helvetica, Arial !important;
+}
+
+.MasterHeader{
+    width: 80%;
+    display: inline-flex;
+    height: 80px;
+    margin-left: 10%;
+    margin-right: 10%;
+    font-family: Helvetica, Arial  ;
+    border-bottom: 1px solid #da291c;
+    margin-bottom: 20px;
+    /* box-shadow: 0 6px 2px -6px #da291c; */
+}
+
+.MasterHeader h2{
+    /* position: absolute; */
+    margin: 20px 0px;
+}
+
+.MasterHeaderlable{
+    width: 80%;
+    height: 80px;
+    margin-left: 10%;
+    margin-right: 10%;
+    font-family: Helvetica, Arial  ;
+    font-size: 14px !important;
+}
+
+.MasterHeaderlableSearch{
+    width: 80%;
+    height: 50px;
+    margin-left: 10%;
+    font-family: Helvetica, Arial  ;
+}
+
+* {
+    font-family: Helvetica, Arial !important;
+}
+
+.tooltip-cmn {
+    background-color: #f00;
+}
+
+.table td {
+    text-align: center;
+}
+
+.table thead {
+    text-align: center;
+}
+
+.table thead tr th {
+    background-color:  #da291c;
+    color: #fff;
+    padding: 3px;
+    width: auto !important;
+}
+button.i:focus {
+    outline: none;
+}
+
+#searchLogoDiv {
+    margin-left: -20px;
+    /* width: 10%; */
+    /* text-align: center;
+    justify-content: center; */
+}
+#searchLogoDiv:hover {
+    cursor: pointer;
+    background-color: rgba(205, 136, 9, 0.584);
+    /* float: left; */
+}
+.searchboxtext2 {
+    /* width: 40%; */
+    height: 100%;
+    display: inline-flex;
+    margin-left: 60%;
+    border-radius: 4px;
+    border: 1px solid #808080;
+
+}
+.mainsearch {
+    /* width: 50%; */
+    border: none;
+}
+
+
+.searchDiv {
+    width: 50%;
+}
+
+.has-search .form-control {
+    padding-left: 2.8rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 38px;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #f8f6f6;
+    background-color: #da291c;
+}
+
+.search-input {
+    height: 38px;
+}
+
+ 
+*:focus {
+    outline: none;
+    box-shadow: none;
+} 
+
+select:focus {
+    box-shadow: none;
+    outline: none;
+    border: 1px solid #da291c;
+}
+
+.DownloadExcel{
+    color: #0000ff;
+    text-decoration: none;;
+}
+.DownloadExcel:hover{
+    cursor: pointer;
+}
+ 
+
+/* --------------------------------------------------------------------------- */
+
+[data-tooltip]:hover {
+	position: relative;
+}
+[data-tooltip]:hover::after {
+	all: initial;
+	display: inline-block;
+	width: 0; 
+	height: 0; 
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;		  
+	border-top: 10px solid #1a1a1a;
+	position: absolute;
+	bottom: 100%;
+	content: '';
+	left: 50%;
+	transform: translate(-50%, 0);
+	margin-bottom: 5px;
+}
+
+[data-tooltip]:hover::before {
+	all: initial;
+	font-family: Arial, Helvetica, sans-serif;
+	display: inline-block;
+	border-radius: 5px;
+	padding: 10px;
+	background-color: #1a1a1a;
+	content: attr(data-tooltip);
+	color: #f9f9f9;
+	position: absolute;
+	bottom: 100%;
+	width: 100px;
+	left: 50%;
+	transform: translate(-50%, 0);
+	margin-bottom: 15px;
+	text-align: center;
+	font-size: 14px;
+}
+
+.set_trcolor{
+    background-color: #FFCECE !important;
+}
+ 

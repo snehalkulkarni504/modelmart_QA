@@ -1,0 +1,109 @@
+.container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .heading {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px; /* Reduced size */
+  }
+  
+  .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .content {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .left-pane {
+    flex: 30%;
+  }
+  
+  .right-pane {
+    flex: 70%;
+  }
+  
+  .image {
+    max-width: 100%;
+    height: auto;
+    /* display: block;? */
+    margin: 10px 0; /* Added vertical spacing */
+  }
+  .image1 {
+    max-width: max-content;
+    height: auto;
+    display: block;
+    margin: 10px 0; /* Added vertical spacing */
+  }
+  
+  .image-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px; /* Increased horizontal spacing */
+  }
+  
+  .half-width {
+    width: 35%;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .table th {
+    border: 1px solid #000; /* Black border */
+    padding: 5px;
+    text-align: left;
+    font-size: 15px;
+  }
+  .table td {
+    border: 1px solid #000; /* Black border */
+    padding: 3px;
+    text-align: left;
+    font-size: 12px;
+  }
+  
+  .table th {
+    background-color: #191717; /* White background for column headers */
+    color: #f0e9e9; /* Black text color */
+    border: 2px solid #cecaca;
+  }
+  
+  .part-details {
+    margin-top: 20px;
+  }
+  
+  .part-information {
+    margin-top: 20px;
+  }
+  
+  .tool-material {
+    margin-top: 20px;
+  }
+  
+  .styled-table {
+    border: 2px solid #000; /* Thicker border for the styled table */
+  }
+  

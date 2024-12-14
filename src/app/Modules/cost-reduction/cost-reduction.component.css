@@ -1,0 +1,82 @@
+h1 {
+    font-size: 24px;
+    color: #333;
+  }
+  
+  h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    font-size: 18px;
+    margin: 5px 0;
+  }
+
+  .custom-modal-size {
+    max-width: 90%; /* Adjust the width as per your requirement */
+  }
+
+  .custom-button {
+    margin: 10px;
+    padding: 10px 20px; /* Increase padding for height */
+    font-size: 16px;
+    text-align: center; /* Center-align text */
+    line-height: 1.5; /* Adjust line height for spacing */
+    white-space: normal; /* Allow text wrapping */
+    background-color: #0f3b6a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .custom-button:hover {
+    background-color: #6486ab;
+  }
+
+  .custom-button1 {
+    margin: 10px;
+    padding: 10px 20px; /* Increase padding for height */
+    font-size: 16px;
+    text-align: center; /* Center-align text */
+    line-height: 1.5; /* Adjust line height for spacing */
+    white-space: normal; /* Allow text wrapping */
+    background-color: #be5412;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .custom-button1:hover {
+    background-color: #6486ab;
+  }
+  /* General Table Styles */
+.table {
+  font-size: 5.7px; /* Set font size to 7px for smaller text */
+}
+
+
+.table th, .table td {
+  padding: 7px; /* Adjust padding for smaller cells */
+  text-align: left;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.table th {
+  background-color: #343a40; /* Dark header background */
+  color: #fff; /* Header text color */
+}
+
+.table-bordered th, .table-bordered td {
+  border: 1px solid #dee2e6; /* Add borders to table */
+}
+
+.table-responsive {
+  max-height: 300px; /* Set maximum height for scrolling */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+  
+  

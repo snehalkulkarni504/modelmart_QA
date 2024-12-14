@@ -1,0 +1,60 @@
+<div class="container-fluid maxheight">
+    <ngx-spinner name="spinner" bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="square-jelly-box"
+        [fullScreen]="true">
+        <img alt="Loading Please Wait..." style="width:100px ; height:100px ;" src="../../../assets/Spin-2.gif" />
+    </ngx-spinner>
+
+    <div class="row searchbox">
+        <!-- Filters Start -->
+        <div class="col-md-3 border-bottom position-fixed scroll1" id="Id_Filters">
+            <form [formGroup]="SearchboxForm" id="Id_Filtersform">
+                <br>
+                <div class="row font-size">
+                    <div class="col-md-12">
+                        <label class="form-label">Category 3 </label>
+                        <label class="form-label" class="clearall" (click)="clearall()">Clear All </label><br>
+
+                        <div class="row border-bottom"> </div>
+                        <div class="scrollbarsearch">
+                            <ngx-treeview #cat3 [config]="config" [items]="Cat3"
+                                (selectedChange)="getCategoryId($event)"></ngx-treeview>
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+            </form>
+        </div>
+
+        <div class="col-md-9" id="SearchFiltersdiv">
+            <div  class="row border-bottom text-center CategoryWelcome ">
+                <label>Welcome to Category Management (CAT3) page. Please click on a commodity category to view should cost models </label>
+     
+             </div>
+            <div class="row setOpacity" id="SearchFilters">
+
+                <div *ngFor="let c of SearchProductList | groupBy:'parentCategory'">
+                    <h4 class="col-md-12 Categoryheader">
+                        <label id="cetegoryname">{{c.key}}</label>
+                    </h4>
+                    <div *ngFor="let item of c.value" id="prodDetailsId" class="prodDetails"
+                        (click)="showProduct(item)">
+                        <div>
+                            <!-- <img src="assets/No-Image.png" class="prdIcon"> -->
+                            <img *ngIf="item.imagePath == '' else multi" src="assets/No-Image.png" class="prdIcon">
+                            <ng-template #multi>
+                                <img src="{{item.imagePath}}" class="prdIcon">
+                            </ng-template>
+                        </div>
+                        <div class="prdDescription">
+                            <!-- <label id="PartNumber">{{item.ParentCategory}}</label><br> -->
+                            <label id="PartName">{{item.childCategory}}</label><br>
+                        </div>
+                    </div>
+                    <br><br>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

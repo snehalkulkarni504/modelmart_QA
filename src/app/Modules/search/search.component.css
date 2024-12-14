@@ -1,0 +1,759 @@
+#clearFilter {
+    padding: 10px 0px;
+    color: #000;
+}
+
+#clearFilterall {
+    padding: 10px 0px;
+    padding-right: 10px;
+    color: #da291c;
+    /* font-weight: 400; */
+}
+
+#clearFilterall:hover {
+    cursor: pointer;
+}
+
+#Id_Filters {
+    max-height: 100vh;
+    overflow-y: scroll;
+    width: 25%;
+    padding-bottom: 100px;
+    margin-top: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #da291c #da291c0c;
+    /* scrollbar-color: #da291c transparent; */
+
+}
+
+#Id_Filtersform {
+    /* padding: 0px; */
+    position: relative;
+    color: #000;
+    background-image: url("/assets/seachbackground.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+#SearchFiltersdiv {
+    width: 75%;
+    margin-left: 25%;
+    margin-top: 60px;
+    background-image: url("/assets/seachbackground.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+}
+
+#SearchFilters {
+    /* background-color: #80808011;  */
+    padding: 10px;
+    /* height: 100vh;
+    overflow-y: scroll;  */
+    /* opacity: 1; */
+    /* background-image: url("/assets/seachbackground.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;  */
+    padding-top: 0px;
+}
+
+
+@keyframes showpanal {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.searchbox {
+    font-weight: 500;
+    /* background-image: url("/assets/seachbackground.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;  */
+}
+
+.border-bottom {
+    border-bottom: 1px solid #0000001f;
+}
+
+.font-size {
+    font-size: 13px;
+    font-weight: 700;
+    color: #000;
+}
+
+.rangeControl {
+    width: 100%;
+}
+
+.prdIcon {
+    width: 100%;
+    height: 150px;
+}
+
+.prdDescription {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: Helvetica, Arial;
+    text-align: center;
+}
+
+.prdImgDescBorder {
+    margin: 5px 0px;
+    width: 90%;
+    margin-left: 5%;
+    border: 1px solid #80808032;
+
+}
+
+.prdImgDesc:hover {
+    cursor: pointer;
+}
+
+.prodDetails {
+    /* position: relative;
+    width: 18%;
+    padding: 10px;
+    border: 1px solid #8080802c;
+    transition: all .3s ease-in-out;
+    margin: 5px;
+    animation: showpanal alternate 1s; */
+    position: relative;
+    width: 21%;
+    padding: 10px;
+    border: 1px solid #80808070;
+    transition: all .3s ease-in-out;
+    margin: 15px;
+    animation: showpanal alternate 1s;
+    border-radius: 10px;
+}
+
+.prodDetails:hover {
+    box-shadow: 0px 0px 10px #15202B;
+    transition: all .3s ease-in-out;
+    transform: scale(1.02, 1.02);
+}
+
+
+@media screen and (max-width: 992px) {
+    .prodDetails {
+        position: relative;
+        width: 30%;
+        padding: 10px;
+        border: 1px solid #8080802c;
+        transition: all .3s ease-in-out;
+        margin: 10px;
+    }
+
+    .SearchCheckbox {
+        width: 15px;
+        height: 15px;
+        font-weight: 500;
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .prodDetails {
+        position: relative;
+        width: 43%;
+        padding: 10px;
+        border: 1px solid #8080802c;
+        transition: all .3s ease-in-out;
+        margin: 10px;
+    }
+
+    .SearchCheckbox {
+        width: 15px;
+        height: 15px;
+        font-weight: 500;
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+    }
+}
+
+
+/* 
+.prodDetails:hover::after {
+    opacity: 1;
+  } */
+
+#PartNumber {
+    font-size: 12px;
+    font-weight: 600;
+    /* color:rgb(108, 71, 2); */
+    color: #15202B;
+}
+
+#PartName,
+#programName {
+    font-size: 12px;
+    font-weight: 500;
+    /* color:rgb(145, 95, 2); */
+    color: #15202B;
+}
+
+#AnnualVolume,
+#TypeShouldCost,
+#ToolingCost {
+    font-size: 10px;
+    padding: 0px 5px;
+}
+
+#AnnualVolume b {
+    font-size: 10px;
+}
+
+.prdDescription_div1,
+.prdDescription_div2,
+.prdDescription_div3 {
+    margin-top: 5px;
+    height: 50px;
+    width: 33%;
+    float: left;
+    border-bottom: 1px solid #da291c70;
+}
+
+
+.prdDescription_div2 {
+    border-right: 1px solid #da291c70;
+    border-left: 1px solid #da291c70;
+    /* 80808070 */
+}
+
+/* 
+#PartNumber:hover,
+#PartName:hover,
+#programName:hover {
+    cursor: pointer;
+} */
+
+.SearchCheckbox {
+    width: 15px;
+    height: 15px;
+    font-weight: 500;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+
+.PDFIcon {
+    width: 20px;
+    height: 20px;
+    font-weight: 500;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.btncompare {
+    background-color: #ffffff;
+    color: #da291c;
+    font-weight: 500;
+    border-radius: 5px;
+    border: 1px solid #da291c;
+    padding: 2px 30px 5px 30px;
+    margin-left: 50%;
+}
+
+.btncompare:hover {
+    background-color: #da291c;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    cursor: pointer;
+}
+
+.scrollbarsearchcat2 {
+    height: auto;
+    border: 1px solid #80808062;
+    color: #000;
+    font-weight: 400;
+}
+
+.scrollbarsearchcat3 {
+    height: auto;
+    border: 1px solid #80808062;
+    color: #000;
+    font-weight: 400;
+}
+
+.scrollbarsearchcat4 {
+    height: auto;
+    border: 1px solid #80808062;
+    color: #000;
+    font-weight: 400;
+}
+
+.hideNoData {
+    display: none;
+}
+
+
+.scrollbarsearch:hover,
+.scrollbarsearchcat2:hover {
+    background-color: #8080800b;
+}
+
+.scrollbarsearch {
+    height: 130px;
+    overflow-y: scroll;
+    border: 1px solid #80808062;
+    padding: 5px;
+    color: #000;
+    font-weight: 400;
+    /* scrollbar-color: #15202B;
+    -webkit-scrollbar-color: #15202B; */
+    width: 100%;
+    scrollbar-width: thin;
+}
+
+/* 
+.scroll1::-webkit-scrollbar {
+    width: 5px;
+}
+
+.scroll1::-webkit-scrollbar-track {
+    background: #da291c17;
+}
+
+.scroll1::-webkit-scrollbar-thumb {
+    background: #da291c;
+} */
+
+
+.dateBorder {
+    width: 92%;
+    border: 1px solid #80808062;
+    display: inline-flex;
+    margin-left: 10px;
+    padding-bottom: 10px;
+}
+
+/* 
+.dateBorder:hover {
+    background-color: #1f2f3f;
+} */
+
+.datecolor {
+    color: #000;
+}
+
+.filtername {
+
+    border: 1px solid #80808056;
+    border-radius: 5px;
+    color: #000;
+    background-color: #fff;
+    font-weight: 400;
+    z-index: 99999;
+    width: 23%;
+    padding-left: 10px;
+
+}
+
+/* 
+#Cat2search{
+    margin-left:50px;
+} */
+
+.Filterstextbox {
+    display: inline-flex;
+    float: right;
+    background-color: #fff;
+    border: none;
+    outline: none;
+    color: #000;
+    border-radius: 3px;
+    border: 1px solid #80808062;
+    padding-right: 0px;
+    padding-left: 10px;
+}
+
+.Filterstextbox::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #80808062;
+}
+
+.Filterstextboxtext {
+    border: none;
+    outline: none;
+    width: 80%;
+}
+
+/* 
+.Filterstextboxtext::placeholder{
+    color: #da291c;
+} */
+
+#searchLogoDivfilter {
+    width: 20%;
+    text-align: center;
+    justify-content: center;
+}
+
+#searchLogoDivfilter:hover {
+    cursor: pointer;
+    background-color: rgba(205, 136, 9, 0.584);
+}
+
+
+/*  menu bar ///////////////////////////////////////////////////////////////////////////////// */
+
+.searchboxheader {
+    position: fixed;
+    width: 100%;
+    z-index: 99;
+    background-color: #fff;
+    padding-top: 10px;
+    border-bottom: 1px solid #80808041;
+    display: inline-flex;
+    padding-bottom: 10px;
+}
+
+.searchboxtext {
+    width: 50%;
+    height: 100%;
+}
+
+.compare {
+    height: 100%;
+    width: 25%;
+}
+
+.mainsearch {
+    width: 90%;
+    border: none;
+}
+
+.mainsearchborder {
+    width: 80%;
+    background-color: #fff;
+    border-radius: 4px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.searchProduct {
+    width: 100%;
+    height: 30px;
+    padding-left: 10px;
+    font-size: 15px;
+    outline: none;
+    border: none;
+    border-radius: 4px;
+}
+
+.searchdataheight {
+    position: fixed;
+    background-color: #f1f1f1;
+    z-index: 999;
+    width: 440px;
+    height: 400px;
+    overflow-y: scroll;
+    border-radius: 0px;
+}
+
+.searchdata {
+    position: fixed;
+    background-color: #f1f1f1;
+    z-index: 999;
+    width: 433px;
+    height: auto;
+    border-radius: 0px;
+}
+
+.searchdataheight li:hover,
+.searchdata li:hover {
+    background-color: #ddd;
+    cursor: pointer;
+}
+
+.searchdata li {
+    padding: 5px 0px 5px 5px;
+    color: #000000db;
+    font-size: 12px;
+}
+
+#searchLogoDiv {
+    width: 10%;
+    text-align: center;
+    justify-content: center;
+}
+
+#searchLogoDiv:hover {
+    /* cursor: pointer; */
+    background-color: rgba(205, 136, 9, 0.584);
+    /* float: left; */
+}
+
+
+.searchboxtext2 {
+    width: 80%;
+    height: 100%;
+    display: inline-flex;
+    margin-left: 20%;
+    border-radius: 4px;
+    border: 1px solid #808080;
+
+}
+
+.searchLogo {
+    position: absolute;
+    width: 23px;
+    height: 23px;
+    top: 10px;
+}
+
+
+input[type=checkbox] {
+    accent-color: #da291c !important;
+}
+
+.form-check-input {
+    accent-color: #da291c !important;
+}
+
+.BusinessUnitCheckboxlable {
+    width: 30%;
+}
+
+.showcategory {
+    accent-color: #da291c;
+}
+
+
+#doller,
+#pounds {
+    accent-color: #da291c;
+    margin-top: 20px;
+}
+
+#FromShouldCost:focus,
+#ToShouldCost:focus,
+#FromFinishWeight:focus,
+#ToFinishWeight:focus,
+#FromDate:focus,
+#ToDate:focus {
+    box-shadow: none;
+    border-color: #da291c;
+}
+
+.filter_input_Search {
+    width: 100%;
+    height: 30px;
+    border: none;
+    border-bottom: 1px solid #80808041;
+    padding: 5px 10px;
+    padding-right: 30px;
+}
+
+.filter_input_Search:focus {
+    box-shadow: none;
+    border: none;
+    border-bottom: 1px solid #da291c;
+    outline: none;
+}
+
+.UL_List {
+    margin: 5px 0px 5px 5px;
+    padding: 0px;
+    height: 100px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    /* scrollbar-color: #da291c #da291c17; */
+    scrollbar-color: #da291c #da291c0c;
+}
+
+/* 
+.UL_List::-webkit-scrollbar {
+    width: 6px;
+	background-color: #da291c17;
+}
+
+.UL_List::-webkit-scrollbar-track {
+    background: #da291c17;
+}
+
+.UL_List::-webkit-scrollbar-thumb {
+    background: #da291c;
+    background-color: red;
+    border: 4px solid transparent;
+    border-radius: 8px;
+    background-clip: padding-box;
+} */
+
+.UL_List li {
+    font-family: Helvetica, Arial !important;
+    list-style-type: none;
+    margin: 3px 0px;
+    letter-spacing: 0.2px;
+    font-size: 12px;
+    color: #000000e9;
+}
+
+.UL_List li .checkboxsize {
+    width: 13px;
+    height: 13px;
+    vertical-align: middle;
+    position: relative;
+    bottom: 1px;
+}
+
+.closedCat2Text {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    left: 92%;
+    margin-top: 7px;
+    opacity: 0.5;
+}
+
+/* 
+.input[name=catlist] {
+    accent-color: #da291c !important;
+    background-color: #000;
+} */
+
+/* ::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+    background: #da291c17;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #da291c;
+    
+}
+
+::-webkit-scrollbar-corner {
+    background: #da291c17;
+} */
+
+
+
+/* /////////////////////////////////////////////////// */
+
+
+:host ::ng-deep ngx-treeview-item {
+    color: 000;
+    font-weight: 400;
+    padding-left: 5px;
+}
+
+:host ::ng-deep ngx-treeview-item .form-check-input {
+    background-color: #da291c;
+    border: none;
+}
+
+:host ::ng-deep ngx-treeview-item .form-check-input:focus {
+    box-shadow: none;
+}
+
+:host ::ng-deep ngx-treeview-item .ng-valid {
+    background-color: #da291c !important;
+    border: none;
+}
+
+:host ::ng-deep .treeview-container {
+    scrollbar-width: thin;
+    scrollbar-color: #da291c #da291c17;
+    height: 100px;
+}
+
+:host ::ng-deep .treeview-container::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+:host ::ng-deep .treeview-container::-webkit-scrollbar-track {
+    background: #da291c17;
+}
+
+:host ::ng-deep .treeview-container::-webkit-scrollbar-thumb {
+    background: #da291c;
+}
+
+:host ::ng-deep .treeview-header .form-control {
+    color: #000000ee;
+    font-family: 400;
+    height: 30px;
+    border-radius: 0px;
+    font-size: 15px;
+    border: none;
+    border-bottom: 1px solid #80808041;
+}
+
+:host ::ng-deep .treeview-header .form-control:focus {
+    border-color: #da291c;
+    box-shadow: none;
+
+    /* box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6); */
+}
+
+:host ::ng-deep ngx-treeview .treeview-wrapper .treeview-text {
+    margin-left: 20px;
+}
+
+
+.labless {
+    text-align: center;
+    font-size: 10px;
+    font-family: Helvetica, Arial !important;
+}
+
+.labletest {
+    margin-left: 5px;
+}
+
+.NoModelFound {
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 20px;
+    padding: 5px 0px;
+    font-family: Helvetica, Arial !important;
+    border: 1px solid #80808070;
+    border-radius: 5px;
+}
+
+.ModelFound {
+    width: 100%;
+    margin-top: 5px;
+    font-family: Helvetica, Arial !important;
+    font-size: 12px;
+}
+
+
+input[type="text"]:focus {
+    box-shadow: none;
+    outline: none;
+    border: none;
+}
+
+.BUdisabled {
+    color: #808080 !important;
+}
+
+
+.descsorting{
+    width: 130px;
+} 
+ 
+.ng-select.custom {
+    border:0px;
+    min-height: 0px;
+    border-radius: 0;
+}
+.ng-select.custom .ng-select-container  {            
+    min-height: 0px;
+    border-radius: 0;
+}
+
+/* ///////////////////////////////////////////////////////////////////// */
