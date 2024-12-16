@@ -49,8 +49,11 @@
 
     </div> -->
 
-    <!-- <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'300px'}"></canvasjs-chart> -->
+    <div class="chartOptions">
+        <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'300px'}"></canvasjs-chart>
+    </div>
 
+    <!--  -->
 
     <!-- Part Details -->
     <div class="d-flex justify-content-center setimage ">
@@ -128,10 +131,16 @@
     <div class="d-flex justify-content-center setimage ">
         <table class="table table-bordered ShouldCostVolume">
             <tr>
-                <th rowspan="9" class="text-center mainpart">Should Cost Volume</th>
+                <th rowspan="9" class="text-center mainpart">Should Cost Volume and Location</th>
                 <th class="particular">csHeaderId</th>
                 <td class="right" *ngFor="let i of this.shouldCostVolume">
                     {{i.csHeaderId}}
+                </td>
+            </tr>
+            <tr>
+                <th class="particular">Invoice ($)</th>
+                <td class="right" *ngFor="let i of this.shouldCostVolume">
+                    {{i.invoice | number:'1.2-2'}}
                 </td>
             </tr>
             <tr>
@@ -141,9 +150,9 @@
                 </td>
             </tr>
             <tr>
-                <th class="particular">Spend</th>
+                <th class="particular">Estimated Spend ($)</th>
                 <td class="right" *ngFor="let i of this.shouldCostVolume">
-                    {{i.estimatedSpend}}
+                    {{i.estimatedSpend | number:'1.2-2'}}
                 </td>
             </tr>
             <tr>
@@ -165,13 +174,13 @@
                 </td>
             </tr>
             <tr>
-                <th class="particular">Invoice Price (Kg)</th>
+                <th class="particular">Invoice Price (per/kg)</th>
                 <td class="right" *ngFor="let i of this.shouldCostVolume">
                     {{i.invoicePrice_kg | number:'1.2-2'}}
                 </td>
             </tr>
             <tr>
-                <th class="particular">Should Cost (Kg)</th>
+                <th class="particular">Should Cost (per/kg)</th>
                 <td class="right" *ngFor="let i of this.shouldCostVolume">
                     {{i.shouldCost_kg | number:'1.2-2'}}
                 </td>
@@ -211,7 +220,7 @@
                 </td>
             </tr>
             <tr>
-                <th class="particular">Rough Weight</th>
+                <th class="particular">Rough Weight (kg)</th>
                 <td class="right" *ngFor="let i of this.technicalParatameters">
                     {{i.rough_Weight}}
                 </td>
@@ -229,21 +238,21 @@
                 </td>
             </tr>
             <tr>
-                <th class="particular">Casting/Forging Yield</th>
+                <th class="particular">Casting/Forging Yield (%)</th>
                 <td class="right" *ngFor="let i of this.technicalParatameters">
                     {{i.castingForging_Yield}}
                 </td>
             </tr>
             <tr>
-                <th class="particular">Average Wall Thickness</th>
+                <th class="particular">Average Wall Thickness (mm)</th>
                 <td class="right" *ngFor="let i of this.technicalParatameters">
                     {{i.averageWallThickness}}
                 </td>
             </tr>
             <tr>
-                <th class="particular">Material Removag</th>
+                <th class="particular">Material Removal (Kg)</th>
                 <td class="right" *ngFor="let i of this.technicalParatameters">
-                    {{i.materialRemovag}}
+                    {{i.materialRemovag | number:'1.2-2'}}
                 </td>
             </tr>
             <tr>
@@ -261,12 +270,80 @@
         </table>
     </div>
 
+    <!-- Technical Parameters material Main -->
+    <div class="d-flex justify-content-center setimage ">
+        <table class="table table-bordered tableTechnicalParameters">
+            <tr>
+                <th rowspan="101" class="text-center mainpart ">
+                    Technical Parameters <br> Material Info
+                </th>
+                <th class="particular">csHeaderId</th>
+                <td class="right" *ngFor="let i of this.material_Main">
+                    {{i.csHeaderId}}
+                </td>
+            </tr>
+            <tr>
+                <th class="particular">Material (Main)</th>
+                <td class="right" *ngFor="let i of this.material_Main">
+                    {{i.materialType}}
+                </td>
+            </tr>
+            <tr>
+                <th rowspan="101" class="particular mainpart hideCommericalDetailsShouldCost"
+                    (click)="IsMaterialDetails = !IsMaterialDetails">Material (Detailed)
+                    <i *ngIf="IsMaterialDetails" class="bi-chevron-down showhiderowstier2"></i>
+                    <i *ngIf="!IsMaterialDetails" class="bi-chevron-right showhiderowstier2"></i>
+                </th>
+            </tr>
+            <ng-container *ngIf="IsMaterialDetails">
+                <tr>
+                    <td class="particular" style="vertical-align: top; ">
+                        <table class="setimage" style="width: 100%;">
+                            <tr *ngFor="let i of this.material_Detailed">
+                                <td style="border: 1px solid #80808041" *ngIf="i.details1">
+                                    {{i.details1}}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="particular" style="vertical-align: top; ">
+                        <table class="setimage" style="width: 100%;">
+                            <tr *ngFor="let i of this.material_Detailed">
+                                <td style="border: 1px solid #80808041" *ngIf="i.details2">
+                                    {{i.details2}}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="particular" style="vertical-align: top; ">
+                        <table class="setimage" style="width: 100%;">
+                            <tr *ngFor="let i of this.material_Detailed">
+                                <td style="border: 1px solid #80808041" *ngIf="i.details3">
+                                    {{i.details3}}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="particular" style="vertical-align: top; ">
+                        <table class="setimage" style="width: 100%;">
+                            <tr *ngFor="let i of this.material_Detailed">
+                                <td style="border: 1px solid #80808041" *ngIf="i.details4">
+                                    {{i.details4}}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </ng-container>
+
+        </table>
+    </div>
 
     <!-- Commerical Details <br> (Should Cost) -->
     <div class="d-flex justify-content-center setimage ">
         <table class="table CommericalDetails">
             <tr>
-                <th rowspan="20" class="text-center mainpart hideCommericalDetailsShouldCost"
+                <th rowspan="21" class="text-center mainpart hideCommericalDetailsShouldCost"
                     (click)="IsCommericalDetailsSC = !IsCommericalDetailsSC">
                     Commerical Details <br> (Should Cost)
                     <i *ngIf="IsCommericalDetailsSC" class="bi-chevron-down showhiderowstier2"></i>
@@ -283,7 +360,7 @@
             </tr>
             <ng-container *ngIf="IsCommericalDetailsSC">
                 <tr *ngFor="let i of this.CommericalDetailsShouldCost">
-                    <th class="particular" [class.showShouldCostTier2]="i.row_num == 3"
+                    <th *ngIf="i.row_num != 100" class="particular" [class.showShouldCostTier2]="i.row_num == 3"
                         (click)="i.row_num == 3 && showShouldCostTier2()">
                         {{i.particular}}
                         <ng-container *ngIf="i.row_num == 3">
@@ -292,7 +369,7 @@
                         </ng-container>
 
                     </th>
-                    <td *ngIf="i.details1" class="right" [class.TotalCostData]="i.row_num == 17"
+                    <td *ngIf="i.details1 && i.row_num != 100" class="right" [class.TotalCostData]="i.row_num == 17"
                         [class.directCostminus]="i.details1 < 0">
                         {{i.details1}}
                         <ng-container *ngIf="i.row_num == 3">
@@ -308,7 +385,7 @@
                             </table>
                         </ng-container>
                     </td>
-                    <td *ngIf="i.details2" class="right" [class.TotalCostData]="i.row_num == 17"
+                    <td *ngIf="i.details2  && i.row_num != 100" class="right" [class.TotalCostData]="i.row_num == 17"
                         [class.directCostminus]="i.details2 < 0">
                         {{i.details2}}
                         <ng-container *ngIf="i.row_num == 3">
@@ -324,7 +401,7 @@
                             </table>
                         </ng-container>
                     </td>
-                    <td *ngIf="i.details3" class="right" [class.TotalCostData]="i.row_num == 17"
+                    <td *ngIf="i.details3  && i.row_num != 100" class="right" [class.TotalCostData]="i.row_num == 17"
                         [class.directCostminus]="i.details3 < 0">
                         {{i.details3}}
                         <ng-container *ngIf="i.row_num == 3">
@@ -340,7 +417,7 @@
                             </table>
                         </ng-container>
                     </td>
-                    <td *ngIf="i.details4" class="right" [class.TotalCostData]="i.row_num == 17"
+                    <td *ngIf="i.details4  && i.row_num != 100" class="right" [class.TotalCostData]="i.row_num == 17"
                         [class.directCostminus]="i.details4 < 0">
                         {{i.details4}}
                         <ng-container *ngIf="i.row_num == 3">
@@ -383,94 +460,94 @@
                 </td>
             </tr>
             <tr>
-                <th class="particular">Total Cost</th>
+                <th class="particular">Total Cost ($)</th>
                 <td class="right TotalCostData" *ngFor="let i of this.CommericalDetailsSupplierCost">
-                    {{i.totalCost}}
+                    {{i.totalCost | number:'1.2-2'}}
                 </td>
             </tr>
             <ng-container *ngIf="IsCommericalDetailsSupplierCost">
                 <tr>
-                    <th class="particular">Direct Material Cost</th>
+                    <th class="particular">Direct Material Cost ($)</th>
                     <td class="right" *ngFor="let i of this.CommericalDetailsSupplierCost">
-                        {{i.directMaterialCost}}
+                        {{i.directMaterialCost | number:'1.2-2'}}
                     </td>
                 </tr>
                 <tr>
-                    <th class="particular">Material Refund</th>
+                    <th class="particular">Material Refund ($)</th>
                     <td class="right" *ngFor="let i of this.CommericalDetailsSupplierCost">
-                        {{i.materialRefund}}
+                        {{i.materialRefund | number:'1.2-2'}}
                     </td>
                 </tr>
                 <tr>
-                    <th class="particular">Bought Out Finish Cost</th>
+                    <th class="particular">Bought Out Finish Cost ($)</th>
                     <td class="right" *ngFor="let i of this.CommericalDetailsSupplierCost">
-                        {{i.boughtOutFinishCost}}
+                        {{i.boughtOutFinishCost | number:'1.2-2'}}
                     </td>
                 </tr>
                 <tr>
-                    <th class="particularTier2">Rough Part Cost</th>
+                    <th class="particularTier2">Rough Part Cost ($)</th>
                     <td class="right" *ngFor="let i of this.CommericalDetailsSupplierCost">
-                        {{i.roughPartCost}}
+                        {{i.roughPartCost | number:'1.2-2'}}
                     </td>
                 </tr>
                 <tr>
-                    <th class="particular">Direct Labour Cost</th>
+                    <th class="particular">Direct Labour Cost ($)</th>
                     <td class="right" *ngFor="let i of this.CommericalDetailsSupplierCost">
-                        {{i.directLabourCost}}
+                        {{i.directLabourCost | number:'1.2-2'}}
                     </td>
                 </tr>
                 <tr>
-                    <th class="particular">Process Overhead Cost</th>
+                    <th class="particular">Process Overhead Cost ($)</th>
                     <td class="right" *ngFor="let i of this.CommericalDetailsSupplierCost">
-                        {{i.processOverheadCost}}
+                        {{i.processOverheadCost | number:'1.2-2'}}
                     </td>
                 </tr>
                 <tr>
-                    <th class="particular">Surface Treatment Cost</th>
+                    <th class="particular">Surface Treatment Cost ($)</th>
                     <td class="right" *ngFor="let i of this.CommericalDetailsSupplierCost">
-                        {{i.surfaceTreatmentCost}}
+                        {{i.surfaceTreatmentCost | number:'1.2-2'}}
                     </td>
                 </tr>
                 <tr>
-                    <th class="particular">Total Manu Cost</th>
+                    <th class="particular">Total Manu Cost ($)</th>
                     <td class="right" *ngFor="let i of this.CommericalDetailsSupplierCost">
-                        {{i.totalManuCost}}
+                        {{i.totalManuCost | number:'1.2-2'}}
                     </td>
                 </tr>
                 <tr>
-                    <th class="particular">SGA</th>
+                    <th class="particular">SGA ($)</th>
                     <td class="right" *ngFor="let i of this.CommericalDetailsSupplierCost">
-                        {{i.sga}}
+                        {{i.sga | number:'1.2-2'}}
                     </td>
                 </tr>
                 <tr>
-                    <th class="particular">Profit</th>
+                    <th class="particular">Profit ($)</th>
                     <td class="right" *ngFor="let i of this.CommericalDetailsSupplierCost">
-                        {{i.profit}}
+                        {{i.profit | number:'1.2-2'}}
                     </td>
                 </tr>
                 <tr>
-                    <th class="particular">Packaging</th>
+                    <th class="particular">Packaging ($)</th>
                     <td class="right" *ngFor="let i of this.CommericalDetailsSupplierCost">
-                        {{i.packaging}}
+                        {{i.packaging | number:'1.2-2'}}
                     </td>
                 </tr>
                 <tr>
-                    <th class="particular">Fright Logistics</th>
+                    <th class="particular">Fright Logistics ($)</th>
                     <td class="right" *ngFor="let i of this.CommericalDetailsSupplierCost">
-                        {{i.fright_Logistics}}
+                        {{i.fright_Logistics | number:'1.2-2'}}
                     </td>
                 </tr>
                 <tr>
-                    <th class="particular">Directed Buy</th>
+                    <th class="particular">Directed Buy ($)</th>
                     <td class="right" *ngFor="let i of this.CommericalDetailsSupplierCost">
-                        {{i.directedBuy}}
+                        {{i.directedBuy | number:'1.2-2'}}
                     </td>
                 </tr>
                 <tr>
-                    <th class="particular">Handling Charges</th>
+                    <th class="particular">Handling Charges ($)</th>
                     <td class="right" *ngFor="let i of this.CommericalDetailsSupplierCost">
-                        {{i.handlingCharges}}
+                        {{i.handlingCharges | number:'1.2-2'}}
                     </td>
                 </tr>
             </ng-container>
@@ -539,6 +616,21 @@
 
                 </tr>
             </ng-container>
+        </table>
+    </div>
+
+    <!-- Click to view Should Cost in details -->
+    <div class="d-flex justify-content-center setimage">
+        <table class="table setimageviewShould">
+            <tr>
+                <th rowspan="9" class="text-center mainpart"></th>
+                <th class="particular"></th>
+                <td class="right text-center" *ngFor="let i of this.shouldCostVolume" style="padding: 5px;">
+                    <button type="button" class="btn btn-sm btn-outline-danger btnview"
+                        data-bs-dismis="modal" (click)="getComparison(i.csHeaderId)">View Details</button>
+                </td>
+            </tr>
+
         </table>
     </div>
 

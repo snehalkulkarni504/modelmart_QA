@@ -1,3 +1,8 @@
+
+* {
+  font-family: Helvetica, Arial !important;
+}
+
 h1 {
     font-size: 24px;
     color: #333;
@@ -14,16 +19,18 @@ h1 {
   }
 
   .custom-modal-size {
-    max-width: 90%; /* Adjust the width as per your requirement */
+    max-width: 90%; 
   }
 
   .custom-button {
     margin: 10px;
-    padding: 10px 20px; /* Increase padding for height */
-    font-size: 16px;
-    text-align: center; /* Center-align text */
-    line-height: 1.5; /* Adjust line height for spacing */
-    white-space: normal; /* Allow text wrapping */
+    width: 150px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 14px;
+    text-align: center; 
+    line-height: 1.5; 
+    white-space: normal; 
     background-color: #0f3b6a;
     color: white;
     border: none;
@@ -37,12 +44,12 @@ h1 {
 
   .custom-button1 {
     margin: 10px;
-    padding: 10px 20px; /* Increase padding for height */
+    padding: 10px 20px; 
     font-size: 16px;
-    text-align: center; /* Center-align text */
-    line-height: 1.5; /* Adjust line height for spacing */
-    white-space: normal; /* Allow text wrapping */
-    background-color: #be5412;
+    text-align: center; 
+    line-height: 1.5; 
+    white-space: normal;
+    background-color: #da291c;
     color: white;
     border: none;
     border-radius: 5px;
@@ -52,31 +59,38 @@ h1 {
   .custom-button1:hover {
     background-color: #6486ab;
   }
-  /* General Table Styles */
+  .custom-button.active {
+    background-color: #da291c; 
+    color: white;
+    border: 2px solid #da291c; 
+  }
+  
+
 .table {
-  font-size: 5.7px; /* Set font size to 7px for smaller text */
+  font-size: 12px !important; 
 }
 
 
 .table th, .table td {
-  padding: 7px; /* Adjust padding for smaller cells */
   text-align: left;
-  white-space: nowrap; /* Prevent text wrapping */
+  white-space: nowrap; 
 }
 
 .table th {
-  background-color: #343a40; /* Dark header background */
-  color: #fff; /* Header text color */
+  
+  background-color: #da291c;
+  color: #fff; 
 }
 
 .table-bordered th, .table-bordered td {
-  border: 1px solid #dee2e6; /* Add borders to table */
+  /* border: 2px solid #dee2e6; */
 }
 
 .table-responsive {
-  max-height: 300px; /* Set maximum height for scrolling */
-  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 400px; 
+  overflow-y: auto; 
 }
 
   
   
+

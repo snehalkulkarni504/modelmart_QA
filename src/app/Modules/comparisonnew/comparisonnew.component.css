@@ -43,7 +43,7 @@
     cursor: pointer !important;
     text-decoration: underline;
 } */
- 
+
 
 .setheadernone {
     visibility: hidden;
@@ -252,11 +252,14 @@
 
 
 
-.tablePartDetails, .tableTechnicalParameters {
+.tablePartDetails,
+.tableTechnicalParameters {
     width: 90%;
     border: 1px solid #808080;
     margin-top: 50px;
     font-size: 10px !important;
+
+
 }
 
 .tablePartDetails th,
@@ -264,6 +267,22 @@
     border: 1px solid #808080;
     padding-left: 5px;
     padding-right: 5px;
+}
+
+.right {
+    width: 18% !important;
+}
+
+.right_cal_4 {
+    width: 18% !important;
+}
+
+.right_cal_3 {
+    width: 27% !important;
+}
+
+.right_cal_2 {
+    width: 36% !important;
 }
 
 
@@ -278,7 +297,7 @@
     padding-right: 5px;
 }
 
-.CommericalDetails{
+.CommericalDetails {
     width: 90%;
     border: 1px solid #808080;
     font-size: 10px !important;
@@ -291,7 +310,7 @@
     padding-right: 5px;
 }
 
-.ShouldCostVolume{
+.ShouldCostVolume {
     width: 90%;
     border: 1px solid #808080;
     font-size: 10px !important;
@@ -306,7 +325,7 @@
 }
 
 
-.ManufacturingProcess{
+.ManufacturingProcess {
     width: 90%;
     border: 1px solid #808080;
     font-size: 10px !important;
@@ -318,7 +337,7 @@
     padding-left: 5px;
     padding-right: 5px;
 }
- 
+
 
 .mainpart {
     width: 150px !important;
@@ -329,15 +348,12 @@
     width: 200px !important;
 }
 
-.right{
-    /* min-width: 18% !important; */
+
+.TotalCostData {
+    font-weight: 600 !important;
 }
 
-.TotalCostData{
-    font-weight: 600 !important; 
-}
-
-.directCostminus{
+.directCostminus {
     color: #da291c;
 }
 
@@ -345,7 +361,7 @@
     width: 150px !important;
 }
 
-.particularTier2:hover{
+.particularTier2:hover {
     cursor: pointer;
 }
 
@@ -363,18 +379,42 @@
     background-color: transparent;
 }
 
-.showhiderowstier2:hover ,
+.showhiderowstier2:hover,
 .showShouldCostTier2:hover,
-.hideCommericalDetailsShouldCost:hover
-{
+.hideCommericalDetailsShouldCost:hover {
     cursor: pointer;
 }
 
-.showShouldCostTier2{
-    vertical-align: top;
-} 
-.hideCommericalDetailsShouldCost{
+.showShouldCostTier2 {
     vertical-align: top;
 }
- 
- 
+
+.hideCommericalDetailsShouldCost {
+    vertical-align: top;
+}
+
+.setimageviewShould {
+    width: 90%;
+    /* border: 1px solid #808080; */
+    font-size: 10px !important;
+}
+
+.setimageviewShould th,
+.setimageviewShould td {
+    /* border: 1px solid #808080; */
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+
+.btnview {
+    border: 1px solid #da291c;
+    border-radius: 5px;
+}
+
+
+.chartOptions {
+    width: 80% !important;
+    margin-left: 10% !important;
+    height: 300px;
+}

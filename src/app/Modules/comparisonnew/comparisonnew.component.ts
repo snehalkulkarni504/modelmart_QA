@@ -53,11 +53,6 @@ export class ComparisonnewComponent implements OnInit {
 
     this.GetData();
     this.GetDataTier2();
-
-    setTimeout(() => {
-      this.ShowChart();
-    }, 1000);
-
   }
 
 
@@ -73,8 +68,10 @@ export class ComparisonnewComponent implements OnInit {
   CommericalDetailsShouldCost: any;
   commericalDetailsTier2: any;
   shouldCostVolume: any;
-  ManufacturingProcessDetail:any;
-  CommericalDetailsShouldCostTier2:any;
+  ManufacturingProcessDetail: any;
+  CommericalDetailsShouldCostTier2: any;
+  material_Main: any;
+  material_Detailed: any;
 
   isExpand = true;
   isExpandTier2 = false;
@@ -82,28 +79,38 @@ export class ComparisonnewComponent implements OnInit {
   IsCommericalDetailsSC = false;
   IsCommericalDetailsSupplierCost = false;
   IsDetailedProcess = false;
+  IsMaterialDetails = false;
+  ComparePartCount: any;
 
   async GetData() {
-   
+    debugger;
     const data = await this.searchservice.getComparisonDataNew(this.ids).toPromise();
     this.partDetails = data.partDetails;
+    this.ComparePartCount = data.partDetails.length;
     this.technicalParatameters = data.technicalParatameters;
     this.CommericalDetailsSupplierCost = data.commericalDetailsSupplierCost;
     this.CommericalDetailsShouldCost = data.commericalDetailsShouldCost;
+    this.compardata = data.commericalDetailsShouldCost;
+
     this.shouldCostVolume = data.shouldCostVolume;
     this.ManufacturingProcessDetail = data.manufacturingProcessDetail;
     this.CommericalDetailsShouldCostTier2 = data.commericalDetailsShouldCostTier2;
+    this.material_Main = data.material_Main;
+    this.material_Detailed = data.material_Detailed;
+
     this.SpinnerService.hide('spinner');
+    setTimeout(() => {
+      this.ShowChart();
+    }, 200);
   }
 
   async GetDataTier2() {
-    debugger
-  
+
     const data = await this.searchservice.getComparisonDataNewTier2(this.ids).toPromise();
     this.commericalDetailsTier2 = data;
 
-    console.log(this.partDetails);
-   
+    //console.log(this.partDetails);
+
   }
 
   showShouldCostTier2() {
@@ -134,74 +141,52 @@ export class ComparisonnewComponent implements OnInit {
     this.TotalComparePart = [];
     this.TotalCost = [];
 
-    for (var i = 0; i < this.CommericalDetailsShouldCost.length; i++) {
-
-      if (this.CommericalDetailsShouldCost[i].id >= 2 && this.CommericalDetailsShouldCost[i].id <= 18) {
+    for (var i = 0; i < this.compardata.length; i++) {
+      if (this.compardata[i].id >= 4 && this.compardata[i].id <= 20) {
         this.TotalComparePart = [];
         this.TotalCost = [];
-        debugger;
-        var rr1 = this.CommericalDetailsShouldCost[i].details1 - this.CommericalDetailsShouldCost[i].details1;
-        var rr2 = this.CommericalDetailsShouldCost[i].details2 - this.CommericalDetailsShouldCost[i].details2;
-        var rr3 = this.CommericalDetailsShouldCost[i].details3 - this.CommericalDetailsShouldCost[i].details3;
-        var rr4 = this.CommericalDetailsShouldCost[i].details4 - this.CommericalDetailsShouldCost[i].details4;
 
-        if (this.CommericalDetailsShouldCost[i].id != 10) {
-          if (this.CommericalDetailsShouldCost[i].details1 != null) {
+        if (this.compardata[i].id != 12) {
+          if (this.compardata[i].details1 != null) {
             this.TotalCost.push(
-              { y: Number(rr1), label: '', indexLabel: this.CommericalDetailsShouldCost[i].details1 + '$' }
+              { y: 0, label: '', indexLabel: this.compardata[i].details1 + '$' }
             );
-            // this.TotalComparePart.push(
-            //   { y: Number(this.CommericalDetailsShouldCost[i].details1), label: this.CommericalDetailsShouldCost[1].details1 + ' ' + this.CommericalDetailsShouldCost[2].details1 + ' ' + this.CommericalDetailsShouldCost[4].details1 },
-            // );
             this.TotalComparePart.push(
-              { y: Number(this.CommericalDetailsShouldCost[i].details1), label: '' },
+              { y: Number(this.compardata[i].details1), label: this.compardata[1].details1 + ' ' + this.compardata[2].details1 },
             );
           }
-          if (this.CommericalDetailsShouldCost[i].details2 != null) {
+          if (this.compardata[i].details2 != null) {
             this.TotalCost.push(
-              { y: Number(rr2), label: '', indexLabel: this.CommericalDetailsShouldCost[i].details2 + '$' }
+              { y: 0, label: '', indexLabel: this.compardata[i].details2 + '$' }
             );
-            // this.TotalComparePart.push(
-            //   { y: Number(this.CommericalDetailsShouldCost[i].details2), label: this.CommericalDetailsShouldCost[1].details2 + ' ' + this.CommericalDetailsShouldCost[2].details2 + ' ' + this.CommericalDetailsShouldCost[4].details2 },
-            // );
             this.TotalComparePart.push(
-              { y: Number(this.CommericalDetailsShouldCost[i].details2), label: '' },
+              { y: Number(this.compardata[i].details2), label: this.compardata[1].details2 + ' ' + this.compardata[2].details2 },
             );
           }
-          if (this.CommericalDetailsShouldCost[i].details3 != null) {
+          if (this.compardata[i].details3 != null) {
             this.TotalCost.push(
-              { y: Number(rr3), label: '', indexLabel: this.CommericalDetailsShouldCost[i].details3 + '$' }
+              { y: 0, label: '', indexLabel: this.compardata[i].details3 + '$' }
             );
-            // this.TotalComparePart.push(
-            //   { y: Number(this.CommericalDetailsShouldCost[i].details3), label: this.CommericalDetailsShouldCost[1].details3 + ' ' + this.CommericalDetailsShouldCost[2].details3 + ' ' + this.CommericalDetailsShouldCost[4].details3 },
-            // );
             this.TotalComparePart.push(
-              { y: Number(this.CommericalDetailsShouldCost[i].details3), label: '' },
+              { y: Number(this.compardata[i].details3), label: this.compardata[1].details3 + ' ' + this.compardata[2].details3 },
             );
           }
-          if (this.CommericalDetailsShouldCost[i].details4 != null) {
+          if (this.compardata[i].details4 != null) {
             this.TotalCost.push(
-              { y: Number(rr4), label: '', indexLabel: this.CommericalDetailsShouldCost[i].details4 + '$' }
+              { y: 0, label: '', indexLabel: this.compardata[i].details4 + '$' }
             );
-            // this.TotalComparePart.push(
-            //   { y: Number(this.CommericalDetailsShouldCost[i].details4), label: this.CommericalDetailsShouldCost[1].details4 + ' ' + this.CommericalDetailsShouldCost[2].details4 + ' ' + this.CommericalDetailsShouldCost[4].details4 },
-            // );
             this.TotalComparePart.push(
-              { y: Number(this.CommericalDetailsShouldCost[i].details4), label: '' },
+              { y: Number(this.compardata[i].details4), label: this.compardata[1].details4 + ' ' + this.compardata[2].details4 },
             );
           }
         }
 
-        if (this.CommericalDetailsShouldCost[i].id == 2) {
+        if (this.compardata[i].id == 4) {
           this.CostInfo.push(
             {
               type: "stackedColumn",
-              name: this.CommericalDetailsShouldCost[i].particular,
+              name: this.compardata[i].particular,
               showInLegend: "true",
-              // legend: {
-              //   //     verticalAlign: "center",  // "top" , "bottom"
-              //   horizontalAlign: "center" //"left"  // "center" , "right"
-              // },
               indexLabelTextAlign: "left",
               dataPoints: this.TotalCost
             },
@@ -211,20 +196,21 @@ export class ComparisonnewComponent implements OnInit {
           this.CostInfo.push(
             {
               type: "stackedColumn",
-              name: this.CommericalDetailsShouldCost[i].particular,
+              name: this.compardata[i].particular,
               showInLegend: "true",
-              legend: {
-                verticalAlign: "bottom" // "center",  // "top" , "bottom"
-                //horizontalAlign: "center" //"left"  // "center" , "right"
-              },
               indexLabelTextAlign: "left",
               dataPoints: this.TotalComparePart
             },
           );
         }
+
+
       }
 
+
+
     }
+
 
     this.chartOptions = {
 
@@ -256,11 +242,7 @@ export class ComparisonnewComponent implements OnInit {
 
     }
 
-
-    // ----------------------------------------------------
-
-   
   }
- 
+
 }
 

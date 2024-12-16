@@ -4,112 +4,211 @@
   <p>Your current SC Attainment is <strong>74%</strong></p>
   <p>You have current opportunities worth <strong>$200M</strong></p>
 
-  <div style="margin-top: 30px;">
-    <!-- Button to toggle Commercial Arbitrage content visibility -->
-    <button class="custom-button" (click)="showContent = !showContent">
+  <div style="margin-top: 10px;">
+
+    <button class="custom-button" [class.active]="activeButton === 'commercial'"
+      (click)="setActiveButton('commercial')">
       Commercial<br>Arbitrage
     </button>
 
-    <!-- Button to toggle Regional Arbitrage content visibility -->
-    <button class="custom-button" (click)="showRegionalContent = !showRegionalContent">
+    <button class="custom-button" [class.active]="activeButton === 'regional'" (click)="setActiveButton('regional')">
       Regional<br>Arbitrage
     </button>
 
-    <button class="custom-button">Mfg Process<br>Arbitrage </button>
-    <button class="custom-button">Product Tech Spec<br>Arbitrage</button>
+    <button class="custom-button" [class.active]="activeButton === 'manufacturing'"
+      (click)="setActiveButton('manufacturing')">
+      Mfg Process<br>Arbitrage
+    </button>
+
+    <button class="custom-button" [class.active]="activeButton === 'design'" (click)="setActiveButton('design')">
+      Design<br>Arbitrage
+    </button>
   </div>
+
 </div>
 
-<!-- Conditionally displayed content based on showContent (Commercial Arbitrage) -->
-<div *ngIf="showContent" class="container-fluid" style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
-<div class="row" style="width: 100%; display: flex; justify-content: center;">
-  <div class="col-md-6" style="max-width: 100%; text-align: center;">
-    <img src="../../../assets/image4.png" style="width: 100%; max-width: 500px; height: 280px;" />
-  </div>
-  <div class="col-md-6" style="max-width: 100%; overflow-x: auto;">
-    <div class="table-responsive">
-      <table class="table table-bordered table-hover" style="width: 100%; table-layout: 100%;">
-        <thead class="table-dark">
-          <tr>
-            <th>Sr<br>no</th>
-            <th>Part<br>Number</th>
-            <th>Part<br>Name</th>
-            <th>Supp<br>Manf Loc</th>
-            <th>Total<br>Shouldcost</th>
-            <th>Annual<br>volume</th>
-            <th>Supplier<br>Quoted/Invoice<br>Price($)</th>
-            <th>Supplier<br>name</th>
-            <th>Invoice($)</th>
-            <th>ShouldCost<br>Opportunity</th>
-            <th>SC<br>Attainment</th>
-          </tr>              
-        </thead>
-        <tbody>
-          <tr *ngFor="let opportunity of opportunities; let i=index">
-            <td>{{i + 1}}</td>
-            <td>{{opportunity.PartNumber}}</td>
-            <td>{{opportunity.PartName}}</td>
-            <td>{{opportunity.SuppManfLoc}}</td>
-            <td>{{opportunity.TotalShouldCost}}</td>
-            <td>{{opportunity.AnnualVolume}}</td>
-            <td>{{opportunity.SupplierQuoted_InvoicePrice}}</td>
-            <td>{{opportunity.SupplierName}}</td>
-            <td>{{opportunity.Invoice}}</td>
-            <td>{{opportunity.ShouldCostOpportunity}}</td>
-            <td>{{opportunity.SCAttainment}}</td>
-          </tr>
-        </tbody>
-      </table>
+<div *ngIf="showContent" class="container-fluid"
+  style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
+  <div class="row" style="width: 100%; display: flex; justify-content: center;">
+    
+    <div class="col-md-6" style="max-width: 100%;width: 90%; overflow-x: auto;margin-bottom: 60px;">
+      <div class="table-responsive" style="border: 1px solid #808080;">
+        <table class="table table-bordered table-hover" style="width: 100%; table-layout: 100%;">
+          <thead >
+            <tr>
+              <th>Sr<br>no</th>
+              <th>Part Name</th>
+              <th>Part Number</th>
+              <th>Supp Manf Loc</th>
+              <th>Total Shouldcost</th>
+              <th>Annual volume</th>
+              <th>Supplier Quoted/Invoice<br>Price($)</th>
+              <th>Supplier name</th>
+              <th>Invoice($)</th>
+              <th>ShouldCost <br> Opportunity</th>
+              <th>SC<br>Attainment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let opportunity of opportunities; let i=index">
+              <td>{{i + 1}}</td>
+              <td>{{opportunity.PartName}}</td>
+              <td>{{opportunity.PartNumber}}</td>
+              <td>{{opportunity.SuppManfLoc}}</td>
+              <td>{{opportunity.TotalShouldCost}}</td>
+              <td>{{opportunity.AnnualVolume}}</td>
+              <td>{{opportunity.SupplierQuoted_InvoicePrice}}</td>
+              <td>{{opportunity.SupplierName}}</td>
+              <td>{{opportunity.Invoice}}</td>
+              <td>{{opportunity.ShouldCostOpportunity}}</td>
+              <td>{{opportunity.SCAttainment}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-6" style="max-width: 100%;width: 100%; text-align: center; margin-bottom: 20px;">
+      <img src="assets/image4.png" style="width: 100%; max-width: 91%; height: 400px;  border: 1px solid #808080;" />
     </div>
   </div>
 </div>
-</div>
 
-<!-- Conditionally displayed content based on showRegionalContent (Regional Arbitrage) -->
-<div *ngIf="showRegionalContent" class="container-fluid" style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
-<div class="row" style="width: 100%; display: flex; justify-content: center;">
-  <div class="col-md-6" style="max-width: 100%; text-align: center;">
-    <img src="../../../assets/image3.jpg" style="width: 100%; max-width: 500px; height: 280px;" />
-  </div>
-  <div class="col-md-6" style="max-width: 100%; overflow-x: auto;">
-    <div class="table-responsive">
-      <table class="table table-bordered table-hover" style="width: 100%; table-layout: 100%;">
-        <thead class="table-dark">
-          <tr>
-            <th>SrNo</th>
-            <th>Part<br>Number</th>
-            <th>PartName</th>
-            <th>Supp<br>Manf Loc</th>
-            <!-- <th>Total<br>Shouldcost</th> -->
-            <th>Annual<br>volume</th>
-            <th>Supplier<br>Quoted/Invoice<br>Price($)</th>
-            <th>SupplierName</th>
-            <!-- <th>Invoice($)</th> -->
-            <th>Best<br>Region<br>Cost</th>
-            <th>Best<br>Region</th>
-            <th>Region<br>Arbitrage</th>
-            <th>Region<br>Arbitrage<br>Value</th>
-            <th>From -> To</th>
-          </tr>              
-        </thead>
-        <tbody>
-          <tr *ngFor="let Region of Regional ; let i=index">
-            <td>{{i + 1}}</td>
-            <td>{{Region.partNumber}}</td>
-            <td>{{Region.partName}}</td>
-            <td>{{Region.suppManfLocation}}</td>
-            <td>{{Region.annualVolume}}</td>
-            <td>{{Region.supplierQuotedInvoicePrice}}</td>
-            <td>{{Region.supplierName}}</td>
-            <td>{{Region.bestRegion}}</td>
-            <td>{{Region.bestRegionCost}}</td>
-            <td>{{Region.regionArbitrage}}</td>
-            <td>{{Region.regionArbitrageValue}}</td>
-            <td>{{Region.fromTo}}</td>
-          </tr>
-        </tbody>
-      </table>
+<div *ngIf="showRegionalContent" class="container-fluid"
+  style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
+  <div class="row" style="width: 100%; display: flex; justify-content: center;">
+    <div class="col-md-6"
+      style="max-width: 100%;width: 90%; overflow-x: auto; margin-bottom: 60px; ">
+      <div class="table-responsive" style="border: 1px solid #808080;">
+        <table class="table table-bordered table-hover" style="width: 100%; table-layout: 100%;">
+          <thead>
+            <tr>
+              <th>SrNo</th>
+              <th>Part Name</th>
+              <th>Part<br>Number</th>
+              <th>Supp<br>Manf Loc</th>
+              <th>Annual<br>volume</th>
+              <th>Supplier<br>Quoted/Invoice<br>Price($)</th>
+              <th>SupplierName</th>
+              <th>Best<br>Region</th>
+              <th>Best<br>Region<br>Cost</th>
+              <th>Region<br>Arbitrage</th>
+              <th>Region<br>Arbitrage<br>Value</th>
+              <th>From -> To</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let Region of Regional ; let i=index">
+              <td>{{i + 1}}</td>
+              <td>{{Region.partName}}</td>
+              <td>{{Region.partNumber}}</td>
+              <td>{{Region.suppManfLocation}}</td>
+              <td>{{Region.annualVolume}}</td>
+              <td>{{Region.supplierQuotedInvoicePrice}}</td>
+              <td>{{Region.supplierName}}</td>
+              <td>{{Region.bestRegion}}</td>
+              <td>{{Region.bestRegionCost}}</td>
+              <td>{{Region.regionArbitrage}}</td>
+              <td>{{Region.regionArbitrageValue}}</td>
+              <td>{{Region.fromTo}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-6" style="max-width: 100%;width: 100%; text-align: center; margin-bottom: 20px;">
+      <img src="assets/image3.jpg"
+        style="width: 70%; max-width: 91%; height: 450px; border: 1px solid #808080;" />
     </div>
   </div>
 </div>
+
+<div *ngIf="showmgfprocess" class="container-fluid"
+  style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
+  <div class="row" style="width: 100%; display: flex; justify-content: center; ">
+    <div class="col-md-6"
+      style="max-width: 100%;width: 90%; overflow-x: auto; margin-bottom: 60px;  ">
+      <div class="table-responsive" style="border: 1px solid #808080;">
+        <table class="table table-bordered table-hover" style="width: 100%; table-layout: 100%;">
+          <thead >
+            <tr>
+              <th>Sr<br>no</th>
+              <th>Part Name</th>
+              <th>Part Number</th>
+              <th>Supp Manf Loc</th>
+              <th>Supplier Quoted/Invoice<br>Price($)</th>
+              <th>High Level Process</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of mgfprocess; let i=index">
+              <td>{{i + 1}}</td>
+              <td>{{data.partname}}</td>
+              <td>{{data.partno}}</td>
+              <td>{{data.suppmanilocation}}</td>
+              <td>{{data.supplierQuotedInvoicePrice}}</td>
+              <td>{{data.highlevelprocess}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-6" style="max-width: 100%;width: 100%; text-align: center; margin-bottom: 20px;">
+      <img src="assets/noimg.png"
+        style="width: 100%; max-width: 91%; height: 400px; border: 1px solid #808080;" />
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showdesign" class="container-fluid"
+  style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
+  <div class="row" style="width: 100%; display: flex; justify-content: center; ">
+    <div class="col-md-6"
+      style="max-width: 100%;width: 90%; overflow-x: auto;margin-bottom: 60px;  ">
+      <div class="table-responsive" style="border: 1px solid #808080;">
+        <table class="table table-bordered table-hover" style="width: 100%; table-layout: 100%; font-size: 7px;">
+          <thead >
+            <tr>
+              <th>Sr<br>no</th>
+              <th>Part Name</th>
+              <th>Part Number</th>
+              <th>Supp Manf Loc</th>
+              <th>Annual Volume</th>
+              <th>Material (Main)</th>
+              <th>Material Rate</th>
+              <th>Average Wall<br>Thickness(mm)</th>
+              <th>RM Grade</th>
+              <th>Material per Rate</th>
+              <th>Min Cost Grade</th>
+              <th>Min Cost RM Rate</th>
+              <th>Tech Spec<br>Cost Arbitrage</th>
+              <th>From->To<br>Tech Spec</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of design; let i=index">
+              <td>{{i + 1}}</td>
+              <td>{{data.partname}}</td>
+              <td>{{data.partnumber}}</td>
+              <td>{{data.suppmanilocation}}</td>
+              <td>{{data.annualvol}}</td>
+              <td>{{data.material}}</td>
+              <td>{{data.matrate}}</td>
+              <td>{{data.avgwall}}</td>
+              <td>{{data.rmgrade}}</td>
+              <td>{{data.matrate}}</td>
+              <td>{{data.mincostgrade}}</td>
+              <td>{{data.mincostrmrate}}</td>
+              <td>{{data.techcostarbitage}}</td>
+              <td>{{data.fromtotechspec}}</td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-6" style="max-width: 100%;width: 100%; text-align: center; margin-bottom: 20px;">
+      <img src="assets/design.png"
+        style="width: 100%; max-width: 91%; height: 500px; border: 1px solid #808080;" />
+    </div>
+  </div>
 </div>
