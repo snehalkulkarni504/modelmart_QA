@@ -14,6 +14,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class ComparisonnewComponent implements OnInit {
 
   chartOptions: any = [];
+  chartOptionssupplier: any = [];
+
 
   constructor(public searchservice: SearchService, public router: Router, private location: Location, private SpinnerService: NgxSpinnerService) {
 
@@ -48,6 +50,7 @@ export class ComparisonnewComponent implements OnInit {
       return;
     }
     this.SpinnerService.show('spinner');
+    // debugger;
 
     this.ids = localStorage.getItem("ComapredcheckedboxIds");
 
@@ -72,6 +75,7 @@ export class ComparisonnewComponent implements OnInit {
   CommericalDetailsShouldCostTier2: any;
   material_Main: any;
   material_Detailed: any;
+  compardataSupplier: any;
 
   isExpand = true;
   isExpandTier2 = false;
@@ -81,9 +85,11 @@ export class ComparisonnewComponent implements OnInit {
   IsDetailedProcess = false;
   IsMaterialDetails = false;
   ComparePartCount: any;
+  Hidematerial_Detailedtable3 = true;
+  Hidematerial_Detailedtable4 = true;
 
   async GetData() {
-    debugger;
+    //debugger;
     const data = await this.searchservice.getComparisonDataNew(this.ids).toPromise();
     this.partDetails = data.partDetails;
     this.ComparePartCount = data.partDetails.length;
@@ -91,16 +97,30 @@ export class ComparisonnewComponent implements OnInit {
     this.CommericalDetailsSupplierCost = data.commericalDetailsSupplierCost;
     this.CommericalDetailsShouldCost = data.commericalDetailsShouldCost;
     this.compardata = data.commericalDetailsShouldCost;
+    this.compardataSupplier = data.commericalDetailsSupplierCost;
 
     this.shouldCostVolume = data.shouldCostVolume;
     this.ManufacturingProcessDetail = data.manufacturingProcessDetail;
     this.CommericalDetailsShouldCostTier2 = data.commericalDetailsShouldCostTier2;
     this.material_Main = data.material_Main;
     this.material_Detailed = data.material_Detailed;
+    //this.material_Detailed_Count = data.material_Detailed.length;
+    // alert(this.ComparePartCount);
+    //debugger;
+    if (data.partDetails.length == 3) {
+      this.Hidematerial_Detailedtable3 = false;
+      this.Hidematerial_Detailedtable4 = true;
+    }
+    if (data.partDetails.length == 4) {
+      this.Hidematerial_Detailedtable3 = false;
+      this.Hidematerial_Detailedtable4 = false;
+    }
+
 
     this.SpinnerService.hide('spinner');
     setTimeout(() => {
       this.ShowChart();
+      this.ShowChartSupplier();
     }, 200);
   }
 
@@ -136,7 +156,7 @@ export class ComparisonnewComponent implements OnInit {
   TotalCost: any = [];
 
   ShowChart() {
-    debugger;
+    // debugger;
     this.CostInfo = [];
     this.TotalComparePart = [];
     this.TotalCost = [];
@@ -240,6 +260,101 @@ export class ComparisonnewComponent implements OnInit {
       data: this.CostInfo,
 
 
+    }
+
+  }
+
+  ShowChartSupplier() {
+    debugger;
+    this.CostInfo = [];
+    this.TotalComparePart = [];
+    this.TotalCost = [];
+    console.log(this.compardataSupplier);
+
+    for (var i = 0; i < this.compardataSupplier.length; i++) {
+      this.TotalComparePart = [];
+      this.TotalCost = [];
+
+      this.TotalComparePart.push(
+        { y: Number(this.compardataSupplier[i].directMaterialCost), label: 'Direct Material Cost' },
+      );
+      this.TotalComparePart.push(
+        { y: Number(this.compardataSupplier[i].materialRefund), label: 'materialRefund' },
+      );
+      this.TotalComparePart.push(
+        { y: Number(this.compardataSupplier[i].boughtOutFinishCost), label: 'boughtOutFinishCost' },
+      );
+      this.TotalComparePart.push(
+        { y: Number(this.compardataSupplier[i].roughPartCost), label: 'roughPartCost' },
+      );
+      this.TotalComparePart.push(
+        { y: Number(this.compardataSupplier[i].directLabourCost), label: 'directLabourCost' },
+      );
+      this.TotalComparePart.push(
+        { y: Number(this.compardataSupplier[i].processOverheadCost), label: 'processOverheadCost' },
+      );
+      this.TotalComparePart.push(
+        { y: Number(this.compardataSupplier[i].surfaceTreatmentCost), label: 'surfaceTreatmentCost' },
+      );
+      this.TotalComparePart.push(
+        { y: Number(this.compardataSupplier[i].sga), label: 'sga' },
+      );
+      this.TotalComparePart.push(
+        { y: Number(this.compardataSupplier[i].profit), label: 'profit' },
+      );
+      this.TotalComparePart.push(
+        { y: Number(this.compardataSupplier[i].packaging), label: 'packaging' },
+      );
+      this.TotalComparePart.push(
+        { y: Number(this.compardataSupplier[i].fright_Logistics), label: 'fright_Logistics' },
+      );
+      this.TotalComparePart.push(
+        { y: Number(this.compardataSupplier[i].directedBuy), label: 'directedBuy' },
+      );
+      this.TotalComparePart.push(
+        { y: Number(this.compardataSupplier[i].handlingCharges), label: 'handlingCharges' },
+      );
+
+
+      this.CostInfo.push(
+        {
+          type: "stackedColumn",
+          name: "dsds",
+          showInLegend: "true",
+          indexLabelTextAlign: "left",
+          dataPoints: this.TotalComparePart
+        },
+      );
+    }
+
+    console.log(this.TotalComparePart);
+
+
+    this.chartOptionssupplier = {
+      animationEnabled: true,
+      exportEnabled: false,
+      theme: "light1",
+      title: {
+        text: ""
+      },
+      axisX: {
+        labelFontSize: 10,
+        labelMaxWidth: 100,
+        labelWrap: true,
+        interval: 1,
+      },
+      axisY: {
+        title: "Cost in USD($)",
+      },
+      toolTip: {
+        shared: true
+      },
+      legend: {
+        horizontalAlign: "right",
+        verticalAlign: "center",
+        reversed: true
+      },
+      data: this.CostInfo
     }
 
   }

@@ -52,6 +52,9 @@
     <div class="chartOptions">
         <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'300px'}"></canvasjs-chart>
     </div>
+    <!-- <div class="chartOptions">
+        <canvasjs-chart [options]="chartOptionssupplier" [styles]="{width: '100%', height:'300px'}"></canvasjs-chart>
+    </div> -->
 
     <!--  -->
 
@@ -60,8 +63,8 @@
         <table class="table table-bordered tablePartDetails">
             <tr>
                 <th rowspan="10" class="text-center mainpart">Part Details </th>
-                <th>CSHeaderId</th>
-                <td class="right" *ngFor="let i of this.partDetails">
+                <th hidden>CSHeaderId</th>
+                <td hidden class="right" *ngFor="let i of this.partDetails">
                     {{i.csHeaderId}}
                 </td>
             </tr>
@@ -132,8 +135,8 @@
         <table class="table table-bordered ShouldCostVolume">
             <tr>
                 <th rowspan="9" class="text-center mainpart">Should Cost Volume and Location</th>
-                <th class="particular">csHeaderId</th>
-                <td class="right" *ngFor="let i of this.shouldCostVolume">
+                <th hidden class="particular">csHeaderId</th>
+                <td hidden class="right" *ngFor="let i of this.shouldCostVolume">
                     {{i.csHeaderId}}
                 </td>
             </tr>
@@ -193,8 +196,8 @@
         <table class="table table-bordered tableTechnicalParameters">
             <tr>
                 <th rowspan="12" class="text-center mainpart">Technical Parameters</th>
-                <th class="particular">csHeaderId</th>
-                <td class="right" *ngFor="let i of this.technicalParatameters">
+                <th hidden class="particular">csHeaderId</th>
+                <td hidden class="right" *ngFor="let i of this.technicalParatameters">
                     {{i.csHeaderId}}
                 </td>
             </tr>
@@ -240,7 +243,7 @@
             <tr>
                 <th class="particular">Casting/Forging Yield (%)</th>
                 <td class="right" *ngFor="let i of this.technicalParatameters">
-                    {{i.castingForging_Yield}}
+                    {{i.castingForging_Yield | number:'1.0-0'}}
                 </td>
             </tr>
             <tr>
@@ -277,8 +280,8 @@
                 <th rowspan="101" class="text-center mainpart ">
                     Technical Parameters <br> Material Info
                 </th>
-                <th class="particular">csHeaderId</th>
-                <td class="right" *ngFor="let i of this.material_Main">
+                <th hidden class="particular">csHeaderId</th>
+                <td hidden class="right" *ngFor="let i of this.material_Main">
                     {{i.csHeaderId}}
                 </td>
             </tr>
@@ -300,7 +303,7 @@
                     <td class="particular" style="vertical-align: top; ">
                         <table class="setimage" style="width: 100%;">
                             <tr *ngFor="let i of this.material_Detailed">
-                                <td style="border: 1px solid #80808041" *ngIf="i.details1">
+                                <td style="border: 1px solid #80808041" *ngIf="i.details1 && i.id != 1 ">
                                     {{i.details1}}
                                 </td>
                             </tr>
@@ -309,25 +312,25 @@
                     <td class="particular" style="vertical-align: top; ">
                         <table class="setimage" style="width: 100%;">
                             <tr *ngFor="let i of this.material_Detailed">
-                                <td style="border: 1px solid #80808041" *ngIf="i.details2">
+                                <td style="border: 1px solid #80808041" *ngIf="i.details2  && i.id != 1">
                                     {{i.details2}}
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td class="particular" style="vertical-align: top; ">
+                    <td [hidden]="Hidematerial_Detailedtable3" class="particular" style="vertical-align: top; ">
                         <table class="setimage" style="width: 100%;">
                             <tr *ngFor="let i of this.material_Detailed">
-                                <td style="border: 1px solid #80808041" *ngIf="i.details3">
+                                <td style="border: 1px solid #80808041" *ngIf="i.details3  && i.id != 1">
                                     {{i.details3}}
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td class="particular" style="vertical-align: top; ">
+                    <td [hidden]="Hidematerial_Detailedtable4" class="particular" style="vertical-align: top; ">
                         <table class="setimage" style="width: 100%;">
                             <tr *ngFor="let i of this.material_Detailed">
-                                <td style="border: 1px solid #80808041" *ngIf="i.details4">
+                                <td style="border: 1px solid #80808041" *ngIf="i.details4  && i.id != 1">
                                     {{i.details4}}
                                 </td>
                             </tr>
@@ -360,7 +363,7 @@
             </tr>
             <ng-container *ngIf="IsCommericalDetailsSC">
                 <tr *ngFor="let i of this.CommericalDetailsShouldCost">
-                    <th *ngIf="i.row_num != 100" class="particular" [class.showShouldCostTier2]="i.row_num == 3"
+                    <th *ngIf="i.row_num != 100  && i.row_num != 1" class="particular" [class.showShouldCostTier2]="i.row_num == 3"
                         (click)="i.row_num == 3 && showShouldCostTier2()">
                         {{i.particular}}
                         <ng-container *ngIf="i.row_num == 3">
@@ -369,64 +372,64 @@
                         </ng-container>
 
                     </th>
-                    <td *ngIf="i.details1 && i.row_num != 100" class="right" [class.TotalCostData]="i.row_num == 17"
+                    <td *ngIf="i.details1 && i.row_num != 100  && i.row_num != 1" class="right" [class.TotalCostData]="i.row_num == 17"
                         [class.directCostminus]="i.details1 < 0">
                         {{i.details1}}
                         <ng-container *ngIf="i.row_num == 3">
                             <table *ngIf="isExpandShouldCostTier2">
                                 <tr *ngFor="let t2 of this.CommericalDetailsShouldCostTier2">
-                                    <th class="particular">
+                                    <th  *ngIf="t2.row_num != 1" class="particular">
                                         {{t2.particular}}
                                     </th>
-                                    <td *ngIf="t2.details1" class="right">
+                                    <td *ngIf="t2.details1  && t2.row_num != 1" class="right">
                                         {{t2.details1}}
                                     </td>
                                 </tr>
                             </table>
                         </ng-container>
                     </td>
-                    <td *ngIf="i.details2  && i.row_num != 100" class="right" [class.TotalCostData]="i.row_num == 17"
+                    <td *ngIf="i.details2  && i.row_num != 100  && i.row_num != 1" class="right" [class.TotalCostData]="i.row_num == 17"
                         [class.directCostminus]="i.details2 < 0">
                         {{i.details2}}
                         <ng-container *ngIf="i.row_num == 3">
                             <table *ngIf="isExpandShouldCostTier2">
                                 <tr *ngFor="let t2 of this.CommericalDetailsShouldCostTier2">
-                                    <th class="particular">
+                                    <th *ngIf="t2.row_num != 1" class="particular">
                                         {{t2.particular}}
                                     </th>
-                                    <td *ngIf="t2.details2" class="right">
+                                    <td *ngIf="t2.details2  && t2.row_num != 1" class="right">
                                         {{t2.details2}}
                                     </td>
                                 </tr>
                             </table>
                         </ng-container>
                     </td>
-                    <td *ngIf="i.details3  && i.row_num != 100" class="right" [class.TotalCostData]="i.row_num == 17"
+                    <td *ngIf="i.details3  && i.row_num != 100 && i.row_num != 1" class="right" [class.TotalCostData]="i.row_num == 17"
                         [class.directCostminus]="i.details3 < 0">
                         {{i.details3}}
                         <ng-container *ngIf="i.row_num == 3">
                             <table *ngIf="isExpandShouldCostTier2">
                                 <tr *ngFor="let t2 of this.CommericalDetailsShouldCostTier2">
-                                    <th class="particular">
+                                    <th  *ngIf="t2.row_num != 1" class="particular">
                                         {{t2.particular}}
                                     </th>
-                                    <td *ngIf="t2.details3" class="right">
+                                    <td *ngIf="t2.details3  && t2.row_num != 1" class="right">
                                         {{t2.details3}}
                                     </td>
                                 </tr>
                             </table>
                         </ng-container>
                     </td>
-                    <td *ngIf="i.details4  && i.row_num != 100" class="right" [class.TotalCostData]="i.row_num == 17"
+                    <td *ngIf="i.details4  && i.row_num != 100 && i.row_num != 1" class="right" [class.TotalCostData]="i.row_num == 17"
                         [class.directCostminus]="i.details4 < 0">
                         {{i.details4}}
                         <ng-container *ngIf="i.row_num == 3">
                             <table *ngIf="isExpandShouldCostTier2">
                                 <tr *ngFor="let t2 of this.CommericalDetailsShouldCostTier2">
-                                    <th class="particular">
+                                    <th  *ngIf="t2.row_num != 1"  class="particular">
                                         {{t2.particular}}
                                     </th>
-                                    <td *ngIf="t2.details4" class="right">
+                                    <td *ngIf="t2.details4  && t2.row_num != 1" class="right">
                                         {{t2.details4}}
                                     </td>
                                 </tr>
@@ -448,8 +451,8 @@
                     <i *ngIf="IsCommericalDetailsSupplierCost" class="bi-chevron-down showhiderowstier2"></i>
                     <i *ngIf="!IsCommericalDetailsSupplierCost" class="bi-chevron-right showhiderowstier2"></i>
                 </th>
-                <th class="particular">csHeaderId</th>
-                <td class="right" *ngFor="let i of this.CommericalDetailsSupplierCost">
+                <th hidden class="particular">csHeaderId</th>
+                <td hidden class="right" *ngFor="let i of this.CommericalDetailsSupplierCost">
                     {{i.csHeaderId}}
                 </td>
             </tr>
@@ -580,7 +583,7 @@
                     <td class="particular" style="vertical-align: top; ">
                         <table class="setimage" style="width: 100%;">
                             <tr *ngFor="let i of this.ManufacturingProcessDetail">
-                                <td style="border: 1px solid #80808041" *ngIf="i.details1">
+                                <td style="border: 1px solid #80808041" *ngIf="i.details1 && i.id != 1">
                                     {{i.details1}}
                                 </td>
                             </tr>
@@ -589,25 +592,25 @@
                     <td class="particular" style="vertical-align: top;">
                         <table class="setimage" style="width: 100%;">
                             <tr *ngFor="let i of this.ManufacturingProcessDetail">
-                                <td style="border: 1px solid #80808041" *ngIf="i.details2">
+                                <td style="border: 1px solid #80808041" *ngIf="i.details2 && i.id != 1">
                                     {{i.details2}}
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td class="particular" style="vertical-align: top;">
+                    <td [hidden]="Hidematerial_Detailedtable3"  class="particular" style="vertical-align: top;">
                         <table class="setimage" style="width: 100%;">
                             <tr *ngFor="let i of this.ManufacturingProcessDetail">
-                                <td style="border: 1px solid #80808041" *ngIf="i.details3">
+                                <td style="border: 1px solid #80808041" *ngIf="i.details3 && i.id != 1">
                                     {{i.details3}}
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td class="particular" style="vertical-align: top;">
+                    <td [hidden]="Hidematerial_Detailedtable4"  class="particular" style="vertical-align: top;">
                         <table class="setimage" style="width: 100%;">
                             <tr *ngFor="let i of this.ManufacturingProcessDetail">
-                                <td style="border: 1px solid #80808041" *ngIf="i.details4">
+                                <td style="border: 1px solid #80808041" *ngIf="i.details4 && i.id != 1">
                                     {{i.details4}}
                                 </td>
                             </tr>

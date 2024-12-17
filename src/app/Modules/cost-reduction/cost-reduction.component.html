@@ -33,20 +33,20 @@
     
     <div class="col-md-6" style="max-width: 100%;width: 90%; overflow-x: auto;margin-bottom: 60px;">
       <div class="table-responsive" style="border: 1px solid #808080;">
-        <table class="table table-bordered table-hover" style="width: 100%; table-layout: 100%;">
+        <table class="table table-bordered table-hover table-striped" style="width: 100%; table-layout: 100%;">
           <thead >
             <tr>
               <th>Sr<br>no</th>
               <th>Part Name</th>
               <th>Part Number</th>
-              <th>Supp Manf Loc</th>
-              <th>Total Shouldcost</th>
-              <th>Annual volume</th>
-              <th>Supplier Quoted/Invoice<br>Price($)</th>
-              <th>Supplier name</th>
-              <th>Invoice($)</th>
-              <th>ShouldCost <br> Opportunity</th>
-              <th>SC<br>Attainment</th>
+              <th>Supp Mfg Location</th>
+              <th>Should Cost(USD)</th>
+              <th>Annual Volume</th>
+              <th>Supplier Quoted/Invoice<br>Price (USD)</th>
+              <th>Supplier Name</th>
+              <th>Invoice Price-ShouldCose</th>
+              <th>Should Cost <br> Opportunity (USD)</th>
+              <th>SC<br>Attainment (%)</th>
             </tr>
           </thead>
           <tbody>
@@ -55,20 +55,20 @@
               <td>{{opportunity.PartName}}</td>
               <td>{{opportunity.PartNumber}}</td>
               <td>{{opportunity.SuppManfLoc}}</td>
-              <td>{{opportunity.TotalShouldCost}}</td>
-              <td>{{opportunity.AnnualVolume}}</td>
-              <td>{{opportunity.SupplierQuoted_InvoicePrice}}</td>
+              <td>$ {{opportunity.TotalShouldCost}}</td>
+              <td>{{opportunity.AnnualVolume | number:'1.0-0'}}</td>
+              <td>$ {{opportunity.SupplierQuoted_InvoicePrice}}</td>
               <td>{{opportunity.SupplierName}}</td>
-              <td>{{opportunity.Invoice}}</td>
-              <td>{{opportunity.ShouldCostOpportunity}}</td>
-              <td>{{opportunity.SCAttainment}}</td>
+              <td>$ {{opportunity.Invoice}}</td>
+              <td>$ {{opportunity.ShouldCostOpportunity}}</td>
+              <td>{{opportunity.SCAttainment}}%</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
     <div class="col-md-6" style="max-width: 100%;width: 100%; text-align: center; margin-bottom: 20px;">
-      <img src="assets/image4.png" style="width: 100%; max-width: 91%; height: 400px;  border: 1px solid #808080;" />
+      <img src="../../../assets/Commerical_10.png" style="width: 100%; max-width: 91%; height: 400px;  border: 1px solid #808080;" />
     </div>
   </div>
 </div>
@@ -79,19 +79,19 @@
     <div class="col-md-6"
       style="max-width: 100%;width: 90%; overflow-x: auto; margin-bottom: 60px; ">
       <div class="table-responsive" style="border: 1px solid #808080;">
-        <table class="table table-bordered table-hover" style="width: 100%; table-layout: 100%;">
+        <table class="table table-bordered table-hover table-striped" style="width: 100%; table-layout: 100%;">
           <thead>
             <tr>
               <th>SrNo</th>
               <th>Part Name</th>
               <th>Part<br>Number</th>
-              <th>Supp<br>Manf Loc</th>
+              <th>Supplier Mfg Location</th>
               <th>Annual<br>volume</th>
-              <th>Supplier<br>Quoted/Invoice<br>Price($)</th>
-              <th>SupplierName</th>
+              <th>Supplier<br>Quoted/Invoice<br>Price (USD)</th>
+              <th>Supplier Name</th>
               <th>Best<br>Region</th>
-              <th>Best<br>Region<br>Cost</th>
-              <th>Region<br>Arbitrage</th>
+              <th>Best<br>Region<br>Cost (USD)</th>
+              <th>Region<br>Arbitrage (USD)</th>
               <th>Region<br>Arbitrage<br>Value</th>
               <th>From -> To</th>
             </tr>
@@ -102,13 +102,13 @@
               <td>{{Region.partName}}</td>
               <td>{{Region.partNumber}}</td>
               <td>{{Region.suppManfLocation}}</td>
-              <td>{{Region.annualVolume}}</td>
-              <td>{{Region.supplierQuotedInvoicePrice}}</td>
+              <td>{{Region.annualVolume | number:'1.0-0'}}</td>
+              <td>$ {{Region.supplierQuotedInvoicePrice}}</td>
               <td>{{Region.supplierName}}</td>
               <td>{{Region.bestRegion}}</td>
-              <td>{{Region.bestRegionCost}}</td>
-              <td>{{Region.regionArbitrage}}</td>
-              <td>{{Region.regionArbitrageValue}}</td>
+              <td>$ {{Region.bestRegionCost}}</td>
+              <td>$ {{Region.regionArbitrage}}</td>
+              <td>$ {{Region.regionArbitrageValue}}</td>
               <td>{{Region.fromTo}}</td>
             </tr>
           </tbody>
@@ -116,8 +116,8 @@
       </div>
     </div>
     <div class="col-md-6" style="max-width: 100%;width: 100%; text-align: center; margin-bottom: 20px;">
-      <img src="assets/image3.jpg"
-        style="width: 70%; max-width: 91%; height: 450px; border: 1px solid #808080;" />
+      <img src="../../../assets/RegionArbitrage_10.png"
+        style="width: 70%; max-width: 91%; height: 300px; border: 1px solid #808080;" />
     </div>
   </div>
 </div>
@@ -128,14 +128,14 @@
     <div class="col-md-6"
       style="max-width: 100%;width: 90%; overflow-x: auto; margin-bottom: 60px;  ">
       <div class="table-responsive" style="border: 1px solid #808080;">
-        <table class="table table-bordered table-hover" style="width: 100%; table-layout: 100%;">
+        <table class="table table-bordered table-hover table-striped" style="width: 100%; table-layout: 100%;">
           <thead >
             <tr>
               <th>Sr<br>no</th>
               <th>Part Name</th>
               <th>Part Number</th>
-              <th>Supp Manf Loc</th>
-              <th>Supplier Quoted/Invoice<br>Price($)</th>
+              <th>Supplier Mfg Location</th>
+              <th>Supplier Quoted/Invoice<br>Price (USD)</th>
               <th>High Level Process</th>
             </tr>
           </thead>
@@ -145,7 +145,7 @@
               <td>{{data.partname}}</td>
               <td>{{data.partno}}</td>
               <td>{{data.suppmanilocation}}</td>
-              <td>{{data.supplierQuotedInvoicePrice}}</td>
+              <td>$ {{data.supplierQuotedInvoicePrice}}</td>
               <td>{{data.highlevelprocess}}</td>
             </tr>
           </tbody>
@@ -165,22 +165,22 @@
     <div class="col-md-6"
       style="max-width: 100%;width: 90%; overflow-x: auto;margin-bottom: 60px;  ">
       <div class="table-responsive" style="border: 1px solid #808080;">
-        <table class="table table-bordered table-hover" style="width: 100%; table-layout: 100%; font-size: 7px;">
+        <table class="table table-bordered table-hover table-striped" style="width: 100%; table-layout: 100%; font-size: 7px;">
           <thead >
             <tr>
               <th>Sr<br>no</th>
               <th>Part Name</th>
               <th>Part Number</th>
-              <th>Supp Manf Loc</th>
+              <th>Supplier Manfacturing Location</th>
               <th>Annual Volume</th>
               <th>Material (Main)</th>
-              <th>Material Rate</th>
-              <th>Average Wall<br>Thickness(mm)</th>
+              <th>Material Rate ($/kg)</th>
+              <th>Average Wall<br>Thickness (mm)</th>
               <th>RM Grade</th>
-              <th>Material per Rate</th>
+              <th hidden>Material Rate ($/kg)</th>
               <th>Min Cost Grade</th>
-              <th>Min Cost RM Rate</th>
-              <th>Tech Spec<br>Cost Arbitrage</th>
+              <th>Min Cost RM Rate ($/kg)</th>
+              <th>Tech Spec<br>Cost Arbitrage/pc</th>
               <th>From->To<br>Tech Spec</th>
             </tr>
           </thead>
@@ -190,15 +190,15 @@
               <td>{{data.partname}}</td>
               <td>{{data.partnumber}}</td>
               <td>{{data.suppmanilocation}}</td>
-              <td>{{data.annualvol}}</td>
+              <td>{{data.annualvol | number:'1.0-0'}}</td>
               <td>{{data.material}}</td>
-              <td>{{data.matrate}}</td>
+              <td>$ {{data.matrate}}</td>
               <td>{{data.avgwall}}</td>
               <td>{{data.rmgrade}}</td>
-              <td>{{data.matrate}}</td>
+              <td hidden>$ {{data.matratee}}</td>
               <td>{{data.mincostgrade}}</td>
-              <td>{{data.mincostrmrate}}</td>
-              <td>{{data.techcostarbitage}}</td>
+              <td>$ {{data.mincostrmrate}}</td>
+              <td>$ {{data.techcostarbitage}}</td>
               <td>{{data.fromtotechspec}}</td>
 
             </tr>
@@ -207,8 +207,8 @@
       </div>
     </div>
     <div class="col-md-6" style="max-width: 100%;width: 100%; text-align: center; margin-bottom: 20px;">
-      <img src="assets/design.png"
-        style="width: 100%; max-width: 91%; height: 500px; border: 1px solid #808080;" />
+      <img src="../../../assets/DesignArbitrage_10.png"
+        style="width: 100%; max-width: 91%; height: 300px; border: 1px solid #808080;" />
     </div>
   </div>
 </div>
