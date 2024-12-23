@@ -54,7 +54,6 @@ import { ForexreportComponent } from './Modules/Report/forexreport/forexreport.c
 import { UserhistoryComponent } from './Modules/Report/userhistory/userhistory.component';
 import { ShouldCostUserHistoryComponent } from './Modules/Report/should-cost-user-history/should-cost-user-history.component';
 import { FrequentlyusedmaterialgradeComponent } from './Modules/Report/frequentlyusedmaterialgrade/frequentlyusedmaterialgrade.component';
-import { NgApexchartsModule } from 'ng-apexcharts';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { MaintenanceComponent } from './home/maintenance/maintenance.component';
 import { ComparisonnewComponent } from './Modules/comparisonnew/comparisonnew.component';
@@ -126,7 +125,6 @@ import { HousingflywheelComponent } from './Modules/housingflywheel/housingflywh
     NgxPaginationModule,
     NgbModule,
     NgIdleKeepaliveModule,
-    NgApexchartsModule,
     CanvasJSAngularChartsModule
   ],
   providers: [

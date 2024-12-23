@@ -23,7 +23,7 @@
     "@azure/msal-angular": "^3.0.10",
     "@azure/msal-browser": "^3.7.0",
     "@canvasjs/angular-charts": "^1.2.0",
-    "@canvasjs/charts": "^3.8.7",
+    "@canvasjs/charts": "^3.10.21",
     "@charmedme/ngx-treeview": "^2.0.8",
     "@material/checkbox": "^14.0.0",
     "@ng-bootstrap/ng-bootstrap": "^15.1.2",
