@@ -1,3 +1,4 @@
+import { ApexChart } from './../../../../node_modules/ng-apexcharts/lib/model/apex-types.d';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
