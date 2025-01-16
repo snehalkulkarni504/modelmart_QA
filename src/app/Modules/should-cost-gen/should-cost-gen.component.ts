@@ -1,4 +1,3 @@
-import { color } from 'html2canvas/dist/types/css/types/color';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
@@ -6,31 +5,7 @@ import { SearchService } from 'src/app/SharedServices/search.service';
 import { Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { ChartComponent } from "ng-apexcharts";
-
-import {
-  ApexAxisChartSeries,
-  ApexDataLabels,
-  ApexPlotOptions,
-  ApexYAxis,
-  ApexTitleSubtitle,
-  ApexXAxis,
-  ApexFill,
-  ApexChart,
-} from "ng-apexcharts";
 import { environment } from 'src/environments/environments';
-
-export type ChartOptions = {
-  series: ApexAxisChartSeries;
-  chart: ApexChart;
-  dataLabels: ApexDataLabels;
-  plotOptions: ApexPlotOptions;
-  yaxis: ApexYAxis;
-  xaxis: ApexXAxis;
-  fill: ApexFill;
-  title: ApexTitleSubtitle;
-};
-
 
 export interface Piedata {
   y: number;
@@ -45,12 +20,7 @@ export interface Piedata {
 })
 export class ShouldCostGenComponent implements OnInit {
 
-  @ViewChild("chart") chart!: ChartComponent;
-  public chartOptions!: Partial<ChartOptions>;
-
   imgName: any;
-
-
   //private datePipe: DatePipe
   constructor(public searchservice: SearchService,
     public router: Router, private route: ActivatedRoute, private location: Location, private SpinnerService: NgxSpinnerService, public toastr: ToastrService) {
@@ -60,8 +30,7 @@ export class ShouldCostGenComponent implements OnInit {
     // });
 
   }
-  showError2: boolean = false;
-  showError1: boolean = false;
+
   ComapredId: any;
   ShouldeCostData: any = [];
   shouldCostBreakdownList: any = [];
@@ -117,24 +86,8 @@ export class ShouldCostGenComponent implements OnInit {
   AluminiumCastingGrade: any;
   modelTypes_Id: any;
   IsCSmodel: boolean = false;
-  display = "none";
-    header: string = '';
-    txt_btn: string = '';
-    date: Date = new Date();
-   // engine: Engine[] = [];
-    newArr: any = {};
-    isErrorEngDis: boolean = false;
-    statusValue: boolean = false;
-    editModal: boolean = false;
-    editRowIndex: any;
-    textsearch: string = '';
-    engineDis: any;
-    Cartcategory:any;
-  cartName:any;
-  CreateNewCart:boolean=false;
-  AddToCart:boolean=true;
-  ShowHideNewCartButton:boolean=true;
-  cartNameList:any={}
+
+
   ngOnInit(): void {
 
     this.router.events.subscribe((event) => {
@@ -182,7 +135,7 @@ export class ShouldCostGenComponent implements OnInit {
       this.appexChart();
       // this.getPiedata();
     }, 500);
-    this.getCartName();
+
 
   }
 
@@ -1021,132 +974,9 @@ export class ShouldCostGenComponent implements OnInit {
       }]
     }
 
-    
-
     const si = document.getElementById("graphData") as HTMLElement;
     si.getElementsByClassName('canvasjs-chart-credit')[0].innerHTML = '';
 
   }
 
-  //OPEN MODEL FOR CART VIEW
-
-  public options: string[] = ["Cart1", "Cart2", "Cart3","Cart4"];
-  selectedQuantity = "Cart1";
-
-  openModal() {
-    this.getCartName();
-
-    if(this.cartNameList.length<=0)
-    {
-      this.onCartCreate();
-    }
-
-    this.display = "block";
-    if (this.CreateNewCart) {
-      this.showError2 = false;
-      this.header = 'Create Cart and Save To Add Item';
-      this.txt_btn = 'Create New Cart';
-      this.engineDis = ""; 
-      this.statusValue ;
-    } else {
-      this.showError2 = false;
-      this.header = 'Add To Cart';
-      this.txt_btn = 'Save';
-      this.engineDis = "";
-      this.statusValue;
-    }
-  };
-
-  onCloseHandled() {
-
-   this.CreateNewCart=false;
-   this.AddToCart=true;
-   this.ShowHideNewCartButton=true;
-   this.showError1=false;
-   this.display = "none";
-
-    
-  }
-
-  blurCheckBlankInputValidation(inputName: string) {
-    const inputElement = document.getElementsByName(inputName)[0] as HTMLInputElement
-    if (inputName === 'engDis') {
-      this.showError1 = inputElement.value.trim() === '';
-      this.engineDis = inputElement.value;
-    }
-    if (inputName === 'status') {
-      this.showError2 = inputElement.value.trim() === '';
-      // this.statusValue = inputElement.defaultValue
-    }
-  }
-
-  getCartName() {
-    this.searchservice.getCartName(this.userId).subscribe((_result: any) => {
-      this.cartNameList = _result;
-
-    });
-  }
-
-  onCartCreate(){
-    this.AddToCart=false;
-    this.CreateNewCart=true;
-    this.ShowHideNewCartButton=false;
-    this.showError1=false;
-    this.Cartcategory=undefined;
-
-  }
-
-  async onSaveButton() {
-
-    if(!this.Cartcategory)
-    {
-      this.showError1=true;
-      return;
-    }
-
-    if(this.CreateNewCart)
-    {
-      const matches = this.cartNameList.filter((x:any) => x.cartName.includes(this.Cartcategory)); 
-      if(matches.length>0)
-      {
-        this.showError2=true;
-        return;
-      }
-    }
-  this.searchservice.SaveToCart(this.userId, this.UniqueId,this.Cartcategory)
-    .subscribe({
-      next: (_res) => {
-        if(_res==1)
-        {
-        //this.getEngineAll();
-        this.toastr.success("Item Inserted Successfully.");
-        this.AddToCart=true;
-        this.CreateNewCart=false;
-        this.ShowHideNewCartButton=true;
-        this.showError1=false;
-        this.showError2=false;
-        this.onCloseHandled();
-        this.Cartcategory=undefined;
-        this.getCartName();
-        }
-        if(_res==2)
-        {
-          this.toastr.success("Item Already exist in the cart");
-          this.showError1=false;
-          this.showError2=false;
-          this.Cartcategory=undefined;
-        }
-      },
-      error: (error) => {
-        console.error('Inserting API call error:', error);
-        this.AddToCart=true;
-        this.CreateNewCart=false;
-        this.ShowHideNewCartButton=true;
-        this.showError1=false;
-        this.showError2=false;
-        this.Cartcategory=undefined;
-      },
-    });
-  }
-   
-    }
+}

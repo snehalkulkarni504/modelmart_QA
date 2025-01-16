@@ -114,16 +114,6 @@ export class SearchService {
     return this.httpClient.post(this.apiUrl + "SaveMatetialCost?userId=" + userId + "&IsCastingSheet=" + IsCastingSheet, saveMatetialCost)
   }
 
-////Post method for save to cart
-  SaveToCart(userId:any,uniqueId:any,CartName:any): Observable<any> {
-    return this.httpClient.post(this.apiUrl + "SaveToCart?userId="+userId+"&uniqueId=" +uniqueId+ "&CartName=" +CartName, '')
-  }
-
-  getCartName(UserId:any):Observable<any>{
-    return this.httpClient.get<any>(this.apiUrl+`GetCartName?UserId=${UserId}`);
-  }
-
-
   GetSourcingManagerReport(id: number, SM_Id: number, IsCastingSheet: any): Observable<any> {
     return this.httpClient.get<any[]>(this.apiUrl + `GetSourcingManagerReport?id=${id}&SM_Id=${SM_Id}&IsCastingSheet=${IsCastingSheet}`);
   }

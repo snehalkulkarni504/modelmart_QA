@@ -34,6 +34,7 @@ import { UserhistoryComponent } from '../Report/userhistory/userhistory.componen
 import { ShouldCostUserHistoryComponent } from '../Report/should-cost-user-history/should-cost-user-history.component';
 import { ComparisonnewComponent } from '../comparisonnew/comparisonnew.component';
 import { CostReductionComponent } from '../cost-reduction/cost-reduction.component';
+import { SendMessageComponent } from '../contact/send-message/send-message.component';
  
 
 const routes: Routes = [
@@ -73,7 +74,10 @@ const routes: Routes = [
       { path : 'shouldcostuserhistory/:data', component:ShouldCostUserHistoryComponent},
       { path : 'frequentlyusedmaterialgrade' , component:FrequentlyusedmaterialgradeComponent},
       { path : 'costinsights' , component:CostReductionComponent},
-      { path : 'toolingcost' , component:HousingflywheelComponent}
+      { path : 'toolingcost' , component:HousingflywheelComponent},
+      { path : 'sendmessage' , component:SendMessageComponent},
+
+      
 
 
 

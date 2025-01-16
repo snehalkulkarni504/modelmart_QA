@@ -14,7 +14,9 @@ export class ContactComponent {
 
 
   toSupportPage(){
-    this.router.navigate(['/home/supportpage']);
+   // this.router.navigate(['/home/supportpage']);
+    this.router.navigate(['/home/sendmessage']);
+
   }
 
   openPDF() {

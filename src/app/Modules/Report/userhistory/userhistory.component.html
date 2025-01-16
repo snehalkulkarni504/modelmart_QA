@@ -35,23 +35,25 @@
                         <th hidden>CSHeaderID</th>
                         <th>User Name</th>
                         <th>Full Name</th>
+                        <th>ModelMart Id</th>
                         <th>Project Name</th>
                         <th>View / Download</th>
                         <th>Updated Date</th>
-                        <th>Previous Should Cost</th>
-                        <th>User simulation</th>
+                        <th>Previous Should Cost ($)</th>
+                        <th>User simulation ($)</th>
                         <th>Variation</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr
                         *ngFor="let val of getData | search: textsearch:filterMetadata | paginate: { itemsPerPage: 10, currentPage: page }  let i=index">
-                        <td>{{i + 1}}</td>
+                        <td>{{(page - 1) * 10 + i + 1}}</td>
                         <td hidden>{{val.id}}</td>
                         <td hidden>{{val.SCReportId}}</td>
                         <td hidden>{{val.CSHeaderID}}</td>
                         <td>{{val.UserName}}</td>
                         <td>{{val.FullName}}</td>
+                        <td>{{val.Modelmartid}}</td>
                         <td>{{val.PName}}</td>
                         <td>
                             <span (click)='viewReport(val)'>
@@ -72,6 +74,9 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="remark">
+            <label><b>Note : </b>we show last six months simulataed models</label>
         </div>
 
         <div class="d-flex justify-content-between p-2 pagination">

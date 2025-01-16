@@ -177,6 +177,9 @@ export class AdminService {
   }
 
 
+  submitContact(contact: any): Observable<any> {
+    return this.httpClient.post(this.apiUrl+`submitcontact`, contact);
+  }
 
 
 }

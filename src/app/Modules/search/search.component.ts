@@ -1,4 +1,3 @@
-import { ApexChart } from './../../../../node_modules/ng-apexcharts/lib/model/apex-types.d';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -613,14 +612,14 @@ export class SearchComponent implements OnInit {
         li[i].style.display = "";
       }
 
-      //this.clearProgramName();
-      // this.ProgramNameSearch.nativeElement.value = "";
-      // var ul = document.getElementById("ProgramnameUL");
-      // var li = ul!.getElementsByTagName("li") as any;
-      // for (var i = 0; i < li.length; i++) {
-      //   li[i].getElementsByTagName('input')[0].checked = false;
-      //   li[i].style.display = "";
-      // }
+      this.clearProgramName();
+      this.ProgramNameSearch.nativeElement.value = "";
+      var ul = document.getElementById("ProgramnameUL");
+      var li = ul!.getElementsByTagName("li") as any;
+      for (var i = 0; i < li.length; i++) {
+        li[i].getElementsByTagName('input')[0].checked = false;
+        li[i].style.display = "";
+      }
 
 
       this.filters.cat2 = ''; this.filters.cat3 = ''; this.filters.cat4 = ''; this.filters.location = ''; this.filters.engine = '';
@@ -1450,6 +1449,7 @@ export class SearchComponent implements OnInit {
     xhr.send();
   }
 
+  
   FilterSearchDataAsceDesc(e: any) {
     // 0 = Sort by A-Z
     // 1 = Sort by Z-A
@@ -1459,14 +1459,30 @@ export class SearchComponent implements OnInit {
     this.FilterSearchDataAsceDesc_var = e;
     this.filterData();
   }
+
+  firstRow_Sorting: any = "Ascending to Descending";
+  secondRow_Sorting: any = "Descending to Ascending" ;
+
   FilterSearchData(e: any) {
+    debugger;
     // 0 = Debrief Date 
     // 1 = Location
     // 2 = Tooling Cost
     // 3 = Should Cost
+
+    if (e == 0 || e == 1) {
+      this.firstRow_Sorting = "Ascending to Descending";
+      this.secondRow_Sorting = "Descending to Ascending";
+    }
+    else{
+      this.firstRow_Sorting = "Smallest to Largest";
+      this.secondRow_Sorting = "Largest to Smallest";
+    }
+
     this.selectedSearchDataAsceDesc = undefined;
     this.FilterSearchData_var = e;
   }
+
 
   filterData() {
     // debugger;

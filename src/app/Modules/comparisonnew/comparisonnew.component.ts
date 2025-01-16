@@ -50,7 +50,6 @@ export class ComparisonnewComponent implements OnInit {
       return;
     }
     this.SpinnerService.show('spinner');
-    // debugger;
 
     this.ids = localStorage.getItem("ComapredcheckedboxIds");
 
@@ -89,7 +88,7 @@ export class ComparisonnewComponent implements OnInit {
   Hidematerial_Detailedtable4 = true;
 
   async GetData() {
-    //debugger;
+
     const data = await this.searchservice.getComparisonDataNew(this.ids).toPromise();
     this.partDetails = data.partDetails;
     this.ComparePartCount = data.partDetails.length;
@@ -104,9 +103,7 @@ export class ComparisonnewComponent implements OnInit {
     this.CommericalDetailsShouldCostTier2 = data.commericalDetailsShouldCostTier2;
     this.material_Main = data.material_Main;
     this.material_Detailed = data.material_Detailed;
-    //this.material_Detailed_Count = data.material_Detailed.length;
-    // alert(this.ComparePartCount);
-    //debugger;
+
     if (data.partDetails.length == 3) {
       this.Hidematerial_Detailedtable3 = false;
       this.Hidematerial_Detailedtable4 = true;
@@ -122,6 +119,19 @@ export class ComparisonnewComponent implements OnInit {
       this.ShowChart();
       this.ShowChartSupplier();
     }, 200);
+
+    setTimeout(() => {
+      this.hidename();
+    }, 300);
+  }
+
+
+  hidename() {
+    const r = document.getElementById("chartOptionsId") as any;
+    r.getElementsByClassName('canvasjs-chart-credit')[0].style.display = "none";
+
+    const r2 = document.getElementById("chartOptionssupplierId") as any;
+    r2.getElementsByClassName('canvasjs-chart-credit')[0].style.display = "none";
   }
 
   async GetDataTier2() {
@@ -155,9 +165,13 @@ export class ComparisonnewComponent implements OnInit {
   TotalComparePart: any = [];
   TotalCost: any = [];
 
+  ShoudeCostInfo: any = [];
+
+  chartOptionstest: any = [];
+
   ShowChart() {
-    // debugger;
-    this.CostInfo = [];
+    //debugger;
+    this.ShoudeCostInfo = [];
     this.TotalComparePart = [];
     this.TotalCost = [];
 
@@ -166,7 +180,7 @@ export class ComparisonnewComponent implements OnInit {
         this.TotalComparePart = [];
         this.TotalCost = [];
 
-        if (this.compardata[i].id != 12) {
+        if (this.compardata[i].id != 11) {
           if (this.compardata[i].details1 != null) {
             this.TotalCost.push(
               { y: 0, label: '', indexLabel: this.compardata[i].details1 + '$' }
@@ -201,33 +215,27 @@ export class ComparisonnewComponent implements OnInit {
           }
         }
 
-        if (this.compardata[i].id == 4) {
-          this.CostInfo.push(
+        if (this.compardata[i].id == 20) {
+          this.ShoudeCostInfo.push(
             {
               type: "stackedColumn",
               name: this.compardata[i].particular,
-              showInLegend: "true",
               indexLabelTextAlign: "left",
               dataPoints: this.TotalCost
             },
           );
         }
         else {
-          this.CostInfo.push(
+          this.ShoudeCostInfo.push(
             {
               type: "stackedColumn",
               name: this.compardata[i].particular,
-              showInLegend: "true",
               indexLabelTextAlign: "left",
               dataPoints: this.TotalComparePart
             },
           );
         }
-
-
       }
-
-
 
     }
 
@@ -257,78 +265,281 @@ export class ComparisonnewComponent implements OnInit {
         verticalAlign: "center",
         reversed: true
       },
-      data: this.CostInfo,
+      data: this.ShoudeCostInfo,
 
 
     }
 
   }
 
+
+  compardataSupplierlable = ['Total Cost ($)', 'Direct Material Cost ($)', 'Material Refund ($)', 'Bought Out Finish Cost ($)',
+    'Rough Part Cost ($)', 'Direct Labour Cost ($)', 'Process Overhead Cost ($)', 'Surface Treatment Cost ($)',
+    'SGA ($)', 'Profit ($)', 'Packaging ($)', 'Fright Logistics ($)', 'Directed Buy ($)', 'Handling Charges ($)', 'ICC ($)', 'Rejection ($)'];
+
+  compardataSuppliervalue = ['totalCost', 'directMaterialCost', 'materialRefund', 'boughtOutFinishCost',
+    'roughPartCost', 'directLabourCost', 'processOverheadCost', 'surfaceTreatmentCost',
+    'sga', 'profit', 'packaging', 'fright_Logistics', 'directedBuy', 'handlingCharges', '0', '0'];
+
   ShowChartSupplier() {
-    debugger;
+    //debugger;
     this.CostInfo = [];
     this.TotalComparePart = [];
-    this.TotalCost = [];
-    console.log(this.compardataSupplier);
 
-    for (var i = 0; i < this.compardataSupplier.length; i++) {
-      this.TotalComparePart = [];
-      this.TotalCost = [];
-
+    this.TotalComparePart = [];
+    for (var j = 0; j < this.compardataSupplier.length; j++) {
+      var lbl = this.compardataSupplier[j].partName + ',' + this.compardataSupplier[j].partNumber + ',' + this.compardataSupplier[j].supplierName + ',' + this.compardataSupplier[j].suppManfLocation;
       this.TotalComparePart.push(
-        { y: Number(this.compardataSupplier[i].directMaterialCost), label: 'Direct Material Cost' },
-      );
-      this.TotalComparePart.push(
-        { y: Number(this.compardataSupplier[i].materialRefund), label: 'materialRefund' },
-      );
-      this.TotalComparePart.push(
-        { y: Number(this.compardataSupplier[i].boughtOutFinishCost), label: 'boughtOutFinishCost' },
-      );
-      this.TotalComparePart.push(
-        { y: Number(this.compardataSupplier[i].roughPartCost), label: 'roughPartCost' },
-      );
-      this.TotalComparePart.push(
-        { y: Number(this.compardataSupplier[i].directLabourCost), label: 'directLabourCost' },
-      );
-      this.TotalComparePart.push(
-        { y: Number(this.compardataSupplier[i].processOverheadCost), label: 'processOverheadCost' },
-      );
-      this.TotalComparePart.push(
-        { y: Number(this.compardataSupplier[i].surfaceTreatmentCost), label: 'surfaceTreatmentCost' },
-      );
-      this.TotalComparePart.push(
-        { y: Number(this.compardataSupplier[i].sga), label: 'sga' },
-      );
-      this.TotalComparePart.push(
-        { y: Number(this.compardataSupplier[i].profit), label: 'profit' },
-      );
-      this.TotalComparePart.push(
-        { y: Number(this.compardataSupplier[i].packaging), label: 'packaging' },
-      );
-      this.TotalComparePart.push(
-        { y: Number(this.compardataSupplier[i].fright_Logistics), label: 'fright_Logistics' },
-      );
-      this.TotalComparePart.push(
-        { y: Number(this.compardataSupplier[i].directedBuy), label: 'directedBuy' },
-      );
-      this.TotalComparePart.push(
-        { y: Number(this.compardataSupplier[i].handlingCharges), label: 'handlingCharges' },
-      );
-
-
-      this.CostInfo.push(
-        {
-          type: "stackedColumn",
-          name: "dsds",
-          showInLegend: "true",
-          indexLabelTextAlign: "left",
-          dataPoints: this.TotalComparePart
-        },
+        { label: lbl, y: Number(this.compardataSupplier[j].directMaterialCost) },
       );
     }
+    this.CostInfo.push(
+      {
+        type: "stackedColumn",
+        name: 'Direct Material Cost ($)',
+        indexLabelTextAlign: "left",
+        dataPoints: this.TotalComparePart
+      },
+    );
 
-    console.log(this.TotalComparePart);
+    this.TotalComparePart = [];
+    for (var j = 0; j < this.compardataSupplier.length; j++) {
+      // var lbl  = this.compardataSupplier[j].partName + ' ' + this.compardataSupplier[j].partNumber + ' ' + this.compardataSupplier[j].supplierName + ' ' + this.compardataSupplier[j].suppManfLocation ;
+      this.TotalComparePart.push(
+        { label: '', y: Number(this.compardataSupplier[j].materialRefund) },
+      );
+    }
+    this.CostInfo.push(
+      {
+        type: "stackedColumn",
+        name: 'Material Refund ($)',
+        indexLabelTextAlign: "left",
+        dataPoints: this.TotalComparePart
+      },
+    );
 
+    this.TotalComparePart = [];
+    for (var j = 0; j < this.compardataSupplier.length; j++) {
+      //var lbl  = this.compardataSupplier[j].partName + ' ' + this.compardataSupplier[j].partNumber + ' ' + this.compardataSupplier[j].supplierName + ' ' + this.compardataSupplier[j].suppManfLocation ;
+      this.TotalComparePart.push(
+        { label: '', y: Number(this.compardataSupplier[j].boughtOutFinishCost) },
+      );
+    }
+    this.CostInfo.push(
+      {
+        type: "stackedColumn",
+        name: 'Bought Out Finish Cost ($)',
+        indexLabelTextAlign: "left",
+        dataPoints: this.TotalComparePart
+      },
+    );
+
+    this.TotalComparePart = [];
+    for (var j = 0; j < this.compardataSupplier.length; j++) {
+      // var lbl  = this.compardataSupplier[j].partName + ' ' + this.compardataSupplier[j].partNumber + ' ' + this.compardataSupplier[j].supplierName + ' ' + this.compardataSupplier[j].suppManfLocation ;
+      this.TotalComparePart.push(
+        { label: '', y: Number(this.compardataSupplier[j].roughPartCost) },
+      );
+    }
+    this.CostInfo.push(
+      {
+        type: "stackedColumn",
+        name: 'Rough Part Cost ($)',
+        indexLabelTextAlign: "left",
+        dataPoints: this.TotalComparePart
+      },
+    );
+
+    this.TotalComparePart = [];
+    for (var j = 0; j < this.compardataSupplier.length; j++) {
+      //  var lbl  = this.compardataSupplier[j].partName + ' ' + this.compardataSupplier[j].partNumber + ' ' + this.compardataSupplier[j].supplierName + ' ' + this.compardataSupplier[j].suppManfLocation ;
+      this.TotalComparePart.push(
+        { label: '', y: Number(this.compardataSupplier[j].directLabourCost) },
+      );
+    }
+    this.CostInfo.push(
+      {
+        type: "stackedColumn",
+        name: 'Direct Labour Cost ($)',
+        indexLabelTextAlign: "left",
+        dataPoints: this.TotalComparePart
+      },
+    );
+
+    this.TotalComparePart = [];
+    for (var j = 0; j < this.compardataSupplier.length; j++) {
+      // var lbl  = this.compardataSupplier[j].partName + ' ' + this.compardataSupplier[j].partNumber + ' ' + this.compardataSupplier[j].supplierName + ' ' + this.compardataSupplier[j].suppManfLocation ;
+      this.TotalComparePart.push(
+        { label: '', y: Number(this.compardataSupplier[j].processOverheadCost) },
+      );
+    }
+    this.CostInfo.push(
+      {
+        type: "stackedColumn",
+        name: 'Process Overhead Cost ($)',
+        indexLabelTextAlign: "left",
+        dataPoints: this.TotalComparePart
+      },
+    );
+
+    this.TotalComparePart = [];
+    for (var j = 0; j < this.compardataSupplier.length; j++) {
+      // var lbl  = this.compardataSupplier[j].partName + ' ' + this.compardataSupplier[j].partNumber + ' ' + this.compardataSupplier[j].supplierName + ' ' + this.compardataSupplier[j].suppManfLocation ;
+      this.TotalComparePart.push(
+        { label: '', y: Number(this.compardataSupplier[j].surfaceTreatmentCost) },
+      );
+    }
+    this.CostInfo.push(
+      {
+        type: "stackedColumn",
+        name: 'Surface Treatment Cost ($)',
+        indexLabelTextAlign: "left",
+        dataPoints: this.TotalComparePart
+      },
+    );
+
+    this.TotalComparePart = [];
+    for (var j = 0; j < this.compardataSupplier.length; j++) {
+      // var lbl  = this.compardataSupplier[j].partName + ' ' + this.compardataSupplier[j].partNumber + ' ' + this.compardataSupplier[j].supplierName + ' ' + this.compardataSupplier[j].suppManfLocation ;
+      this.TotalComparePart.push(
+        { label: '', y: Number(this.compardataSupplier[j].sga) },
+      );
+    }
+    this.CostInfo.push(
+      {
+        type: "stackedColumn",
+        name: 'SGA ($)',
+        indexLabelTextAlign: "left",
+        dataPoints: this.TotalComparePart
+      },
+    );
+
+    this.TotalComparePart = [];
+    for (var j = 0; j < this.compardataSupplier.length; j++) {
+      // var lbl  = this.compardataSupplier[j].partName + ' ' + this.compardataSupplier[j].partNumber + ' ' + this.compardataSupplier[j].supplierName + ' ' + this.compardataSupplier[j].suppManfLocation ;
+      this.TotalComparePart.push(
+        { label: '', y: Number(this.compardataSupplier[j].profit) },
+      );
+    }
+    this.CostInfo.push(
+      {
+        type: "stackedColumn",
+        name: 'Profit ($)',
+        indexLabelTextAlign: "left",
+        dataPoints: this.TotalComparePart
+      },
+    );
+
+    this.TotalComparePart = [];
+    for (var j = 0; j < this.compardataSupplier.length; j++) {
+      // var lbl  = this.compardataSupplier[j].partName + ' ' + this.compardataSupplier[j].partNumber + ' ' + this.compardataSupplier[j].supplierName + ' ' + this.compardataSupplier[j].suppManfLocation ;
+      this.TotalComparePart.push(
+        { label: '', y: Number(this.compardataSupplier[j].packaging) },
+      );
+    }
+    this.CostInfo.push(
+      {
+        type: "stackedColumn",
+        name: 'Packaging ($)',
+        indexLabelTextAlign: "left",
+        dataPoints: this.TotalComparePart
+      },
+    );
+
+    this.TotalComparePart = [];
+    for (var j = 0; j < this.compardataSupplier.length; j++) {
+      // var lbl  = this.compardataSupplier[j].partName + ' ' + this.compardataSupplier[j].partNumber + ' ' + this.compardataSupplier[j].supplierName + ' ' + this.compardataSupplier[j].suppManfLocation ;
+      this.TotalComparePart.push(
+        { label: '', y: Number(this.compardataSupplier[j].fright_Logistics) },
+      );
+    }
+    this.CostInfo.push(
+      {
+        type: "stackedColumn",
+        name: 'Fright/Logistics ($)',
+        indexLabelTextAlign: "left",
+        dataPoints: this.TotalComparePart
+      },
+    );
+
+    this.TotalComparePart = [];
+    for (var j = 0; j < this.compardataSupplier.length; j++) {
+      // var lbl  = this.compardataSupplier[j].partName + ' ' + this.compardataSupplier[j].partNumber + ' ' + this.compardataSupplier[j].supplierName + ' ' + this.compardataSupplier[j].suppManfLocation ;
+      this.TotalComparePart.push(
+        { label: '', y: Number(this.compardataSupplier[j].directedBuy) },
+      );
+    }
+    this.CostInfo.push(
+      {
+        type: "stackedColumn",
+        name: 'Directed Buy ($)',
+        indexLabelTextAlign: "left",
+        dataPoints: this.TotalComparePart
+      },
+    );
+
+    this.TotalComparePart = [];
+    for (var j = 0; j < this.compardataSupplier.length; j++) {
+      // var lbl  = this.compardataSupplier[j].partName + ' ' + this.compardataSupplier[j].partNumber + ' ' + this.compardataSupplier[j].supplierName + ' ' + this.compardataSupplier[j].suppManfLocation ;
+      this.TotalComparePart.push(
+        { label: '', y: Number(this.compardataSupplier[j].handlingCharges) },
+      );
+    }
+    this.CostInfo.push(
+      {
+        type: "stackedColumn",
+        name: 'Handling Charges ($)',
+        indexLabelTextAlign: "left",
+        dataPoints: this.TotalComparePart
+      },
+    );
+
+    this.TotalComparePart = [];
+    for (var j = 0; j < this.compardataSupplier.length; j++) {
+      // var lbl  = this.compardataSupplier[j].partName + ' ' + this.compardataSupplier[j].partNumber + ' ' + this.compardataSupplier[j].supplierName + ' ' + this.compardataSupplier[j].suppManfLocation ;
+      this.TotalComparePart.push(
+        { label: '', y: 0 },
+      );
+    }
+    this.CostInfo.push(
+      {
+        type: "stackedColumn",
+        name: 'ICC ($)',
+        indexLabelTextAlign: "left",
+        dataPoints: this.TotalComparePart
+      },
+    );
+
+    this.TotalComparePart = [];
+    for (var j = 0; j < this.compardataSupplier.length; j++) {
+      // var lbl  = this.compardataSupplier[j].partName + ' ' + this.compardataSupplier[j].partNumber + ' ' + this.compardataSupplier[j].supplierName + ' ' + this.compardataSupplier[j].suppManfLocation ;
+      this.TotalComparePart.push(
+        { label: '', y: 0 },
+      );
+    }
+    this.CostInfo.push(
+      {
+        type: "stackedColumn",
+        name: 'Rejection ($)',
+        indexLabelTextAlign: "left",
+        dataPoints: this.TotalComparePart
+      },
+    );
+
+    this.TotalComparePart = [];
+    for (var j = 0; j < this.compardataSupplier.length; j++) {
+      this.TotalComparePart.push(
+        { y: 0, label: '', indexLabel: this.compardataSupplier[j].totalCost + '$' },
+      );
+    }
+    this.CostInfo.push(
+      {
+        type: "stackedColumn",
+        name: 'Total Cost ($)',
+        indexLabelTextAlign: "left",
+        dataPoints: this.TotalComparePart
+      },
+    );
 
     this.chartOptionssupplier = {
       animationEnabled: true,
@@ -345,6 +556,11 @@ export class ComparisonnewComponent implements OnInit {
       },
       axisY: {
         title: "Cost in USD($)",
+      },
+      axisY2: {
+        maximum: 15,
+        lineThickness: 0,
+        tickLength: 0,
       },
       toolTip: {
         shared: true
