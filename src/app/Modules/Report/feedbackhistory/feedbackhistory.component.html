@@ -4,10 +4,10 @@
         <img alt="Loading Please Wait..." style="width:100px ; height:100px ;" src="../../../assets/Spin-2.gif" />
     </ngx-spinner>
 
-    <form [formGroup]="UserHistory">
+    <form [formGroup]="feedbackHistory">
         <div class="MasterHeader">
             <div style="width: 50%;">
-                <h2>User History Details</h2>
+                <h2>Feedback History Details</h2>
             </div>
             <div class="text-end" style="width: 50%;">
                 <button class="btnbackLeft" (click)="backToPreviousPage()">Back</button>
@@ -33,15 +33,12 @@
                         <th hidden>Id</th>
                         <th hidden>SCReportId</th>
                         <th hidden>CSHeaderID</th>
-                        <th>User Name</th>
+                        
                         <th>Full Name</th>
-                        <th>ModelMart Id</th>
-                        <th>Project Name</th>
-                        <th>View / Download</th>
-                        <th>Updated Date</th>
-                        <th>Previous Should Cost ($)</th>
-                        <th>User simulation ($)</th>
-                        <th>Variation</th>
+                        <th>Email</th>
+                        <th>Created By</th>
+                        <th>Created On</th>
+                        <th>View</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,32 +48,16 @@
                         <td hidden>{{val.id}}</td>
                         <td hidden>{{val.SCReportId}}</td>
                         <td hidden>{{val.CSHeaderID}}</td>
-                        <td>{{val.UserName}}</td>
-                        <td>{{val.FullName}}</td>
-                        <td>{{val.Modelmartid}}</td>
-                        <td>{{val.PName}}</td>
+                        <td>{{val.name}}</td>
+                        <td>{{val.email}}</td>
+                        <td>{{val.createdby}}</td>
+                        <td>{{val.createdon|date :'dd-MMM-yyyy - HH:mm:ss'}}</td>
                         <td>
-                            <span (click)='viewReport(val)'>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-download" viewBox="0 0 16 16">
-                                    <path
-                                        d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
-                                    <path
-                                        d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
-                                </svg>
-                            </span>
+                            <i class="bi bi-eye-fill" style=" color: #da291c; font-size:18px; cursor: pointer;" (click)="viewfeedback(val)"></i>
                         </td>
-
-                        <td>{{val.CreatedOn | date :'dd-MMM-yyyy - HH:mm:ss'}}</td>
-                        <td>{{val.value_existing}}</td>
-                        <td>{{val.value_updated}}</td>
-                        <td>{{val.variation + '%'}} </td>
                     </tr>
                 </tbody>
             </table>
-        </div>
-        <div class="remark">
-            <label><b>Note : </b>Last 6 months simulated data is retained.</label>
         </div>
 
         <div class="d-flex justify-content-between p-2 pagination">
@@ -87,12 +68,6 @@
             </ngb-pagination>
             <br>
         </div>
-
-        <!-- <div class="RemarkSection">
-            <ol>
-                <li></li>
-            </ol>
-        </div> -->
 
     </form>
 </div>

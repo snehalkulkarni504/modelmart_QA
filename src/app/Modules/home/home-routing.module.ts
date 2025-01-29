@@ -35,6 +35,9 @@ import { ShouldCostUserHistoryComponent } from '../Report/should-cost-user-histo
 import { ComparisonnewComponent } from '../comparisonnew/comparisonnew.component';
 import { CostReductionComponent } from '../cost-reduction/cost-reduction.component';
 import { SendMessageComponent } from '../contact/send-message/send-message.component';
+import { CartdetailsComponent } from '../cartdetails/cartdetails.component';
+import { FeedbackComponent } from '../contact/feedback/feedback.component';
+import { FeedbackhistoryComponent } from '../Report/feedbackhistory/feedbackhistory.component';
  
 
 const routes: Routes = [
@@ -75,8 +78,10 @@ const routes: Routes = [
       { path : 'frequentlyusedmaterialgrade' , component:FrequentlyusedmaterialgradeComponent},
       { path : 'costinsights' , component:CostReductionComponent},
       { path : 'toolingcost' , component:HousingflywheelComponent},
+      { path : 'cartdeta' , component:CartdetailsComponent},
       { path : 'sendmessage' , component:SendMessageComponent},
-
+      { path : 'feedback', component: FeedbackComponent },
+      { path : 'feedbackhistory', component: FeedbackhistoryComponent },
       
 
 

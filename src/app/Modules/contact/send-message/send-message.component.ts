@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {Location} from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { AdminService } from 'src/app/SharedServices/admin.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { AdminService } from 'src/app/SharedServices/admin.service';
+
 
 @Component({
   selector: 'app-send-message',
@@ -58,11 +59,11 @@ export class SendMessageComponent implements OnInit {
     // Make the POST API call to submit the contact form data
     this.adminService.submitContact(contactData).subscribe(
       (response: any) => {
-        this.toastr.success('Message sent successfully!');
+        this.toastr.success('Message sent successfully!', 'Success');
         
       },
-        (error:any) => {
-          this.toastr.error('Failed to send message. Please try again later.');
+        (error) => {
+          this.toastr.error('Failed to send message. Please try again later.', 'Error');
           console.error(error);
         }
       );
@@ -73,7 +74,7 @@ export class SendMessageComponent implements OnInit {
   }
 
 
-  toSendMessagePage(){
-    this.router.navigate(['/home/SendMessagePage']);
+  tofeedbackPage(){
+    this.router.navigate(['/home/feedback']);
   }
 }

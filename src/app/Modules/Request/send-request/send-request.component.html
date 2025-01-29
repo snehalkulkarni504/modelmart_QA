@@ -145,6 +145,7 @@
                                 <th>Cost Type</th>
                                 <th hidden>CSHeaderID</th>
                                 <th>Model Mart ID</th>
+                                <th>Iterations</th>
                                 <th *ngIf="IsHopperValide">Action</th>
                             </tr>
                         </thead>
@@ -167,18 +168,20 @@
                                 <td hidden *ngIf="getUArr[i]">{{ getUArr[i].csHeaderID }}</td>
                                 <td hidden *ngIf="!getUArr[i]"></td>
                                 <td>{{data.uniqueID}}</td>
-                                <td *ngIf="getUArr[i] && IsHopperValide">
-                                    <i class="bi bi-pencil-fill" style="color: #da291c; 
+                                <td>{{data.iterationsCount}}</td>
+                                <td *ngIf=" IsHopperValide && getUArr[i] && (getUArr[i].iterationCount == data.iterationsCount)">
+                                    <i class="bi bi-pencil-fill" style="color: #da291c;
                                             font-size:larger;" (click)="editModalMethod(i)"
                                         ngbTooltip="Update Model"></i>
                                     <i class="bi bi-trash-fill" style="color: #da291c; padding-left:4px;
                                             font-size:larger;" (click)="deleteUploadedData(i)"
                                         ngbTooltip="Delete Model"></i>
+ 
                                 </td>
-                                <td  *ngIf="!getUArr[i] && IsHopperValide"><i class="bi bi-plus-lg"
+                                <td  *ngIf="IsHopperValide && ( !getUArr[i] || getUArr[i].iterationCount < data.iterationsCount)"><i class="bi bi-plus-lg"
                                         style="color: #da291c; font-size:larger;" id="plus-icon"
                                         (click)="addModalMethod(i)" ngbTooltip="Add new Model"></i>
-
+ 
                                 </td>
 
                             </tr>

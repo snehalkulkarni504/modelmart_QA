@@ -42,7 +42,7 @@
                     <tr
                         *ngFor="let data of getRole | search: textsearch:filterMetadata | paginate: { itemsPerPage: 10, currentPage: page } let i=index">
                         <td hidden>{{data.RoleId}}</td>
-                        <td>{{i+1}}</td>
+                        <td>{{(page - 1) * 10 + i + 1}}</td>
                         <td>{{data.Description}}</td>
                         <td>{{data.Menu}}</td>
                         <td hidden>{{data.MenuId}}</td>

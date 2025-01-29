@@ -60,6 +60,9 @@ import { ComparisonnewComponent } from './Modules/comparisonnew/comparisonnew.co
 import { CostReductionComponent } from './Modules/cost-reduction/cost-reduction.component';
 import { HousingflywheelComponent } from './Modules/housingflywheel/housingflywheel.component';
 import { SendMessageComponent } from './Modules/contact/send-message/send-message.component';
+import { CartdetailsComponent } from './Modules/cartdetails/cartdetails.component';
+import { FeedbackComponent } from './Modules/contact/feedback/feedback.component';
+import { FeedbackhistoryComponent } from './Modules/Report/feedbackhistory/feedbackhistory.component';
 
 @NgModule({
   declarations: [
@@ -106,7 +109,10 @@ import { SendMessageComponent } from './Modules/contact/send-message/send-messag
     ComparisonnewComponent,
     CostReductionComponent,
     HousingflywheelComponent,
-    SendMessageComponent
+    SendMessageComponent,
+    CartdetailsComponent,
+    FeedbackComponent,
+    FeedbackhistoryComponent
   ],
   imports: [
     TreeModule,

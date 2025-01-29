@@ -47,7 +47,7 @@
                 <tbody>
                     <tr *ngFor="let data of masterManintenance | search: textsearch:filterMetadata | paginate: { itemsPerPage: 10, currentPage: page }  let i=index">
                         <td hidden>{{data.LocationId}}</td>
-                        <td>{{i+1}}</td>
+                        <td>{{(page - 1) * 10 + i + 1}}</td>
                         <td>{{data.LocationName}}</td>
                         <td hidden>{{data.Currency}}</td>
                         <!-- <td>{{data.IsActive?'Active':'Inactive'}}</td> -->

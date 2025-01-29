@@ -216,7 +216,7 @@ export class SearchComponent implements OnInit {
     this.ShowCagetory3("");
     this.GetBusinessUnit();
     this.GetProgramName();
- 
+
     if (this.childCategory == " ") {
       this.filters.cat4 = '';
     }
@@ -1340,6 +1340,8 @@ export class SearchComponent implements OnInit {
   }
 
   getComparison() {
+    // this.router.navigate(['/home/cartdeta']);
+    // return
     // this.Comparecheckbox;
     if (this.SearchList.length <= 0) {
       this.toastr.error("Record Not Found");
@@ -1449,7 +1451,7 @@ export class SearchComponent implements OnInit {
     xhr.send();
   }
 
-  
+
   FilterSearchDataAsceDesc(e: any) {
     // 0 = Sort by A-Z
     // 1 = Sort by Z-A
@@ -1461,7 +1463,7 @@ export class SearchComponent implements OnInit {
   }
 
   firstRow_Sorting: any = "Ascending to Descending";
-  secondRow_Sorting: any = "Descending to Ascending" ;
+  secondRow_Sorting: any = "Descending to Ascending";
 
   FilterSearchData(e: any) {
     debugger;
@@ -1474,7 +1476,7 @@ export class SearchComponent implements OnInit {
       this.firstRow_Sorting = "Ascending to Descending";
       this.secondRow_Sorting = "Descending to Ascending";
     }
-    else{
+    else {
       this.firstRow_Sorting = "Smallest to Largest";
       this.secondRow_Sorting = "Largest to Smallest";
     }

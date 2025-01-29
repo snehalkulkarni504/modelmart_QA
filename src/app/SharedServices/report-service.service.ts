@@ -77,6 +77,13 @@ export class ReportServiceService {
   }
 
   
+  sendfeedbackdata(data:any):Observable<any> {
+    return this.http.post<any>(this.apiUrl + 'Feedbackdata',data)
+  }
+   
+  GetFeedbackHistoryDetails(username:any):Observable<any> {
+    return this.http.get<any[]>(this.apiUrl+`Getfeedbackdata?username=${username}`);
+  }
 
   
 }

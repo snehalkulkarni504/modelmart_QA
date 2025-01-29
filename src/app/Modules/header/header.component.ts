@@ -144,19 +144,7 @@ export class HeaderComponent implements OnInit {
   }
 
   NavigatePage(event: any) {
-
-    if (this.router.url == "/home" && event == "/home") {
-      //location.reload();
-
-      //this.Homepage.ShowCagetory3();
-    }
-    else if (event == "/home") {
       this.router.navigate([event]);
-    }
-    else {
-      var url = '/home/' + event;
-      this.router.navigate([url]);
-    }
   }
 
   gotohome() {
