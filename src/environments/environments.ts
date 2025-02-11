@@ -5,11 +5,11 @@ export const environment = {
 
 
   // User API
-   apiUrl: 'https://localhost:5000/',
-   apiUrl_User: 'https://localhost:5000/User/',
-   apiUrl_Admin: 'https://localhost:5000/AdminService/',
-   apiUrl_File: 'https://localhost:5000/File/',
-   apiUrl_Search: 'https://localhost:5000/Search/',
+  apiUrl: 'https://localhost:5000/',
+  apiUrl_User: 'https://localhost:5000/User/',
+  apiUrl_Admin: 'https://localhost:5000/AdminService/',
+  apiUrl_File: 'https://localhost:5000/File/',
+  apiUrl_Search: 'https://localhost:5000/Search/',
 
   /// office Server
   // apiUrl: 'http://172.28.209.108:9090/', ////   Gateway
@@ -26,11 +26,11 @@ export const environment = {
   // apiUrl_User:  'http://172.28.209.108:9090/User/',
 
   // cummins server   UAT
-   //apiUrl: 'http://10.185.31.233:90/', // geteway
-   //apiUrl_Admin: 'http://10.185.31.233:90/AdminService/', 
-   //apiUrl_File: 'http://10.185.31.233:90/File/',
-   //apiUrl_Search: 'http://10.185.31.233:90/Search/'   ,
-   //apiUrl_User: '',
+  //  apiUrl: 'http://10.185.31.233:90/', // geteway
+  //  apiUrl_Admin: 'http://10.185.31.233:90/AdminService/', 
+  //  apiUrl_File: 'http://10.185.31.233:90/File/',
+  //  apiUrl_Search: 'http://10.185.31.233:90/Search/'   ,
+  //  apiUrl_User: '',
 
   // cummins server  production
   // apiUrl: 'https://modelmart.cummins.com:1443/', // geteway

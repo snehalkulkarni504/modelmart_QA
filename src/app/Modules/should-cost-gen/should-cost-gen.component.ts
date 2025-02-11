@@ -6,30 +6,30 @@ import { SearchService } from 'src/app/SharedServices/search.service';
 import { Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { ChartComponent } from "ng-apexcharts";
+// import { ChartComponent } from "ng-apexcharts";
 
-import {
-  ApexAxisChartSeries,
-  ApexDataLabels,
-  ApexPlotOptions,
-  ApexYAxis,
-  ApexTitleSubtitle,
-  ApexXAxis,
-  ApexFill,
-  ApexChart,
-} from "ng-apexcharts";
+// import {
+//   ApexAxisChartSeries,
+//   ApexDataLabels,
+//   ApexPlotOptions,
+//   ApexYAxis,
+//   ApexTitleSubtitle,
+//   ApexXAxis,
+//   ApexFill,
+//   ApexChart,
+// } from "ng-apexcharts";
 import { environment } from 'src/environments/environments';
 
-export type ChartOptions = {
-  series: ApexAxisChartSeries;
-  chart: ApexChart;
-  dataLabels: ApexDataLabels;
-  plotOptions: ApexPlotOptions;
-  yaxis: ApexYAxis;
-  xaxis: ApexXAxis;
-  fill: ApexFill;
-  title: ApexTitleSubtitle;
-};
+// export type ChartOptions = {
+//   series: ApexAxisChartSeries;
+//   chart: ApexChart;
+//   dataLabels: ApexDataLabels;
+//   plotOptions: ApexPlotOptions;
+//   yaxis: ApexYAxis;
+//   xaxis: ApexXAxis;
+//   fill: ApexFill;
+//   title: ApexTitleSubtitle;
+// };
 
 
 export interface Piedata {
@@ -45,8 +45,8 @@ export interface Piedata {
 })
 export class ShouldCostGenComponent implements OnInit {
 
-  @ViewChild("chart") chart!: ChartComponent;
-  public chartOptions!: Partial<ChartOptions>;
+  // @ViewChild("chart") chart!: ChartComponent;
+  // public chartOptions!: Partial<ChartOptions>;
 
   imgName: any;
 

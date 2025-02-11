@@ -2,9 +2,9 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DEFAULT_INTERRUPTSOURCES, Idle } from '@ng-idle/core';
 import { ToastrService } from 'ngx-toastr';
-import { AdminService } from 'src/app/SharedServices/admin.service';
 import { SearchService } from 'src/app/SharedServices/search.service';
 import { AppComponent } from 'src/app/app.component';
+import { AdminService } from 'src/app/SharedServices/admin.service';
 
 @Component({
   selector: 'app-header',
@@ -19,6 +19,7 @@ export class HeaderComponent implements OnInit {
   constructor(
      
     private Searchservice: SearchService,
+    public admin: AdminService,
     public router: Router,
     public toastr: ToastrService,
     private adminService: AdminService,
@@ -144,20 +145,8 @@ export class HeaderComponent implements OnInit {
   }
 
   NavigatePage(event: any) {
-
-    if (this.router.url == "/home" && event == "/home") {
-      //location.reload();
-
-      //this.Homepage.ShowCagetory3();
-    }
-    else if (event == "/home") {
-      this.router.navigate([event]);
-    }
-    else {
-      var url = '/home/' + event;
-      this.router.navigate([url]);
-    }
-  }
+    this.router.navigate([event]);
+}
 
   gotohome() {
 
@@ -168,8 +157,13 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
-  Logout() {
+  async Logout() {
     if (confirm("Are you sure? Do you want to Logout?")) {
+      
+      const sessionid=await this.admin.UpdateLogout(localStorage.getItem("userId")
+      ,localStorage.getItem("sessionId"),false).toPromise();
+
+      localStorage.removeItem("sessionId")
       localStorage.removeItem("userName");
       localStorage.removeItem("userFullName");
       localStorage.removeItem("userEmailId");
@@ -177,12 +171,16 @@ export class HeaderComponent implements OnInit {
       localStorage.removeItem("HopperColumns");
       localStorage.removeItem("Historysearch");
       this.router.navigate(['/welcome']);
-      
     }
     
   }
 
-  AutoLogout() {
+  async AutoLogout() {
+
+    const sessionid=await this.admin.UpdateLogout(localStorage.getItem("userId")
+    ,localStorage.getItem("sessionId"),true).toPromise();
+
+    localStorage.removeItem("sessionId")
     localStorage.removeItem("userName");
     localStorage.removeItem("userFullName");
     localStorage.removeItem("userEmailId");
@@ -190,7 +188,7 @@ export class HeaderComponent implements OnInit {
     localStorage.removeItem("HopperColumns");
     localStorage.removeItem("Historysearch");
     this.router.navigate(['/welcome']);
-     
+    //kavita logout capture
   }
 
 }

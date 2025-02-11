@@ -76,6 +76,25 @@ export class ReportServiceService {
     return this.http.get<any[]>(this.apiUrl + `GetFrequentlyusedmaterialgrade`); 
   }
 
+  // getUserSearchData(UserId:any):Observable<any>{
+  //   return this.http.get<any>(this.apiUrl+`GetUserSearchData?UserId=${UserId}`);
+  // }
+
+  getUserLogData(UserId:any):Observable<any>{
+    // console.log('list1',this.http.get<any>(this.apiUrl+`GetUserLogData?UserId=${UserId}`))
+    return this.http.get<any>(this.apiUrl+`GetUserLogData?UserId=${UserId}`);
+  }
+
+  getUserProjectData(UserId:any):Observable<any>{
+    return this.http.get<any>(this.apiUrl+`GetUserProjectData?UserId=${UserId}`);
+  }
+
+  InsertCompareLogData(CsheaderIds: any, userId: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('CsheaderIds', CsheaderIds);
+    formData.append('userId', userId);
+    return this.http.post<any>(this.apiUrl + `InsertCompareLogData`,formData);
+  }
   
 
   

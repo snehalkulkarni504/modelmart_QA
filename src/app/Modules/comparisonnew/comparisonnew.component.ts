@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { SearchService } from 'src/app/SharedServices/search.service';
+import { ReportServiceService } from 'src/app/SharedServices/report-service.service';
 import { Location } from '@angular/common';
 import { environment } from 'src/environments/environments';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -17,7 +18,8 @@ export class ComparisonnewComponent implements OnInit {
   chartOptionssupplier: any = [];
 
 
-  constructor(public searchservice: SearchService, public router: Router, private location: Location, private SpinnerService: NgxSpinnerService) {
+  constructor(public searchservice: SearchService, public router: Router, private location: Location, private SpinnerService: NgxSpinnerService,
+    public reportservice: ReportServiceService,) {
 
   }
 
@@ -27,8 +29,7 @@ export class ComparisonnewComponent implements OnInit {
   headers: any[] = [];
   ids: any = [];
   data: any[] = [];
-
-
+  userId:any;
   NA: any = "NA*";
 
   shouldCostBreakdownList: any;
@@ -52,10 +53,12 @@ export class ComparisonnewComponent implements OnInit {
     this.SpinnerService.show('spinner');
     // debugger;
 
+    this.userId = localStorage.getItem("userId");
     this.ids = localStorage.getItem("ComapredcheckedboxIds");
 
     this.GetData();
     this.GetDataTier2();
+    this.InsertCompareLog();
   }
 
 
@@ -355,8 +358,16 @@ export class ComparisonnewComponent implements OnInit {
         reversed: true
       },
       data: this.CostInfo
-    }
+    };
 
+    
+
+  }
+
+  async InsertCompareLog() {
+
+    const data = await this.reportservice.InsertCompareLogData(this.ids, this.userId).toPromise();
+    return;
   }
 
 }
