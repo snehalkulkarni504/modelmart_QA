@@ -181,4 +181,8 @@ export class HeaderComponent implements OnInit {
      
   }
 
+  gowelcome(){
+    this.router.navigate(['/welcomeuser']);
+  }
+
 }

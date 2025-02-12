@@ -85,5 +85,8 @@ export class ReportServiceService {
     return this.http.get<any[]>(this.apiUrl+`Getfeedbackdata?username=${username}`);
   }
 
+  Getpiechartdata():Observable<any> {
+    return this.http.get<any[]>(this.apiUrl+`Getpiechartdata`);
+  }
   
 }

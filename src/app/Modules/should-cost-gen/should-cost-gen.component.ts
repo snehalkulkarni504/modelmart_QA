@@ -73,6 +73,7 @@ export class ShouldCostGenComponent implements OnInit {
   PartName: any; IncoTerms: any; Forex: any; BatchSize: any; ForexRegion: any; DebriefDateFormated: any; UniqueId: any;
   ToolingCost: any;
   AnnualVolume: any;
+  EngineDisplacement:any;
   RoleId: any;
   fvOnly: any;
   ShouldCostModeller: any; ToolingCostModeller: any;
@@ -120,7 +121,7 @@ export class ShouldCostGenComponent implements OnInit {
       PartNumber: new FormControl(), Projecttype: new FormControl(), SupplierName: new FormControl(),
       Location: new FormControl(), TargetQuote: new FormControl(), Costtype: new FormControl(), PartName: new FormControl(),
       DebriefDate: new FormControl(), IncoTerms: new FormControl(), Forex: new FormControl(), BatchSize: new FormControl(),
-      AnnualVolume: new FormControl()
+      AnnualVolume: new FormControl(),EngineDisplacement: new FormControl()
     });
 
     this.PartDimensionDetails = new FormGroup({
@@ -175,7 +176,10 @@ export class ShouldCostGenComponent implements OnInit {
       this.AnnualVolume = data.projectDetails[0].annualVolume;
       this.RoleId = data.projectDetails[0].roleId;
       this.UniqueId = data.projectDetails[0].uniqueId;
+      this.EngineDisplacement = data.projectDetails[0].engineDisplacement;
+
       this.modelTypes_Id = data.projectDetails[0].modelTypes_Id;
+
       if (this.modelTypes_Id == 4) {
         this.IsCSmodel = true;
       }

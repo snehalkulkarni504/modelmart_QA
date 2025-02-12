@@ -63,6 +63,7 @@ import { SendMessageComponent } from './Modules/contact/send-message/send-messag
 import { CartdetailsComponent } from './Modules/cartdetails/cartdetails.component';
 import { FeedbackComponent } from './Modules/contact/feedback/feedback.component';
 import { FeedbackhistoryComponent } from './Modules/Report/feedbackhistory/feedbackhistory.component';
+import { WelcomeuserComponent } from './home/welcomeuser/welcomeuser.component';
 
 @NgModule({
   declarations: [
@@ -112,7 +113,8 @@ import { FeedbackhistoryComponent } from './Modules/Report/feedbackhistory/feedb
     SendMessageComponent,
     CartdetailsComponent,
     FeedbackComponent,
-    FeedbackhistoryComponent
+    FeedbackhistoryComponent,
+    WelcomeuserComponent
   ],
   imports: [
     TreeModule,

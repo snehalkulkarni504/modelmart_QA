@@ -136,7 +136,9 @@ export class LoginComponent implements OnInit {
       // localStorage.setItem("refreshToken", this.results[0].RefreshToken)
       // localStorage.setItem("refreshTokenExpires", this.results[0].RefreshTokenExpires)
 
-      this.router.navigate(['/home/search/ ']);
+      //this.router.navigate(['/home/search/ ']);
+      this.router.navigate(['/welcomeuser']);
+
   
     }
     else {

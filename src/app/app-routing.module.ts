@@ -1,3 +1,4 @@
+import { WelcomeuserComponent } from './home/welcomeuser/welcomeuser.component';
  
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -13,6 +14,8 @@ const routes: Routes = [
   { path: 'welcome', component: WelcomepageComponent },
   { path: 'invaliduser', component: ForgotpasswordComponent },
   { path: 'maintenance', component: MaintenanceComponent },
+  { path: 'welcomeuser', component: WelcomeuserComponent },
+
   
   { path: '', redirectTo:'/welcome', pathMatch:'full'},
   

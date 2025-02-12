@@ -297,3 +297,7 @@
     margin: 0px;
     line-height: 40px;
   }
+
+  .cumminslogo :hover{
+    cursor: pointer !important;
+  }

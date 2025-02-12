@@ -236,10 +236,10 @@ export class SendRequestComponent implements OnInit {
                 this.toastr.warning("This Should Cost Model already exist with Model Mart ID " + this.getUArr[0].uniqueId + " and Request ID " + this.getUArr[0].requestHeaderId);
 
                 if (this.getArr[0].iterationsCount > this.getUArr[0].iterationCount) {
-                  this.toastr.warning("This Should Cost Model Iterations");
+                  this.toastr.warning("This is an uploaded model with the next iteration");
                 }
               }
-              
+
             }
           );
 
@@ -383,61 +383,66 @@ export class SendRequestComponent implements OnInit {
         console.log(this.getArr);
         var IsIteration = true;
 
-        if (this.getArr1.length >= 0 ) {
-          if (this.getArr1.length > 0  && (this.getArr[0].iterationsCount > this.getArr1[0].iterationCount)) {
-            if(confirm("This Model Mart Id ahve Iteration. Are you sure you want to Add Iteration.")){
-              IsIteration =  true
+        if (this.getArr1.length >= 0) {
+          if (this.getArr1.length > 0 && (this.getArr[0].iterationsCount > this.getArr1[0].iterationCount)) {
+            if (confirm("This Model Mart Id already exist for different Request Id. Are you sure to add it against new Request Id?")) {
+              IsIteration = true
             }
-            else{
+            else {
               IsIteration = false;
             }
           }
 
-          if(IsIteration)
-          if (!this.onBlurCheckValidation()) {
-            this.sendRequest = {
-              RequestHeaderID: this.selectedID,
-              Cat2: this.getArr[this.editRowIndex].cat2,
-              Cat3: this.getArr[this.editRowIndex].cat3,
-              Cat4: this.getArr[this.editRowIndex].cat4,
-              EstimatedSpend: this.getArr[this.editRowIndex].estimatedSpend === null ? 0 : this.getArr[this.editRowIndex].estimatedSpend,
-              BusinessUnit: this.getArr[this.editRowIndex].businessUnit,
-              ProjectType: this.getArr[this.editRowIndex].projectType,
-              EngineDisplacement: this.getArr[this.editRowIndex].engineDisplacement === null ? '' : this.getArr[this.editRowIndex].engineDisplacement,
-              MaterialGrade: this.getArr[this.editRowIndex].materialGrade,
-              DebriefDate: this.getArr[this.editRowIndex].debriefDate,
-              SourcingManager: this.getArr[this.editRowIndex].sourcingManager,
-              TargetQuote: this.getArr[this.editRowIndex].targetQuote === null ? '' : this.getArr[this.editRowIndex].targetQuote,
-              ShouldCostModeller: this.getArr[this.editRowIndex].shouldCostModeller,
-              ToolingCostModeller: this.getArr[this.editRowIndex].toolingCostModeller,
-              ProgramName: this.getArr[this.editRowIndex].programName,
-              ToolingShouldCost: this.getArr[this.editRowIndex].toolingShouldCost === '' ? 0 : this.getArr[this.editRowIndex].toolingShouldCost,
-              CostType: this.getArr[this.editRowIndex].costType,
-              PartSpecificId: this.selectedPartSpecific,
-              Length: this.length,
-              Width: this.width,
-              Height: this.height,
-              UniqueID: this.getArr[this.editRowIndex].uniqueID,
-              ImagePath: "C:\\inetpub\\wwwroot\\modelmart\\img\\" + this.getArr[this.editRowIndex].uniqueID,
-              CreatedBy: this.userId,
-              PartWeight: this.partWeight,
-              ModelTypes: this.modelTypesID,
-              IterationCount: this.getArr[this.editRowIndex].iterationsCount
-            }
+          if (IsIteration) {
+            if (!this.onBlurCheckValidation()) {
+              this.sendRequest = {
+                RequestHeaderID: this.selectedID,
+                Cat2: this.getArr[this.editRowIndex].cat2,
+                Cat3: this.getArr[this.editRowIndex].cat3,
+                Cat4: this.getArr[this.editRowIndex].cat4,
+                EstimatedSpend: this.getArr[this.editRowIndex].estimatedSpend === null ? 0 : this.getArr[this.editRowIndex].estimatedSpend,
+                BusinessUnit: this.getArr[this.editRowIndex].businessUnit,
+                ProjectType: this.getArr[this.editRowIndex].projectType,
+                EngineDisplacement: this.getArr[this.editRowIndex].engineDisplacement === null ? '' : this.getArr[this.editRowIndex].engineDisplacement,
+                MaterialGrade: this.getArr[this.editRowIndex].materialGrade,
+                DebriefDate: this.getArr[this.editRowIndex].debriefDate,
+                SourcingManager: this.getArr[this.editRowIndex].sourcingManager,
+                TargetQuote: this.getArr[this.editRowIndex].targetQuote === null ? '' : this.getArr[this.editRowIndex].targetQuote,
+                ShouldCostModeller: this.getArr[this.editRowIndex].shouldCostModeller,
+                ToolingCostModeller: this.getArr[this.editRowIndex].toolingCostModeller,
+                ProgramName: this.getArr[this.editRowIndex].programName,
+                ToolingShouldCost: this.getArr[this.editRowIndex].toolingShouldCost === '' ? 0 : this.getArr[this.editRowIndex].toolingShouldCost,
+                CostType: this.getArr[this.editRowIndex].costType,
+                PartSpecificId: this.selectedPartSpecific,
+                Length: this.length,
+                Width: this.width,
+                Height: this.height,
+                UniqueID: this.getArr[this.editRowIndex].uniqueID,
+                ImagePath: "C:\\inetpub\\wwwroot\\modelmart\\img\\" + this.getArr[this.editRowIndex].uniqueID,
+                CreatedBy: this.userId,
+                PartWeight: this.partWeight,
+                ModelTypes: this.modelTypesID,
+                IterationCount: this.getArr[this.editRowIndex].iterationsCount,
 
-            //console.log('insert array', this.sendRequest);
-            this.fileUploadService.addSendRequest(this.sendRequest).subscribe({
-              next: (_res) => {
-               // console.log('API call completed successfully');
-                const addicon = document.getElementById("plus-icon") as HTMLElement;
-                addicon.style.display = 'none';
-                this.myForm!.resetForm();
-                this.addSuccess = true;
-              },
-              error: (error) => {
-                console.error('API call error:', error);
-              },
-            });
+                AnnualVolume: this.getArr[this.editRowIndex].annualVolume,
+                ShouldCost: this.getArr[this.editRowIndex].shouldCost,
+
+              }
+
+              //console.log('insert array', this.sendRequest);
+              this.fileUploadService.addSendRequest(this.sendRequest).subscribe({
+                next: (_res) => {
+                  // console.log('API call completed successfully');
+                  const addicon = document.getElementById("plus-icon") as HTMLElement;
+                  addicon.style.display = 'none';
+                  this.myForm!.resetForm();
+                  this.addSuccess = true;
+                },
+                error: (error) => {
+                  console.error('API call error:', error);
+                },
+              });
+            }
           }
         }
         else {
