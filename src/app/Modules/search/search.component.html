@@ -400,12 +400,16 @@
 
                     </div>
 
-
                 </div>
                  
             </div>
 
-            <div class="row setOpacity" id="SearchFilters">
+            <div class="TabMenu">
+                <button [ngClass]="{'activeTab': showTab1, 'Tab':!showTab1}" (click)="showTabs('Tab1')" >CEO Models</button>
+                <button [ngClass]="{'activeTab': showTab2, 'Tab':!showTab2}" (click)="showTabs('Tab2')">Simulated Models</button>
+            </div>
+
+            <div [hidden]="!showTab1" class="row setOpacity" id="SearchFilters">
                 <div *ngFor="let t of SearchList  | paginate: { itemsPerPage: 100, currentPage: page }"
                     class="prodDetails">
                     <div class="prdImgDesc" (click)="getShouldeCost(t)">
@@ -456,6 +460,71 @@
 
                 <div class="d-flex justify-content-between p-2 pagination" *ngIf="ModelCount > 0">
                     <ngb-pagination [collectionSize]="this.ModelCount" [(page)]="page" [pageSize]="pageSize"
+                        [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm">
+                        <ng-template ngbPaginationPrevious>Prev</ng-template>
+                        <ng-template ngbPaginationNext>Next</ng-template>
+                    </ngb-pagination>
+                    <br>
+                </div>
+            </div>
+
+
+            <div [hidden]="!showTab2" class="row setOpacity" id="SearchFilters">
+                <div class="row text-center SimulatedModelFound">
+                    <label>We found "<b>{{this.SimulatedModelCount}}</b>" simulated models. </label>
+                </div>
+
+                <div *ngFor="let t of SimulatedSearchList  | paginate: { itemsPerPage: 100, currentPage: Simulatedpage }"
+                    class="prodDetails ">
+                    <div class="SumilatedprdImgDesc">
+                        <img *ngIf="t.imagePath == '' else multi" src="assets/No-Image.png" class="prdIcon"
+                            style="width: 100%; height: 150px;">
+                        <ng-template #multi>
+                            <img src="{{t.imagePath}}" class="prdIcon" style="width: 100%; height: 150px;">
+                        </ng-template>
+
+                    </div>
+
+                    <div class="prdDescription">
+                        <label id="PartNumber">{{ChekNull(t.partNumber)}}</label><br>
+                        <label id="PartName">{{ChekNull(t.partName)}}</label><br>
+                        <label id="programName">{{ChekNull(t.programName)}}</label><br>
+
+                        <div class="labless">
+                            <label class="labletest">Debrief Date : <b>{{ChekNull(t.debriefDateFormated)}}</b></label>
+                            <label class="labletest">Simulated Date : <b>{{ChekNull(t.simulated_Date)}}</b></label>
+                            <label class="labletest">Business Unit : <b>{{ChekNull(t.businessUnit)}}</b></label>
+                            <label class="labletest">Location : <b>{{ChekNull(t.mfgRegion)}}</b></label>
+                        </div>
+                        
+                        <div class="prdDescription_div1">
+                            <label id="AnnualVolume"> <b>{{ChekNull(t.totalCost | number:'1.2-2')}} </b> <br>
+                                Should Cost ($)
+                           </label>
+                        </div>
+                        <div class="prdDescription_div2">
+                            <label id="AnnualVolume"> <b>{{ChekNull(t.simulated_TotalCost)}} </b> <br>
+                                Simulated Cost ($) </label>
+                        </div>
+                        <div class="prdDescription_div3">
+                            <label id="AnnualVolume"> <b>{{ChekNull(t.toolingCostModeller | number:'1.2-2')}}</b> <br>
+                                Tooling Cost ($)</label>
+                        </div>
+
+
+                    </div>
+                    <div>
+                        <input #Comparecheckbox class="form-check-input" type="checkbox" class="SearchCheckbox"
+                            id="{{t.csHeaderId}}" (click)="getPartId(t)" title="Select for Compate">
+                    </div>
+                    <!-- <div>
+                        <img src="../../../assets/PDFIcon.png" class="PDFIcon" title="Download PDF"
+                            (click)="DownloadPDF(t)">
+                    </div> -->
+                </div>
+
+                <div class="d-flex justify-content-between p-2 pagination" *ngIf="SimulatedModelCount > 0">
+                    <ngb-pagination [collectionSize]="this.SimulatedModelCount" [(page)]="Simulatedpage" [pageSize]="SimulatedpageSize"
                         [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm">
                         <ng-template ngbPaginationPrevious>Prev</ng-template>
                         <ng-template ngbPaginationNext>Next</ng-template>

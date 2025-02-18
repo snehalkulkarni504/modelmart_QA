@@ -147,16 +147,8 @@ export class SearchService {
     return this.httpClient.put(this.apiUrl + "UpdateShouldCostRequest", formData);
   }
 
-  // SendShouldCostRequest(file: File[], RequesterId: any, Comments: Blob, FolderLink:any): Observable<any> {
-  //   const formData = new FormData();
-  //   formData.append('RequesterId', RequesterId);
-  //   formData.append('Comments', Comments);
-  //   formData.append('FolderLink',FolderLink);
-  //   for (const Dfile of file) {
-  //     formData.append('files', Dfile, Dfile.name);
-  //   }
-
-  //   return this.httpClient.post<FormData>(this.apiUrl + `SendShouldCostRequest`, formData);
-  // }
+  SearchSimulated(userId: any): Observable<any> {
+    return this.httpClient.get<any[]>(this.apiUrl + `GetSearchSimulated?userId=${userId}`);
+  }
 
 }

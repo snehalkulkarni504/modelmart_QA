@@ -69,6 +69,11 @@ export class SearchComponent implements OnInit {
       itemsPerPage: 100
     };
 
+    this.SimulatedconfigPagination ={
+      SimulatedcurrentPage: 1,
+      SimulateditemsPerPage: 100
+    }
+
   }
 
   NA: any = "NA*";
@@ -128,6 +133,11 @@ export class SearchComponent implements OnInit {
     Ids: ""
   }
 
+  showTab1 = true;
+  showTab2 = false;
+
+
+
   ////////////////////////////////////////////////////////
 
   items: TreeviewItem[] = [];
@@ -162,7 +172,14 @@ export class SearchComponent implements OnInit {
 
   page: number = 1;
   pageSize: number = 100;
+
+  Simulatedpage:number=1;
+  SimulatedpageSize:number=100;
+
   configPagination: any;
+  SimulatedconfigPagination: any;
+
+  SimulatedSearchList: any;
 
   async ngOnInit(): Promise<void> {
 
@@ -239,6 +256,7 @@ export class SearchComponent implements OnInit {
       this.GetSearchdata(this.filters);
     }
 
+    this.GetSearchSimulated();
 
   }
 
@@ -1109,6 +1127,8 @@ export class SearchComponent implements OnInit {
   NoModelFound = true;
   ModelFound = true;
   ModelCount: any;
+  SimulatedModelCount: any;
+
   radiobtn: any;
 
 
@@ -1187,6 +1207,24 @@ export class SearchComponent implements OnInit {
       this.SpinnerService.hide('spinner');
     }
     this.SpinnerService.hide('spinner');
+  }
+
+  async GetSearchSimulated() {
+    debugger;
+    this.SpinnerService.show('spinner');
+    try {
+      this.SimulatedSearchList = [];
+      this.SimulatedModelCount = 0;
+
+      const data = await this.searchservice.SearchSimulated(this.userId).toPromise();
+      this.SimulatedSearchList = data;
+      this.SimulatedModelCount = this.SimulatedSearchList.length;
+    }
+    catch (e) {
+      this.SpinnerService.hide('spinner');
+    }
+    this.SpinnerService.hide('spinner');
+
   }
 
   clearDate() {
@@ -1525,6 +1563,23 @@ export class SearchComponent implements OnInit {
           break;
       }
 
+  }
+
+
+  showTabs(ActiveTab: any) {
+    this.showTab1 = false;
+    this.showTab2 = false;
+
+    switch (ActiveTab) {
+      case 'Tab1': {
+        this.showTab1 = true;
+        break;
+      }
+      case 'Tab2': {
+        this.showTab2 = true;
+        break;
+      }
+    }
   }
 
 }

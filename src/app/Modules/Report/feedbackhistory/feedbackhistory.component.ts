@@ -37,8 +37,9 @@ export class FeedbackhistoryComponent {
   param_userId: any;
   param_SCReportId: any;
   username: any;
-  showpiechart: boolean = false;
-  showgrid: boolean = true
+  showTab2: boolean = false;
+  showTab1: boolean = true
+  
   demo: number = 0;
 
   ngOnInit(): void {
@@ -172,14 +173,14 @@ export class FeedbackhistoryComponent {
 
 
 
-  showgridd( ) {
-    this.showpiechart=false;
-    this.showgrid=true;
+  Fun_showTab1( ) {
+    this.showTab2=false;
+    this.showTab1=true;
   }
 
-  showpiechartbtn() {
-    this.showgrid = false;
-    this.showpiechart = true;
+  Fun_showTab2() {
+    this.showTab1 = false;
+    this.showTab2 = true;
   }
 
 
