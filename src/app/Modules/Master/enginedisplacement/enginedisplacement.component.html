@@ -41,7 +41,7 @@
                     <tr
                         *ngFor="let eng of engine | search: textsearch:filterMetadata | paginate: { itemsPerPage: 10, currentPage: page }  let i=index">
                         <td hidden>{{eng.EDId}}</td>
-                        <td>{{i+1}}</td>
+                        <td>{{(page - 1) * 10 + i + 1}}</td>
                         <td>{{eng.Description}}</td>
                         <!-- <td>{{eng.IsActive?'Active':'Inactive'}}</td> -->
                         <td>{{eng.IsActive}}</td>

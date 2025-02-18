@@ -140,9 +140,12 @@ export class LoginComponent implements OnInit {
       
       localStorage.setItem("sessionId", sessionid)
 
+
       const data = await this.admin.GetAuthentication(this.Username, this.Password).toPromise();
       this.results = data;
-      this.router.navigate(['/home/search/ ']);
+       
+      //this.router.navigate(['/home/search/ ']);
+      this.router.navigate(['/welcomeuser']);
   
     }
     else {

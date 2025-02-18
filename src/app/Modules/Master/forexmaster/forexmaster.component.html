@@ -40,7 +40,7 @@
                 <tbody>
                     <tr *ngFor="let data of forexMaster | search: textsearch:filterMetadata | paginate: { itemsPerPage: 10, currentPage: page }  let i=index">
                         <td hidden>{{data.ForexId}}</td>
-                        <td>{{i+1}}</td>
+                        <td>{{(page - 1) * 10 + i + 1}}</td>
                         <td>{{data.Location}}</td>
                         <td>{{data.Currency}}</td>
                         <td>{{data.Year}}</td>

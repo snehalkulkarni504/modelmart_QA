@@ -145,9 +145,10 @@ export class HeaderComponent implements OnInit {
   }
 
   NavigatePage(event: any) {
+
     this.router.navigate([event]);
 }
-
+ 
   gotohome() {
 
     if (this.router.url == "/home") {
@@ -189,6 +190,10 @@ export class HeaderComponent implements OnInit {
     localStorage.removeItem("Historysearch");
     this.router.navigate(['/welcome']);
     //kavita logout capture
+  }
+
+  gowelcome(){
+    this.router.navigate(['/welcomeuser']);
   }
 
 }

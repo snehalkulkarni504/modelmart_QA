@@ -23,7 +23,7 @@ export class SendRequestComponent implements OnInit {
   @ViewChild("takeInputExcel", { static: false }) takeInputExcel!: ElementRef;
   @ViewChild("takeInputPDF", { static: false }) takeInputPDF!: ElementRef;
   @ViewChild("takeInputImage", { static: false }) takeInputImage!: ElementRef;
-  @ViewChild('ngModelTypeID') ngModelTypeID! : NgSelectComponent;
+  @ViewChild('ngModelTypeID') ngModelTypeID!: NgSelectComponent;
 
   RequestForm!: FormGroup;
   selectedFiles: File[] = [];
@@ -196,7 +196,7 @@ export class SendRequestComponent implements OnInit {
       this.fileUploadService.GetFilteredHopperData(excelData).subscribe(
         (_result: any[]) => {
           this.getArr = _result;
-          console.log("view data", this.getArr)
+          //console.log("view data", this.getArr)
           const UData: UpdateSendRequest = {
             // requestHeaderID: this.selectedID,
             uniqueID: this.selectedUniqueID
@@ -231,11 +231,15 @@ export class SendRequestComponent implements OnInit {
               else {
                 this.modelTypesID = 1;
               }
-              console.log("My UpdateArr", this.getUArr)
+              //console.log("My UpdateArr", this.getUArr)
               if (this.getUArr.length > 0) {
                 this.toastr.warning("This Should Cost Model already exist with Model Mart ID " + this.getUArr[0].uniqueId + " and Request ID " + this.getUArr[0].requestHeaderId);
 
+                if (this.getArr[0].iterationsCount > this.getUArr[0].iterationCount) {
+                  this.toastr.warning("This is an uploaded model with the next iteration");
+                }
               }
+
             }
           );
 
@@ -355,7 +359,7 @@ export class SendRequestComponent implements OnInit {
   // }
 
   async addModalMethod(rowIndex: any) {
-    //debugger;
+    debugger;
     //  this.AddUploadDataValidation(rowIndex);
     this.getAUID = 0;
     this.addSuccess = false;
@@ -376,51 +380,69 @@ export class SendRequestComponent implements OnInit {
       (_result: any) => {
         this.getArr1 = _result;
         console.log("view added data", this.getArr1)
+        console.log(this.getArr);
+        var IsIteration = true;
 
-        if (this.getArr1.length == 0) {
-          if (!this.onBlurCheckValidation()) {
-            this.sendRequest = {
-              RequestHeaderID: this.selectedID,
-              Cat2: this.getArr[this.editRowIndex].cat2,
-              Cat3: this.getArr[this.editRowIndex].cat3,
-              Cat4: this.getArr[this.editRowIndex].cat4,
-              EstimatedSpend: this.getArr[this.editRowIndex].estimatedSpend === null ? 0 : this.getArr[this.editRowIndex].estimatedSpend,
-              BusinessUnit: this.getArr[this.editRowIndex].businessUnit,
-              ProjectType: this.getArr[this.editRowIndex].projectType,
-              EngineDisplacement: this.getArr[this.editRowIndex].engineDisplacement === null ? '' : this.getArr[this.editRowIndex].engineDisplacement,
-              MaterialGrade: this.getArr[this.editRowIndex].materialGrade,
-              DebriefDate: this.getArr[this.editRowIndex].debriefDate,
-              SourcingManager: this.getArr[this.editRowIndex].sourcingManager,
-              TargetQuote: this.getArr[this.editRowIndex].targetQuote === null ? '' : this.getArr[this.editRowIndex].targetQuote,
-              ShouldCostModeller: this.getArr[this.editRowIndex].shouldCostModeller,
-              ToolingCostModeller: this.getArr[this.editRowIndex].toolingCostModeller,
-              ProgramName: this.getArr[this.editRowIndex].programName,
-              ToolingShouldCost: this.getArr[this.editRowIndex].toolingShouldCost === '' ? 0 : this.getArr[this.editRowIndex].toolingShouldCost,
-              CostType: this.getArr[this.editRowIndex].costType,
-              PartSpecificId: this.selectedPartSpecific,
-              Length: this.length,
-              Width: this.width,
-              Height: this.height,
-              UniqueID: this.getArr[this.editRowIndex].uniqueID,
-              ImagePath: "C:\\inetpub\\wwwroot\\modelmart\\img\\" + this.getArr[this.editRowIndex].uniqueID,
-              CreatedBy: this.userId,
-              PartWeight: this.partWeight,
-              ModelTypes: this.modelTypesID
+        if (this.getArr1.length >= 0) {
+          if (this.getArr1.length > 0 && (this.getArr[0].iterationsCount > this.getArr1[0].iterationCount)) {
+            if (confirm("This Model Mart Id already exist for different Request Id. Are you sure to add it against new Request Id?")) {
+              IsIteration = true
             }
+            else {
+              IsIteration = false;
+            }
+          }
 
-            console.log('insert array', this.sendRequest);
-            this.fileUploadService.addSendRequest(this.sendRequest).subscribe({
-              next: (_res) => {
-                console.log('API call completed successfully');
-                const addicon = document.getElementById("plus-icon") as HTMLElement;
-                addicon.style.display = 'none';
-                this.myForm!.resetForm();
-                this.addSuccess = true;
-              },
-              error: (error) => {
-                console.error('API call error:', error);
-              },
-            });
+          if (IsIteration) {
+            if (!this.onBlurCheckValidation()) {
+              this.sendRequest = {
+                RequestHeaderID: this.selectedID,
+                Cat2: this.getArr[this.editRowIndex].cat2,
+                Cat3: this.getArr[this.editRowIndex].cat3,
+                Cat4: this.getArr[this.editRowIndex].cat4,
+                EstimatedSpend: this.getArr[this.editRowIndex].estimatedSpend === null ? 0 : this.getArr[this.editRowIndex].estimatedSpend,
+                BusinessUnit: this.getArr[this.editRowIndex].businessUnit,
+                ProjectType: this.getArr[this.editRowIndex].projectType,
+                EngineDisplacement: this.getArr[this.editRowIndex].engineDisplacement === null ? '' : this.getArr[this.editRowIndex].engineDisplacement,
+                MaterialGrade: this.getArr[this.editRowIndex].materialGrade,
+                DebriefDate: this.getArr[this.editRowIndex].debriefDate,
+                SourcingManager: this.getArr[this.editRowIndex].sourcingManager,
+                TargetQuote: this.getArr[this.editRowIndex].targetQuote === null ? '' : this.getArr[this.editRowIndex].targetQuote,
+                ShouldCostModeller: this.getArr[this.editRowIndex].shouldCostModeller,
+                ToolingCostModeller: this.getArr[this.editRowIndex].toolingCostModeller,
+                ProgramName: this.getArr[this.editRowIndex].programName,
+                ToolingShouldCost: this.getArr[this.editRowIndex].toolingShouldCost === '' ? 0 : this.getArr[this.editRowIndex].toolingShouldCost,
+                CostType: this.getArr[this.editRowIndex].costType,
+                PartSpecificId: this.selectedPartSpecific,
+                Length: this.length,
+                Width: this.width,
+                Height: this.height,
+                UniqueID: this.getArr[this.editRowIndex].uniqueID,
+                ImagePath: "C:\\inetpub\\wwwroot\\modelmart\\img\\" + this.getArr[this.editRowIndex].uniqueID,
+                CreatedBy: this.userId,
+                PartWeight: this.partWeight,
+                ModelTypes: this.modelTypesID,
+                IterationCount: this.getArr[this.editRowIndex].iterationsCount,
+
+                AnnualVolume: this.getArr[this.editRowIndex].annualVolume,
+                ShouldCost: this.getArr[this.editRowIndex].shouldCost,
+
+              }
+
+              //console.log('insert array', this.sendRequest);
+              this.fileUploadService.addSendRequest(this.sendRequest).subscribe({
+                next: (_res) => {
+                  // console.log('API call completed successfully');
+                  const addicon = document.getElementById("plus-icon") as HTMLElement;
+                  addicon.style.display = 'none';
+                  this.myForm!.resetForm();
+                  this.addSuccess = true;
+                },
+                error: (error) => {
+                  console.error('API call error:', error);
+                },
+              });
+            }
           }
         }
         else {
@@ -448,7 +470,7 @@ export class SendRequestComponent implements OnInit {
   editModalMethod(rowIndex: any) {
     if (this.modelTypesID === '' || this.modelTypesID === null || this.modelTypesID === undefined) {
       this.showError11 = true;
-      return 
+      return
     }
 
     this.editRowIndex = rowIndex;
@@ -478,7 +500,7 @@ export class SendRequestComponent implements OnInit {
 
     const data = await this.fileUploadService.ReadHoppercolumns().toPromise();
     this.HopperColumns = data;
-    console.log("ReadHopperColumns", this.HopperColumns);
+    //console.log("ReadHopperColumns", this.HopperColumns);
     this.loading = false;
     this.SpinnerService.hide('spinner');
 
@@ -627,21 +649,21 @@ export class SendRequestComponent implements OnInit {
     this.selectedFiles = [];
   }
 
-  
+
   //ng-value ng-star-inserted
   async BulkUpload() {
-    
+
     if (this.modelTypesID === '' || this.modelTypesID === null || this.modelTypesID === undefined) {
       this.showError11 = true;
-      return 
+      return
     }
-   // let element = document.getElementById('ngModelTypeID') as HTMLElement ;
+    // let element = document.getElementById('ngModelTypeID') as HTMLElement ;
 
     if (confirm("Are you sure want to start Bulk Upload")) {
 
       this.SpinnerService.show('spinner');
-      const data = await this.fileUploadService.getBulkUpload(this.userId,this.modelTypesID).toPromise();
-      console.log('Bulk Upload', data);
+      const data = await this.fileUploadService.getBulkUpload(this.userId, this.modelTypesID).toPromise();
+      //console.log('Bulk Upload', data);
       //debugger;
       if (data == null) {
         this.toastr.success("Bulk Upload Completed.")
@@ -684,13 +706,13 @@ export class SendRequestComponent implements OnInit {
       CostType: this.getArr[this.editRowIndex].costType,
       UniqueID: this.getArr[this.editRowIndex].uniqueID,
       ModifiedBy: this.userId,
-      ModelTypesID:this.modelTypesID
+      ModelTypesID: this.modelTypesID
 
     }
 
     this.fileUploadService.UpdateLWHandPW(this.UpdateSendRequest).subscribe({
       next: (_res) => {
-        console.log('API call successful');
+        //console.log('API call successful');
       },
       error: (error) => {
         console.error('API call error:', error);

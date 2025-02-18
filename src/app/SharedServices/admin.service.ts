@@ -178,6 +178,10 @@ export class AdminService {
   }
 
 
+  submitContact(contact: any): Observable<any> {
+    return this.httpClient.post(this.apiUrl+`submitcontact`, contact);
+  }
+
 
   InsertLoginDetails(userid:any,username:any): Observable<any> {
     const formdata = new FormData();

@@ -1,4 +1,3 @@
-// import { ApexChart } from './../../../../node_modules/ng-apexcharts/lib/model/apex-types.d';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -70,6 +69,11 @@ export class SearchComponent implements OnInit {
       itemsPerPage: 100
     };
 
+    this.SimulatedconfigPagination ={
+      SimulatedcurrentPage: 1,
+      SimulateditemsPerPage: 100
+    }
+
   }
 
   NA: any = "NA*";
@@ -129,6 +133,11 @@ export class SearchComponent implements OnInit {
     Ids: ""
   }
 
+  showTab1 = true;
+  showTab2 = false;
+
+
+
   ////////////////////////////////////////////////////////
 
   items: TreeviewItem[] = [];
@@ -163,7 +172,14 @@ export class SearchComponent implements OnInit {
 
   page: number = 1;
   pageSize: number = 100;
+
+  Simulatedpage:number=1;
+  SimulatedpageSize:number=100;
+
   configPagination: any;
+  SimulatedconfigPagination: any;
+
+  SimulatedSearchList: any;
 
   async ngOnInit(): Promise<void> {
 
@@ -217,7 +233,7 @@ export class SearchComponent implements OnInit {
     this.ShowCagetory3("");
     this.GetBusinessUnit();
     this.GetProgramName();
- 
+
     if (this.childCategory == " ") {
       this.filters.cat4 = '';
     }
@@ -240,6 +256,7 @@ export class SearchComponent implements OnInit {
       this.GetSearchdata(this.filters);
     }
 
+    this.GetSearchSimulated();
 
   }
 
@@ -613,14 +630,14 @@ export class SearchComponent implements OnInit {
         li[i].style.display = "";
       }
 
-      //this.clearProgramName();
-      // this.ProgramNameSearch.nativeElement.value = "";
-      // var ul = document.getElementById("ProgramnameUL");
-      // var li = ul!.getElementsByTagName("li") as any;
-      // for (var i = 0; i < li.length; i++) {
-      //   li[i].getElementsByTagName('input')[0].checked = false;
-      //   li[i].style.display = "";
-      // }
+      this.clearProgramName();
+      this.ProgramNameSearch.nativeElement.value = "";
+      var ul = document.getElementById("ProgramnameUL");
+      var li = ul!.getElementsByTagName("li") as any;
+      for (var i = 0; i < li.length; i++) {
+        li[i].getElementsByTagName('input')[0].checked = false;
+        li[i].style.display = "";
+      }
 
 
       this.filters.cat2 = ''; this.filters.cat3 = ''; this.filters.cat4 = ''; this.filters.location = ''; this.filters.engine = '';
@@ -1110,6 +1127,8 @@ export class SearchComponent implements OnInit {
   NoModelFound = true;
   ModelFound = true;
   ModelCount: any;
+  SimulatedModelCount: any;
+
   radiobtn: any;
 
 
@@ -1188,6 +1207,24 @@ export class SearchComponent implements OnInit {
       this.SpinnerService.hide('spinner');
     }
     this.SpinnerService.hide('spinner');
+  }
+
+  async GetSearchSimulated() {
+    debugger;
+    this.SpinnerService.show('spinner');
+    try {
+      this.SimulatedSearchList = [];
+      this.SimulatedModelCount = 0;
+
+      const data = await this.searchservice.SearchSimulated(this.userId).toPromise();
+      this.SimulatedSearchList = data;
+      this.SimulatedModelCount = this.SimulatedSearchList.length;
+    }
+    catch (e) {
+      this.SpinnerService.hide('spinner');
+    }
+    this.SpinnerService.hide('spinner');
+
   }
 
   clearDate() {
@@ -1341,6 +1378,8 @@ export class SearchComponent implements OnInit {
   }
 
   getComparison() {
+    // this.router.navigate(['/home/cartdeta']);
+    // return
     // this.Comparecheckbox;
     if (this.SearchList.length <= 0) {
       this.toastr.error("Record Not Found");
@@ -1450,6 +1489,7 @@ export class SearchComponent implements OnInit {
     xhr.send();
   }
 
+
   FilterSearchDataAsceDesc(e: any) {
     // 0 = Sort by A-Z
     // 1 = Sort by Z-A
@@ -1459,14 +1499,30 @@ export class SearchComponent implements OnInit {
     this.FilterSearchDataAsceDesc_var = e;
     this.filterData();
   }
+
+  firstRow_Sorting: any = "Ascending to Descending";
+  secondRow_Sorting: any = "Descending to Ascending";
+
   FilterSearchData(e: any) {
+    debugger;
     // 0 = Debrief Date 
     // 1 = Location
     // 2 = Tooling Cost
     // 3 = Should Cost
+
+    if (e == 0 || e == 1) {
+      this.firstRow_Sorting = "Ascending to Descending";
+      this.secondRow_Sorting = "Descending to Ascending";
+    }
+    else {
+      this.firstRow_Sorting = "Smallest to Largest";
+      this.secondRow_Sorting = "Largest to Smallest";
+    }
+
     this.selectedSearchDataAsceDesc = undefined;
     this.FilterSearchData_var = e;
   }
+
 
   filterData() {
     // debugger;
@@ -1507,6 +1563,23 @@ export class SearchComponent implements OnInit {
           break;
       }
 
+  }
+
+
+  showTabs(ActiveTab: any) {
+    this.showTab1 = false;
+    this.showTab2 = false;
+
+    switch (ActiveTab) {
+      case 'Tab1': {
+        this.showTab1 = true;
+        break;
+      }
+      case 'Tab2': {
+        this.showTab2 = true;
+        break;
+      }
+    }
   }
 
 }

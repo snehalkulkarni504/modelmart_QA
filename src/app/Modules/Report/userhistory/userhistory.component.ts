@@ -4,10 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MasterServiceService } from 'src/app/SharedServices/master-service.service';
 import { Location } from '@angular/common';
 import { ReportServiceService } from 'src/app/SharedServices/report-service.service';
+import { SearchPipe } from "../../../pipe/search.pipe";
 @Component({
   selector: 'app-userhistory',
   templateUrl: './userhistory.component.html',
-  styleUrls: ['./userhistory.component.css']
+  styleUrls: ['./userhistory.component.css'],
 })
 export class UserhistoryComponent implements OnInit {
 

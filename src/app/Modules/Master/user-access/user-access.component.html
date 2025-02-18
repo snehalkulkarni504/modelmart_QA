@@ -55,7 +55,7 @@
                     <tr
                         *ngFor="let data of usernameandBu  | search: textsearch:filterMetadata | paginate: { itemsPerPage: 10, currentPage: page }  let i=index">
                         <td hidden>{{data.UserId}}</td>
-                        <td>{{i+1}}</td>
+                        <td>{{(page - 1) * 10 + i + 1}}</td>
                         <td>{{data.UserName}}</td>
                         <td class="text-start">{{data.FullName}}</td>
                         <td class="text-start">{{data.EmailId}}</td>

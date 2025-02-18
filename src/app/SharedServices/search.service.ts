@@ -114,16 +114,6 @@ export class SearchService {
     return this.httpClient.post(this.apiUrl + "SaveMatetialCost?userId=" + userId + "&IsCastingSheet=" + IsCastingSheet, saveMatetialCost)
   }
 
-////Post method for save to cart
-  SaveToCart(userId:any,uniqueId:any,CartName:any): Observable<any> {
-    return this.httpClient.post(this.apiUrl + "SaveToCart?userId="+userId+"&uniqueId=" +uniqueId+ "&CartName=" +CartName, '')
-  }
-
-  getCartName(UserId:any):Observable<any>{
-    return this.httpClient.get<any>(this.apiUrl+`GetCartName?UserId=${UserId}`);
-  }
-
-
   GetSourcingManagerReport(id: number, SM_Id: number, IsCastingSheet: any): Observable<any> {
     return this.httpClient.get<any[]>(this.apiUrl + `GetSourcingManagerReport?id=${id}&SM_Id=${SM_Id}&IsCastingSheet=${IsCastingSheet}`);
   }
@@ -157,16 +147,8 @@ export class SearchService {
     return this.httpClient.put(this.apiUrl + "UpdateShouldCostRequest", formData);
   }
 
-  // SendShouldCostRequest(file: File[], RequesterId: any, Comments: Blob, FolderLink:any): Observable<any> {
-  //   const formData = new FormData();
-  //   formData.append('RequesterId', RequesterId);
-  //   formData.append('Comments', Comments);
-  //   formData.append('FolderLink',FolderLink);
-  //   for (const Dfile of file) {
-  //     formData.append('files', Dfile, Dfile.name);
-  //   }
-
-  //   return this.httpClient.post<FormData>(this.apiUrl + `SendShouldCostRequest`, formData);
-  // }
+  SearchSimulated(userId: any): Observable<any> {
+    return this.httpClient.get<any[]>(this.apiUrl + `GetSearchSimulated?userId=${userId}`);
+  }
 
 }

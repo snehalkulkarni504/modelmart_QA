@@ -54,17 +54,23 @@ import { ForexreportComponent } from './Modules/Report/forexreport/forexreport.c
 import { UserhistoryComponent } from './Modules/Report/userhistory/userhistory.component';
 import { ShouldCostUserHistoryComponent } from './Modules/Report/should-cost-user-history/should-cost-user-history.component';
 import { FrequentlyusedmaterialgradeComponent } from './Modules/Report/frequentlyusedmaterialgrade/frequentlyusedmaterialgrade.component';
-// import { NgApexchartsModule } from 'ng-apexcharts';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { MaintenanceComponent } from './home/maintenance/maintenance.component';
 import { ComparisonnewComponent } from './Modules/comparisonnew/comparisonnew.component';
 import { CostReductionComponent } from './Modules/cost-reduction/cost-reduction.component';
 import { HousingflywheelComponent } from './Modules/housingflywheel/housingflywheel.component';
+
 // import { SendMessageComponent } from './Modules/contact/send-message/send-message.component';
 //import { UserAuditComponent } from './Modules/user-audit/user-audit.component';
 import { TabsComponent } from './Modules/tabs/tabs.component';
 import { UserAnalyticsComponent } from './Modules/user-analytics/user-analytics.component';
 import { MatTabsModule } from '@angular/material/tabs';
+ 
+import { SendMessageComponent } from './Modules/contact/send-message/send-message.component';
+import { CartdetailsComponent } from './Modules/cartdetails/cartdetails.component';
+import { FeedbackComponent } from './Modules/contact/feedback/feedback.component';
+import { FeedbackhistoryComponent } from './Modules/Report/feedbackhistory/feedbackhistory.component';
+import { WelcomeuserComponent } from './home/welcomeuser/welcomeuser.component';
 
 
 @NgModule({
@@ -112,10 +118,14 @@ import { MatTabsModule } from '@angular/material/tabs';
     ComparisonnewComponent,
     CostReductionComponent,
     HousingflywheelComponent,
-    // SendMessageComponent,
-    //UserAuditComponent,
     TabsComponent,
     UserAnalyticsComponent
+
+    SendMessageComponent,
+    CartdetailsComponent,
+    FeedbackComponent,
+    FeedbackhistoryComponent,
+    WelcomeuserComponent
   ],
   imports: [
     TreeModule,
@@ -136,10 +146,13 @@ import { MatTabsModule } from '@angular/material/tabs';
     NgxPaginationModule,
     NgbModule,
     NgIdleKeepaliveModule,
+
     CanvasJSAngularChartsModule,
     MatTabsModule,BrowserModule,
     BrowserAnimationsModule
+    CanvasJSAngularChartsModule
   ],
+  
   providers: [
     {
       provide: LocationStrategy,

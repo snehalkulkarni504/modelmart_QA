@@ -11,19 +11,19 @@ export const environment = {
   apiUrl_File: 'https://localhost:5000/File/',
   apiUrl_Search: 'https://localhost:5000/Search/',
 
-  /// office Server
-  // apiUrl: 'http://172.28.209.108:9090/', ////   Gateway
-  // apiUrl_Search: 'http://172.28.209.108:9090/Search/' ,
-  // apiUrl_Admin: 'http://172.28.209.108:9090/AdminService/',
-  // apiUrl_File: 'http://172.28.209.108:9090/File/',
-  // apiUrl_User:  'http://172.28.209.108:9090/User/',
+  // office Server
+  // apiUrl: 'http://172.28.208.135:9090/', ////   Gateway
+  // apiUrl_Search: 'http://172.28.208.135:9090/Search/' ,
+  // apiUrl_Admin: 'http://172.28.208.135:9090/AdminService/',
+  // apiUrl_File: 'http://172.28.208.135:9090/File/',
+  // apiUrl_User:  'http://172.28.208.135:9090/User/',
 
   // office Server   diff port
-  // apiUrl: 'http://172.28.209.108:9090/', ////   Gateway
-  // apiUrl_Search: 'http://172.28.209.108:9092/' ,
-  // apiUrl_Admin: 'http://172.28.209.108:9091/',
-  // apiUrl_File: 'http://172.28.209.108:9093/',
-  // apiUrl_User:  'http://172.28.209.108:9090/User/',
+  // apiUrl: 'http://172.28.208.135:9090/', ////   Gateway
+  // apiUrl_Search: 'http://172.28.208.135:9092/' ,
+  // apiUrl_Admin: 'http://172.28.208.135:9091/',
+  // apiUrl_File: 'http://172.28.208.135:9093/',
+  // apiUrl_User:  'http://172.28.208.135:9090/User/',
 
   // cummins server   UAT
   //  apiUrl: 'http://10.185.31.233:90/', // geteway

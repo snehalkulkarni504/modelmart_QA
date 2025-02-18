@@ -114,14 +114,12 @@
     cursor: pointer;
 }
 
+.SumilatedprdImgDesc {
+   cursor: default;;
+}
+
+
 .prodDetails {
-    /* position: relative;
-    width: 18%;
-    padding: 10px;
-    border: 1px solid #8080802c;
-    transition: all .3s ease-in-out;
-    margin: 5px;
-    animation: showpanal alternate 1s; */
     position: relative;
     width: 21%;
     padding: 10px;
@@ -742,18 +740,77 @@ input[type="text"]:focus {
 }
 
 
-.descsorting{
+.descsorting {
     width: 130px;
-} 
- 
+}
+
 .ng-select.custom {
-    border:0px;
+    border: 0px;
     min-height: 0px;
     border-radius: 0;
 }
-.ng-select.custom .ng-select-container  {            
+
+.ng-select.custom .ng-select-container {
     min-height: 0px;
     border-radius: 0;
 }
 
 /* ///////////////////////////////////////////////////////////////////// */
+
+ 
+.SimulatedModelFound {
+    width: 100%;
+    margin-top: 5px;
+    font-family: Helvetica, Arial !important;
+    font-size: 12px;
+}
+
+
+.TabMenu {
+    margin-top: 5px;
+    overflow: hidden;
+    /* border-top: 1px solid #cccccc90;
+    border-bottom: 1px solid #cccccc90; */
+    /* background-color: #f1f1f1; */
+    height: 30px;
+}
+
+.TabMenu button {
+    background-color: inherit;
+    float: left;
+    cursor: pointer;
+    /* padding: 5px 10px; */
+    padding: 0px 10px;
+    font-size: 12px;
+    border: none;
+    outline: none;
+    height: 30px;
+    /* border-bottom: 1px solid #ccc; */
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-left: 3px;
+
+}
+
+/* Change background color of buttons on hover */
+.TabMenu .Tab {
+    background-color: inherit;
+    /* border-bottom: 1px solid inherit; */
+}
+
+.TabMenu .InsideTabLine{
+    float: left;
+    /* border: 1px solid #ccc; */
+    height: 20px;
+    margin-top: 5px;
+}
+
+/* Create an active/current tablink class */
+.TabMenu .activeTab {
+    background-color: #da291c25; 
+    /* border-top: 1px solid #da291c; */
+}
+
+.TabMenu button:hover {
+    background-color: #ddd;
+}

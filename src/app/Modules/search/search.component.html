@@ -219,6 +219,38 @@
                 <br>
                 <div class="row font-size">
                     <div class="col-md-6 ">
+                        <label id="clearFilter">Program Name</label>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <label (click)="clearProgramName()" id="clearFilterall"
+                            title="Clear Selection & Text">Clear</label>
+                    </div>
+                    <div class="col-md-12 ">
+
+                        <div class=" scrollbarsearchcat3">
+                            <input #ProgramNameSearch formControlName="ProgramNameSearch"
+                                placeholder="Search Program Name" id="ProgramnameSearch"
+                                (keyup)="SearchCat('ProgramnameSearch','ProgramnameUL')" class="filter_input_Search">
+
+                            <img src="../../../assets/closed.png" class="closedCat2Text"
+                                (click)="cleartextProgrmaname('ProgramnameUL')" title="Clear Text">
+
+                            <ul #cat2 class="UL_List" id="ProgramnameUL">
+                                <li *ngFor="let g of ProgramNameList">
+                                    <label style="display: block;">
+                                        <input type="checkbox" name="cat3list" class="checkboxsize"
+                                            (change)="getProgramNamelist()" formControlName="ProgramNamecheckbox"
+                                            value="{{g.programName}}" [(ngModel)]="g.selected" />
+                                        {{g.programName}}</label>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row font-size">
+                    <div class="col-md-6 ">
                         <label id="clearFilter">Debrief Date</label>
                     </div>
                     <div class="col-md-6 text-end">
@@ -323,38 +355,7 @@
                         </div>
                     </div>
                 </div>
-                <br>
-                <div class="row font-size">
-                    <div class="col-md-6 ">
-                        <label id="clearFilter">Program Name</label>
-                    </div>
-                    <div class="col-md-6 text-end">
-                        <label (click)="clearProgramName()" id="clearFilterall"
-                            title="Clear Selection & Text">Clear</label>
-                    </div>
-                    <div class="col-md-12 ">
-
-                        <div class=" scrollbarsearchcat3">
-                            <input #ProgramNameSearch formControlName="ProgramNameSearch"
-                                placeholder="Search Program Name" id="ProgramnameSearch"
-                                (keyup)="SearchCat('ProgramnameSearch','ProgramnameUL')" class="filter_input_Search">
-
-                            <img src="../../../assets/closed.png" class="closedCat2Text"
-                                (click)="cleartextProgrmaname('ProgramnameUL')" title="Clear Text">
-
-                            <ul #cat2 class="UL_List" id="ProgramnameUL">
-                                <li *ngFor="let g of ProgramNameList">
-                                    <label style="display: block;">
-                                        <input type="checkbox" name="cat3list" class="checkboxsize"
-                                            (change)="getProgramNamelist()" formControlName="ProgramNamecheckbox"
-                                            value="{{g.programName}}" [(ngModel)]="g.selected" />
-                                        {{g.programName}}</label>
-                                </li>
-                            </ul>
-
-                        </div>
-                    </div>
-                </div>
+               
                 <br>
             </form>
         </div>
@@ -368,7 +369,7 @@
             <div [hidden]="ModelFound" class="row ModelFound">
                 <div class="col-md-12 text-center" >
                     <div class="row">
-                        <div class="col-md-3"></div>
+                        <div class="col-md-2"></div>
                         <div class="col-md-5">
                             <label>We found "<b>{{ModelCount}}</b>" models for your search. <br>
                                 <span style="font-style: italic;" [hidden]="ModelCount<100">"You can apply filters on
@@ -376,16 +377,16 @@
                                     or
                                     enter specific part numbers" </span> </label>
                         </div>
-                        <div class="col-md-4">
-                            <ng-select style="float: right; margin-top: 5px; font-size: 8px !important;" class="custom"
+                        <div class="col-md-5">
+                            <ng-select style="float: right; margin-top: 5px; font-size: 8px !important;  width: 57%; margin-right: 5px;" class="custom"
                                 [ngModelOptions]="{standalone: true}" [searchable]="false" placeholder="Please select"
                                 class="descsorting" (change)="FilterSearchDataAsceDesc($event)"
                                 [(ngModel)]='selectedSearchDataAsceDesc'>
-                                <ng-option [value]='0'>Sort by A-Z</ng-option>
-                                <ng-option [value]='1'>Sort by Z-A</ng-option>
+                                <ng-option [value]='0'>{{firstRow_Sorting}}</ng-option>
+                                <ng-option [value]='1'>{{secondRow_Sorting}}</ng-option>
                             </ng-select>
 
-                            <ng-select style="margin-top: 5px; font-size: 8px !important;"
+                            <ng-select style="margin-top: 5px; font-size: 8px !important;  width: 40%;"
                                 [ngModelOptions]="{standalone: true}" [searchable]="false" placeholder="Please select"
                                 class="descsorting" (change)="FilterSearchData($event)"
                                 [(ngModel)]='selectedSearchData'>
@@ -394,38 +395,21 @@
                                 <ng-option [value]='2'>Tooling Cost</ng-option>
                                 <ng-option [value]='3'>Should Cost</ng-option>
                             </ng-select>
+
                         </div>
 
                     </div>
 
-
                 </div>
-                <!-- <span style="font-style: italic;" [hidden]="ModelCount<100">"You can only view 100 parts one
-                    time,
-                    apply filters on left side or
-                    enter specific part numbers" </span> -->
-
-                <!-- <div class="col-md-8"></div> -->
-                <!-- <div class="col-md-4">
-                    <ng-select style="float: right; margin-top: 5px; font-size: 8px !important;" class="custom" [ngModelOptions]="{standalone: true}"
-                        [searchable]="false" placeholder="Please select" class="descsorting"
-                        (change)="FilterSearchDataAsceDesc($event)" [(ngModel)]='selectedSearchDataAsceDesc'>
-                        <ng-option [value]='0'>Sort by A-Z</ng-option>
-                        <ng-option [value]='1'>Sort by Z-A</ng-option>
-                    </ng-select>
-
-                    <ng-select style="margin-top: 5px; font-size: 8px !important;" [ngModelOptions]="{standalone: true}" [searchable]="false"
-                        placeholder="Please select" class="descsorting" (change)="FilterSearchData($event)"
-                        [(ngModel)]='selectedSearchData'>
-                        <ng-option [value]='0'>Debrief Date </ng-option>
-                        <ng-option [value]='1'>Location</ng-option>
-                        <ng-option [value]='2'>Tooling Cost</ng-option>
-                        <ng-option [value]='3'>Should Cost</ng-option>
-                    </ng-select>
-                </div> -->
+                 
             </div>
 
-            <div class="row setOpacity" id="SearchFilters">
+            <div class="TabMenu">
+                <button [ngClass]="{'activeTab': showTab1, 'Tab':!showTab1}" (click)="showTabs('Tab1')" >CEO Models</button>
+                <button [ngClass]="{'activeTab': showTab2, 'Tab':!showTab2}" (click)="showTabs('Tab2')">Simulated Models</button>
+            </div>
+
+            <div [hidden]="!showTab1" class="row setOpacity" id="SearchFilters">
                 <div *ngFor="let t of SearchList  | paginate: { itemsPerPage: 100, currentPage: page }"
                     class="prodDetails">
                     <div class="prdImgDesc" (click)="getShouldeCost(t)">
@@ -476,6 +460,71 @@
 
                 <div class="d-flex justify-content-between p-2 pagination" *ngIf="ModelCount > 0">
                     <ngb-pagination [collectionSize]="this.ModelCount" [(page)]="page" [pageSize]="pageSize"
+                        [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm">
+                        <ng-template ngbPaginationPrevious>Prev</ng-template>
+                        <ng-template ngbPaginationNext>Next</ng-template>
+                    </ngb-pagination>
+                    <br>
+                </div>
+            </div>
+
+
+            <div [hidden]="!showTab2" class="row setOpacity" id="SearchFilters">
+                <div class="row text-center SimulatedModelFound">
+                    <label>We found "<b>{{this.SimulatedModelCount}}</b>" simulated models. </label>
+                </div>
+
+                <div *ngFor="let t of SimulatedSearchList  | paginate: { itemsPerPage: 100, currentPage: Simulatedpage }"
+                    class="prodDetails ">
+                    <div class="SumilatedprdImgDesc">
+                        <img *ngIf="t.imagePath == '' else multi" src="assets/No-Image.png" class="prdIcon"
+                            style="width: 100%; height: 150px;">
+                        <ng-template #multi>
+                            <img src="{{t.imagePath}}" class="prdIcon" style="width: 100%; height: 150px;">
+                        </ng-template>
+
+                    </div>
+
+                    <div class="prdDescription">
+                        <label id="PartNumber">{{ChekNull(t.partNumber)}}</label><br>
+                        <label id="PartName">{{ChekNull(t.partName)}}</label><br>
+                        <label id="programName">{{ChekNull(t.programName)}}</label><br>
+
+                        <div class="labless">
+                            <label class="labletest">Debrief Date : <b>{{ChekNull(t.debriefDateFormated)}}</b></label>
+                            <label class="labletest">Simulated Date : <b>{{ChekNull(t.simulated_Date)}}</b></label>
+                            <label class="labletest">Business Unit : <b>{{ChekNull(t.businessUnit)}}</b></label>
+                            <label class="labletest">Location : <b>{{ChekNull(t.mfgRegion)}}</b></label>
+                        </div>
+                        
+                        <div class="prdDescription_div1">
+                            <label id="AnnualVolume"> <b>{{ChekNull(t.totalCost | number:'1.2-2')}} </b> <br>
+                                Should Cost ($)
+                           </label>
+                        </div>
+                        <div class="prdDescription_div2">
+                            <label id="AnnualVolume"> <b>{{ChekNull(t.simulated_TotalCost)}} </b> <br>
+                                Simulated Cost ($) </label>
+                        </div>
+                        <div class="prdDescription_div3">
+                            <label id="AnnualVolume"> <b>{{ChekNull(t.toolingCostModeller | number:'1.2-2')}}</b> <br>
+                                Tooling Cost ($)</label>
+                        </div>
+
+
+                    </div>
+                    <div>
+                        <input #Comparecheckbox class="form-check-input" type="checkbox" class="SearchCheckbox"
+                            id="{{t.csHeaderId}}" (click)="getPartId(t)" title="Select for Compate">
+                    </div>
+                    <!-- <div>
+                        <img src="../../../assets/PDFIcon.png" class="PDFIcon" title="Download PDF"
+                            (click)="DownloadPDF(t)">
+                    </div> -->
+                </div>
+
+                <div class="d-flex justify-content-between p-2 pagination" *ngIf="SimulatedModelCount > 0">
+                    <ngb-pagination [collectionSize]="this.SimulatedModelCount" [(page)]="Simulatedpage" [pageSize]="SimulatedpageSize"
                         [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm">
                         <ng-template ngbPaginationPrevious>Prev</ng-template>
                         <ng-template ngbPaginationNext>Next</ng-template>
