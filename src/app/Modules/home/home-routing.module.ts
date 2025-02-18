@@ -34,11 +34,6 @@ import { UserhistoryComponent } from '../Report/userhistory/userhistory.componen
 import { ShouldCostUserHistoryComponent } from '../Report/should-cost-user-history/should-cost-user-history.component';
 import { ComparisonnewComponent } from '../comparisonnew/comparisonnew.component';
 import { CostReductionComponent } from '../cost-reduction/cost-reduction.component';
-
-// import { SendMessageComponent } from '../contact/send-message/send-message.component';
-//import { UserAuditComponent } from '../user-audit/user-audit.component';
-import { UserAnalyticsComponent } from '../user-analytics/user-analytics.component';
-
 import { SendMessageComponent } from '../contact/send-message/send-message.component';
 import { CartdetailsComponent } from '../cartdetails/cartdetails.component';
 import { FeedbackComponent } from '../contact/feedback/feedback.component';
@@ -83,15 +78,14 @@ const routes: Routes = [
       { path : 'frequentlyusedmaterialgrade' , component:FrequentlyusedmaterialgradeComponent},
       { path : 'costinsights' , component:CostReductionComponent},
       { path : 'toolingcost' , component:HousingflywheelComponent},
- 
-      // { path : 'sendmessage' , component:SendMessageComponent},
-     // { path : 'useraudit' , component:UserAuditComponent},
-      { path : 'useranalytics' , component:UserAnalyticsComponent},
       { path : 'cartdeta' , component:CartdetailsComponent},
       { path : 'sendmessage' , component:SendMessageComponent},
       { path : 'feedback', component: FeedbackComponent },
       { path : 'feedbackhistory', component: FeedbackhistoryComponent },
       
+
+
+
     ]
   },
   
