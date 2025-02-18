@@ -75,53 +75,54 @@ export class UserAnalyticsComponent implements OnInit {
     this.FromDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth(), 1), "yyyy-MM-dd");
     this.ToDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth() + 1, 0), "yyyy-MM-dd");
     await this.GetData(this.FromDate, this.ToDate);
+    this.resetcharts();
 
-    this.TeamChartOptions = {
-      animationEnabled: true,
-      title: {
-        text: 'Usage by Roles',
-      },
-      data: [
-        {
-          // Change type to "doughnut", "line", "splineArea", etc.
-          type: 'column',
-          dataPoints: this.TeamchartDataPoints
-        },
-      ],
-    };
+    // this.TeamChartOptions = {
+    //   animationEnabled: true,
+    //   title: {
+    //     text: 'Usage by Roles',
+    //   },
+    //   data: [
+    //     {
+    //       // Change type to "doughnut", "line", "splineArea", etc.
+    //       type: 'column',
+    //       dataPoints: this.TeamchartDataPoints
+    //     },
+    //   ],
+    // };
 
-    this.PageChartOptions = {
-      animationEnabled: true,
-      title: {
-        text: 'Usage by Module',
-      },
-      data: [
-        {
-          // Change type to "doughnut", "line", "splineArea", etc.
-          type: 'pie',
-          dataPoints: this.PagechartDataPoints
-        },
-      ],
-    };
-    this.pagetimechartOptions = {
-      animationEnabled: true,
-      title: {
-        text: 'Average time spent per page',
-      },
-      axisX: {
-        title: "Time in Hrs",
-        interval:1,
-         labelMaxWidth: 100,           
-         labelAngle: -30,
-      },
-      data: [
-        {
-          // Change type to "doughnut", "line", "splineArea", etc.
-          type: 'column',
-          dataPoints: this.PageTimechartDataPoints
-        },
-      ],
-    }
+    // this.PageChartOptions = {
+    //   animationEnabled: true,
+    //   title: {
+    //     text: 'Usage by Module',
+    //   },
+    //   data: [
+    //     {
+    //       // Change type to "doughnut", "line", "splineArea", etc.
+    //       type: 'pie',
+    //       dataPoints: this.PagechartDataPoints
+    //     },
+    //   ],
+    // };
+    // this.pagetimechartOptions = {
+    //   animationEnabled: true,
+    //   title: {
+    //     text: 'Average time spent per page',
+    //   },
+    //   axisX: {
+    //     title: "Time in Hrs",
+    //     interval:1,
+    //      labelMaxWidth: 100,           
+    //      labelAngle: -30,
+    //   },
+    //   data: [
+    //     {
+    //       // Change type to "doughnut", "line", "splineArea", etc.
+    //       type: 'column',
+    //       dataPoints: this.PageTimechartDataPoints
+    //     },
+    //   ],
+    // }
 
   }
 
@@ -233,15 +234,8 @@ export class UserAnalyticsComponent implements OnInit {
 
   }
 
-  async onClickGetData() {
-    debugger;
-    await this.GetData(this.selectedFromDate, this.selectedToDate)
-    this.pagetimechartOptions.data[0].dataPoints = this.PageTimechartDataPoints
-    debugger;
-    this.TeamChartOptions = [];
-    this.PageChartOptions = [];
-    this.pagetimechartOptions = [];
-
+  resetcharts()
+  {
     setTimeout(() => {
 
       this.TeamChartOptions = {
@@ -295,6 +289,18 @@ export class UserAnalyticsComponent implements OnInit {
       }
 
     }, 500);
+  }
+
+  async onClickGetData() {
+    debugger;
+    await this.GetData(this.selectedFromDate, this.selectedToDate)
+    this.pagetimechartOptions.data[0].dataPoints = this.PageTimechartDataPoints
+    debugger;
+    this.TeamChartOptions = [];
+    this.PageChartOptions = [];
+    this.pagetimechartOptions = [];
+    this.resetcharts();
+    
   }
 
   getChartInstance(chart: object) {
