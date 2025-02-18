@@ -8,7 +8,7 @@ import { count, from } from 'rxjs';
 @Component({
   selector: 'app-user-analytics',
   templateUrl: './user-analytics.component.html',
-  styleUrl: './user-analytics.component.css'
+  styleUrls: ['./user-analytics.component.css']
 })
 export class UserAnalyticsComponent implements OnInit {
   useranalytics!: FormGroup

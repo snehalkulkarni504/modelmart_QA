@@ -119,8 +119,7 @@ import { WelcomeuserComponent } from './home/welcomeuser/welcomeuser.component';
     CostReductionComponent,
     HousingflywheelComponent,
     TabsComponent,
-    UserAnalyticsComponent
-
+    UserAnalyticsComponent,
     SendMessageComponent,
     CartdetailsComponent,
     FeedbackComponent,
@@ -149,7 +148,7 @@ import { WelcomeuserComponent } from './home/welcomeuser/welcomeuser.component';
 
     CanvasJSAngularChartsModule,
     MatTabsModule,BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
     CanvasJSAngularChartsModule
   ],
   
