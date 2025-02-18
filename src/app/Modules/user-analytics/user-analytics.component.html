@@ -1,0 +1,191 @@
+<div class="setHeight" style="background-color: whitesmoke;">
+    <ngx-spinner name="spinner" bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="square-jelly-box"
+        [fullScreen]="true">
+        <img alt="Loading Please Wait..." style="width:100px ; height:100px ;" src="../../../assets/Spin-2.gif" />
+    </ngx-spinner>
+
+
+    <form [formGroup]="useranalytics">
+        <div class="MasterHeader">
+            <div style="width: 50%;">
+                <h2>User Analytics</h2>
+            </div>
+            <div class="text-end" style="width: 50%;">
+                <button class="btnexporttoexcel" (click)="exportToExcel()">Export to Excel</button>
+                <button class="btnbackLeft" (click)="backToPreviousPage()">Back</button>
+            </div>
+        </div>
+        <div class="MasterHeaderlable">
+            <div class="row">
+        <div class="col-md-2">
+            <label for="datepicker1" class="default-lbl">From Date</label>
+            <br>
+            <input type="date" formControlName="currentDate" [(ngModel)]="selectedFromDate"
+                class="form-control form-control-sm">
+        </div>
+
+        <div class="col-md-2">
+            <label for="datepicker1" class="default-lbl">To Date</label>
+            <br>
+            <input type="date" formControlName="currentDate" [(ngModel)]="selectedToDate"
+                class="form-control form-control-sm">
+        </div>
+        <div class="col-md-1 ">
+            <button type="button" class="btn btn-sm default-btn" data-bs-dismis="modal"
+            (click)="onClickGetData()">View</button>
+        </div>
+    </div>
+</div>
+        <div class="row cardsdiv" >
+        <div class="card cardsstyle">
+            <div class="card-body d-flex cardbodys">
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-code-slash"
+                viewBox="0 0 16 16">
+                <path
+                    d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z" />
+                </svg> -->
+                <img style="height: 100%;width: 30%;"
+                class="icon"
+                src="../../../assets/useractive.png"
+              />
+                <div style="padding-left: 10%;text-align: left;">
+                <h6 class="card-title cardheading">Active User</h6>
+                <p  style="font-weight:700;" class="card-text">{{Activeusers}}</p>
+            </div>
+            </div>
+        </div>
+        <div class="card cardsstyle">
+            <div class="card-body d-flex cardbodys">
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-code-slash"
+                viewBox="0 0 16 16">
+                <path
+                    d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z" />
+                </svg> -->
+                <img style="height: 90%;width: 25%;"
+                class="icon"
+                src="../../../assets/login.png"
+              />
+                <div style="padding-left: 10%;text-align: left;">
+                <h6 class="card-title cardheading">Application Logins</h6>
+                <p style="font-weight: 700;" class="card-text">{{AppLogins}}</p>
+            </div>
+            </div>
+        </div>
+        <div class="card cardsstyle">
+            <div class="card-body d-flex cardbodys">
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-code-slash"
+                viewBox="0 0 16 16">
+                <path
+                    d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z" />
+                </svg> -->
+                <img style="height: 100%;width: 30%;"
+                class="icon"
+                src="../../../assets/alarm.png"
+              />
+                <div style="padding-left: 10%;text-align: left;">
+                <h6 class="card-title cardheading">Average Usage time per user</h6>
+                <p style="font-weight: 700;" class="card-text">{{AvgUsagetime}}</p>
+            </div>
+        </div>
+        </div>
+        <div class="card cardsstyle">
+            <div class="card-body d-flex cardbodys">
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-code-slash"
+                viewBox="0 0 16 16">
+                <path
+                    d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z" />
+                </svg> -->
+                <img style="height: 100%;width: 30%;"
+                class="icon"
+                src="../../../assets/useractive.png"
+                />
+                <div style="padding-left: 10%;text-align: left;">
+                    <h6 class="card-title cardheading">Unique User Logins</h6>
+                    <p style="font-weight: 700;" class="card-text">{{UnqLogin}}</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        
+        <div class="row gridcardsdiv" >
+            <div class="card gridcards">
+                <div class="card-body p-2">
+                    <label class="default-lbl" style="font-weight: 700;">Usage by Roles</label>
+                    <div class="table-responsive" style="font-size: 12px !important;">
+                        <table class="table p-0 table-borderless bsb-table-xl text-nowrap align-middle m-0">
+                            <thead  style="border-bottom: 3px solid da291c;">
+                                <tr class="shaded">
+                                    <th>Team</th>
+                                    <th>Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="highlight" *ngFor="let val of TeamcountArray let i=index">
+                                    <td class="highlight">{{val.Team}}</td>
+                                    <td>{{val.Count}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card gridcards">
+                <div class="card-body p-2">
+                    <label class="default-lbl" style="font-weight: 700;">Usage by Module</label>
+                    <div class="table-responsive" style="font-size: 12px !important;">
+                        <table class="table p-0 table-borderless bsb-table-xl text-nowrap align-middle m-0">
+                            <thead  style="border-bottom: 3px solid da291c; text-align: center;">
+                                <tr class="shaded">
+                                    <th>Page</th>
+                                    <th>Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="highlight"  style="text-align: center" *ngFor="let val of PagecountArray let i=index">
+                                    <td class="highlight">{{val.Page}}</td>
+                                    <td>{{val.Count}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card gridcards">
+                <div class="card-body p-2">
+                    <label class="default-lbl" style="font-weight: 700;">Average time spent per page:</label>
+                    <div class="table-responsive" style="font-size: 12px !important;">
+                        <table class="table p-0 table-borderless bsb-table-xl text-nowrap align-middle m-0" style="width : 350px; table-layout: fixed;">
+                            <thead  style="border-bottom: 3px solid da291c; text-align: center;">
+                                <tr class="shaded">
+                                    <th>Page</th>
+                                    <th>Duration (In Hrs)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="highlight"  style="text-align: center" *ngFor="let val of PagetimeArray let i=index">
+                                    <td class="highlight" style="white-space: normal;">{{val.Page}}</td>
+                                    <td>{{val.Time}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+          <div class="row cardsdiv" style="margin-top: 2%;" >
+            <div class="col-md-4">
+                <canvasjs-chart [options]="TeamChartOptions" [styles]="{width: '100%', height:'250px'}" id="chartOptionsId"></canvasjs-chart>
+            </div>
+            <div class="col-md-4">
+                <canvasjs-chart [options]="PageChartOptions" [styles]="{width: '100%', height:'250px'}" id="chartOptionsId"></canvasjs-chart>
+            </div>
+            <div class="col-md-4">
+                <canvasjs-chart [options]="pagetimechartOptions" [styles]="{width: '100%', height:'250px'}" id="chartOptionsId"
+                (stockChartInstance)="getChartInstance($event)"></canvasjs-chart>
+            </div>
+            <!-- <div class="col-md-5">
+                <canvasjs-chart [options]="chartOptionssupplier" [styles]="{width: '100%', height:'250px'}" id="chartOptionssupplierId"></canvasjs-chart>
+            </div> -->
+        </div>
+    </form>
+</div>

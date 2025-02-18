@@ -59,11 +59,19 @@ import { MaintenanceComponent } from './home/maintenance/maintenance.component';
 import { ComparisonnewComponent } from './Modules/comparisonnew/comparisonnew.component';
 import { CostReductionComponent } from './Modules/cost-reduction/cost-reduction.component';
 import { HousingflywheelComponent } from './Modules/housingflywheel/housingflywheel.component';
+
+// import { SendMessageComponent } from './Modules/contact/send-message/send-message.component';
+//import { UserAuditComponent } from './Modules/user-audit/user-audit.component';
+import { TabsComponent } from './Modules/tabs/tabs.component';
+import { UserAnalyticsComponent } from './Modules/user-analytics/user-analytics.component';
+import { MatTabsModule } from '@angular/material/tabs';
+ 
 import { SendMessageComponent } from './Modules/contact/send-message/send-message.component';
 import { CartdetailsComponent } from './Modules/cartdetails/cartdetails.component';
 import { FeedbackComponent } from './Modules/contact/feedback/feedback.component';
 import { FeedbackhistoryComponent } from './Modules/Report/feedbackhistory/feedbackhistory.component';
 import { WelcomeuserComponent } from './home/welcomeuser/welcomeuser.component';
+
 
 @NgModule({
   declarations: [
@@ -110,6 +118,9 @@ import { WelcomeuserComponent } from './home/welcomeuser/welcomeuser.component';
     ComparisonnewComponent,
     CostReductionComponent,
     HousingflywheelComponent,
+    TabsComponent,
+    UserAnalyticsComponent
+
     SendMessageComponent,
     CartdetailsComponent,
     FeedbackComponent,
@@ -135,8 +146,13 @@ import { WelcomeuserComponent } from './home/welcomeuser/welcomeuser.component';
     NgxPaginationModule,
     NgbModule,
     NgIdleKeepaliveModule,
+
+    CanvasJSAngularChartsModule,
+    MatTabsModule,BrowserModule,
+    BrowserAnimationsModule
     CanvasJSAngularChartsModule
   ],
+  
   providers: [
     {
       provide: LocationStrategy,
