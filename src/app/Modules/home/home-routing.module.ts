@@ -35,7 +35,7 @@ import { ShouldCostUserHistoryComponent } from '../Report/should-cost-user-histo
 import { ComparisonnewComponent } from '../comparisonnew/comparisonnew.component';
 import { CostReductionComponent } from '../cost-reduction/cost-reduction.component';
 // import { SendMessageComponent } from '../contact/send-message/send-message.component';
-import { UserAuditComponent } from '../user-audit/user-audit.component';
+//import { UserAuditComponent } from '../user-audit/user-audit.component';
 import { UserAnalyticsComponent } from '../user-analytics/user-analytics.component';
  
 
@@ -78,7 +78,7 @@ const routes: Routes = [
       { path : 'costinsights' , component:CostReductionComponent},
       { path : 'toolingcost' , component:HousingflywheelComponent},
       // { path : 'sendmessage' , component:SendMessageComponent},
-      { path : 'useraudit' , component:UserAuditComponent},
+     // { path : 'useraudit' , component:UserAuditComponent},
       { path : 'useranalytics' , component:UserAnalyticsComponent},
     ]
   },

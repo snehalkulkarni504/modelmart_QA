@@ -61,7 +61,7 @@ import { ComparisonnewComponent } from './Modules/comparisonnew/comparisonnew.co
 import { CostReductionComponent } from './Modules/cost-reduction/cost-reduction.component';
 import { HousingflywheelComponent } from './Modules/housingflywheel/housingflywheel.component';
 // import { SendMessageComponent } from './Modules/contact/send-message/send-message.component';
-import { UserAuditComponent } from './Modules/user-audit/user-audit.component';
+//import { UserAuditComponent } from './Modules/user-audit/user-audit.component';
 import { TabsComponent } from './Modules/tabs/tabs.component';
 import { UserAnalyticsComponent } from './Modules/user-analytics/user-analytics.component';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -113,7 +113,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     CostReductionComponent,
     HousingflywheelComponent,
     // SendMessageComponent,
-    UserAuditComponent,
+    //UserAuditComponent,
     TabsComponent,
     UserAnalyticsComponent
   ],

@@ -36,6 +36,7 @@ img {
     width: 80%;
     margin-left: 9%;
     margin-right: 10%;
+    
 }
 
 .cardsstyle{
@@ -58,7 +59,7 @@ img {
 }
 
 .gridcards{
-    width: 30%;
+    width: 31%;
     margin-left: 2%;
     height: 13rem;
     border: none;
@@ -87,6 +88,12 @@ tr.highlight td {
 
 thead {
     border-bottom: 2px solid #f50505; /* Adjust thickness and color */
+    position: sticky;
+  }
+
+  table thead tr th {
+    position: sticky;
+    top: -1px;
   }
 
   .btnexporttoexcel {
@@ -104,4 +111,11 @@ thead {
 .btnexporttoexcel:hover{
     background-color: #fff;
     color: #da291c;
+}
+
+.MasterHeaderlable{
+    width: 80%;
+    height: 80px;
+    margin-left: 11%;
+    font-family: Helvetica, Arial  ;
 }
