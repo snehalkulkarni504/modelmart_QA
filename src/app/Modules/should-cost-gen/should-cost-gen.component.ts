@@ -6,7 +6,7 @@ import { Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environments';
-
+ 
 export interface Piedata {
   y: number;
   name: string;
