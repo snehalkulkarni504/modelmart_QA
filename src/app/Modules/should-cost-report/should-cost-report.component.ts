@@ -75,7 +75,7 @@ export class ShouldCostReportComponent {
     this.router.events.subscribe((event) => {
       window.scrollTo(0, 0)
     });
-    
+
     if (localStorage.getItem("userName") == null) {
       this.router.navigate(['/welcome']);
       return;
@@ -85,7 +85,7 @@ export class ShouldCostReportComponent {
 
     this.CSHeaderId = localStorage.getItem("ComapredId");
     this.GetTierCostData();
-  
+
   }
 
   async GetTierCostData() {
@@ -701,7 +701,7 @@ export class ShouldCostReportComponent {
   Notes3: any;
   Notes4: any;
   Notes5: any;
-  Notes6:any ;
+  Notes6: any;
 
   Direct_haeder1: any;
   Direct_haeder2: any;
@@ -747,7 +747,7 @@ export class ShouldCostReportComponent {
       this.Notes2 = 'Total direct Labour content in cost model ($)';
       this.Notes3 = 'Inflationary increase in Labour in %. If you are unsure of inflationary trends, reach out to COE or send the model for refresh.';
       this.Notes4 = 'This model was costed on ' + this.DebriefDate;
-      
+
     }
     else if (value.particular == "SGA") {
       this.ModelPopUpheaderLable = 'Selling, General & Administrative (SG&A)' + '¹';
@@ -820,7 +820,7 @@ export class ShouldCostReportComponent {
           this.ModelPopUp_usdValue_Updated = UpdateCost.value;
           UpdateCostNonPer_Popup.value = UpdateCostTD_per.value;
           this.Notes5 = '';
-          this.Notes6 = 'Labor cost may increase or decrease based on forex fluctuations.' ;
+          this.Notes6 = 'Labor cost may increase or decrease based on forex fluctuations.';
         }
         else {
           this.IsNotes = false;
@@ -921,7 +921,7 @@ export class ShouldCostReportComponent {
           this.ModelPopUp_usdValue_Updated = UpdateCostT2.value;
           UpdateCostNonPer_Popup.value = UpdateCostTD_per.value;
           this.Notes5 = '';
-          this.Notes6 = 'Labor cost may increase or decrease based on forex fluctuations.' ;
+          this.Notes6 = 'Labor cost may increase or decrease based on forex fluctuations.';
         }
         else {
           this.IsNotes = false;
@@ -1709,11 +1709,11 @@ export class ShouldCostReportComponent {
     else {
       updatedTextbox.value = this.DirectMaterialCostT1;
     }
-   
+
 
     this.findsumPercent();
-   
-     
+
+
   }
 
 
@@ -1853,8 +1853,8 @@ export class ShouldCostReportComponent {
         // let t_existing = this.TotalMaterialRate_Existing - Math.abs(this.TotalMaterialRate_Existing_casting);
         // let t_Updated = this.TotalMaterialRate_Update - Math.abs(this.TotalMaterialRate_Update_casting);
 
-        let t_existing = this.TotalMaterialRate_Existing  ;
-        let t_Updated = this.TotalMaterialRate_Update ;
+        let t_existing = this.TotalMaterialRate_Existing;
+        let t_Updated = this.TotalMaterialRate_Update;
 
         var num = parseFloat(this.DirectMaterialCostT2.replace(",", ""));
         let total = (num - t_existing);
@@ -1967,7 +1967,7 @@ export class ShouldCostReportComponent {
 
     const data = await this.searchservice.SaveMatetialCost(this.saveMatetialCost, this.userId, this.IsCastingSheet).toPromise();
 
-    if (data == 0 ) {
+    if (data == 0) {
       this.SpinnerService.hide('spinner');
       alert("Should Cost Not Updated !!!");
       return

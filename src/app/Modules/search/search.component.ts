@@ -69,7 +69,7 @@ export class SearchComponent implements OnInit {
       itemsPerPage: 100
     };
 
-    this.SimulatedconfigPagination ={
+    this.SimulatedconfigPagination = {
       SimulatedcurrentPage: 1,
       SimulateditemsPerPage: 100
     }
@@ -112,6 +112,8 @@ export class SearchComponent implements OnInit {
   results: any;
   autoseachhide: boolean = false;
   Productvalue: any = [];
+  SimulatedProductvalue: any = [];
+
   checkcount: number = 0;
 
   filters = {
@@ -173,8 +175,8 @@ export class SearchComponent implements OnInit {
   page: number = 1;
   pageSize: number = 100;
 
-  Simulatedpage:number=1;
-  SimulatedpageSize:number=100;
+  Simulatedpage: number = 1;
+  SimulatedpageSize: number = 100;
 
   configPagination: any;
   SimulatedconfigPagination: any;
@@ -1139,6 +1141,7 @@ export class SearchComponent implements OnInit {
       this.selectedSearchData = undefined;
       this.checkcount = 0;
       this.Productvalue = [];
+      this.SimulatedProductvalue = [];
       //console.log('search Userid function' + localStorage.getItem("userId"));
 
       this.userId = localStorage.getItem("userId");
@@ -1378,13 +1381,14 @@ export class SearchComponent implements OnInit {
   }
 
   getComparison() {
-    // this.router.navigate(['/home/cartdeta']);
-    // return
-    // this.Comparecheckbox;
+    debugger;
+
     if (this.SearchList.length <= 0) {
       this.toastr.error("Record Not Found");
       return
     }
+
+
 
     const comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
     let checkcount = 0;
@@ -1399,34 +1403,79 @@ export class SearchComponent implements OnInit {
       return
     }
 
-    localStorage.setItem("ComapredcheckedboxIds", this.Productvalue);
+    this.compareIds = [];
+
+    this.compareIds.push(
+      {
+        "M": this.Productvalue,
+        "S": this.SimulatedProductvalue
+      }
+    )
+
+    localStorage.setItem("ComapredcheckedboxIds", this.compareIds);
     this.router.navigate(['/home/comparison']);
 
   }
 
-  getPartId(e: any) {
+  compareIds: any = [];
+
+  getPartId(e: any, model: any) {
+
+    debugger;
     this.checkcount = 0;
-    this.Productvalue = [];
+
     const Comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
-    for (let i = 0; i < Comparecheckbox.length; i++) {
-      if (Comparecheckbox[i].checked) {
-        this.checkcount = this.checkcount + 1;
-        this.Productvalue.push(Comparecheckbox[i].id);
+    const SearchCheckboxSimulated = document.getElementsByClassName("SearchCheckboxSimulated") as any;
+    //SearchCheckboxSimulated
+    if (model == 'M') {
+      this.Productvalue = [];
+      for (let i = 0; i < Comparecheckbox.length; i++) {
+        if (Comparecheckbox[i].checked) {
+         // this.checkcount = this.checkcount + 1;
+          this.Productvalue.push(Comparecheckbox[i].id);
+        }
+      }
+
+      if (Number(this.Productvalue.length) + Number(this.SimulatedProductvalue.length) > 4) {
+        this.toastr.warning("You can select only 4 Products");
+        for (let i = 0; i < Comparecheckbox.length; i++) {
+          if (Comparecheckbox[i].id == e.csHeaderId) {
+            Comparecheckbox[i].checked = false;
+           // this.checkcount = this.checkcount - 1;
+            this.Productvalue.pop();
+            return
+          }
+        }
+        return
+      }
+    }
+    else {
+      this.SimulatedProductvalue = [];
+      for (let i = 0; i < SearchCheckboxSimulated.length; i++) {
+        if (SearchCheckboxSimulated[i].checked) {
+         // this.checkcount = this.checkcount + 1;
+          this.SimulatedProductvalue.push(SearchCheckboxSimulated[i].id);
+        }
+      }
+
+      if (Number(this.Productvalue.length) + Number(this.SimulatedProductvalue.length) > 4) {
+        this.toastr.warning("You can select only 4 Products");
+        for (let i = 0; i < SearchCheckboxSimulated.length; i++) {
+          if (SearchCheckboxSimulated[i].id == e.scReportId) {
+            SearchCheckboxSimulated[i].checked = false;
+           // this.checkcount = this.checkcount - 1;
+            this.SimulatedProductvalue.pop();
+            return
+          }
+        }
+        return
       }
     }
 
-    if (this.checkcount > 4) {
-      this.toastr.warning("You can select only 4 Products");
-      for (let i = 0; i < Comparecheckbox.length; i++) {
-        if (Comparecheckbox[i].id == e.csHeaderId) {
-          Comparecheckbox[i].checked = false;
-          this.checkcount = this.checkcount - 1;
-          this.Productvalue.pop();
-          return
-        }
-      }
-      return
-    }
+    this.checkcount = Number(this.Productvalue.length) + Number(this.SimulatedProductvalue.length);
+   // console.log(this.SimulatedProductvalue.length);
+
+
   }
 
 

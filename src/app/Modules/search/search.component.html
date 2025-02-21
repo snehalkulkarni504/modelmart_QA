@@ -26,7 +26,7 @@
                             (keyup)="searchOnKeyUp($event)" (keydown.enter)="setvalue('0')" (focusout)="hidedropdown()">
                         <!-- (keydown.enter)="setvalue('0')"  -->
                         <ul class="list-group searchdata" id="searchdata" [hidden]="autoseachhide">
-                            <li class="list-group-item" *ngFor="let c of results" (click)="setvalue(c)">
+                            <li class="list-group-item" style="font-size: 12px !important;" *ngFor="let c of results" (click)="setvalue(c)">
                                 {{c.name}}
                             </li>
                         </ul>
@@ -48,6 +48,7 @@
         </div>
 
         <!-- Filters Start -->
+      
         <div class="col-md-3 border-bottom position-fixed scroll1" id="Id_Filters">
             <form [formGroup]="SearchboxForm" id="Id_Filtersform">
                 <br>
@@ -355,8 +356,8 @@
                         </div>
                     </div>
                 </div>
-               
                 <br>
+             
             </form>
         </div>
         <!-- Filters End -->
@@ -367,7 +368,7 @@
                 <label>We found "<b>0</b>" models for your search. </label>
             </div>
             <div [hidden]="ModelFound" class="row ModelFound">
-                <div class="col-md-12 text-center" >
+                <div class="col-md-12 text-center">
                     <div class="row">
                         <div class="col-md-2"></div>
                         <div class="col-md-5">
@@ -399,16 +400,17 @@
                         </div>
 
                     </div>
-
                 </div>
-                 
             </div>
 
             <div class="TabMenu">
-                <button [ngClass]="{'activeTab': showTab1, 'Tab':!showTab1}" (click)="showTabs('Tab1')" >CEO Models</button>
-                <button [ngClass]="{'activeTab': showTab2, 'Tab':!showTab2}" (click)="showTabs('Tab2')">Simulated Models</button>
+                <button [ngClass]="{'activeTab': showTab1, 'Tab':!showTab1}" (click)="showTabs('Tab1')">CEO
+                    Models</button>
+                <button [ngClass]="{'activeTab': showTab2, 'Tab':!showTab2}" (click)="showTabs('Tab2')">Simulated
+                    Models</button>
             </div>
 
+            <!-- CEO models -->
             <div [hidden]="!showTab1" class="row setOpacity" id="SearchFilters">
                 <div *ngFor="let t of SearchList  | paginate: { itemsPerPage: 100, currentPage: page }"
                     class="prodDetails">
@@ -450,7 +452,7 @@
                     </div>
                     <div>
                         <input #Comparecheckbox class="form-check-input" type="checkbox" class="SearchCheckbox"
-                            id="{{t.csHeaderId}}" (click)="getPartId(t)" title="Select for Compate">
+                            id="{{t.csHeaderId}}" (click)="getPartId(t,'M')" title="Select for Compate">
                     </div>
                     <div>
                         <img src="../../../assets/PDFIcon.png" class="PDFIcon" title="Download PDF"
@@ -468,15 +470,16 @@
                 </div>
             </div>
 
-
+            <!-- simulated models -->
             <div [hidden]="!showTab2" class="row setOpacity" id="SearchFilters">
-                <div class="row text-center SimulatedModelFound">
-                    <label>We found "<b>{{this.SimulatedModelCount}}</b>" simulated models. </label>
+                <div class="row text-center ModelFound">
+                    <label>you have simulate "<b>{{SimulatedModelCount}}</b>" models. </label>
                 </div>
 
                 <div *ngFor="let t of SimulatedSearchList  | paginate: { itemsPerPage: 100, currentPage: Simulatedpage }"
-                    class="prodDetails ">
-                    <div class="SumilatedprdImgDesc">
+                    class="prodDetails">
+                    <div class="prdImgDesc" >
+
                         <img *ngIf="t.imagePath == '' else multi" src="assets/No-Image.png" class="prdIcon"
                             style="width: 100%; height: 150px;">
                         <ng-template #multi>
@@ -492,30 +495,27 @@
 
                         <div class="labless">
                             <label class="labletest">Debrief Date : <b>{{ChekNull(t.debriefDateFormated)}}</b></label>
-                            <label class="labletest">Simulated Date : <b>{{ChekNull(t.simulated_Date)}}</b></label>
                             <label class="labletest">Business Unit : <b>{{ChekNull(t.businessUnit)}}</b></label>
-                            <label class="labletest">Location : <b>{{ChekNull(t.mfgRegion)}}</b></label>
                         </div>
-                        
+
                         <div class="prdDescription_div1">
-                            <label id="AnnualVolume"> <b>{{ChekNull(t.totalCost | number:'1.2-2')}} </b> <br>
-                                Should Cost ($)
-                           </label>
+                            <label id="AnnualVolume"> <b>{{ChekNull(t.mfgRegion)}} </b> <br> Location </label>
                         </div>
                         <div class="prdDescription_div2">
-                            <label id="AnnualVolume"> <b>{{ChekNull(t.simulated_TotalCost)}} </b> <br>
-                                Simulated Cost ($) </label>
+                            <label id="AnnualVolume"> <b>{{ChekNull(t.totalCost | number:'1.2-2')}} </b> <br> Should
+                                Cost ($)
+                            </label>
                         </div>
                         <div class="prdDescription_div3">
                             <label id="AnnualVolume"> <b>{{ChekNull(t.toolingCostModeller | number:'1.2-2')}}</b> <br>
-                                Tooling Cost ($)</label>
+                                Tooling
+                                Cost ($)</label>
                         </div>
-
 
                     </div>
                     <div>
-                        <input #Comparecheckbox class="form-check-input" type="checkbox" class="SearchCheckbox"
-                            id="{{t.csHeaderId}}" (click)="getPartId(t)" title="Select for Compate">
+                        <input #Comparecheckbox class="form-check-input" type="checkbox" class="SearchCheckboxSimulated"
+                            id="{{t.scReportId}}" (click)="getPartId(t,'S')" title="Select for Compate">
                     </div>
                     <!-- <div>
                         <img src="../../../assets/PDFIcon.png" class="PDFIcon" title="Download PDF"

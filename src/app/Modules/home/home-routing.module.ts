@@ -37,7 +37,7 @@ import { CostReductionComponent } from '../cost-reduction/cost-reduction.compone
 
 // import { SendMessageComponent } from '../contact/send-message/send-message.component';
 //import { UserAuditComponent } from '../user-audit/user-audit.component';
-import { UserAnalyticsComponent } from '../user-analytics/user-analytics.component';
+import { UserAnalyticsComponent } from '../Report/user-analytics/user-analytics.component';
 
 import { SendMessageComponent } from '../contact/send-message/send-message.component';
 import { CartdetailsComponent } from '../cartdetails/cartdetails.component';

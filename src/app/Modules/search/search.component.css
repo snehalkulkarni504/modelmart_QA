@@ -114,12 +114,14 @@
     cursor: pointer;
 }
 
-.SumilatedprdImgDesc {
-   cursor: default;;
-}
-
-
 .prodDetails {
+    /* position: relative;
+    width: 18%;
+    padding: 10px;
+    border: 1px solid #8080802c;
+    transition: all .3s ease-in-out;
+    margin: 5px;
+    animation: showpanal alternate 1s; */
     position: relative;
     width: 21%;
     padding: 10px;
@@ -147,7 +149,7 @@
         margin: 10px;
     }
 
-    .SearchCheckbox {
+    .SearchCheckbox, .SearchCheckboxSimulated {
         width: 15px;
         height: 15px;
         font-weight: 500;
@@ -167,7 +169,7 @@
         margin: 10px;
     }
 
-    .SearchCheckbox {
+    .SearchCheckbox, .SearchCheckboxSimulated {
         width: 15px;
         height: 15px;
         font-weight: 500;
@@ -233,7 +235,7 @@
     cursor: pointer;
 } */
 
-.SearchCheckbox {
+.SearchCheckbox, .SearchCheckboxSimulated {
     width: 15px;
     height: 15px;
     font-weight: 500;
@@ -432,7 +434,7 @@
 }
 
 .mainsearchborder {
-    width: 80%;
+    width: 90%;
     background-color: #fff;
     border-radius: 4px;
     border-bottom-left-radius: 0px;
@@ -454,8 +456,9 @@
     background-color: #f1f1f1;
     z-index: 999;
     width: 440px;
-    height: 400px;
-    overflow-y: scroll;
+    height: auto;
+    /* height: 400px;
+    overflow-y: scroll; */
     border-radius: 0px;
 }
 
@@ -740,24 +743,14 @@ input[type="text"]:focus {
 }
 
 
-.descsorting {
+.descsorting{
     width: 130px;
-}
-
-.ng-select.custom {
-    border: 0px;
-    min-height: 0px;
-    border-radius: 0;
-}
-
-.ng-select.custom .ng-select-container {
-    min-height: 0px;
-    border-radius: 0;
-}
+} 
+ 
 
 /* ///////////////////////////////////////////////////////////////////// */
 
- 
+
 .SimulatedModelFound {
     width: 100%;
     margin-top: 5px;
@@ -814,3 +807,4 @@ input[type="text"]:focus {
 .TabMenu button:hover {
     background-color: #ddd;
 }
+
