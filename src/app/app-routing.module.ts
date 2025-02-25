@@ -5,6 +5,7 @@ import { WelcomepageComponent } from './home/welcomepage/welcomepage.component';
 import { LoginComponent } from './home/login/login.component';
 import { ForgotpasswordComponent } from './home/forgotpassword/forgotpassword.component';
 import { MaintenanceComponent } from './home/maintenance/maintenance.component';
+import { TcoUploadComponent } from './tco-upload/tco-upload.component';
  
 const routes: Routes = [
    
@@ -13,6 +14,12 @@ const routes: Routes = [
   { path: 'welcome', component: WelcomepageComponent },
   { path: 'invaliduser', component: ForgotpasswordComponent },
   { path: 'maintenance', component: MaintenanceComponent },
+<<<<<<< Updated upstream
+=======
+  { path: 'welcomeuser', component: WelcomeuserComponent },
+  { path: 'tcoupload', component:TcoUploadComponent},
+
+>>>>>>> Stashed changes
   
   { path: '', redirectTo:'/welcome', pathMatch:'full'},
   

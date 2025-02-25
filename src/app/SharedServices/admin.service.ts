@@ -177,6 +177,85 @@ export class AdminService {
   }
 
 
+<<<<<<< Updated upstream
+=======
+  submitContact(contact: any): Observable<any> {
+    return this.httpClient.post(this.apiUrl+`submitcontact`, contact);
+  }
+
+
+  InsertLoginDetails(userid:any,username:any): Observable<any> {
+    const formdata = new FormData();
+    formdata.append('userid', userid);
+    formdata.append('username', username);
+    return this.httpClient.post<FormData>(this.apiUrl + `InsertLoginDetails`,formdata);
+  }
+
+  UpdateLogout(userid:any,sessionid:any,autologout:any): Observable<any> {
+    const formdata = new FormData();
+    formdata.append('userid', userid);
+    formdata.append('sessionid', sessionid);
+    formdata.append('autologout', autologout);
+    return this.httpClient.post(this.apiUrl + `UpdateLogout`,formdata);
+  }
+
+  insertpageentry(userid:any,sessionid:any,page:any): Observable<any> {
+    const formdata = new FormData();
+    formdata.append('userid', userid);
+    formdata.append('sessionid', sessionid);
+    formdata.append('page', page);
+    return this.httpClient.post<FormData>(this.apiUrl + `InsertPageEntry`,formdata);
+  }
+
+  updatepageexit(userid:any,sessionid:any,page:any): Observable<any> {
+    const formdata = new FormData();
+    formdata.append('userid', userid);
+    formdata.append('sessionid', sessionid);
+    formdata.append('page', page);
+    return this.httpClient.post(this.apiUrl + `UpdatePageExit`,formdata);
+  }
+  
+  // GetUsersList(): Observable<any> {
+  //   return this.httpClient.get<any[]>(this.apiUrl + `GetAdminList`);
+  // }
+  GetSupplierList(): Observable<any> {
+    return this.httpClient.get<any[]>(this.apiUrl + `GetSupplierdetails`);
+  }
+  GetTcoDetails(): Observable<any> {
+    return this.httpClient.get<any[]>(this.apiUrl + `GetTcoDetails`);
+  }
+  GetFilteredTcoDetails(UniqueId: string, RequestHeaderId: string): Observable<any> {
+    debugger
+    return this.httpClient.get<any[]>(this.apiUrl + `GetTcoDetails?UniqueId=${UniqueId}&RequestHeaderId=${RequestHeaderId}`);
+  }
+  GetFilteredSupplierdetails(MMID: string, Request_ID: string): Observable<any> {
+    debugger
+    return this.httpClient.get<any[]>(this.apiUrl + `GetSupplierdetails?MMID=${MMID}&Request_ID=${Request_ID}`);
+  }
+  uploadFile(file: File,TCOID: string ,TCO_Number:string,TCO_Version:string,requestID:string,uniqueId:string,Status:string): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('TCO_ID', TCOID);
+    formData.append('Tco_Number', TCO_Number);
+    formData.append('Version', TCO_Version);
+    formData.append('uniqueID', uniqueId);
+    formData.append('Status', Status);
+    formData.append('requestID', requestID);
+  
+    debugger; 
+    return this.httpClient.post(this.apiUrl+"UploadDoc", formData);
+  }
+
+  bulkUpload(files: File[]): Observable<any> {
+    const formData = new FormData();
+    files.forEach(file => {
+        formData.append('files', file, file.name);
+    });
+    debugger; 
+    return this.httpClient.post(this.apiUrl + "Bulkupload", formData);
+}
+
+>>>>>>> Stashed changes
 
 
 }

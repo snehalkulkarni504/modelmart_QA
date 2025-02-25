@@ -61,6 +61,23 @@ import { ComparisonnewComponent } from './Modules/comparisonnew/comparisonnew.co
 import { CostReductionComponent } from './Modules/cost-reduction/cost-reduction.component';
 import { HousingflywheelComponent } from './Modules/housingflywheel/housingflywheel.component';
 
+<<<<<<< Updated upstream
+=======
+// import { SendMessageComponent } from './Modules/contact/send-message/send-message.component';
+//import { UserAuditComponent } from './Modules/user-audit/user-audit.component';
+import { TabsComponent } from './Modules/tabs/tabs.component';
+import { UserAnalyticsComponent } from './Modules/Report/user-analytics/user-analytics.component';
+import { MatTabsModule } from '@angular/material/tabs';
+ 
+import { SendMessageComponent } from './Modules/contact/send-message/send-message.component';
+import { CartdetailsComponent } from './Modules/cartdetails/cartdetails.component';
+import { FeedbackComponent } from './Modules/contact/feedback/feedback.component';
+import { FeedbackhistoryComponent } from './Modules/Report/feedbackhistory/feedbackhistory.component';
+import { WelcomeuserComponent } from './home/welcomeuser/welcomeuser.component';
+import { TcoUploadComponent } from './tco-upload/tco-upload.component';
+
+
+>>>>>>> Stashed changes
 @NgModule({
   declarations: [
     AppComponent,
@@ -105,7 +122,19 @@ import { HousingflywheelComponent } from './Modules/housingflywheel/housingflywh
     MaintenanceComponent,
     ComparisonnewComponent,
     CostReductionComponent,
+<<<<<<< Updated upstream
     HousingflywheelComponent
+=======
+    HousingflywheelComponent,
+    TabsComponent,
+    UserAnalyticsComponent,
+    SendMessageComponent,
+    CartdetailsComponent,
+    FeedbackComponent,
+    FeedbackhistoryComponent,
+    WelcomeuserComponent,
+    // TcoUploadComponent
+>>>>>>> Stashed changes
   ],
   imports: [
     TreeModule,
@@ -126,7 +155,15 @@ import { HousingflywheelComponent } from './Modules/housingflywheel/housingflywh
     NgxPaginationModule,
     NgbModule,
     NgIdleKeepaliveModule,
+<<<<<<< Updated upstream
     NgApexchartsModule,
+=======
+    TcoUploadComponent,
+
+    CanvasJSAngularChartsModule,
+    MatTabsModule,BrowserModule,
+    BrowserAnimationsModule,
+>>>>>>> Stashed changes
     CanvasJSAngularChartsModule
   ],
   providers: [
