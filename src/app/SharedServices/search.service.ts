@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environments';
 import { SearchFilters } from '../Model/SearchFilter';
 import { UpdateRequest, UpdateRequestbyAdmin } from '../Model/update-request';
 import { EmailForRequestUpdate } from '../Model/email-for-request-update';
+import { compareIds } from '../Model/CompareIds';
 
 @Injectable({
   providedIn: 'root'
@@ -63,8 +64,8 @@ export class SearchService {
     return this.httpClient.get<any[]>(this.apiUrl + `getCompardata?ids=${ids}`);
   }
 
-  getComparisonDataNew(ids: any): Observable<any> {
-    return this.httpClient.get<any[]>(this.apiUrl + `getCompardatanew?ids=${ids}`);
+  getComparisonDataNew(ids: compareIds[]): Observable<any> {
+    return this.httpClient.post(this.apiUrl + "getCompardatanew",ids);
   }
 
   getComparisonDataNewTier2(ids: any): Observable<any> {

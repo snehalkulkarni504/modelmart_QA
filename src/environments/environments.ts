@@ -10,6 +10,8 @@ export const environment = {
   apiUrl_Admin: 'https://localhost:5000/AdminService/',
   apiUrl_File: 'https://localhost:5000/File/',
   apiUrl_Search: 'https://localhost:5000/Search/',
+  apiUrl_Tco: 'https://localhost:5000/Tco/',
+
 
   // office Server
   // apiUrl: 'http://172.28.208.135:9090/', ////   Gateway

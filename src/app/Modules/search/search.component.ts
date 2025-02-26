@@ -8,6 +8,7 @@ import { SearchService } from 'src/app/SharedServices/search.service';
 import { environment } from 'src/environments/environments';
 import { Subject } from 'rxjs';
 import { AdminService } from 'src/app/SharedServices/admin.service';
+import { compareIds } from 'src/app/Model/CompareIds';
 
 
 @Component({
@@ -1388,17 +1389,16 @@ export class SearchComponent implements OnInit {
       return
     }
 
+    // const comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
+    // let checkcount = 0;
 
-
-    const comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
-    let checkcount = 0;
-
-    for (let i = 0; i < comparecheckbox.length; i++) {
-      if (comparecheckbox[i].checked) {
-        checkcount = checkcount + 1;
-      }
-    }
-    if (checkcount < 2) {
+    // for (let i = 0; i < comparecheckbox.length; i++) {
+    //   if (comparecheckbox[i].checked) {
+    //     checkcount = checkcount + 1;
+    //   }
+    // }
+    
+    if (Number(this.Productvalue.length) + Number(this.SimulatedProductvalue.length)  < 2) {
       this.toastr.warning("Please select at least 2 Products");
       return
     }
@@ -1412,12 +1412,13 @@ export class SearchComponent implements OnInit {
       }
     )
 
-    localStorage.setItem("ComapredcheckedboxIds", this.compareIds);
+    localStorage.setItem("ComapredcheckedboxIds", JSON.stringify(this.compareIds));
     this.router.navigate(['/home/comparison']);
 
   }
 
-  compareIds: any = [];
+  compareIds: compareIds[] = [];
+ // compareIds: any = [];
 
   getPartId(e: any, model: any) {
 
@@ -1431,7 +1432,7 @@ export class SearchComponent implements OnInit {
       this.Productvalue = [];
       for (let i = 0; i < Comparecheckbox.length; i++) {
         if (Comparecheckbox[i].checked) {
-         // this.checkcount = this.checkcount + 1;
+          // this.checkcount = this.checkcount + 1;
           this.Productvalue.push(Comparecheckbox[i].id);
         }
       }
@@ -1441,7 +1442,7 @@ export class SearchComponent implements OnInit {
         for (let i = 0; i < Comparecheckbox.length; i++) {
           if (Comparecheckbox[i].id == e.csHeaderId) {
             Comparecheckbox[i].checked = false;
-           // this.checkcount = this.checkcount - 1;
+            // this.checkcount = this.checkcount - 1;
             this.Productvalue.pop();
             return
           }
@@ -1453,7 +1454,7 @@ export class SearchComponent implements OnInit {
       this.SimulatedProductvalue = [];
       for (let i = 0; i < SearchCheckboxSimulated.length; i++) {
         if (SearchCheckboxSimulated[i].checked) {
-         // this.checkcount = this.checkcount + 1;
+          // this.checkcount = this.checkcount + 1;
           this.SimulatedProductvalue.push(SearchCheckboxSimulated[i].id);
         }
       }
@@ -1463,7 +1464,7 @@ export class SearchComponent implements OnInit {
         for (let i = 0; i < SearchCheckboxSimulated.length; i++) {
           if (SearchCheckboxSimulated[i].id == e.scReportId) {
             SearchCheckboxSimulated[i].checked = false;
-           // this.checkcount = this.checkcount - 1;
+            // this.checkcount = this.checkcount - 1;
             this.SimulatedProductvalue.pop();
             return
           }
@@ -1472,8 +1473,8 @@ export class SearchComponent implements OnInit {
       }
     }
 
-    this.checkcount = Number(this.Productvalue.length) + Number(this.SimulatedProductvalue.length);
-   // console.log(this.SimulatedProductvalue.length);
+    //this.checkcount = Number(this.Productvalue.length) + Number(this.SimulatedProductvalue.length);
+    // console.log(this.SimulatedProductvalue.length);
 
 
   }
@@ -1559,9 +1560,13 @@ export class SearchComponent implements OnInit {
     // 2 = Tooling Cost
     // 3 = Should Cost
 
-    if (e == 0 || e == 1) {
+    if (e == 0) {
       this.firstRow_Sorting = "Ascending to Descending";
       this.secondRow_Sorting = "Descending to Ascending";
+    }
+    else if (e == 1) {
+      this.firstRow_Sorting = "Sort by A - Z";
+      this.secondRow_Sorting = "Sort by Z - A";
     }
     else {
       this.firstRow_Sorting = "Smallest to Largest";

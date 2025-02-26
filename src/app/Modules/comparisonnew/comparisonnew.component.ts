@@ -5,6 +5,7 @@ import { ReportServiceService } from 'src/app/SharedServices/report-service.serv
 import { Location } from '@angular/common';
 import { environment } from 'src/environments/environments';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { compareIds } from 'src/app/Model/CompareIds';
 
 
 @Component({
@@ -27,9 +28,10 @@ export class ComparisonnewComponent implements OnInit {
   compardataTier2: any[] = [];
   colunms: any[] = [];
   headers: any[] = [];
-  ids: any = [];
+  compare_Ids: compareIds[] = [];
+  ids: any;
   data: any[] = [];
-  userId:any;
+  userId: any;
   NA: any = "NA*";
 
   shouldCostBreakdownList: any;
@@ -39,6 +41,7 @@ export class ComparisonnewComponent implements OnInit {
   TotalInUSD: number = 0;
 
   ngOnInit(): void {
+    debugger;
     if (localStorage.getItem("userName") == null) {
       this.router.navigate(['/welcome']);
       return;
@@ -53,7 +56,9 @@ export class ComparisonnewComponent implements OnInit {
     this.SpinnerService.show('spinner');
 
     this.userId = localStorage.getItem("userId");
-    this.ids = localStorage.getItem("ComapredcheckedboxIds");
+    this.ids = localStorage.getItem("ComapredcheckedboxIds");  // localStorage.getItem("ComapredcheckedboxIds");
+
+    this.compare_Ids = JSON.parse(this.ids);
 
     this.GetData();
     this.GetDataTier2();
@@ -91,8 +96,8 @@ export class ComparisonnewComponent implements OnInit {
   Hidematerial_Detailedtable4 = true;
 
   async GetData() {
-
-    const data = await this.searchservice.getComparisonDataNew(this.ids).toPromise();
+    debugger;
+    const data = await this.searchservice.getComparisonDataNew(this.compare_Ids).toPromise();
     this.partDetails = data.partDetails;
     this.ComparePartCount = data.partDetails.length;
     this.technicalParatameters = data.technicalParatameters;
@@ -576,7 +581,7 @@ export class ComparisonnewComponent implements OnInit {
       data: this.CostInfo
     };
 
-    
+
 
   }
 

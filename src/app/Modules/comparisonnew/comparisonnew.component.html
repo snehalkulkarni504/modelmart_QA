@@ -76,9 +76,11 @@
         <table class="table table-bordered tablePartDetails">
             <tr>
                 <th rowspan="10" class="text-center mainpart">Part Details </th>
-                <th hidden>CSHeaderId</th>
+                <th hidden >CSHeaderId</th>
                 <td hidden class="right" *ngFor="let i of this.partDetails">
                     {{i.csHeaderId}}
+                    {{i.scReportId}}
+
                 </td>
             </tr>
             <tr>
@@ -151,6 +153,7 @@
                 <th hidden class="particular">csHeaderId</th>
                 <td hidden class="right" *ngFor="let i of this.shouldCostVolume">
                     {{i.csHeaderId}}
+                    {{i.scReportId}}
                 </td>
             </tr>
             <tr>
@@ -212,6 +215,7 @@
                 <th hidden class="particular">csHeaderId</th>
                 <td hidden class="right" *ngFor="let i of this.technicalParatameters">
                     {{i.csHeaderId}}
+                    {{i.scReportId}}
                 </td>
             </tr>
             <tr>
@@ -296,6 +300,7 @@
                 <th hidden class="particular">csHeaderId</th>
                 <td hidden class="right" *ngFor="let i of this.material_Main">
                     {{i.csHeaderId}}
+                    {{i.scReportId}}
                 </td>
             </tr>
             <tr>
@@ -376,7 +381,8 @@
             </tr>
             <ng-container *ngIf="IsCommericalDetailsSC">
                 <tr *ngFor="let i of this.CommericalDetailsShouldCost">
-                    <th *ngIf="i.row_num != 100  && i.row_num != 1" class="particular"
+                    <!-- && i.row_num != 1 -->
+                    <th *ngIf="i.row_num != 100 && i.row_num != 1" class="particular"
                         [class.showShouldCostTier2]="i.row_num == 3" (click)="i.row_num == 3 && showShouldCostTier2()">
                         {{i.particular}}
                         <ng-container *ngIf="i.row_num == 3">
@@ -385,7 +391,7 @@
                         </ng-container>
 
                     </th>
-                    <td *ngIf="i.details1 && i.row_num != 100  && i.row_num != 1" class="right"
+                    <td *ngIf="i.details1 && i.row_num != 100 && i.row_num != 1" class="right"
                         [class.TotalCostData]="i.row_num == 17" [class.directCostminus]="i.details1 < 0">
                         {{i.details1}}
                         <ng-container *ngIf="i.row_num == 3">
@@ -401,7 +407,7 @@
                             </table>
                         </ng-container>
                     </td>
-                    <td *ngIf="i.details2  && i.row_num != 100  && i.row_num != 1" class="right"
+                    <td *ngIf="i.details2  && i.row_num != 100 && i.row_num != 1" class="right"
                         [class.TotalCostData]="i.row_num == 17" [class.directCostminus]="i.details2 < 0">
                         {{i.details2}}
                         <ng-container *ngIf="i.row_num == 3">
@@ -467,6 +473,7 @@
                 <th hidden class="particular">csHeaderId</th>
                 <td hidden class="right" *ngFor="let i of this.CommericalDetailsSupplierCost">
                     {{i.csHeaderId}}
+                    {{i.scReportId}}
                 </td>
             </tr>
             <tr>
@@ -578,9 +585,11 @@
                 <th rowspan="101" class="text-center mainpart ">
                     Manufacturing Process
                 </th>
-                <th class="particular">High Level Process</th>
-                <td class="right" *ngFor="let i of this.shouldCostVolume">
+                <th  class="particular">High Level Process</th>
+                <td  class="right" *ngFor="let i of this.shouldCostVolume">
                     {{i.highLevelProcess}}
+                    <!-- {{i.csHeaderId}}
+                    {{i.scReportId}} -->
                 </td>
             </tr>
             <tr>
@@ -596,6 +605,7 @@
                     <td class="particular" style="vertical-align: top; ">
                         <table class="setimage" style="width: 100%;">
                             <tr *ngFor="let i of this.ManufacturingProcessDetail">
+                                <!-- && i.id != 1 -->
                                 <td style="border: 1px solid #80808041" *ngIf="i.details1 && i.id != 1">
                                     {{i.details1}}
                                 </td>
@@ -605,7 +615,7 @@
                     <td class="particular" style="vertical-align: top;">
                         <table class="setimage" style="width: 100%;">
                             <tr *ngFor="let i of this.ManufacturingProcessDetail">
-                                <td style="border: 1px solid #80808041" *ngIf="i.details2 && i.id != 1">
+                                <td style="border: 1px solid #80808041" *ngIf="i.details2  && i.id != 1">
                                     {{i.details2}}
                                 </td>
                             </tr>
@@ -614,7 +624,7 @@
                     <td [hidden]="Hidematerial_Detailedtable3" class="particular" style="vertical-align: top;">
                         <table class="setimage" style="width: 100%;">
                             <tr *ngFor="let i of this.ManufacturingProcessDetail">
-                                <td style="border: 1px solid #80808041" *ngIf="i.details3 && i.id != 1">
+                                <td style="border: 1px solid #80808041" *ngIf="i.details3 && i.id != 1 ">
                                     {{i.details3}}
                                 </td>
                             </tr>
@@ -623,7 +633,7 @@
                     <td [hidden]="Hidematerial_Detailedtable4" class="particular" style="vertical-align: top;">
                         <table class="setimage" style="width: 100%;">
                             <tr *ngFor="let i of this.ManufacturingProcessDetail">
-                                <td style="border: 1px solid #80808041" *ngIf="i.details4 && i.id != 1">
+                                <td style="border: 1px solid #80808041" *ngIf="i.details4 && i.id != 1 ">
                                     {{i.details4}}
                                 </td>
                             </tr>
@@ -642,7 +652,7 @@
                 <th rowspan="9" class="text-center mainpart"></th>
                 <th class="particular"></th>
                 <td class="right text-center" *ngFor="let i of this.shouldCostVolume" style="padding: 5px;">
-                    <button type="button" class="btn btn-sm btn-outline-danger btnview" data-bs-dismis="modal"
+                    <button [hidden]="i.scReportId > 0" type="button" class="btn btn-sm btn-outline-danger btnview" data-bs-dismis="modal"
                         (click)="getComparison(i.csHeaderId)">View Details</button>
                 </td>
             </tr>
