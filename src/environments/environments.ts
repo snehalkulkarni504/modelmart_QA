@@ -12,7 +12,7 @@ export const environment = {
   apiUrl_Search: 'https://localhost:5000/Search/',
   apiUrl_Tco: 'https://localhost:5000/Tco/',
 
-
+  
   // office Server
   // apiUrl: 'http://172.28.208.135:9090/', ////   Gateway
   // apiUrl_Search: 'http://172.28.208.135:9090/Search/' ,

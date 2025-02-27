@@ -121,3 +121,11 @@ thead {
     margin-left: 5%;
     font-family: Helvetica, Arial  ;
 }
+
+.exportToExcel{
+    width: 30px;height: 30px;
+    margin-top: 25px; margin-left: 60px;
+}
+.exportToExcel:hover{
+    cursor: pointer !important;
+}

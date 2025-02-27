@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import { ReportServiceService } from 'src/app/SharedServices/report-service.service';
 import { count, from } from 'rxjs';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-user-analytics',
@@ -35,7 +36,7 @@ export class UserAnalyticsComponent implements OnInit {
   pagetimechartOptions: any = [];
   chart: any;
 
-  constructor(private datePipe: DatePipe, private location: Location, private reportservice: ReportServiceService) { }
+  constructor(private datePipe: DatePipe, private location: Location, private reportservice: ReportServiceService,private spinnerService: NgxSpinnerService) { }
 
   // chartDataPoints = [
   //   { label: 'Tech Purchasing', y: 19 },
@@ -175,32 +176,47 @@ export class UserAnalyticsComponent implements OnInit {
   }
 
   exportToExcel(): void {
-
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.UserData);
-
-    // Apply formatting to header (first row)
-    const headerCells = Object.keys(this.UserData[0]).map((_, index) =>
-      XLSX.utils.encode_cell({ c: index, r: 0 })  // Get cell address like A1, B1, C1
-    );
-
-    headerCells.forEach(cell => {
-      if (!ws[cell]) return;
-      ws[cell].s = {
-        font: { bold: true, color: { rgb: 'FFFFFF' } },   // Bold, white text
-        fill: { fgColor: { rgb: '4CAF50' } },            // Green background
-        alignment: { horizontal: 'center' }              // Center align text
-      };
-    });
-
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    const currentDate = new Date();
-    const formattedDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
-    const fileName = `ModelMart_Stats_${formattedDate}.xlsx`;
-    XLSX.writeFile(wb, fileName, { bookType: 'xlsx', cellStyles: true });
-
-
+ 
+    debugger
+    if ((this.selectedFromDate!=undefined) &&
+    (this.selectedToDate!=undefined))
+    {
+      this.spinnerService.show();
+      this.reportservice.ExcelExportUserAnalytics(this.selectedFromDate, this.selectedToDate).subscribe({
+        next: (data) => {
+          const blob = new Blob([data], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          });
+          const url = window.URL.createObjectURL(blob);
+ 
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = "User Analytics Report" ;
+          a.click();
+        },
+        error: (e) => {
+          //this.ProcessOrderLoading = false;
+          this.spinnerService.hide();
+          alert(
+            'Please select Proper dates.'
+          );
+        },
+        complete: () => {
+          this.spinnerService.hide();
+        },
+      });
+    }
+    else if((this.selectedFromDate==undefined) &&
+    (this.selectedToDate==undefined))
+    {
+      // startDate= this.fydate.getCurrentFinancialYearDates().startDate;
+      // endDate=this.fydate.getCurrentFinancialYearDates().endDate;
+      alert(
+        'Please select dates.'
+      );
+    }
   }
+
 
   async GetData(FromDate: any, ToDate: any) {
     debugger;
