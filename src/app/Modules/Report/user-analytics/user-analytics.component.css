@@ -3,11 +3,11 @@
 }
 
 .MasterHeader{
-    width: 80%;
+    width: 90%;
     display: inline-flex;
     height: 80px;
-    margin-left: 10%;
-    margin-right: 10%;
+    margin-left: 5%;
+    margin-right: 5%;
     font-family: Helvetica, Arial  ;
     border-bottom: 1px solid #da291c;
     margin-bottom: 20px;
@@ -33,20 +33,20 @@ img {
   }
 
 .cardsdiv{
-    width: 80%;
-    margin-left: 9%;
-    margin-right: 10%;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
     
 }
 
 .cardsstyle{
-    width: 18%;
-    margin-left: 2%;
+    width: 15%;
+    margin-left: 1.5%;
     height: 6rem;
     border: none;
     background-color: white;
-    box-shadow: 0px 0px 10px #c4c4c4;
-
+    border-radius: 8%;
+    box-shadow: 0px 5px 10px #80808070;
 }
 
 .cardbodys{
@@ -61,19 +61,18 @@ img {
 
 .gridcards{
     width: 31%;
-    margin-left: 2%;
+    margin-left: 2.5%;
     height: 13rem;
     border: none;
     background-color: white;
     padding: 0;
-    box-shadow: 0px 0px 10px #c4c4c4;
-
+    box-shadow: 0px 5px 10px #80808070;
 }
 
 .gridcardsdiv{
-    width: 80%;
-    margin-left: 9%;
-    margin-right: 10%;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
     margin-top: 2%;
 }
 
@@ -117,16 +116,8 @@ thead {
 }
 
 .MasterHeaderlable{
-    width: 80%;
+    width: 90%;
     height: 80px;
-    margin-left: 11%;
+    margin-left: 5%;
     font-family: Helvetica, Arial  ;
-}
-
-
-.exportToExcel{
-    width: 30px;height: 30px;
-}
-.exportToExcel:hover{
-    cursor: pointer !important;
 }

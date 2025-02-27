@@ -4,7 +4,6 @@ import { FormControl, FormGroup } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import { ReportServiceService } from 'src/app/SharedServices/report-service.service';
 import { count, from } from 'rxjs';
-import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-user-analytics',
@@ -19,6 +18,7 @@ export class UserAnalyticsComponent implements OnInit {
   AppLogins!: string
   AvgUsagetime!: string
   NoofRequest!: string
+  NoofUpload!: string
   UnqLogin!: string
   FromDate!: any;
   ToDate!: any;
@@ -35,8 +35,7 @@ export class UserAnalyticsComponent implements OnInit {
   pagetimechartOptions: any = [];
   chart: any;
 
-  constructor(private datePipe: DatePipe, private location: Location, private reportservice: ReportServiceService,
-    private spinnerService: NgxSpinnerService) { }
+  constructor(private datePipe: DatePipe, private location: Location, private reportservice: ReportServiceService) { }
 
   // chartDataPoints = [
   //   { label: 'Tech Purchasing', y: 19 },
@@ -75,8 +74,10 @@ export class UserAnalyticsComponent implements OnInit {
     this.currentDate = dd1;
 
     var date = new Date();
-    this.FromDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth(), 1), "yyyy-MM-dd");
-    this.ToDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth() + 1, 0), "yyyy-MM-dd");
+    this.FromDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth() - 6, 1), "yyyy-MM-dd");
+    console.log(this.FromDate)
+    this.ToDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth(), 0), "yyyy-MM-dd");
+    console.log(this.ToDate)
     await this.GetData(this.FromDate, this.ToDate);
     this.resetcharts();
 
@@ -175,67 +176,28 @@ export class UserAnalyticsComponent implements OnInit {
 
   exportToExcel(): void {
 
-    debugger
-    if ((this.selectedFromDate!=undefined) && 
-    (this.selectedToDate!=undefined))
-    {
-      this.spinnerService.show();
-      this.reportservice.ExcelExportUserAnalytics(this.selectedFromDate, this.selectedToDate).subscribe({
-        next: (data) => {
-          const blob = new Blob([data], {
-            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          });
-          const url = window.URL.createObjectURL(blob);
-  
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = "User Analytics Report" ;
-          a.click();
-        },
-        error: (e) => {
-          //this.ProcessOrderLoading = false;
-          this.spinnerService.hide();
-          alert(
-            'Please select Proper dates.'
-          );
-        },
-        complete: () => {
-          this.spinnerService.hide();
-        },
-      });
-    }
-    else if((this.selectedFromDate==undefined) && 
-    (this.selectedToDate==undefined))
-    {
-      // startDate= this.fydate.getCurrentFinancialYearDates().startDate;
-      // endDate=this.fydate.getCurrentFinancialYearDates().endDate;
-      alert(
-        'Please select dates.'
-      );
-    }
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.UserData);
 
-    // const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.UserData);
+    // Apply formatting to header (first row)
+    const headerCells = Object.keys(this.UserData[0]).map((_, index) =>
+      XLSX.utils.encode_cell({ c: index, r: 0 })  // Get cell address like A1, B1, C1
+    );
 
-    // // Apply formatting to header (first row)
-    // const headerCells = Object.keys(this.UserData[0]).map((_, index) =>
-    //   XLSX.utils.encode_cell({ c: index, r: 0 })  // Get cell address like A1, B1, C1
-    // );
+    headerCells.forEach(cell => {
+      if (!ws[cell]) return;
+      ws[cell].s = {
+        font: { bold: true, color: { rgb: 'FFFFFF' } },   // Bold, white text
+        fill: { fgColor: { rgb: '4CAF50' } },            // Green background
+        alignment: { horizontal: 'center' }              // Center align text
+      };
+    });
 
-    // headerCells.forEach(cell => {
-    //   if (!ws[cell]) return;
-    //   ws[cell].s = {
-    //     font: { bold: true, color: { rgb: 'FFFFFF' } },   // Bold, white text
-    //     fill: { fgColor: { rgb: '4CAF50' } },            // Green background
-    //     alignment: { horizontal: 'center' }              // Center align text
-    //   };
-    // });
-
-    // const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    // XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    // const currentDate = new Date();
-    // const formattedDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
-    // const fileName = `ModelMart_Stats_${formattedDate}.xlsx`;
-    // XLSX.writeFile(wb, fileName, { bookType: 'xlsx', cellStyles: true });
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    const currentDate = new Date();
+    const formattedDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
+    const fileName = `ModelMart_Stats_${formattedDate}.xlsx`;
+    XLSX.writeFile(wb, fileName, { bookType: 'xlsx', cellStyles: true });
 
 
   }
@@ -251,8 +213,9 @@ export class UserAnalyticsComponent implements OnInit {
     this.Activeusers = data.usersdata[0].Count;
     this.AppLogins = data.usersdata[1].Count;
     this.AvgUsagetime = data.usersdata[2].Count;
-    this.UnqLogin = data.usersdata[4].Count;
     this.NoofRequest=data.usersdata[3].Count;
+    this.NoofUpload=data.usersdata[4].Count;
+    this.UnqLogin = data.usersdata[5].Count;
     this.TeamcountArray = data.usagebyrole;
     this.PagecountArray = data.usagebypage;
     this.PagetimeArray = data.averagetimespent;
