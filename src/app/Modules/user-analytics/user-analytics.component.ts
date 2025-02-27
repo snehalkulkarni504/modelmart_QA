@@ -17,6 +17,8 @@ export class UserAnalyticsComponent implements OnInit {
   Activeusers!: string
   AppLogins!: string
   AvgUsagetime!: string
+  NoofRequest!: string
+  NoofUpload!: string
   UnqLogin!: string
   FromDate!: any;
   ToDate!: any;
@@ -72,8 +74,10 @@ export class UserAnalyticsComponent implements OnInit {
     this.currentDate = dd1;
 
     var date = new Date();
-    this.FromDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth(), 1), "yyyy-MM-dd");
-    this.ToDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth() + 1, 0), "yyyy-MM-dd");
+    this.FromDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth() - 6, 1), "yyyy-MM-dd");
+    console.log(this.FromDate)
+    this.ToDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth(), 0), "yyyy-MM-dd");
+    console.log(this.ToDate)
     await this.GetData(this.FromDate, this.ToDate);
     this.resetcharts();
 
@@ -209,7 +213,9 @@ export class UserAnalyticsComponent implements OnInit {
     this.Activeusers = data.usersdata[0].Count;
     this.AppLogins = data.usersdata[1].Count;
     this.AvgUsagetime = data.usersdata[2].Count;
-    this.UnqLogin = data.usersdata[3].Count;
+    this.NoofRequest=data.usersdata[3].Count;
+    this.NoofUpload=data.usersdata[4].Count;
+    this.UnqLogin = data.usersdata[5].Count;
     this.TeamcountArray = data.usagebyrole;
     this.PagecountArray = data.usagebypage;
     this.PagetimeArray = data.averagetimespent;
