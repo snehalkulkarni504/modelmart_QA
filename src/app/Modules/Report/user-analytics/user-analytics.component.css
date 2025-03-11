@@ -1,0 +1,131 @@
+.setHeight{
+    min-height: 100dvh;
+}
+
+.MasterHeader{
+    width: 90%;
+    display: inline-flex;
+    height: 80px;
+    margin-left: 5%;
+    margin-right: 5%;
+    font-family: Helvetica, Arial  ;
+    border-bottom: 1px solid #da291c;
+    margin-bottom: 20px;
+    /* box-shadow: 0 6px 2px -6px #da291c; */
+}
+
+.MasterHeader h2{
+    /* position: absolute; */
+    margin: 20px 0px;
+}
+
+.default-lbl {
+    margin: 0px 0px 3px 2px;
+    font-family: Helvetica, Arial !important;
+    font-size: 13px;
+
+}
+
+img {
+    width: 20%;
+    max-width: 250px;
+    height: auto;
+  }
+
+.cardsdiv{
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    
+}
+
+.cardsstyle{
+    width: 15%;
+    margin-left: 1.5%;
+    height: 6rem;
+    border: none;
+    background-color: white;
+    border-radius: 8%;
+    box-shadow: 0px 5px 10px #80808070;
+}
+
+.cardbodys{
+    padding-left:0%;
+    padding-right: 0%;
+}
+
+.cardheading{
+    color:rgb(123, 126, 126);
+    font-size:80%;
+}
+
+.gridcards{
+    width: 31%;
+    margin-left: 2.5%;
+    height: 13rem;
+    border: none;
+    background-color: white;
+    padding: 0;
+    box-shadow: 0px 5px 10px #80808070;
+}
+
+.gridcardsdiv{
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 2%;
+}
+
+.table-responsive {
+    height:10rem;
+    overflow-y: scroll;
+}
+
+tr.shaded th {
+    background-color:white;
+}
+tr.highlight td {
+    background-color:white;
+}
+
+thead {
+    border-bottom: 2px solid #f50505; /* Adjust thickness and color */
+    position: sticky;
+  }
+
+  table thead tr th {
+    position: sticky;
+    top: -1px;
+  }
+
+  .btnexporttoexcel {
+    margin-top: 25px;
+    font-size: 15px !important;
+    background-color: #da291c;
+    color: #fff;
+    padding: 4px 15px;
+    border: 1px solid #da291c;
+    font-family: Helvetica, Arial !important;
+    border-radius: 5px;
+    margin-right: 2%;
+}
+
+.btnexporttoexcel:hover{
+    background-color: #fff;
+    color: #da291c;
+}
+
+.MasterHeaderlable{
+    width: 90%;
+    height: 80px;
+    margin-left: 5%;
+    font-family: Helvetica, Arial  ;
+}
+
+.exportToExcel{
+    width: 30px;height: 30px;
+    margin-top: 25px; margin-left: 60px;
+}
+.exportToExcel:hover{
+    cursor: pointer !important;
+}

@@ -37,12 +37,13 @@ import { CostReductionComponent } from '../cost-reduction/cost-reduction.compone
 
 // import { SendMessageComponent } from '../contact/send-message/send-message.component';
 //import { UserAuditComponent } from '../user-audit/user-audit.component';
-import { UserAnalyticsComponent } from '../user-analytics/user-analytics.component';
+import { UserAnalyticsComponent } from '../Report/user-analytics/user-analytics.component';
 
 import { SendMessageComponent } from '../contact/send-message/send-message.component';
 import { CartdetailsComponent } from '../cartdetails/cartdetails.component';
 import { FeedbackComponent } from '../contact/feedback/feedback.component';
 import { FeedbackhistoryComponent } from '../Report/feedbackhistory/feedbackhistory.component';
+import { TcoUploadComponent } from '../Request/tco-upload/tco-upload.component';
  
 
 const routes: Routes = [
@@ -91,6 +92,8 @@ const routes: Routes = [
       { path : 'sendmessage' , component:SendMessageComponent},
       { path : 'feedback', component: FeedbackComponent },
       { path : 'feedbackhistory', component: FeedbackhistoryComponent },
+      { path : 'tcoupload', component: TcoUploadComponent },
+
       
     ]
   },

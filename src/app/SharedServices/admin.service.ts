@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environments';
 import { BUnitMaster } from 'src/app/Model/BUnitMaster';
 import { Authclass } from '../Model/authclass';
 import { Form } from '@angular/forms';
- 
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ import { Form } from '@angular/forms';
 export class AdminService {
 
   apiUrl = environment.apiUrl_Admin;
-  
+
   //public $refreshToken = new Subject<boolean>;
 
   constructor(private httpClient: HttpClient) {
@@ -38,7 +38,7 @@ export class AdminService {
   //     "RefreshToken": localStorage.getItem("refreshToken"),
   //     "RefreshTokenExpires": localStorage.getItem("refreshTokenExpires")
   //   });
- 
+
   //   return this.httpClient.post(this.apiUrl + "RenewAccessTOken", this.mSTUsers)
   // }
 
@@ -179,40 +179,41 @@ export class AdminService {
 
 
   submitContact(contact: any): Observable<any> {
-    return this.httpClient.post(this.apiUrl+`submitcontact`, contact);
+    return this.httpClient.post(this.apiUrl + `submitcontact`, contact);
   }
 
 
-  InsertLoginDetails(userid:any,username:any): Observable<any> {
+  InsertLoginDetails(userid: any, username: any): Observable<any> {
     const formdata = new FormData();
     formdata.append('userid', userid);
     formdata.append('username', username);
-    return this.httpClient.post<FormData>(this.apiUrl + `InsertLoginDetails`,formdata);
+    return this.httpClient.post<FormData>(this.apiUrl + `InsertLoginDetails`, formdata);
   }
 
-  UpdateLogout(userid:any,sessionid:any,autologout:any): Observable<any> {
+  UpdateLogout(userid: any, sessionid: any, autologout: any): Observable<any> {
     const formdata = new FormData();
     formdata.append('userid', userid);
     formdata.append('sessionid', sessionid);
     formdata.append('autologout', autologout);
-    return this.httpClient.post(this.apiUrl + `UpdateLogout`,formdata);
+    return this.httpClient.post(this.apiUrl + `UpdateLogout`, formdata);
   }
 
-  insertpageentry(userid:any,sessionid:any,page:any): Observable<any> {
+  insertpageentry(userid: any, sessionid: any, page: any): Observable<any> {
     const formdata = new FormData();
     formdata.append('userid', userid);
     formdata.append('sessionid', sessionid);
     formdata.append('page', page);
-    return this.httpClient.post<FormData>(this.apiUrl + `InsertPageEntry`,formdata);
+    return this.httpClient.post<FormData>(this.apiUrl + `InsertPageEntry`, formdata);
   }
 
-  updatepageexit(userid:any,sessionid:any,page:any): Observable<any> {
+  updatepageexit(userid: any, sessionid: any, page: any): Observable<any> {
     const formdata = new FormData();
     formdata.append('userid', userid);
     formdata.append('sessionid', sessionid);
     formdata.append('page', page);
-    return this.httpClient.post(this.apiUrl + `UpdatePageExit`,formdata);
+    return this.httpClient.post(this.apiUrl + `UpdatePageExit`, formdata);
   }
+
 
 
 }

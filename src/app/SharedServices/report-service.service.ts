@@ -114,5 +114,15 @@ export class ReportServiceService {
   Getpiechartdata():Observable<any> {
     return this.http.get<any[]>(this.apiUrl+`Getpiechartdata`);
   }
+
+  ExcelExportUserAnalytics(Fromdate :any,Todate :any) {
+    return this.http.get(
+      this.apiUrl +
+        `ExportToExcelUserAnalyticsData?fromdate=${Fromdate}&todate=${Todate}`,
+      {
+        responseType: 'blob', // Important to specify blob as the response type
+      }
+    );
+  }
   
 }

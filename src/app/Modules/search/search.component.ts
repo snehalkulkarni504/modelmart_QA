@@ -8,6 +8,7 @@ import { SearchService } from 'src/app/SharedServices/search.service';
 import { environment } from 'src/environments/environments';
 import { Subject } from 'rxjs';
 import { AdminService } from 'src/app/SharedServices/admin.service';
+import { compareIds } from 'src/app/Model/CompareIds';
 
 
 @Component({
@@ -69,7 +70,7 @@ export class SearchComponent implements OnInit {
       itemsPerPage: 100
     };
 
-    this.SimulatedconfigPagination ={
+    this.SimulatedconfigPagination = {
       SimulatedcurrentPage: 1,
       SimulateditemsPerPage: 100
     }
@@ -112,6 +113,8 @@ export class SearchComponent implements OnInit {
   results: any;
   autoseachhide: boolean = false;
   Productvalue: any = [];
+  SimulatedProductvalue: any = [];
+
   checkcount: number = 0;
 
   filters = {
@@ -173,8 +176,8 @@ export class SearchComponent implements OnInit {
   page: number = 1;
   pageSize: number = 100;
 
-  Simulatedpage:number=1;
-  SimulatedpageSize:number=100;
+  Simulatedpage: number = 1;
+  SimulatedpageSize: number = 100;
 
   configPagination: any;
   SimulatedconfigPagination: any;
@@ -1139,6 +1142,7 @@ export class SearchComponent implements OnInit {
       this.selectedSearchData = undefined;
       this.checkcount = 0;
       this.Productvalue = [];
+      this.SimulatedProductvalue = [];
       //console.log('search Userid function' + localStorage.getItem("userId"));
 
       this.userId = localStorage.getItem("userId");
@@ -1378,55 +1382,101 @@ export class SearchComponent implements OnInit {
   }
 
   getComparison() {
-    // this.router.navigate(['/home/cartdeta']);
-    // return
-    // this.Comparecheckbox;
+    debugger;
+
     if (this.SearchList.length <= 0) {
       this.toastr.error("Record Not Found");
       return
     }
 
-    const comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
-    let checkcount = 0;
+    // const comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
+    // let checkcount = 0;
 
-    for (let i = 0; i < comparecheckbox.length; i++) {
-      if (comparecheckbox[i].checked) {
-        checkcount = checkcount + 1;
-      }
-    }
-    if (checkcount < 2) {
+    // for (let i = 0; i < comparecheckbox.length; i++) {
+    //   if (comparecheckbox[i].checked) {
+    //     checkcount = checkcount + 1;
+    //   }
+    // }
+    
+    if (Number(this.Productvalue.length) + Number(this.SimulatedProductvalue.length)  < 2) {
       this.toastr.warning("Please select at least 2 Products");
       return
     }
 
-    localStorage.setItem("ComapredcheckedboxIds", this.Productvalue);
+    this.compareIds = [];
+
+    this.compareIds.push(
+      {
+        "M": this.Productvalue,
+        "S": this.SimulatedProductvalue
+      }
+    )
+
+    localStorage.setItem("ComapredcheckedboxIds", JSON.stringify(this.compareIds));
     this.router.navigate(['/home/comparison']);
 
   }
 
-  getPartId(e: any) {
+  compareIds: compareIds[] = [];
+ // compareIds: any = [];
+
+  getPartId(e: any, model: any) {
+
+    debugger;
     this.checkcount = 0;
-    this.Productvalue = [];
+
     const Comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
-    for (let i = 0; i < Comparecheckbox.length; i++) {
-      if (Comparecheckbox[i].checked) {
-        this.checkcount = this.checkcount + 1;
-        this.Productvalue.push(Comparecheckbox[i].id);
+    const SearchCheckboxSimulated = document.getElementsByClassName("SearchCheckboxSimulated") as any;
+    //SearchCheckboxSimulated
+    if (model == 'M') {
+      this.Productvalue = [];
+      for (let i = 0; i < Comparecheckbox.length; i++) {
+        if (Comparecheckbox[i].checked) {
+          // this.checkcount = this.checkcount + 1;
+          this.Productvalue.push(Comparecheckbox[i].id);
+        }
+      }
+
+      if (Number(this.Productvalue.length) + Number(this.SimulatedProductvalue.length) > 4) {
+        this.toastr.warning("You can select only 4 Products");
+        for (let i = 0; i < Comparecheckbox.length; i++) {
+          if (Comparecheckbox[i].id == e.csHeaderId) {
+            Comparecheckbox[i].checked = false;
+            // this.checkcount = this.checkcount - 1;
+            this.Productvalue.pop();
+            return
+          }
+        }
+        return
+      }
+    }
+    else {
+      this.SimulatedProductvalue = [];
+      for (let i = 0; i < SearchCheckboxSimulated.length; i++) {
+        if (SearchCheckboxSimulated[i].checked) {
+          // this.checkcount = this.checkcount + 1;
+          this.SimulatedProductvalue.push(SearchCheckboxSimulated[i].id);
+        }
+      }
+
+      if (Number(this.Productvalue.length) + Number(this.SimulatedProductvalue.length) > 4) {
+        this.toastr.warning("You can select only 4 Products");
+        for (let i = 0; i < SearchCheckboxSimulated.length; i++) {
+          if (SearchCheckboxSimulated[i].id == e.scReportId) {
+            SearchCheckboxSimulated[i].checked = false;
+            // this.checkcount = this.checkcount - 1;
+            this.SimulatedProductvalue.pop();
+            return
+          }
+        }
+        return
       }
     }
 
-    if (this.checkcount > 4) {
-      this.toastr.warning("You can select only 4 Products");
-      for (let i = 0; i < Comparecheckbox.length; i++) {
-        if (Comparecheckbox[i].id == e.csHeaderId) {
-          Comparecheckbox[i].checked = false;
-          this.checkcount = this.checkcount - 1;
-          this.Productvalue.pop();
-          return
-        }
-      }
-      return
-    }
+    //this.checkcount = Number(this.Productvalue.length) + Number(this.SimulatedProductvalue.length);
+    // console.log(this.SimulatedProductvalue.length);
+
+
   }
 
 
@@ -1510,9 +1560,13 @@ export class SearchComponent implements OnInit {
     // 2 = Tooling Cost
     // 3 = Should Cost
 
-    if (e == 0 || e == 1) {
+    if (e == 0) {
       this.firstRow_Sorting = "Ascending to Descending";
       this.secondRow_Sorting = "Descending to Ascending";
+    }
+    else if (e == 1) {
+      this.firstRow_Sorting = "Sort by A - Z";
+      this.secondRow_Sorting = "Sort by Z - A";
     }
     else {
       this.firstRow_Sorting = "Smallest to Largest";

@@ -63,7 +63,7 @@ import { HousingflywheelComponent } from './Modules/housingflywheel/housingflywh
 // import { SendMessageComponent } from './Modules/contact/send-message/send-message.component';
 //import { UserAuditComponent } from './Modules/user-audit/user-audit.component';
 import { TabsComponent } from './Modules/tabs/tabs.component';
-import { UserAnalyticsComponent } from './Modules/user-analytics/user-analytics.component';
+import { UserAnalyticsComponent } from './Modules/Report/user-analytics/user-analytics.component';
 import { MatTabsModule } from '@angular/material/tabs';
  
 import { SendMessageComponent } from './Modules/contact/send-message/send-message.component';
@@ -119,8 +119,7 @@ import { WelcomeuserComponent } from './home/welcomeuser/welcomeuser.component';
     CostReductionComponent,
     HousingflywheelComponent,
     TabsComponent,
-    UserAnalyticsComponent
-
+    UserAnalyticsComponent,
     SendMessageComponent,
     CartdetailsComponent,
     FeedbackComponent,
@@ -149,7 +148,7 @@ import { WelcomeuserComponent } from './home/welcomeuser/welcomeuser.component';
 
     CanvasJSAngularChartsModule,
     MatTabsModule,BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
     CanvasJSAngularChartsModule
   ],
   

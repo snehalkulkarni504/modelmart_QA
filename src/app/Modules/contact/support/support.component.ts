@@ -7,7 +7,8 @@ import { Location } from '@angular/common';
   styleUrls: ['./support.component.css']
 })
 export class SupportComponent {
-
+  
+email = "modelmart@cummins.com";
   
   constructor(private location: Location) {
     // window.scrollTo(0, 0);

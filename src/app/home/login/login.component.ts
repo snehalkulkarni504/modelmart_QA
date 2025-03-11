@@ -146,7 +146,7 @@ export class LoginComponent implements OnInit {
        
       //this.router.navigate(['/home/search/ ']);
       this.router.navigate(['/welcomeuser']);
-  
+       
     }
     else {
       this.toastr.error("Invalid UserName and Password");
