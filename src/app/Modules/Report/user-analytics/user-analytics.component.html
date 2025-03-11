@@ -167,19 +167,21 @@
         </div>
 
         <div class="row cardsdiv" style="margin-top: 2%;">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <canvasjs-chart [options]="TeamChartOptions" [styles]="{width: '100%', height:'250px'}"
                     id="chartOptionsId"></canvasjs-chart>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <canvasjs-chart [options]="PageChartOptions" [styles]="{width: '100%', height:'250px'}"
                     id="chartOptionsId"></canvasjs-chart>
             </div>
-            <div class="col-md-4">
-                <canvasjs-chart [options]="pagetimechartOptions" [styles]="{width: '100%', height:'250px'}"
+        </div>
+        <div class="row cardsdiv"  style="margin-top: 2%;">
+            <div class="col">
+                <canvasjs-chart [options]="pagetimechartOptions" [styles]="{width: '100%', height:'400px'}"
                     id="chartOptionsId" (stockChartInstance)="getChartInstance($event)"></canvasjs-chart>
             </div>
-        </div>
+        </div>  
     </form>
     <br>
     <br>

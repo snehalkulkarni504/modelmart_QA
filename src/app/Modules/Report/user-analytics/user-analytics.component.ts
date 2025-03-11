@@ -27,7 +27,7 @@ export class UserAnalyticsComponent implements OnInit {
   dd: any;
   TeamcountArray: { Team: string; Count: number }[] = [];
   PagecountArray: { Page: string; Count: number }[] = [];
-  PagetimeArray: { Page: string; Time: number }[] = [];
+  PagetimeArray: { Page: string; Time: string }[] = [];
   TeamchartDataPoints: { label: string; y: number }[] = [];
   PagechartDataPoints: { label: string; y: number }[] = [];
   PageTimechartDataPoints: { label: string; y: number }[] = [];
@@ -249,7 +249,7 @@ export class UserAnalyticsComponent implements OnInit {
       return { label: Page, y: Count };
     })
     this.PageTimechartDataPoints = this.PagetimeArray.map(({ Page, Time }) => {
-      return { label: Page, y: Number(Time) };
+      return { label: Page, y: Number(Time.substring(0,5)) };
     })
 
 
@@ -295,11 +295,14 @@ export class UserAnalyticsComponent implements OnInit {
         title: {
           text: 'Average time spent per page',
         },
+        axisY: {
+          interval:5,
+          gridThickness: 2,
+        },
         axisX: {
           title: "Time in Hrs",
-          interval:1,
            labelMaxWidth: 100,           
-           labelAngle: -30,
+           labelAngle: -75,
         },
         data: [
           {

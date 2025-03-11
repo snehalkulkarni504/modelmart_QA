@@ -136,17 +136,33 @@ getpagename(url:string):string{
     }
     else if(url=='/home/userforex')
     {
-      return 'User Forex Details'
+      return 'User Forex Details Report'
     }
     else if(url=='/home/frequentlyusedmaterialgrade')
     {
-      return 'Frequently Used Material Grade Details'
+      return 'Frequently Used Material Grade Details Report'
     }
     else if(url=='/home/userhistory')
     {
-      return 'User History Details'
+      return 'User History Details Report'
     }
-      
+    else if(url=='/home/useranalytics')
+    {
+      return 'User Analytics Report'
+    }
+    else if(url=='/home/feedbackhistory')
+    {
+      return 'Feedback History Details Report'
+    }
+    else if(url=='/home/costinsights')
+    {
+      return 'Cost Insights'
+    }
+    else if(url=='/home/comparison')
+    {
+      return 'Comparison'
+    }
+
     return''
 }
 }
