@@ -11,6 +11,8 @@ import { RequestFileUploadService } from 'src/app/SharedServices/request-file-up
 import { SearchService } from 'src/app/SharedServices/search.service';
 import { Location } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-send-request',
@@ -54,8 +56,7 @@ export class SendRequestComponent implements OnInit {
   excelData: ExcelData[] = [];
   UData: UpdateSendRequest[] = [];
   HopperColumns: any = {};
-  //uploadSendRequest: UploadSendRequestFile[] = [];
-  //UploadSendRequest: any = {};
+
   showError1: boolean = false;
   showError2!: boolean;
   showError3!: boolean;
@@ -116,6 +117,7 @@ export class SendRequestComponent implements OnInit {
   ModelTypes: any;
   modelTypesID: any;
 
+
   @ViewChild('excelFile_lbl')
   excelFile_lbl!: ElementRef;
 
@@ -168,14 +170,14 @@ export class SendRequestComponent implements OnInit {
     this.SpinnerService.hide('spinner');
 
   }
+
+
   getMaterialGrade(event: any) {
     this.selectedMaterialGrade = event.target.value;
-    // console.log(this.selectedMaterialGrade)
 
   }
 
   onSelected() {
-    //debugger;
 
     this.length = '';
     this.width = '';
@@ -196,9 +198,7 @@ export class SendRequestComponent implements OnInit {
       this.fileUploadService.GetFilteredHopperData(excelData).subscribe(
         (_result: any[]) => {
           this.getArr = _result;
-          //console.log("view data", this.getArr)
           const UData: UpdateSendRequest = {
-            // requestHeaderID: this.selectedID,
             uniqueID: this.selectedUniqueID
           };
 
@@ -231,12 +231,10 @@ export class SendRequestComponent implements OnInit {
               else {
                 this.modelTypesID = 1;
               }
-              //console.log("My UpdateArr", this.getUArr)
               if (this.getUArr.length > 0) {
                 this.toastr.warning("This Should Cost Model already exist with Model Mart ID " + this.getUArr[0].uniqueId + " and Request ID " + this.getUArr[0].requestHeaderId);
-
                 if (this.getArr[0].iterationsCount > this.getUArr[0].iterationCount) {
-                  this.toastr.warning("This is an uploaded model with the next iteration");
+                  this.toastr.warning("This Should Cost Model Iterations");
                 }
               }
 
@@ -244,31 +242,255 @@ export class SendRequestComponent implements OnInit {
           );
 
           this.SpinnerService.hide('spinner');
-
-
+          console.log('modeltype id=' + this.modelTypesID);
         }
       );
     }
 
+
+
   }
+
+
+  modelMartIdFromExcel: string = '';
+  validationMessage: string = '';
 
   onChange(event: any, fileType: string) {
     const files = event.target.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       if (fileType === 'pdf' || fileType === 'excel' || fileType === 'image') {
+        if (fileType === 'excel') {
+          const file = event.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (e: any) => {
+              const data = new Uint8Array(e.target.result);
+              const workbook = XLSX.read(data, { type: 'array' });
+              const sheetName = workbook.SheetNames[0];
+              const sheet = workbook.Sheets[sheetName];
+              debugger;
+              const jsonData: any[] = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+              if (jsonData.length > 0) {
+                this.modelMartIdFromExcel = jsonData[1][0];
+                this.validateModelMartId(jsonData);
+              }
+            };
+            reader.readAsArrayBuffer(file);
+          }
+        }
         this.selectedFiles.push(file);
+        this.addSuccess = true;
       }
+    }
+  }
+
+
+
+
+
+
+  yellowmodeldata = {
+    MMID: 0,
+    requestid: 0,
+    createdby: 0,
+    modelmarttypeid: 0,
+    cat2: "",
+    cat3: "",
+    cat4: "",
+    estimatespend: "",
+    businessunit: "",
+    projecttype: "",
+    costtype: "",
+    partno: "",
+    partname: "",
+
+    programname: "",
+    enginedisplacement: "",
+    sourcingmanager: "",
+    targetquote: "",
+    shouldcostmodeller: "",
+    toolingcostmodeller: "",
+    materialgrade: "",
+    debriefdate: "",
+
+    suppmgfloc: "",
+    directmatcost: 0.00,
+    boughtoutfinishcost: 0.00,
+    roughtpartcost: 0.00,
+    directlabourcost: 0.00,
+    processoverheadcost: 0.00,
+    surfacetreatmentcost: 0.00,
+    totalmgfcost: 0.00,
+    SGA: 0.00,
+    profit: 0.00,
+    packaging: 0.00,
+    freightlogistics: 0.00,
+    directedbuycost: 0.00,
+    handlingcharges: 0.00,
+    icc: 0.00,
+    rejection: 0.00,
+    totalnonmanufacturingcosts: 0.00,
+    totalcost: 0.00,
+    length: 0.00,
+    width: 0.00,
+    height: 0.00,
+    weight: 0.00,
+    addinfo: ""
+  };
+
+  demodata = this.yellowmodeldata;
+
+
+  validateModelMartId(exceldata: any): void {
+    debugger;
+    if (this.modelMartIdFromExcel && this.selectedUniqueID) {
+      if (this.modelMartIdFromExcel.toString() === this.selectedUniqueID) {
+        this.validationMessage = 'ModelMart ID Matched';
+        alert("Modelmart Id matched");
+
+        this.yellowmodeldata = {
+          MMID: exceldata[1][0],
+          requestid: this.selectedID,
+          createdby: this.userId,
+          modelmarttypeid: this.modelTypesID,
+          cat2: this.getArr[0].cat2,
+          cat3: this.getArr[0].cat3,
+          cat4: this.getArr[0].cat4,
+          estimatespend: this.getArr[0].estimatedSpend,
+          businessunit: this.getArr[0].businessUnit,
+          projecttype: this.getArr[0].projectType,
+          programname: this.getArr[0].programName,
+          enginedisplacement: this.getArr[0].engineDisplacement,
+          sourcingmanager: this.getArr[0].engineDisplacement,
+          targetquote: this.getArr[0].targetQuote,
+          shouldcostmodeller: this.getArr[0].shouldCostModeller,
+          toolingcostmodeller: this.getArr[0].toolingCostModeller,
+          materialgrade: this.getArr[0].materialGrade,
+          debriefdate: this.getArr[0].debriefDate,
+
+
+          costtype: exceldata[1][1],
+          partno: exceldata[1][2],
+          partname: exceldata[1][3],
+          suppmgfloc: exceldata[1][4],
+          directmatcost: exceldata[1][5],
+          boughtoutfinishcost: exceldata[1][6],
+          roughtpartcost: exceldata[1][7], // Rough part cost
+          directlabourcost: exceldata[1][8], // Direct Labour Cost
+          processoverheadcost: exceldata[1][9], // Process Overhead Cost
+          surfacetreatmentcost: exceldata[1][10], // Surface Treatments Cost
+          totalmgfcost: exceldata[1][11], // Total Manufacturing Cost
+          SGA: exceldata[1][12], // SG&A (5% of Mfg. cost)
+          profit: exceldata[1][13], // Profit (8% of Mfg. cost)
+          packaging: exceldata[1][14],
+          freightlogistics: exceldata[1][15], // Freight/Logistics
+          directedbuycost: exceldata[1][16], // Directed Buy Cost
+          handlingcharges: exceldata[1][17], // Handling Charges
+          icc: exceldata[1][18],
+          rejection: exceldata[1][19],
+          totalnonmanufacturingcosts: exceldata[1][20], // Total Non-Manufacturing Costs
+          totalcost: exceldata[1][21], // Total Cost
+          length: exceldata[1][22],
+          width: exceldata[1][23],
+          height: exceldata[1][24],
+          weight: exceldata[1][25],
+          addinfo: exceldata[1][26] || ""
+        };
+
+      } else {
+        this.validationMessage = 'ModelMart ID Not Matched';
+        alert("ModelMart ID Not Matched");
+      }
+
     }
   }
 
 
   onUpload() {
     this.check = false;
-
+    debugger;
     if (this.selectedFiles === null || this.selectedFiles === undefined) {
 
       this.toastr.warning("Please upload the file.")
+    }
+    else if (this.modelTypesID == 2) {
+      this.fileUploadService.uploadexceldata(this.yellowmodeldata).subscribe({
+        next: (res) => {
+          this.toastr.success("Excel data Inserted Successfully");
+          this.SpinnerService.hide('spinner');
+          this.addSuccess = false;
+          this.selectedPartName = this.getArr[0].partName
+          this.selectedPartNumber = this.getArr[0].partNumber
+
+          this.imgName = this.selectedPartName + '-' + this.selectedPartNumber
+          this.username = localStorage.getItem("userName");
+
+          this.SpinnerService.show('spinner');
+          this.fileUploadService.yellowmodelfileupload(this.selectedFiles, this.getAUID, this.selectedUniqueID, this.userId).subscribe({
+            next: (_res) => {
+              // debugger;
+
+              this.toastr.success("File uploaded Successfully.");
+
+              this.SpinnerService.hide('spinner');
+              this.addSuccess = false;
+
+              let element: HTMLElement = document.getElementById('testbtn') as HTMLElement;
+              element.click();
+              setTimeout(() => {
+
+                this.clearALLData();
+
+                let element2: HTMLElement = document.getElementById('excelFile') as HTMLElement;
+                element2.innerText = '';
+
+              }, 200);
+
+              this.takeInputExcel.nativeElement.value = "";
+              this.takeInputPDF.nativeElement.value = "";
+              this.takeInputImage.nativeElement.value = "";
+
+              this.check = true;
+
+            },
+            error: (error) => {
+              console.error('API call error:', error);
+              this.SpinnerService.hide('spinner');
+              this.toastr.error("File Not uploaded.");
+              this.selectedFiles = [];
+
+              let element: HTMLElement = document.getElementById('testbtn') as HTMLElement;
+              element.click();
+              setTimeout(() => {
+
+                this.clearALLData();
+
+                let element2: HTMLElement = document.getElementById('excelFile') as HTMLElement;
+                element2.innerText = '';
+
+              }, 200);
+
+              this.takeInputExcel.nativeElement.value = "";
+              this.takeInputPDF.nativeElement.value = "";
+              this.takeInputImage.nativeElement.value = "";
+
+              this.check = true;
+              this.addSuccess = false;
+
+            },
+          });
+
+
+        },
+        error: (error) => {
+          console.error('API call error:', error);
+          this.SpinnerService.hide('spinner');
+          this.toastr.error("Excel data Not uploaded.");
+        }
+      })
+
     }
     else {
       this.selectedPartName = this.getArr[0].partName
@@ -329,10 +551,11 @@ export class SendRequestComponent implements OnInit {
           this.check = true;
           this.addSuccess = false;
 
-          //spinner.style.display = 'none';
         },
       });
     }
+
+    this.yellowmodeldata = this.demodata
 
   }
 
@@ -341,26 +564,8 @@ export class SendRequestComponent implements OnInit {
   Region: any;
 
 
-  // AddUploadDataValidation(RowIndex: any) {
-  //   this.DebriefDate = this.getArr[RowIndex].debriefDate
-  //   this.Region = this.getArr[RowIndex].suppManuLoc
-  //   this.selectedPartName = this.getArr[RowIndex].partName
-  //   this.selectedPartNumber = this.getArr[RowIndex].partNumber
-
-  //   this.getArr1 = [];
-
-  //   this.fileUploadService.AddUploadDataValidation(this.DebriefDate, this.Region, this.selectedPartName, this.selectedPartNumber).subscribe(
-  //     (_result: any) => {
-  //       this.getArr1 = _result;
-  //       console.log("view added data", this.getArr1)
-
-  //     })
-
-  // }
-
   async addModalMethod(rowIndex: any) {
     debugger;
-    //  this.AddUploadDataValidation(rowIndex);
     this.getAUID = 0;
     this.addSuccess = false;
     this.editRowIndex = rowIndex;
@@ -370,11 +575,8 @@ export class SendRequestComponent implements OnInit {
     this.Region = this.getArr[rowIndex].suppManuLoc
     this.selectedPartName = this.getArr[rowIndex].partName
     this.selectedPartNumber = this.getArr[rowIndex].partNumber
-
+    console.log(this.getArr)
     this.getArr1 = [];
-
-    // const data  = await this.fileUploadService.AddUploadDataValidation(this.DebriefDate, this.Region, this.selectedPartName, this.selectedPartNumber).toPromise();
-    // this.getArr1 = data;
 
     this.fileUploadService.AddUploadDataValidation(this.DebriefDate, this.Region, this.selectedPartName, this.selectedPartNumber).subscribe(
       (_result: any) => {
@@ -385,7 +587,7 @@ export class SendRequestComponent implements OnInit {
 
         if (this.getArr1.length >= 0) {
           if (this.getArr1.length > 0 && (this.getArr[0].iterationsCount > this.getArr1[0].iterationCount)) {
-            if (confirm("This Model Mart Id already exist for different Request Id. Are you sure to add it against new Request Id?")) {
+            if (confirm("This Model Mart Id ahve Iteration. Are you sure you want to Add Iteration.")) {
               IsIteration = true
             }
             else {
@@ -393,8 +595,8 @@ export class SendRequestComponent implements OnInit {
             }
           }
 
-          if (IsIteration) {
-            if (!this.onBlurCheckValidation()) {
+          if (IsIteration)
+            if (this.modelTypesID == 2) {
               this.sendRequest = {
                 RequestHeaderID: this.selectedID,
                 Cat2: this.getArr[this.editRowIndex].cat2,
@@ -422,17 +624,10 @@ export class SendRequestComponent implements OnInit {
                 CreatedBy: this.userId,
                 PartWeight: this.partWeight,
                 ModelTypes: this.modelTypesID,
-                IterationCount: this.getArr[this.editRowIndex].iterationsCount,
-
-                AnnualVolume: this.getArr[this.editRowIndex].annualVolume,
-                ShouldCost: this.getArr[this.editRowIndex].shouldCost,
-
+                IterationCount: this.getArr[this.editRowIndex].iterationsCount
               }
-
-              //console.log('insert array', this.sendRequest);
               this.fileUploadService.addSendRequest(this.sendRequest).subscribe({
                 next: (_res) => {
-                  // console.log('API call completed successfully');
                   const addicon = document.getElementById("plus-icon") as HTMLElement;
                   addicon.style.display = 'none';
                   this.myForm!.resetForm();
@@ -443,7 +638,50 @@ export class SendRequestComponent implements OnInit {
                 },
               });
             }
-          }
+
+            else if (!this.onBlurCheckValidation()) {
+              this.sendRequest = {
+                RequestHeaderID: this.selectedID,
+                Cat2: this.getArr[this.editRowIndex].cat2,
+                Cat3: this.getArr[this.editRowIndex].cat3,
+                Cat4: this.getArr[this.editRowIndex].cat4,
+                EstimatedSpend: this.getArr[this.editRowIndex].estimatedSpend === null ? 0 : this.getArr[this.editRowIndex].estimatedSpend,
+                BusinessUnit: this.getArr[this.editRowIndex].businessUnit,
+                ProjectType: this.getArr[this.editRowIndex].projectType,
+                EngineDisplacement: this.getArr[this.editRowIndex].engineDisplacement === null ? '' : this.getArr[this.editRowIndex].engineDisplacement,
+                MaterialGrade: this.getArr[this.editRowIndex].materialGrade,
+                DebriefDate: this.getArr[this.editRowIndex].debriefDate,
+                SourcingManager: this.getArr[this.editRowIndex].sourcingManager,
+                TargetQuote: this.getArr[this.editRowIndex].targetQuote === null ? '' : this.getArr[this.editRowIndex].targetQuote,
+                ShouldCostModeller: this.getArr[this.editRowIndex].shouldCostModeller,
+                ToolingCostModeller: this.getArr[this.editRowIndex].toolingCostModeller,
+                ProgramName: this.getArr[this.editRowIndex].programName,
+                ToolingShouldCost: this.getArr[this.editRowIndex].toolingShouldCost === '' ? 0 : this.getArr[this.editRowIndex].toolingShouldCost,
+                CostType: this.getArr[this.editRowIndex].costType,
+                PartSpecificId: this.selectedPartSpecific,
+                Length: this.length,
+                Width: this.width,
+                Height: this.height,
+                UniqueID: this.getArr[this.editRowIndex].uniqueID,
+                ImagePath: "C:\\inetpub\\wwwroot\\modelmart\\img\\" + this.getArr[this.editRowIndex].uniqueID,
+                CreatedBy: this.userId,
+                PartWeight: this.partWeight,
+                ModelTypes: this.modelTypesID,
+                IterationCount: this.getArr[this.editRowIndex].iterationsCount
+              }
+
+              this.fileUploadService.addSendRequest(this.sendRequest).subscribe({
+                next: (_res) => {
+                  const addicon = document.getElementById("plus-icon") as HTMLElement;
+                  addicon.style.display = 'none';
+                  this.myForm!.resetForm();
+                  this.addSuccess = true;
+                },
+                error: (error) => {
+                  console.error('API call error:', error);
+                },
+              });
+            }
         }
         else {
           this.toastr.warning("Model already uploaded.")
@@ -453,19 +691,7 @@ export class SendRequestComponent implements OnInit {
 
   }
 
-  // onUpdateSelected() {
 
-  //   const UData: UpdateSendRequest = {
-  //     requestHeaderID: this.selectedID,
-  //     uniqueID:
-  //   };
-  //   this.fileUploadService.getUpdateSendRequest(UData).subscribe(
-  //     _result => {
-  //       this.getUArr = _result;
-  //       console.log("My UpdateArr", this.getUArr)
-  //     }
-  //   );
-  // }
 
   editModalMethod(rowIndex: any) {
     if (this.modelTypesID === '' || this.modelTypesID === null || this.modelTypesID === undefined) {
@@ -483,24 +709,11 @@ export class SendRequestComponent implements OnInit {
 
 
   async ReadHopperColumns() {
-    // this.fileUploadService.ReadHoppercolumns().subscribe(
-    //   (data: any) => {
-    //     this.HopperColumns = data;
-    //     console.log("ReadHopperColumns",this.HopperColumns);
 
-
-    //   },
-    //   (error: any) => {
-    //     console.error('Error fetching hopper columns:', error);
-    //     this.SpinnerService.hide('spinner');
-    //   }
-    // );
-    //debugger;
     this.SpinnerService.show('spinner');
 
     const data = await this.fileUploadService.ReadHoppercolumns().toPromise();
     this.HopperColumns = data;
-    //console.log("ReadHopperColumns", this.HopperColumns);
     this.loading = false;
     this.SpinnerService.hide('spinner');
 
@@ -526,12 +739,7 @@ export class SendRequestComponent implements OnInit {
   onBlurCheckValidation(): boolean {
     //debugger;
     var count = 0;
-    // for (let i = 0; i < this.partspecification.filterItems.length; i++) {
 
-    //   if (this.partspecification.filterItems[i].checked) {
-    //     count = count + 1;
-    //   }
-    // }
 
     if (this.length == '' || this.length === undefined) {
       this.showError9 = true;
@@ -549,10 +757,6 @@ export class SendRequestComponent implements OnInit {
       this.showError13 = true;
       return true;
     }
-    // else if (this.selectedPartSpecific === '' || this.selectedPartSpecific === null || this.selectedPartSpecific === undefined) {
-    //   this.showError8 = true;
-    //   return true;
-    // }
     else {
       return false;
     }
@@ -583,31 +787,18 @@ export class SendRequestComponent implements OnInit {
   }
 
   onSelectedChangePartSpec(e: any) {
-    //debugger;
-    // if (this.isFirstLoad) {
+
     if (e.length == 1) {
       this.selectedPartSpecific = e[0];
-      //this.isFirstLoad = false;
       return;
     }
     if (e.length > 1) {
       this.toastr.warning("Please select only one Part Secification");
       this.selectedPartSpecific = '';
-      //this.isFirstLoad = false;
       return;
     }
-    // }
-    // else if (e.length != 1) {
-    //   this.toastr.warning("Please select only one Part Secification");
-    //   this.selectedPartSpecific = '';
-    // }
-    // else {
-    //   this.selectedPartSpecific = e[0];
-    // }
-
 
   }
-  //// click on cat4 checkbox
   async getCategoryIdcat4() {
     const e = this.selectedCat4;
 
@@ -650,32 +841,91 @@ export class SendRequestComponent implements OnInit {
   }
 
 
-  //ng-value ng-star-inserted
   async BulkUpload() {
 
-    if (this.modelTypesID === '' || this.modelTypesID === null || this.modelTypesID === undefined) {
+    //     if (this.modelTypesID === '' || this.modelTypesID === null || this.modelTypesID === undefined) {
+    //       this.showError11 = true;
+    //       return
+    //     }
+    // debugger
+    //     if (this.modelTypesID == 2) 
+    //     {
+    //       console.log(this.modelTypesID);
+    //       if (confirm("Are you sure want to start Bulk Upload"))
+    //       {
+
+    //         this.SpinnerService.show('spinner');
+    //         const data = await this.fileUploadService.yellowbulkupload(this.userId, this.modelTypesID).toPromise();
+    //         debugger;
+    //         if (data == null) {
+    //           this.toastr.success("Bulk Upload Completed.")
+    //           this.SpinnerService.hide('spinner');
+    //         }
+    //         if(data!=null)
+    //         {
+    //           this.toastr.error("Failed MMID")
+    //           this.SpinnerService.hide('spinner');
+
+    //         }
+    //         else {
+    //           console.error('API call error:', data);
+    //           this.toastr.error("Bulk Upload Failed.")
+    //           this.SpinnerService.hide('spinner');
+    //         }
+    //         this.SpinnerService.hide('spinner');
+    //       }
+    //     }
+
+
+    if (!this.modelTypesID) {
       this.showError11 = true;
-      return
+      return;
     }
-    // let element = document.getElementById('ngModelTypeID') as HTMLElement ;
 
-    if (confirm("Are you sure want to start Bulk Upload")) {
+    if (this.modelTypesID == 2) {
+      if (confirm("Are you sure you want to start Bulk Upload?")) {
+        this.SpinnerService.show('spinner');
 
-      this.SpinnerService.show('spinner');
-      const data = await this.fileUploadService.getBulkUpload(this.userId, this.modelTypesID).toPromise();
-      //console.log('Bulk Upload', data);
-      //debugger;
-      if (data == null) {
-        this.toastr.success("Bulk Upload Completed.")
+        try {
+          const response: any = await this.fileUploadService.yellowbulkupload(this.userId, this.modelTypesID).toPromise();
+
+          if (response.failedIds && response.failedIds.length > 0) {
+            this.toastr.error(`Bulk Upload Failed for MMIDs: ${response.failedIds.join(", ")}`,'',{
+              timeOut:0,
+              progressBar:false,
+              closeButton:true
+            });
+          } else {
+            this.toastr.success(response.message || "Bulk Upload Completed.");
+          }
+        } catch (error) {
+          console.error('API call error:', error);
+          this.toastr.error("Bulk Upload Failed.");
+        } finally {
+          this.SpinnerService.hide('spinner');
+        }
+      }
+    }
+
+    else {
+      if (confirm("Are you sure want to start Bulk Upload")) {
+
+        this.SpinnerService.show('spinner');
+        const data = await this.fileUploadService.getBulkUpload(this.userId, this.modelTypesID).toPromise();
+
+        if (data == null) {
+          this.toastr.success("Bulk Upload Completed.")
+          this.SpinnerService.hide('spinner');
+        }
+        else {
+          console.error('API call error:', data);
+          this.toastr.error("Bulk Upload Failed.")
+          this.SpinnerService.hide('spinner');
+        }
         this.SpinnerService.hide('spinner');
       }
-      else {
-        console.error('API call error:', data);
-        this.toastr.error("Bulk Upload Failed.")
-        this.SpinnerService.hide('spinner');
-      }
-      this.SpinnerService.hide('spinner');
     }
+    this.modelTypesID=null;
 
   }
 
