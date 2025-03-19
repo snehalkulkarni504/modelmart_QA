@@ -106,4 +106,16 @@ export class RequestFileUploadService {
     return this.http.get(this.apiUrl + 'getModelTypes', {})
   }
 
+  uploadexceldata(data:any)
+  {
+    debugger;
+    return this.http.post<any>(this.apiUrl + 'uploadexceldata',data);
+  }
+
+ 
+  yellowbulkupload(userid:any,modeltypeid:any): Observable<any[]> {
+    debugger;
+    return this.http.get<any[]>(this.apiUrl + `yellowmodelbulkupload?userid=${userid}&modeltypeid=${modeltypeid}`);
+  }
+
 }

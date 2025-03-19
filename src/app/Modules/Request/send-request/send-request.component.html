@@ -5,7 +5,6 @@
         <img alt="Loading Please Wait..." style="width:100px ; height:100px ;" src="../../../../assets/Spin-2.gif" />
     </ngx-spinner>
 
-    <!-- <div class="setHeight"> -->
     <div class="MasterHeader">
         <div style="width: 50%;">
             <h2>Upload Should Cost File</h2>
@@ -61,15 +60,12 @@
                                 <button type="button" class="btn btn-bulkupload" (click)="BulkUpload()" style="margin-top: 15px;"
                                 data-bs-dismis="modal">Bulk Upload</button>                           
                         </div>
-                        <!-- <div class="col-md-2 ">
-                            <button type="button" class="btn btn-bulkupload" (click)="BulkUpload()" style="margin-top: 15px;"
-                                data-bs-dismis="modal">Bulk Upload</button>
-                        </div> -->
+                       
                     </div>
 
                 </div>
 
-                <div class="row" id="panleborder">
+                <div *ngIf="modelTypesID!=2" class="row" id="panleborder">
                     <div class="row">
                         <div class="col-md-2">
                             <label for="dropdown6" class="default-lbl">Length (mm)<span
@@ -104,7 +100,6 @@
                         </div>
                         <div class="col-md-3">
                             <label for="dropdown6" class="default-lbl">Cat 4 </label>
-                            <!-- <span style="color: red;">*</span> -->
                             <ng-select #ngSelectCat4 [ngModelOptions]="{standalone: true}" [searchable]="true"
                                 placeholder="Please select" [(ngModel)]="selectedCat4"
                                 (ngModelChange)="getCategoryIdcat4()">
@@ -117,7 +112,6 @@
                     <div class="row" style="margin-top: 20px;">
                         <div class="col-md-3">
                             <label for="dropdown6" class="default-lbl">Part Secification </label>
-                            <!-- <span style="color: red;">*</span> -->
                             <ngx-treeview #partspecific [config]="config" [items]="PartSpecific"
                                 (selectedChange)="onSelectedChangePartSpec($event)">
                             </ngx-treeview>
@@ -201,10 +195,8 @@
                             <input #takeInputExcel  type="file" class="form-control" (change)="onChange($event,'excel')" id="excelFile"
                                 accept=".xlsx, .xls, .xlsm">
                         </div>
-                        <!-- <input class="form-control" type="file" (change)="onChange($event,'excel')" id="excelFile" accept=".xlsx, .xls, .xlsm"> -->
                     </div>
                     <div class="col-md-3 text-start">
-                        <!-- <input class="form-control" type="file" (change)="onChange($event,'pdf')" id="pdfFile" accept=".pdf"> -->
                         <div class="input-group custom-file-button">
                             <label class="input-group-text" for="inputGroupFile">PDF File</label>
                             <input #takeInputPDF type="file" class="form-control" (change)="onChange($event,'pdf')" id="pdfFile"
@@ -213,7 +205,6 @@
                     </div>
                     <div class="col-md-3 text-start">
 
-                        <!-- <input class="form-control" type="file" (change)="onChange($event,'image')" id="imageFiles" accept=".jpg, .jpeg, .png" multiple> -->
                         <div class="input-group custom-file-button">
                             <label class="input-group-text" for="inputGroupFile">Image File</label>
                             <input #takeInputImage type="file" class="form-control" (change)="onChange($event,'image')" id="imageFiles"
@@ -224,8 +215,8 @@
                         <button type="button" class="btn btn-lg btn-upload" (click)="onUpload();" data-bs-dismis="modal"
                             [disabled]="!addSuccess">Upload</button>
 
-                            <button type="button" id="testbtn" (click)="ngSelectRequestID.clearModel(); ngSelectUniqueID.clearModel();ngSelectCat4.clearModel()" style="visibility: hidden;">
-                            </button>
+                            <!-- <button type="button" id="testbtn" (click)="ngSelectRequestID.clearModel(); ngSelectUniqueID.clearModel();ngSelectCat4.clearModel()" style="visibility: hidden;">
+                            </button> -->
 
 
                     </div>
