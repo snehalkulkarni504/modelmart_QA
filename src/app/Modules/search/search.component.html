@@ -12,10 +12,10 @@
                     <div class="col-md-6 ">
                         <label id="clearFilter">Filters</label>
                     </div>
-                    <div class="col-md-6 text-end">
+                    <!-- <div class="col-md-6 text-end">
                         <label (click)="clearFilter(1)" id="clearFilterall"
-                            title="Clear All Selection & Text">Reset</label>
-                    </div>
+                            title="Clear All Selection & Text">Reset All</label>
+                    </div> -->
                 </div>
             </div>
             <div class="searchboxtext">
@@ -25,9 +25,9 @@
                             placeholder="E.g. Part Number, Part Name, Cat 2, Cat 3, Cat 4, location "
                             (keyup)="searchOnKeyUp($event)" (keydown.enter)="setvalue('0')" (focusout)="hidedropdown()">
                         <!-- (keydown.enter)="setvalue('0')"  -->
-                        <ul class="list-group searchdata" id="searchdata" [hidden]="autoseachhide">
-                            <li class="list-group-item" style="font-size: 12px !important;" *ngFor="let c of results" (click)="setvalue(c)">
-                                {{c.name}}
+                        <ul class="list-group searchdata" id="searchdata" [hidden]="autoseachhide" style="font-size: 12px !important;">
+                            <li class="list-group-item" *ngFor="let c of results" (click)="setvalue(c)">
+                                <span class="searchdatalist"> {{c.filtergroup}} - </span> {{c.name}}
                             </li>
                         </ul>
                     </div>
@@ -39,16 +39,18 @@
                         </svg>
                     </div>
                 </div>
-
+                
             </div>
             <div class="compare">
+                <input type="button" class="btn btn-primary btnreset" (click)="clearFilter(1)" value="Reset All"
+                    Name="Reset">
                 <input type="button" class="btn btn-primary btncompare" (click)="getComparison()" value="Compare"
                     Name="Compare">
             </div>
         </div>
 
         <!-- Filters Start -->
-      
+
         <div class="col-md-3 border-bottom position-fixed scroll1" id="Id_Filters">
             <form [formGroup]="SearchboxForm" id="Id_Filtersform">
                 <br>
@@ -357,7 +359,7 @@
                     </div>
                 </div>
                 <br>
-             
+
             </form>
         </div>
         <!-- Filters End -->
@@ -378,24 +380,23 @@
                                     or
                                     enter specific part numbers" </span> </label>
                         </div>
-                        <div class="col-md-5">
-                            <ng-select style="float: right; margin-top: 5px; font-size: 8px !important;  width: 57%; margin-right: 5px;" class="custom"
-                                [ngModelOptions]="{standalone: true}" [searchable]="false" placeholder="Please select"
-                                class="descsorting" (change)="FilterSearchDataAsceDesc($event)"
-                                [(ngModel)]='selectedSearchDataAsceDesc'>
-                                <ng-option [value]='0'>{{firstRow_Sorting}}</ng-option>
-                                <ng-option [value]='1'>{{secondRow_Sorting}}</ng-option>
-                            </ng-select>
+                        <div class="col-md-5 text-end">
 
-                            <ng-select style="margin-top: 5px; font-size: 8px !important;  width: 40%;"
-                                [ngModelOptions]="{standalone: true}" [searchable]="false" placeholder="Please select"
-                                class="descsorting" (change)="FilterSearchData($event)"
-                                [(ngModel)]='selectedSearchData'>
-                                <ng-option [value]='0'>Debrief Date </ng-option>
-                                <ng-option [value]='1'>Location</ng-option>
-                                <ng-option [value]='2'>Tooling Cost</ng-option>
-                                <ng-option [value]='3'>Should Cost</ng-option>
-                            </ng-select>
+                            <select name="sortingmodels" id="sortingmodels" (change)="FilterSearchData()"
+                                [(ngModel)]='SortSearchData'>
+                                <option value='0' class="sortingoption">Select Sorting... </option>
+                                <option value='1' class="sortingoption">Debrief Date Ascending to Descending </option>
+                                <option value='2' class="sortingoption">Debrief Date Descending to Ascending </option>
+
+                                <option value='3' class="sortingoption">Location Sort by A-Z</option>
+                                <option value='4' class="sortingoption">Location Sort by Z-A</option>
+
+                                <option value='5' class="sortingoption">Tooling Cost Smallest to Largest</option>
+                                <option value='6' class="sortingoption">Tooling Cost Largest to Smallest</option>
+
+                                <option value='7' class="sortingoption">Should Cost Smallest to Largest</option>
+                                <option value='8' class="sortingoption">Should Cost Largest to Smallest</option>
+                            </select>
 
                         </div>
 
@@ -403,15 +404,7 @@
                 </div>
             </div>
 
-            <div class="TabMenu">
-                <button [ngClass]="{'activeTab': showTab1, 'Tab':!showTab1}" (click)="showTabs('Tab1')">COE
-                    Models</button>
-                <button [ngClass]="{'activeTab': showTab2, 'Tab':!showTab2}" (click)="showTabs('Tab2')">Simulated
-                    Models</button>
-            </div>
-
-            <!-- CEO models -->
-            <div [hidden]="!showTab1" class="row setOpacity" id="SearchFilters">
+            <div class="row setOpacity" id="SearchFilters">
                 <div *ngFor="let t of SearchList  | paginate: { itemsPerPage: 100, currentPage: page }"
                     class="prodDetails">
                     <div class="prdImgDesc" (click)="getShouldeCost(t)">
@@ -462,69 +455,6 @@
 
                 <div class="d-flex justify-content-between p-2 pagination" *ngIf="ModelCount > 0">
                     <ngb-pagination [collectionSize]="this.ModelCount" [(page)]="page" [pageSize]="pageSize"
-                        [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm">
-                        <ng-template ngbPaginationPrevious>Prev</ng-template>
-                        <ng-template ngbPaginationNext>Next</ng-template>
-                    </ngb-pagination>
-                    <br>
-                </div>
-            </div>
-
-            <!-- simulated models -->
-            <div [hidden]="!showTab2" class="row setOpacity" id="SearchFilters">
-                <div class="row text-center ModelFound">
-                    <label>you have simulate "<b>{{SimulatedModelCount}}</b>" models. </label>
-                </div>
-
-                <div *ngFor="let t of SimulatedSearchList  | paginate: { itemsPerPage: 100, currentPage: Simulatedpage }"
-                    class="prodDetails">
-                    <div class="prdImgDesc" >
-
-                        <img *ngIf="t.imagePath == '' else multi" src="assets/No-Image.png" class="prdIcon"
-                            style="width: 100%; height: 150px;">
-                        <ng-template #multi>
-                            <img src="{{t.imagePath}}" class="prdIcon" style="width: 100%; height: 150px;">
-                        </ng-template>
-
-                    </div>
-
-                    <div class="prdDescription">
-                        <label id="PartNumber">{{ChekNull(t.partNumber)}}</label><br>
-                        <label id="PartName">{{ChekNull(t.partName)}}</label><br>
-                        <label id="programName">{{ChekNull(t.programName)}}</label><br>
-
-                        <div class="labless">
-                            <label class="labletest">Debrief Date : <b>{{ChekNull(t.debriefDateFormated)}}</b></label>
-                            <label class="labletest">Business Unit : <b>{{ChekNull(t.businessUnit)}}</b></label>
-                        </div>
-
-                        <div class="prdDescription_div1">
-                            <label id="AnnualVolume"> <b>{{ChekNull(t.mfgRegion)}} </b> <br> Location </label>
-                        </div>
-                        <div class="prdDescription_div2">
-                            <label id="AnnualVolume"> <b>{{ChekNull(t.totalCost | number:'1.2-2')}} </b> <br> Should
-                                Cost ($)
-                            </label>
-                        </div>
-                        <div class="prdDescription_div3">
-                            <label id="AnnualVolume"> <b>{{ChekNull(t.toolingCostModeller | number:'1.2-2')}}</b> <br>
-                                Tooling
-                                Cost ($)</label>
-                        </div>
-
-                    </div>
-                    <div>
-                        <input #Comparecheckbox class="form-check-input" type="checkbox" class="SearchCheckboxSimulated"
-                            id="{{t.scReportId}}" (click)="getPartId(t,'S')" title="Select for Compate">
-                    </div>
-                    <!-- <div>
-                        <img src="../../../assets/PDFIcon.png" class="PDFIcon" title="Download PDF"
-                            (click)="DownloadPDF(t)">
-                    </div> -->
-                </div>
-
-                <div class="d-flex justify-content-between p-2 pagination" *ngIf="SimulatedModelCount > 0">
-                    <ngb-pagination [collectionSize]="this.SimulatedModelCount" [(page)]="Simulatedpage" [pageSize]="SimulatedpageSize"
                         [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm">
                         <ng-template ngbPaginationPrevious>Prev</ng-template>
                         <ng-template ngbPaginationNext>Next</ng-template>

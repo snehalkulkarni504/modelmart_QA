@@ -98,12 +98,12 @@
         </div>
 
         <div class="row gridcardsdiv">
-            <div class="card gridcards" style=" margin-left: 1%">
+            <div class="card gridcards" style=" margin-left: 5%">
                 <div class="card-body p-2">
                     <label class="default-lbl" style="font-weight: 700;">Usage by Roles</label>
                     <div class="table-responsive" style="font-size: 12px !important;">
                         <table class="table p-0 table-borderless bsb-table-xl text-nowrap align-middle m-0">
-                            <thead style="border-bottom: 3px solid da291c;">
+                            <thead >
                                 <tr class="shaded">
                                     <th>Team</th>
                                     <th>Count</th>
@@ -124,9 +124,9 @@
                     <label class="default-lbl" style="font-weight: 700;">Usage by Module</label>
                     <div class="table-responsive" style="font-size: 12px !important;">
                         <table class="table p-0 table-borderless bsb-table-xl text-nowrap align-middle m-0">
-                            <thead style="border-bottom: 3px solid da291c; text-align: center;">
+                            <thead >
                                 <tr class="shaded">
-                                    <th>Page</th>
+                                    <th >Page</th>
                                     <th>Count</th>
                                 </tr>
                             </thead>
@@ -141,45 +141,48 @@
                     </div>
                 </div>
             </div>
-            <div class="card  gridcards">
-                <div class="card-body p-2">
-                    <label class="default-lbl" style="font-weight: 700;">Average time spent per page:</label>
-                    <div class="table-responsive" style="font-size: 12px !important;">
-                        <table class="table p-0 table-borderless bsb-table-xl text-nowrap align-middle m-0"
-                            style="width : 350px; table-layout: fixed;">
-                            <thead style="border-bottom: 3px solid da291c; text-align: center;">
-                                <tr class="shaded">
-                                    <th>Page</th>
-                                    <th>Duration (In Hrs)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="highlight" style="text-align: center"
-                                    *ngFor="let val of PagetimeArray let i=index">
-                                    <td class="highlight" style="white-space: normal;">{{val.Page}}</td>
-                                    <td>{{val.Time}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+           
         </div>
 
         <div class="row cardsdiv" style="margin-top: 2%;">
-            <div class="col-md-4">
+            <div class="gridcards">
                 <canvasjs-chart [options]="TeamChartOptions" [styles]="{width: '100%', height:'250px'}"
                     id="chartOptionsId"></canvasjs-chart>
             </div>
-            <div class="col-md-4">
+            <div class="gridcards">
                 <canvasjs-chart [options]="PageChartOptions" [styles]="{width: '100%', height:'250px'}"
                     id="chartOptionsId"></canvasjs-chart>
             </div>
-            <div class="col-md-4">
-                <canvasjs-chart [options]="pagetimechartOptions" [styles]="{width: '100%', height:'250px'}"
-                    id="chartOptionsId" (stockChartInstance)="getChartInstance($event)"></canvasjs-chart>
+        </div>
+        <br><br><br>
+        <div class="card  gridcards" style="margin-left: 30%;">
+            <div class="card-body p-2">
+                <label class="default-lbl" style="font-weight: 700;">Average time spent per page</label>
+                <div class="table-responsive" style="font-size: 12px !important;">
+                    <table class="table p-0 table-borderless bsb-table-xl text-nowrap align-middle m-0">
+                        <thead>
+                            <tr class="shaded">
+                                <th>Page</th>
+                                <th>Duration (In Hrs)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="highlight" style="text-align: center"
+                                *ngFor="let val of PagetimeArray let i=index">
+                                <td class="highlight" style="white-space: normal;">{{val.Page}}</td>
+                                <td>{{val.Time}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+        <div class="row cardsdiv"  style="margin-top: 2%;">
+            <div class="col">
+                <canvasjs-chart [options]="pagetimechartOptions" [styles]="{width: '100%', height:'400px'}"
+                    id="chartOptionsId" (stockChartInstance)="getChartInstance($event)"></canvasjs-chart>
+            </div>
+        </div>  
     </form>
     <br>
     <br>

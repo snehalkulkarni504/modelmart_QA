@@ -423,9 +423,10 @@ export class SendRequestComponent implements OnInit {
                 PartWeight: this.partWeight,
                 ModelTypes: this.modelTypesID,
                 IterationCount: this.getArr[this.editRowIndex].iterationsCount,
-
                 AnnualVolume: this.getArr[this.editRowIndex].annualVolume,
                 ShouldCost: this.getArr[this.editRowIndex].shouldCost,
+                SourcingManagerEmail: this.getArr[this.editRowIndex].sourcingManagerEmail,
+                 
 
               }
 

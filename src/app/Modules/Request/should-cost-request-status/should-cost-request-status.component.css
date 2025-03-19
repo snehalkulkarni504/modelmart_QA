@@ -180,4 +180,23 @@ select:focus {
 .set_trcolor{
     background-color: #FFCECE !important;
 }
- 
+.btn-success {
+    float: right;
+    margin-left: 370px;
+    background-color: #da291c
+  }
+  .exportToExcel{
+    width: 30px;height: 30px;
+    margin-left: 50px; margin-top: 25px;
+}
+.exportToExcel:hover{
+    cursor: pointer !important;
+}
+
+.my-icon{
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  

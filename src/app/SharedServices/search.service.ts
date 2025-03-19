@@ -152,4 +152,9 @@ export class SearchService {
     return this.httpClient.get<any[]>(this.apiUrl + `GetSearchSimulated?userId=${userId}`);
   }
 
+  GetSubpartProcessData(Supplierlevel: string, CSHeaderId: string): Observable<any> {
+    return this.httpClient.get<any[]>(this.apiUrl + `GetSubpartProcessData?CSHeaderId=${CSHeaderId}&SupplyLevel=${Supplierlevel}`);
+  }
+  
+
 }
