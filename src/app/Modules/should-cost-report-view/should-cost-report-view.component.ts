@@ -58,9 +58,24 @@ export class ShouldCostReportViewComponent {
   IsUserLog: any;
   ProjectName: any;
   userFullName: any;
-
+  uniqueId:any;
   T2NotPresent = true;
-
+  editModal: boolean = false;
+    editRowIndex: any;
+    textsearch: string = '';
+    engineDis: any;
+    Cartcategory:any;
+  cartName:any;
+  CreateNewCart:boolean=false;
+  AddToCart:boolean=true;
+  ShowHideNewCartButton:boolean=true;
+  cartNameList:any={};
+  showError2: boolean = false;
+  showError1: boolean = false;
+  display = "none";
+  header: string = '';
+  txt_btn: string = '';
+  statusValue: boolean = false;
   ngOnInit(): void {
 
     this.router.events.subscribe((event) => {
@@ -82,8 +97,11 @@ export class ShouldCostReportViewComponent {
 
     this.CSHeaderId = localStorage.getItem("ComapredId");
     this.SCReportId = localStorage.getItem("SCReportId");
-    this.ProjectName = localStorage.getItem("ProjectName");
 
+    //alert(this.SCReportId);
+
+    this.ProjectName = localStorage.getItem("ProjectName");
+    this.uniqueId=localStorage.getItem("uniqueId");
     if (this.IsUserLog == 1) {
       this.GetReportData();
     }
@@ -747,6 +765,113 @@ export class ShouldCostReportViewComponent {
 
   backToPreviousPage() {
     this.location.back();
+  }
+  openModal() {
+    //this.getCartName();
+    this.searchservice.getCartName(this.userId).subscribe((_result: any) => {
+      this.cartNameList = _result;
+
+    
+    if(this.cartNameList.length<=0)
+    {
+      this.onCartCreate();
+    }
+
+    this.display = "block";
+    if (this.CreateNewCart) {
+      this.showError2 = false;
+      this.header = 'Create Cart and Save To Add Item';
+      this.txt_btn = 'Create New Cart';
+      this.engineDis = ""; 
+      this.statusValue ;
+    } else {
+      this.showError2 = false;
+      this.header = 'Add To Cart';
+      this.txt_btn = 'Save';
+      this.engineDis = "";
+      this.statusValue;
+    }
+  });
+  };
+
+  onCloseHandled() {
+
+    this.CreateNewCart=false;
+    this.AddToCart=true;
+    this.ShowHideNewCartButton=true;
+    this.showError1=false;
+    this.display = "none";
+ 
+     
+   }
+
+  getCartName() {
+    this.searchservice.getCartName(this.userId).subscribe((_result: any) => {
+      this.cartNameList = _result;
+
+    });
+  }
+
+  onCartCreate(){
+    this.AddToCart=false;
+    this.CreateNewCart=true;
+    this.ShowHideNewCartButton=false;
+    this.showError1=false;
+    this.Cartcategory=undefined;
+
+  }
+
+  async onSaveButton() {
+
+    if(!this.Cartcategory)
+    {
+      this.showError1=true;
+      return;
+    }
+
+    if(this.CreateNewCart)
+    {
+      const matches = this.cartNameList.filter((x:any) => x.cartName.includes(this.Cartcategory)); 
+      if(matches.length>0)
+      {
+        this.showError2=true;
+        return;
+      }
+    }
+  this.searchservice.SaveToCart(this.userId, this.uniqueId,this.Cartcategory,"Update")
+    .subscribe({
+      next: (_res) => {
+        if(_res==1)
+        {
+        //this.getEngineAll();
+        this.toastr.success("Item Inserted Successfully.");
+        this.AddToCart=true;
+        this.CreateNewCart=false;
+        this.ShowHideNewCartButton=true;
+        this.showError1=false;
+        this.showError2=false;
+        this.onCloseHandled();
+        this.Cartcategory=undefined;
+        this.getCartName();
+        }
+        if(_res==2)
+        {
+          this.toastr.warning("Item Already exist in the cart Please use different cart");
+          this.showError1=false;
+          this.showError2=false;
+          this.Cartcategory=undefined;
+        }
+      },
+      error: (error) => {
+        console.error('Inserting API call error:', error);
+        this.AddToCart=true;
+        this.CreateNewCart=false;
+        this.ShowHideNewCartButton=true;
+        this.showError1=false;
+        this.showError2=false;
+        this.Cartcategory=undefined;
+      },
+    });
   }
 
 

@@ -13,6 +13,20 @@
 #clearFilterall:hover {
     cursor: pointer;
 }
+body.modal-open .container-fluid{
+    -webkit-filter: blur(1px);
+    -moz-filter: blur(1px);
+    -o-filter: blur(1px);
+    -ms-filter: blur(1px);
+    filter: blur(1px);
+}
+.modal {
+    background: rgba(0, 0, 0, .5);
+}
+.default-btn_popup {
+    background-color: #da291c;
+    color: #fff;
+}
 
 #Id_Filters {
     max-height: 100vh;
@@ -253,6 +267,10 @@
     top: 10px;
     left: 10px;
 }
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
 
 .btncompare {
     background-color: #ffffff;
@@ -260,8 +278,24 @@
     font-weight: 500;
     border-radius: 5px;
     border: 1px solid #da291c;
-    padding: 2px 30px 5px 30px;
-    margin-left: 50%;
+    padding: 2px 20px 5px 20px;
+    margin-left: 14%;
+}
+.btnDownload {
+    background-color: #ffffff;
+    color: #da291c;
+    font-weight: 500;
+    border-radius: 5px;
+    border: 1px solid #da291c;
+    padding: 2px 20px 5px 20px;
+    margin-left: 20px;
+}
+
+.btnDownload:hover {
+    background-color: #da291c;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    cursor: pointer;
 }
 
 .btncompare:hover {

@@ -52,6 +52,9 @@
     font-weight:550;
     font-size: 12px;   
 }
+.modal {
+    background: rgba(0, 0, 0, .5);
+}
 
 .zoomImghide{
     position: fixed;

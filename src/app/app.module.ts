@@ -60,6 +60,8 @@ import { MaintenanceComponent } from './home/maintenance/maintenance.component';
 import { ComparisonnewComponent } from './Modules/comparisonnew/comparisonnew.component';
 import { CostReductionComponent } from './Modules/cost-reduction/cost-reduction.component';
 import { HousingflywheelComponent } from './Modules/housingflywheel/housingflywheel.component';
+import { CartdetailsComponent } from './Modules/cartdetails/cartdetails.component';
+
 
 @NgModule({
   declarations: [
@@ -105,7 +107,8 @@ import { HousingflywheelComponent } from './Modules/housingflywheel/housingflywh
     MaintenanceComponent,
     ComparisonnewComponent,
     CostReductionComponent,
-    HousingflywheelComponent
+    HousingflywheelComponent,
+    CartdetailsComponent
   ],
   imports: [
     TreeModule,

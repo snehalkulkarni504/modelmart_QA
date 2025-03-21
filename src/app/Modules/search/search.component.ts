@@ -7,9 +7,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { SearchService } from 'src/app/SharedServices/search.service';
 import { environment } from 'src/environments/environments';
-import { Subject } from 'rxjs';
+import { combineLatest, Subject } from 'rxjs';
 import { AdminService } from 'src/app/SharedServices/admin.service';
-
+import { firstValueFrom } from 'rxjs';
+import { Cartlist } from 'src/app/Model/cartlist';
 
 @Component({
   selector: 'app-search',
@@ -74,7 +75,7 @@ export class SearchComponent implements OnInit {
 
   NA: any = "NA*";
   Catlist2: any;
-
+  cartdetailslist:Cartlist[]=[];
   Cat2Value: any;
   Catlist3: any;
   Cat3Value: any;
@@ -98,7 +99,6 @@ export class SearchComponent implements OnInit {
   Locationsearch: any; FromShouldCost: any; ToShouldCost: any;
   FromFinishWeight: any; ToFinishWeight: any;
   ProgramNameList: any;
-
   UserList: any;
   childCategory: any;
   parentCategory: any;
@@ -109,6 +109,27 @@ export class SearchComponent implements OnInit {
   autoseachhide: boolean = false;
   Productvalue: any = [];
   checkcount: number = 0;
+  uniquevalue: any = [];
+  cartinserted: any=[];
+  cartExist:any=[];
+  editModal: boolean = false;
+    editRowIndex: any;
+    textsearch: string = '';
+    engineDis: any;
+    Cartcategory:any;
+  cartName:any;
+  CreateNewCart:boolean=false;
+  AddToCart:boolean=true;
+  ShowHideNewCartButton:boolean=true;
+  cartNameList:any=[];
+  showError2: boolean = false;
+  showError1: boolean = false;
+  showError4:boolean=false;
+  display = "none";
+  header: string = '';
+  txt_btn: string = '';
+  statusValue: boolean = false;
+  cartlFromDetails:any;
 
   filters = {
     cat2: "", cat3: "", cat4: "", location: "", engine: "", unit: "",
@@ -176,7 +197,8 @@ export class SearchComponent implements OnInit {
       this.router.navigate(['/welcome']);
       return;
     }
-
+    this.cartlFromDetails = localStorage.getItem("cart");
+    
     await this.getUserId(localStorage.getItem("userName"));
 
     this.usernm = localStorage.getItem("userName");
@@ -1121,7 +1143,7 @@ export class SearchComponent implements OnInit {
       this.checkcount = 0;
       this.Productvalue = [];
       //console.log('search Userid function' + localStorage.getItem("userId"));
-
+      this.uniquevalue=[];
       this.userId = localStorage.getItem("userId");
       //console.log('search Userid function' + this.userId);
 
@@ -1359,7 +1381,16 @@ export class SearchComponent implements OnInit {
       this.toastr.warning("Please select at least 2 Products");
       return
     }
-
+    if (checkcount >4 ) {
+      this.toastr.warning("You can select only 4 Products");
+      for (let i = 0; i < comparecheckbox.length; i++) {
+      comparecheckbox[i].checked = false;
+          this.checkcount = this.checkcount - 1;
+          this.Productvalue.pop();
+         // return
+      }
+      return
+    }
     localStorage.setItem("ComapredcheckedboxIds", this.Productvalue);
     this.router.navigate(['/home/comparison']);
 
@@ -1368,28 +1399,185 @@ export class SearchComponent implements OnInit {
   getPartId(e: any) {
     this.checkcount = 0;
     this.Productvalue = [];
+    this.uniquevalue=[];
+    this.cartdetailslist=[];
     const Comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
     for (let i = 0; i < Comparecheckbox.length; i++) {
       if (Comparecheckbox[i].checked) {
         this.checkcount = this.checkcount + 1;
         this.Productvalue.push(Comparecheckbox[i].id);
+        this.uniquevalue.push(Comparecheckbox[i].value);
+        this.cartdetailslist.push({'chHeaderId':Comparecheckbox[i].id,'Uniqueid':Comparecheckbox[i].value})
       }
     }
 
-    if (this.checkcount > 4) {
-      this.toastr.warning("You can select only 4 Products");
-      for (let i = 0; i < Comparecheckbox.length; i++) {
-        if (Comparecheckbox[i].id == e.csHeaderId) {
-          Comparecheckbox[i].checked = false;
-          this.checkcount = this.checkcount - 1;
-          this.Productvalue.pop();
-          return
-        }
-      }
-      return
-    }
+    // if (this.checkcount > 4) {
+    //   this.toastr.warning("You can select only 4 Products");
+    //   for (let i = 0; i < Comparecheckbox.length; i++) {
+    //     if (Comparecheckbox[i].id == e.csHeaderId) {
+    //       Comparecheckbox[i].checked = false;
+    //       this.checkcount = this.checkcount - 1;
+    //       this.Productvalue.pop();
+    //       return
+    //     }
+    //   }
+    //   return
+    // }
   }
 
+  openModal() {
+   // this.getCartName();
+   
+   
+    this.searchservice.getCartName(this.userId).subscribe((_result: any) => {
+      this.cartNameList = _result;
+      if(this.cartlFromDetails!=null)
+        {
+         this.cartNameList[0].cartName=this.cartlFromDetails
+         this.cartNameList.splice(1, this.cartNameList.length);
+         this.cartlFromDetails =null;
+         localStorage.removeItem("cart");
+        }
+    
+    
+    if(this.cartNameList.length<=0)
+    {
+      this.onCartCreate();
+    }
+  
+    this.display = "block";
+    if (this.CreateNewCart) {
+      this.showError2 = false;
+      this.header = 'Create Cart and Save To Add Item';
+      this.txt_btn = 'Create New Cart';
+      this.engineDis = ""; 
+      this.statusValue ;
+    } else {
+      this.showError2 = false;
+      this.header = 'Add To Cart';
+      this.txt_btn = 'Save';
+      this.engineDis = "";
+      this.statusValue;
+    }
+  });
+
+  };
+
+  onCloseHandled() {
+
+   this.CreateNewCart=false;
+   this.AddToCart=true;
+   this.ShowHideNewCartButton=true;
+   this.showError1=false;
+   const comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
+   let checkcount = 0;
+
+   
+   
+    for (let i = 0; i < comparecheckbox.length; i++) {
+     comparecheckbox[i].checked = false;
+     
+        // return
+     }
+     this.cartExist=[];
+    this.cartinserted=[];
+    this.uniquevalue=[];
+    this.cartdetailslist=[];
+    this.cartdetailslist.splice(0, this.cartdetailslist.length);
+   this.display = "none";
+
+    
+  }
+  Addcart(){
+    console.log(this.uniquevalue);
+    //console.log(this.Productvalue);
+  }
+
+  getCartName() {
+    //this.cartNameList=[];
+    this.searchservice.getCartName(this.userId).subscribe((_result: any) => {
+      this.cartNameList = _result;
+
+    });
+  }
+
+  onCartCreate(){
+    this.AddToCart=false;
+    this.CreateNewCart=true;
+    this.ShowHideNewCartButton=false;
+    this.showError1=false;
+    this.Cartcategory=undefined;
+    this.cartExist=[];
+    this.cartinserted=[];
+
+  }
+
+  async onSaveButton() {
+
+    this.cartExist=[];
+    this.cartinserted=[];
+    if(this.uniquevalue.length<=0){
+      this.toastr.error("Model Mart ID should not be blank please select model.");
+      this.onCloseHandled();
+      return;
+    }
+    if(!this.Cartcategory)
+    {
+      this.showError1=true;
+      return;
+    }
+
+    if(this.CreateNewCart)
+    {
+      const matches = this.cartNameList.filter((x:any) => x.cartName.toLowerCase().includes(this.Cartcategory.toLowerCase())); 
+      if(matches.length>0)
+      {
+        this.showError2=true;
+        return;
+      }
+    }
+    // const resp
+    this.display = "none"; 
+      const _res=await firstValueFrom(this.searchservice.SaveToCartList(this.cartdetailslist,this.Cartcategory,this.userId));
+      if(_res==1)
+        {
+          console.log(_res);
+          
+          this.cartdetailslist=[];
+            this.uniquevalue=[];
+            this.AddToCart=true;
+            this.CreateNewCart=false;
+            this.ShowHideNewCartButton=true;
+            this.showError1=false;
+            this.showError2=false;
+            this.toastr.success("Item insertec successfully");
+            this.onCloseHandled();
+            
+          
+          
+        
+      
+      }
+    
+        if(_res==2){
+
+        }
+        
+          
+        
+  
+}
+
+  PushCartDetails(){
+    for(let j=0; j<this.cartExist.length;j++ ){
+      //alert("ok");
+      //alert(this.cartExist[j])
+
+      if(this.uniquevalue.indexOf(this.cartExist[j])===-1){
+      this.uniquevalue.push(this.cartExist[j]);
+      }
+  }
+}
 
   keyPressDecimal(event: any) {
     const reg = /^-?\d*(\.\d{0,3})?$/;

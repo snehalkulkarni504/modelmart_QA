@@ -223,6 +223,7 @@ export class ShouldCostGenComponent implements OnInit {
       this.RoleId = data.projectDetails[0].roleId;
       this.UniqueId = data.projectDetails[0].uniqueId;
       this.modelTypes_Id = data.projectDetails[0].modelTypes_Id;
+      localStorage.setItem('uniqueId',this.UniqueId);
       if (this.modelTypes_Id == 4) {
         this.IsCSmodel = true;
       }
@@ -1113,7 +1114,7 @@ export class ShouldCostGenComponent implements OnInit {
         return;
       }
     }
-  this.searchservice.SaveToCart(this.userId, this.UniqueId,this.Cartcategory)
+  this.searchservice.SaveToCart(this.userId, this.UniqueId,this.Cartcategory,null)
     .subscribe({
       next: (_res) => {
         if(_res==1)
@@ -1131,7 +1132,7 @@ export class ShouldCostGenComponent implements OnInit {
         }
         if(_res==2)
         {
-          this.toastr.success("Item Already exist in the cart");
+          this.toastr.warning("Item Already exist in the cart Please use different cart");
           this.showError1=false;
           this.showError2=false;
           this.Cartcategory=undefined;

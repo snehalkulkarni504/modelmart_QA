@@ -176,7 +176,9 @@ export class HeaderComponent implements OnInit {
       localStorage.removeItem("userId");
       localStorage.removeItem("HopperColumns");
       localStorage.removeItem("Historysearch");
+      localStorage.removeItem("cart");
       this.router.navigate(['/welcome']);
+
       
     }
     
