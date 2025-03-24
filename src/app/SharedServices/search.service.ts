@@ -179,27 +179,8 @@ export class SearchService {
   }
 
   UpdateBomFilter(updatedRow:any,cartname:any,createdby:any): Observable<any> {
-    const formData = new FormData();
-    formData.append('BomId', updatedRow.bomId);
-    formData.append('excelname', updatedRow.excelname);
-    formData.append('excelcostregion', updatedRow.excelcostregion);
-    formData.append('excelitemcount', updatedRow.excelitemcount);
-    formData.append('excelmeterial', updatedRow.excelmeterial);
-    formData.append('excelmfg', updatedRow.excelmfg);
-    formData.append('excelprice', updatedRow.excelprice);
-    formData.append('excelparent', updatedRow.excelparent);
-    formData.append('excelparentpartid', updatedRow.excelparentpartid);
-    formData.append('excelpartno', updatedRow.excelpartno);
-    formData.append('excelweight', updatedRow.excelweight);
-    formData.append('excelutilization', updatedRow.excelutilization);
-    formData.append('excelsuppliername', updatedRow.excelsuppliername);
-    formData.append('excelcurrentprogram', updatedRow.excelcurrentprogram);
-    formData.append('excelparentprogram', updatedRow.excelparentprogram);
-    formData.append('excelcosttype', updatedRow.excelcosttype);
-    formData.append('cartname', cartname);
-    formData.append('createdby', createdby);
-
-    return this.httpClient.post(this.apiUrl + "UpdateBomFilter", formData); 
+    
+    return this.httpClient.post(this.apiUrl + `UpdateBomFilter?cartname=${cartname}&createdby=${createdby}`, updatedRow); 
   }
 
   uploadExcelData(file: File,cartname:any,createdby:any): Observable<any> {

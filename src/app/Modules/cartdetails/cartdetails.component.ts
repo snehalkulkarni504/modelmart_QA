@@ -7,6 +7,8 @@ import { AdminService } from 'src/app/SharedServices/admin.service';
 import { SearchService } from 'src/app/SharedServices/search.service';
 import { Location } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { ChangeDetectorRef } from '@angular/core';
+
 
 
 @Component({
@@ -21,7 +23,8 @@ export class CartdetailsComponent {
     public adminService: AdminService,
     public toastr: ToastrService,
     private location: Location,
-    public SpinnerService: NgxSpinnerService) {
+    public SpinnerService: NgxSpinnerService,
+    private cdr: ChangeDetectorRef) {
     // this.myScriptElement = document.createElement("script");
     // this.myScriptElement.src = "assets/slider.js";
     // document.body.appendChild(this.myScriptElement);
@@ -236,22 +239,41 @@ export class CartdetailsComponent {
   }
 
   editRow(row: any) {
+    //row.tempExcelpartno = row.excelpartno;
     row.editable = true;
+    const tableContainer = document.querySelector('.table-container'); // Adjust selector if needed
+
+  if (tableContainer) {
+    tableContainer.scrollLeft = 0; // Scroll to the left
+  }
+  const firstInput = document.querySelector('.editable-input') as HTMLInputElement;
+            if (firstInput) {
+              firstInput.focus();
+            }
   }
 
   saveRow(row: any) {
-
+    this.cdr.detectChanges();
+    
     const updatedRow = { ...row };  // Create a copy of the row
   delete updatedRow.editable;  // Remove the editable property
 
   // Post updated data to the API
+  this.SpinnerService.show('spinner');
   this.Searchservice.UpdateBomFilter(updatedRow,"cart1",this.userId).subscribe(response => {
     console.log('Row updated successfully', response);
+    
+      this.SpinnerService.hide('spinner');
+      this.toastr.success("Row updated successfully.");
+      this.ShowLandingPage(0,'0');
+
     row.editable = false;  // Disable edit mode after successful update
+
   }, error => {
     console.error('Error updating row', error);
   });
-    row.editable = false;
+
+   // row.editable = false;
   }
 
   cancelEdit(row: any) {

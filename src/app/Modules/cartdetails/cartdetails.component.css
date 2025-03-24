@@ -367,3 +367,7 @@ th,td{
     color: #f8f6f6;
     background-color:#da291c;
 }
+.editable-input:focus {
+    background-color: rgb(200, 225, 239);
+    
+}

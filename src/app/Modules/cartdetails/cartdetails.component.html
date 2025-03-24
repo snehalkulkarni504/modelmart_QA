@@ -99,9 +99,13 @@
 
         
     </div>
-  
-    <div class="d-flex table-responsive" style="font-size: 13px !important;">
-        <table class="table table-bordered table-striped">
+  </form>
+  <div class="row">
+    
+  </div>
+    <div class="d-flex table-responsive table-container" style="font-size: 13px !important;">
+        
+        <table class="table table-bordered table-striped table-container">
             <thead>
                 <tr>
                     <th hidden>ID</th>
@@ -162,7 +166,7 @@
                 
             </thead>
             <tbody>
-                <tr *ngFor="let row of SearchProductList | search: textsearch:filterMetadata | paginate: { itemsPerPage: 5, currentPage: page }  let i=index">
+                <tr *ngFor="let row of SearchProductList | search: textsearch:filterMetadata | paginate: { itemsPerPage: 20, currentPage: page }  let i=index">
                    <!--<tr>--> 
                     <td hidden>{{row.cartId}}</td>
                     <td hidden>{{row.bomId}}</td>
@@ -172,7 +176,7 @@
                         <tr>
                             <td>
                                 <span *ngIf="!row.editable">{{ row.excelpartno }}</span>
-                                <input *ngIf="row.editable" [(ngModel)]="row.excelpartno"  value="{{row.excelpartno}}"/>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelpartno" value="{{row.excelpartno}}" class="editable-input" />
                               </td>
                               <!--<td>
                                 <span *ngIf="!row.editable">{{ row.excelname }}</span>
@@ -180,52 +184,52 @@
                               </td>-->
                               <td>
                                 <span *ngIf="!row.editable">{{ row.excelmeterial }}</span>
-                                <input *ngIf="row.editable" [(ngModel)]="row.excelmeterial" value="{{row.excelmeterial}}"/>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelmeterial" value="{{row.excelmeterial}}" class="editable-input"/>
                               </td>
                               <td>
                                 <span *ngIf="!row.editable">{{ row.excelweight }}</span>
-                                <input *ngIf="row.editable" [(ngModel)]="row.excelweight" value="{{row.excelweight}}"/>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelweight" value="{{row.excelweight}}" class="editable-input"/>
                               </td>
                               <td>
                                 <span *ngIf="!row.editable">{{ row.excelprice }}</span>
-                                <input *ngIf="row.editable" [(ngModel)]="row.excelprice" value="{{row.excelprice}}"/>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelprice" value="{{row.excelprice}}" class="editable-input"/>
                               </td>
                               <td>
                                 <span *ngIf="!row.editable">{{ row.excelcostregion }}</span>
-                                <input *ngIf="row.editable" [(ngModel)]="row.excelcostregion" value="{{row.excelcostregion}}" />
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelcostregion" value="{{row.excelcostregion}}" class="editable-input" />
                               </td>
                               <td>
                                 <span *ngIf="!row.editable">{{ row.excelparent }}</span>
-                                <input *ngIf="row.editable" [(ngModel)]="row.excelparent" value="{{row.excelparent}}" />
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelparent" value="{{row.excelparent}}" class="editable-input"/>
                               </td>
                               <td>
                                 <span *ngIf="!row.editable">{{ row.excelparentpartid }}</span>
-                                <input *ngIf="row.editable" [(ngModel)]="row.excelparentpartid" value="{{row.excelparentpartid}}" />
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelparentpartid" value="{{row.excelparentpartid}}" class="editable-input" />
                               </td>
                               <td>
                                 <span *ngIf="!row.editable">{{ row.excelcosttype }}</span>
-                                <input *ngIf="row.editable" [(ngModel)]="row.excelcosttype" value="{{row.excelcosttype}}"/>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelcosttype" value="{{row.excelcosttype}}" class="editable-input"/>
                               </td>
                               <td>
                                 <span *ngIf="!row.editable">{{ row.excelcurrentprogram}}</span>
-                                <input *ngIf="row.editable" [(ngModel)]="row.excelcurrentprogram" value="{{row.excelcurrentprogram}}"/>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelcurrentprogram" value="{{row.excelcurrentprogram}}" class="editable-input" />
                               </td>
                               <td>
                                 <span *ngIf="!row.editable">{{ row.excelparentprogram}}</span>
-                                <input *ngIf="row.editable" [(ngModel)]="row.excelparentprogram" value="{{row.excelparentprogram}}"/>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelparentprogram" value="{{row.excelparentprogram}}" class="editable-input" />
                               </td>
                               <td>
                                 <span *ngIf="!row.editable">{{ row.excelutilization}}</span>
-                                <input *ngIf="row.editable" [(ngModel)]="row.excelutilization" value="{{row.excelutilization}}"/>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelutilization" value="{{row.excelutilization}}" class="editable-input"/>
                               </td>
                               <td>
                                 <span *ngIf="!row.editable">{{ row.excelsuppliername}}</span>
-                                <input *ngIf="row.editable" [(ngModel)]="row.excelsuppliername" value="{{row.excelsuppliername}}"/>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelsuppliername" value="{{row.excelsuppliername}}" class="editable-input"/>
                               </td>
 
                               <td>
                                 <span *ngIf="!row.editable">{{ row.excelitemcount }}</span>
-                                <input *ngIf="row.editable" [(ngModel)]="row.excelitemcount" value="{{row.excelitemcount}}"/>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelitemcount" value="{{row.excelitemcount}}" class="editable-input" />
                               </td>
                               
                         <!--<td>{{data.excelname}}</td> -->   
@@ -249,7 +253,7 @@
                     <td>{{row.ucost}}</td>
                     <td *ngIf="row.ucost <= 0">
                     <span *ngIf="!row.editable">{{row.scost}}</span>
-                    <input *ngIf="row.editable" [(ngModel)]="row.scost" value="{{row.scost}}"/>
+                    <input *ngIf="row.editable" [(ngModel)]="row.scost" value="{{row.scost}}" />
                     </td>
                     <td *ngIf="row.ucost > 0">{{row.ucost}}</td>
                     <!--<td *ngIf="data.ucost === 0 && data.scost===0">0</td>-->
@@ -295,7 +299,7 @@
         <br>
     </div>
 
-</form>
+
 </div>
 <!--Start cratdetails-->
 <div class="table-responsive">
@@ -414,7 +418,7 @@
             
         </thead>
         <tbody>
-            <tr *ngFor="let data of OverrideProductList | search: textsearch:filterMetadata | paginate: { itemsPerPage: 10, currentPage: page }  let i=index">
+            <tr *ngFor="let data of OverrideProductList | search: textsearch:filterMetadata | paginate: { itemsPerPage: 20, currentPage: page }  let i=index">
                <!--<tr>--> 
                 <td hidden>{{data.cartId}}</td>
                 <td>{{data.name}}</td>
