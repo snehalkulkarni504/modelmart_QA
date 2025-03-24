@@ -1,0 +1,416 @@
+<div class="table-container">
+  <h3>VAVE Ideas for Part No {{PartNumber}}</h3>
+  <hr>
+  <div class="table-controls">
+    <!-- <input type="text" [(ngModel)]="searchText" placeholder="Search" class="search-input"> -->
+    <div class="dropdown-container">
+      <!-- First Dropdown: Column Names -->
+      <ng-select #columnSelect class="ng-selectcustomer"
+    [items]="columnNames"
+    [(ngModel)]="selectedColumn"
+    (change)="onColumnChange()"
+    placeholder="---Select Column---"
+    style="width: 200px;"
+    [ngModelOptions]="{standalone: true}">
+  </ng-select>
+
+  <!-- Second Dropdown: Column Values -->
+  <ng-select #valueSelect class="ng-selectcustomer"
+    [items]="columnValues"
+    [(ngModel)]="selectedValue"
+    (change)="onValueChange()"
+    placeholder="---Select Value---"
+    style="width: 200px;"
+    [ngModelOptions]="{standalone: true}"
+    [disabled]="isSecondDropdownDisabled">
+  </ng-select>
+    </div>
+    <button (click)="exportToExcel(filteredPartNumberTableData,'VAVEIdeasforPartNo-{{PartNumber}}.xlsx')" class="button-29">Export to Excel</button>
+  </div>
+  <div style="overflow-x:auto; max-height: 331px;">
+  <table>
+    <thead>
+      <tr>
+        <th class="hidden-header"></th> <!-- Hidden "Idea" column header -->
+        <th class="header-box">
+          <div class="header-content">
+            Noun Name
+            <div class="header-line"></div>
+          </div>
+        </th>
+        <th class="header-box">
+          <div class="header-content">
+            Program
+            <div class="header-line"></div>
+          </div>
+        </th>
+        <th class="header-box">
+          <div class="header-content">
+            Part Number
+            <div class="header-line"></div>
+          </div>
+        </th>
+        <!-- <th class="header-box">
+          <div class="header-content">
+            Mfg Location
+            <div class="header-line"></div>
+          </div>
+        </th> -->
+        <!-- <th class="header-box">
+          <div class="header-content">
+            Comments
+            <div class="header-line"></div>
+          </div>
+        </th> -->
+        <th class="header-box">
+          <div class="header-content">
+            Potential Savings PP
+            <div class="header-line"></div>
+          </div>
+        </th>
+        <th class="header-box">
+          <div class="header-content">
+            Feasibility
+            <div class="header-line"></div>
+          </div>
+        </th>
+        <th class="header-box">
+          <div class="header-content">
+            Idea Owner
+            <div class="header-line"></div>
+          </div>
+        </th>
+        <!-- <th class="header-box">
+          <div class="header-content">
+            Idea GeneratedOn
+            <div class="header-line"></div>
+          </div>
+        </th> -->
+        <th class="header-box">
+          <div class="header-content">
+            Current Status
+            <div class="header-line"></div>
+          </div>
+        </th>
+        <!-- <th class="header-box">
+          <div class="header-content">
+            Engg Comment
+            <div class="header-line"></div>
+          </div>
+        </th> -->
+        <!-- <th class="header-box">
+          <div class="header-content">
+            Final Solution
+            <div class="header-line"></div>
+          </div>
+        </th> -->
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <tr *ngFor="let row of filteredData1; let i = index" (click)="selectRow(row)" [class.active-row]="row === selectedRow">
+        <td *ngFor="let key of tableKeys" title="{{row[key]}}">{{ row[key] }}</td>
+      </tr> -->
+      <tr *ngFor="let row of filteredPartNumberTableData | paginate: {itemsPerPage:itemonperpage, currentPage: page}">
+        <td title="Idea: {{row.idea}}">{{ row.idea }}</td>
+        <td title="{{row.nounName}}">{{ row.nounName }}</td>
+        <td title="{{row.program}}">{{ row.program }}</td>
+        <td title="{{row.partNumber}}">{{ row.partNumber }}</td>
+        <td title="{{row.potentialSavingsPerPieceMDO}}">{{ row.potentialSavingsPerPieceMDO }}</td>
+        <td title="{{row.feasibility}}">{{ row.feasibility }}</td>
+        <td title="{{row.ideaOwner}}">{{ row.ideaOwner }}</td>
+        <td title="{{row.currentStatus}}">{{ row.currentStatus }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="d-flex justify-content-between p-2 pagination">
+  <ngb-pagination  class="custom-pagination"  [collectionSize]="filteredPartNumberTableData.length" [(page)]="page" [pageSize]="pageSize"
+  [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm">
+      <ng-template ngbPaginationPrevious>Prev</ng-template>
+      <ng-template ngbPaginationNext>Next</ng-template>
+  </ngb-pagination>
+
+  <!-- <div style="margin-left: -640px;">
+  <select class="form-control" style="width: auto;" [(ngModel)]="itemonperpage">
+    <option [ngValue]="5">5 </option>
+    <option [ngValue]="10">10 </option>
+    <option [ngValue]="50">50 </option>
+    <option [ngValue]="100">100 </option>
+</select>
+<span>Items per page</span>
+</div> -->
+  <br>
+</div>
+
+
+  <h3>VAVE Ideas for {{NounName}}</h3>
+  <hr>
+  <div class="table-controls">
+   
+    <div class="dropdown-container">
+      <!-- First Dropdown: Column Names -->
+      <ng-select #columnSelect2 class="ng-selectcustomer"
+        [items]="columnNames"
+        [(ngModel)]="selectedColumn2"
+        (change)="onColumnChange2()"
+        placeholder="---Select Column---"
+        style="width: 200px;"
+        [ngModelOptions]="{standalone: true}">
+      </ng-select>
+
+      <!-- Second Dropdown: Column Values -->
+      <ng-select #valueSelect2 class="ng-selectcustomer"
+        [items]="columnValues2"
+        [(ngModel)]="selectedValue2"
+        (change)="onValueChange2()"
+        placeholder="---Select Value---"
+        style="width: 200px;"
+        [ngModelOptions]="{standalone: true}"
+        [disabled]="isSecondDropdownDisabled2">
+      </ng-select>
+    </div>
+
+    <button (click)="exportToExcel(filteredNounNameTableData,'VAVEIdeasforNounName-{{NounName}}.xlsx')" class="button-29">Export to Excel</button>
+  </div>
+  <div style="overflow-x:auto;">
+  <table>
+    <thead>
+      <tr>
+        <th class="hidden-header"></th> <!-- Hidden "Idea" column header -->
+        <th class="header-box">
+          <div class="header-content">
+            Noun Name
+            <div class="header-line"></div>
+          </div>
+        </th>
+        <th class="header-box">
+          <div class="header-content">
+            Program
+            <div class="header-line"></div>
+          </div>
+        </th>
+        <th class="header-box">
+          <div class="header-content">
+            Part Number
+            <div class="header-line"></div>
+          </div>
+        </th>
+        <!-- <th class="header-box">
+          <div class="header-content">
+            Mfg Location
+            <div class="header-line"></div>
+          </div>
+        </th> -->
+        <!-- <th class="header-box">
+          <div class="header-content">
+            Comments
+            <div class="header-line"></div>
+          </div>
+        </th> -->
+        <th class="header-box">
+          <div class="header-content">
+            Potential Savings PP
+            <div class="header-line"></div>
+          </div>
+        </th>
+        <th class="header-box">
+          <div class="header-content">
+            Feasibility
+            <div class="header-line"></div>
+          </div>
+        </th>
+        <th class="header-box">
+          <div class="header-content">
+            Idea Owner
+            <div class="header-line"></div>
+          </div>
+        </th>
+        <!-- <th class="header-box">
+          <div class="header-content">
+            Idea GeneratedOn
+            <div class="header-line"></div>
+          </div>
+        </th> -->
+        <th class="header-box">
+          <div class="header-content">
+            Current Status
+            <div class="header-line"></div>
+          </div>
+        </th>
+        <!-- <th class="header-box">
+          <div class="header-content">
+            Engg Comment
+            <div class="header-line"></div>
+          </div>
+        </th> -->
+        <!-- <th class="header-box">
+          <div class="header-content">
+            Final Solution
+            <div class="header-line"></div>
+          </div>
+        </th> -->
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <tr *ngFor="let row of filteredData1; let i = index" (click)="selectRow(row)" [class.active-row]="row === selectedRow">
+        <td *ngFor="let key of tableKeys" title="{{row[key]}}">{{ row[key] }}</td>
+      </tr> -->
+      <tr *ngFor="let row of filteredNounNameTableData | paginate:{itemsPerPage: 5, currentPage: page2}">
+        <td title="Idea: {{row.idea}}">{{ row.idea }}</td>
+        <td title="{{row.nounName}}">{{ row.nounName }}</td>
+        <td title="{{row.program}}">{{ row.program }}</td>
+        <td title="{{row.partNumber}}">{{ row.partNumber }}</td>
+        <td title="{{row.potentialSavingsPerPieceMDO}}">{{ row.potentialSavingsPerPieceMDO }}</td>
+        <td title="{{row.feasibility}}">{{ row.feasibility }}</td>
+        <td title="{{row.ideaOwner}}">{{ row.ideaOwner }}</td>
+        <td title="{{row.currentStatus}}">{{ row.currentStatus }}</td>
+       
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="d-flex justify-content-between p-2 pagination">
+  <ngb-pagination class="custom-pagination" [collectionSize]="filteredNounNameTableData.length" [(page)]="page2" [pageSize]="pageSize"
+  [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm">
+      <ng-template ngbPaginationPrevious>Prev</ng-template>
+      <ng-template ngbPaginationNext>Next</ng-template>
+  </ngb-pagination>
+  <br>
+</div>
+
+    <h3>VAVE Ideas for {{NounName}} & {{ProgramName}}</h3>
+    <hr>
+    <div class="table-controls">
+      <div class="dropdown-container">
+        <!-- First Dropdown: Column Names -->
+        <ng-select #columnSelect3 class="ng-selectcustomer"
+          [items]="columnNames"
+          [(ngModel)]="selectedColumn3"
+          (change)="onColumnChange3()"
+          placeholder="---Select Column---"
+          style="width: 200px;"
+          [ngModelOptions]="{standalone: true}">
+        </ng-select>
+  
+        <!-- Second Dropdown: Column Values -->
+        <ng-select #valueSelect3 class="ng-selectcustomer"
+          [items]="columnValues3"
+          [(ngModel)]="selectedValue3"
+          (change)="onValueChange3()"
+          placeholder="---Select Value---"
+          style="width: 200px;"
+          [ngModelOptions]="{standalone: true}"
+          [disabled]="isSecondDropdownDisabled3">
+        </ng-select>
+      </div>  
+
+        <button (click)="exportToExcel(filteredNonunProgramTableData,'VAVEIdeasfor{{NounName}}&{{ProgramName}}.xlsx')" class="button-29">Export to Excel</button>
+      </div>
+      <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th class="hidden-header"></th> <!-- Hidden "Idea" column header -->
+            <th class="header-box">
+              <div class="header-content">
+                Noun Name
+                <div class="header-line"></div>
+              </div>
+            </th>
+            <th class="header-box">
+              <div class="header-content">
+                Program
+                <div class="header-line"></div>
+              </div>
+            </th>
+            <th class="header-box">
+              <div class="header-content">
+                Part Number
+                <div class="header-line"></div>
+              </div>
+            </th>
+            <!-- <th class="header-box">
+              <div class="header-content">
+                Mfg Location
+                <div class="header-line"></div>
+              </div>
+            </th> -->
+            <!-- <th class="header-box">
+              <div class="header-content">
+                Comments
+                <div class="header-line"></div>
+              </div>
+            </th> -->
+            <th class="header-box">
+              <div class="header-content">
+                Potential Savings PP
+                <div class="header-line"></div>
+              </div>
+            </th>
+            <th class="header-box">
+              <div class="header-content">
+                Feasibility
+                <div class="header-line"></div>
+              </div>
+            </th>
+            <th class="header-box">
+              <div class="header-content">
+                Idea Owner
+                <div class="header-line"></div>
+              </div>
+            </th>
+            <!-- <th class="header-box">
+              <div class="header-content">
+                Idea GeneratedOn
+                <div class="header-line"></div>
+              </div>
+            </th> -->
+            <th class="header-box">
+              <div class="header-content">
+                Current Status
+                <div class="header-line"></div>
+              </div>
+            </th>
+            <!-- <th class="header-box">
+              <div class="header-content">
+                Engg Comment
+                <div class="header-line"></div>
+              </div>
+            </th> -->
+            <!-- <th class="header-box">
+              <div class="header-content">
+                Final Solution
+                <div class="header-line"></div>
+              </div>
+            </th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <!-- <tr *ngFor="let row of filteredData1; let i = index" (click)="selectRow(row)" [class.active-row]="row === selectedRow">
+            <td *ngFor="let key of tableKeys" title="{{row[key]}}">{{ row[key] }}</td>
+          </tr> -->
+          <tr *ngFor="let row of filteredNonunProgramTableData | paginate:{itemsPerPage:5, currentPage:page3}">
+            <td title="Idea: {{row.idea}}">{{ row.idea }}</td>
+            <td title="{{row.nounName}}">{{ row.nounName }}</td>
+            <td title="{{row.program}}">{{ row.program }}</td>
+            <td title="{{row.partNumber}}">{{ row.partNumber }}</td>
+            <td title="{{row.potentialSavingsPerPieceMDO}}">{{ row.potentialSavingsPerPieceMDO }}</td>
+            <td title="{{row.feasibility}}">{{ row.feasibility }}</td>
+            <td title="{{row.ideaOwner}}">{{ row.ideaOwner }}</td>
+            <td title="{{row.currentStatus}}">{{ row.currentStatus }}</td>
+          </tr>
+        </tbody>
+      </table>
+        </div>
+
+        <div class="d-flex justify-content-between p-2 pagination">
+          <ngb-pagination class="custom-pagination" [collectionSize]="filteredNonunProgramTableData.length" [(page)]="page3" [pageSize]="pageSize"
+              [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm">
+              <ng-template ngbPaginationPrevious>Prev</ng-template>
+              <ng-template ngbPaginationNext>Next</ng-template>
+          </ngb-pagination>
+          <br>
+        </div>
+        
+
+  </div>

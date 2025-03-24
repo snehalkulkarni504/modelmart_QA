@@ -135,9 +135,18 @@ export class LoginComponent implements OnInit {
       // localStorage.setItem("accessToken", this.results[0].Token)
       // localStorage.setItem("refreshToken", this.results[0].RefreshToken)
       // localStorage.setItem("refreshTokenExpires", this.results[0].RefreshTokenExpires)
+      const sessionid=await this.admin.InsertLoginDetails(localStorage.getItem("userId")
+      ,localStorage.getItem("userName")).toPromise();
+      
+      localStorage.setItem("sessionId", sessionid)
 
-      this.router.navigate(['/home/search/ ']);
-  
+
+      const data = await this.admin.GetAuthentication(this.Username, this.Password).toPromise();
+      this.results = data;
+       
+      //this.router.navigate(['/home/search/ ']);
+      this.router.navigate(['/welcomeuser']);
+       
     }
     else {
       this.toastr.error("Invalid UserName and Password");

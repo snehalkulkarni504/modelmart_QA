@@ -5,34 +5,39 @@ import { TreeviewConfig, TreeviewItem } from '@charmedme/ngx-treeview';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AdminService } from 'src/app/SharedServices/admin.service';
 import { SearchService } from 'src/app/SharedServices/search.service';
+ 
 import { Location } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { ChangeDetectorRef } from '@angular/core';
-
-
-
+ 
 @Component({
   selector: 'app-cartdetails',
   templateUrl: './cartdetails.component.html',
-  styleUrl: './cartdetails.component.css'
+ 
+  styleUrls: ['./cartdetails.component.css']
+
 })
 export class CartdetailsComponent {
 
   constructor(public router: Router,
     public Searchservice: SearchService,
     public adminService: AdminService,
+ 
     public toastr: ToastrService,
     private location: Location,
     public SpinnerService: NgxSpinnerService,
     private cdr: ChangeDetectorRef) {
+ 
     // this.myScriptElement = document.createElement("script");
     // this.myScriptElement.src = "assets/slider.js";
     // document.body.appendChild(this.myScriptElement);
   }
 
   @ViewChild('cat3') public cat3: any;
+ 
   selectedFile!: File | undefined;
   uploadfromdate:any
+ 
   Cat2: any;
   Cat2Value: any;
   Cat3: any;
@@ -49,7 +54,9 @@ export class CartdetailsComponent {
   EngineList: any;
   EngineValue: any;
   SearchProductList: any;
+
   OverrideProductList:any;
+
   Cat2search: any;
   Cat3search: any;
   Cat4search: any;
@@ -58,6 +65,7 @@ export class CartdetailsComponent {
   Locationsearch: any;
   flag: number = 0;
   CategoryID: string = "0";
+ 
   userId:any;
   NA: any = "NA*";
   cartName:any;
@@ -73,11 +81,16 @@ export class CartdetailsComponent {
   engineDis: any;
   Cartcategory:any;
   statusValue: boolean = false;
+ 
+  userId: any;
+  NA: any = "NA*";
+ 
   config = TreeviewConfig.create({
     hasAllCheckBox: false,
     hasFilter: false,
     hasCollapseExpand: false,
     decoupleChildFromParent: false,
+ 
    
 
   });
@@ -99,12 +112,18 @@ export class CartdetailsComponent {
   selectedEngine:any;
   selectedplatform:any;
   exceltemppartno:any=0;
-  
+ 
+  });
+
+  loginDisplay = false;
+  UserList: any;
+  settingForm: any;
+ 
   ngOnInit(): void {
     if (localStorage.getItem("userName") == null) {
       this.router.navigate(['/welcome']);
       return;
-     
+ 
 
       
     }
@@ -112,7 +131,14 @@ export class CartdetailsComponent {
    // this.UserForModelMart(localStorage.getItem("userName"));
 
    this.userId = localStorage.getItem("userId");
-   
+    
+
+    }
+
+    // this.UserForModelMart(localStorage.getItem("userName"));
+
+    this.userId = localStorage.getItem("userId");
+ 
     this.SearchboxForm = new FormGroup({
       Cat2List: new FormControl(),
       EngineList: new FormControl(),
@@ -124,6 +150,7 @@ export class CartdetailsComponent {
       EngineDisplsearch: new FormControl(),
       BusinessUnitsearch: new FormControl(),
       Locationsearch: new FormControl(),
+ 
     });
 
     this.ShowLandingPage(0, "0");
@@ -137,6 +164,19 @@ export class CartdetailsComponent {
 
   getCategoryId(e: any) {
     const selectedText = e ? e.text : null;
+ 
+
+      cartcheckbox: new FormControl(),
+      Cat3Search: new FormControl()
+    });
+
+    this.ShowLandingPage(0, "0");
+    // this.ShowCagetory3();
+    this.ShowCagetory4();
+  }
+
+  getCategoryId(e: any) {
+ 
     const cat3 = document.getElementsByClassName("Cat3Checkbox") as any;
     var param_value = "";
 
@@ -162,7 +202,7 @@ export class CartdetailsComponent {
       return v;
     }
   }
-
+ 
   Override(data:any){
 
     // alert(data.excelpartno)
@@ -230,6 +270,17 @@ export class CartdetailsComponent {
         this.OverrideProductList=data;
         this.SpinnerService.hide('spinner');
       }
+ 
+  async ShowLandingPage(flag: number, CategoryID: string) {
+
+    try {
+
+      this.SpinnerService.show('spinner');
+      // const data = await this.Searchservice.GetLandingPageForCartView(flag, CategoryID).toPromise();
+      // this.SearchProductList = data;
+      // console.log(this.SearchProductList);
+      this.SpinnerService.hide('spinner');
+ 
     }
     catch (e) {
       this.SpinnerService.hide('spinner');
@@ -238,6 +289,7 @@ export class CartdetailsComponent {
 
   }
 
+ 
   editRow(row: any) {
     //row.tempExcelpartno = row.excelpartno;
     row.editable = true;
@@ -493,6 +545,37 @@ export class CartdetailsComponent {
   }
   ClearGird(){
 
+  async ShowCagetory4() {
+    const data = await this.Searchservice.GetCagetory3("0").toPromise();
+    this.Cat3 = data.filter((d: { groupCategory: any; }) => d.groupCategory == "Cat3");
+    console.log(this.Cat3);
+
+    // this.Cat3 = this.Cat3.map((value: { text: any; value: any; }) => {
+    //   return new TreeviewItem({ text: value.text, value: value.value, checked: false });
+    // });
+
+  }
+
+  increment() {
+
+  }
+
+  decrement() {
+
+  }
+
+  async ShowCagetory3() {
+    // const data = await this.Searchservice.GetCart(this.userId).toPromise();
+    // this.Cat3 = data;
+
+
+
+
+    // this.Cat3 = this.Cat3.map((value: { text: any; value: any; }) => {
+    //   return new TreeviewItem({ text: value.text, value: value.text, checked: false });
+    // });
+ 
+
   }
 
   public clearall() {
@@ -507,7 +590,7 @@ export class CartdetailsComponent {
   clearFilter() {
     alert("Clear All");
   }
-
+ 
   getShouldeCost(e: any) {
     //debugger;
 
@@ -528,16 +611,19 @@ export class CartdetailsComponent {
     this.router.navigate(['/home/search/ ']);
   }
 
+ 
   showProduct(event: any) {
     let ss = event.categoryId;
     this.router.navigate(['/home/search', event.categoryId]);
   }
+ 
   public myFunc(e:any) {
     console.log(e);
   }
   
   public async ShowLandingPage_Home(flag: number, CategoryID: string) {
    // debugger;
+ 
     try {
 
       this.ShowCagetory3();
@@ -548,6 +634,7 @@ export class CartdetailsComponent {
       const data = await this.Searchservice.GetLandingPage(flag, CategoryID).toPromise();
       this.SearchProductList = data;
      // console.log(this.SearchProductList);
+ 
       this.SpinnerService.hide('spinner');
     }
     catch (e) {
@@ -557,10 +644,17 @@ export class CartdetailsComponent {
 
   }
 
+ 
+  // -----------------------------------------------------------------------------------------
+
+
+  CartSearch: any;
+ 
   backToPreviousPage() {
     this.location.back();
   }
 
+ 
   // Function to open the upload modal
  // uploadDisplay = 'none';
   openUploadModal(): void {
@@ -665,6 +759,66 @@ export class CartdetailsComponent {
        window.URL.revokeObjectURL(url);
      });
  }
+ 
+
+  clearCategory3() {
+
+    var ul = document.getElementById("CartUL");
+    var li = ul!.getElementsByTagName("li") as any;
+    for (var i = 0; i < li.length; i++) {
+      li[i].getElementsByTagName('input')[0].checked = false;
+      const myElement = document.getElementById(li[i].getElementsByTagName('input')[0].value);
+      myElement?.classList.remove("selectedCart");
+    }
+    
+  }
+
+
+  SearchCat(id: any, ULId: any) {
+    var input = document.getElementById(id) as any;
+    var filter = input.value.toUpperCase();
+    var ul = document.getElementById(ULId);
+    var li = ul!.getElementsByTagName("li") as any;
+    for (var i = 0; i < li.length; i++) {
+      var a = li[i].getElementsByTagName('label')[0].innerText;
+      var txtValue = a;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        li[i].style.display = "";
+      } else {
+        li[i].style.display = "none";
+      }
+    }
+  }
+
+  cleartext3(ULId: any) {
+    this.CartSearch.nativeElement.value = "";
+  }
+
+
+  async getCategoryIdcat3() {
+    var param_value = "";
+
+    var ul = document.getElementById("CartUL");
+    var li = ul!.getElementsByTagName("li") as any;
+    for (var i = 0; i < li.length; i++) {
+      if (li[i].getElementsByTagName('input')[0].checked) {
+        param_value += li[i].getElementsByTagName('input')[0].value + ",";
+
+        const myElement = document.getElementById(li[i].getElementsByTagName('input')[0].value);
+        myElement?.classList.add("selectedCart");
+      }
+      else {
+        const myElement = document.getElementById(li[i].getElementsByTagName('input')[0].value);
+        myElement?.classList.remove("selectedCart");
+      }
+    }
+
+    param_value = param_value.substring(0, param_value.length - 1);
+
+
+
+  }
+ 
 
 }
 

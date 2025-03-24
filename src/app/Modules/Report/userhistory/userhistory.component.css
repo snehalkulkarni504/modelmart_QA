@@ -195,3 +195,10 @@ input[type=checkbox] {
 .bi-download:hover{
     cursor: pointer;
 }
+
+.remark{
+    width: 80%;
+    margin-left: 10%;
+    color: #da291c !important;
+    font-size: 12px;
+}

@@ -4,7 +4,7 @@
         <img alt="Loading Please Wait..." style="width:100px ; height:100px ;" src="../../../assets/Spin-2.gif" />
     </ngx-spinner>
 
-    <div class="row">
+    <div class="row" >
         <div class="backbtnDiv text-center">
             <button class="btnback" (click)="backToPreviousPage()">Back</button>
         </div>
@@ -13,59 +13,46 @@
         {{ChekNull(Projecttype)}}-{{ChekNull(BusinessUnit)}}-{{ChekNull(ProjectName)}}-{{Location}}-{{PartName}}-{{PartNumber}}
 
     </div>
+   
     <div class="row panal">
         <form [formGroup]="ProjectDetails">
             <div class="container-fluid">
                 <div class="row" id="printsection">
                     <div class="">
-
-                        <!-- <div class="projectname">
-
-                            <div class="col-md-10"></div>
-                            <p class="border rounded-3">
-                                {{ChekNull(Projecttype)}}-{{ChekNull(BusinessUnit)}}-{{ChekNull(ProjectName)}}-{{Location}}-{{PartName}}-{{PartNumber}}
-                            </p>
-                        </div> -->
                         <br>
                         <div class="imgPanel">
-                            <!-- <img src="../../../assets/No-Image.png" class="img"> -->
                             <img src="{{mainimg}}" class="img border_img" (mouseover)="ZoomImg($event)"
                                 (mouseout)="ZoomImgclose()">
-                            <!-- <img src="C:/ModelMart/Images/TUBE,STRAIGHT-A071T836/RV.jpg" class="img border"> -->
+    
+                            <!-- <div>
+                                <img class="moneybag" src="../../../assets/img/pngwing.com.png" alt="Avatar" title="redirect to design to cost page" (click)="showTabs('Tab2')"> 
+                                <h6 style="margin-left: 105px;">VAVE Design Ideas</h6>
+                            </div>     -->
                         </div>
                         <div class="Silder_imgPanel">
-                            <!-- <img src="{{mainimg}}" class="silder_img"> -->
                             <div *ngFor="let val of imgsilderData;let i=index" style="display: inline-block;">
                                 <img src="{{val}}" class="silder_img" (mouseover)="setImg(val)">
 
-                                <!-- <img src="../../../assets/comminslogo.png"  > -->
                             </div>
                             <br>
-                            <div *ngFor="let val of imgName" style="display: inline-block;" class="silder_img_name">{{
-                                val }}</div>
-                            <!-- <div style="display: inline-block;">
-                                <img src="{{mainimg}}" class="silder_img" (mouseover)="setImg(mainimg)">
-                            </div> -->
-                            <!-- <td><label for="PartNumber" class="default-lblvalue"
-                                    style="margin-left: 20px;">{{ChekNull(PartNumber)}} - {{ChekNull(PartName)}}</label>
-                            </td> -->
+                            <div *ngFor="let val of imgName" style="display: inline-block;" class="silder_img_name">
+                                {{val }}</div>
+                           
                         </div>
-                        <!-- <div class="Silder_imgPanel_PartName">
-                            <tr>
-                                <td><label for="PartNumber" class="default-lblvalue">{{PartNumber}} - {{PartName}}</label>
-                                </td>
-                            </tr>
-                        </div> -->
-                        <!-- <div > -->
+                        
                         <img src="{{mainimgzoom}}" class="zoomImghide" id="zoomImg">
-                        <!-- </div> -->
+                        
 
-                        <div class="page dataPanel">
+                        <div class="TabMenu">
+                            <button [ngClass]="{'activeTab': showTab1, 'Tab':!showTab1}" (click)="showTabs('Tab1')">Should Cost</button>
+                            <button [ngClass]="{'activeTab': showTab2, 'Tab':!showTab2}" (click)="showTabs('Tab2')">VAVE Design Ideas</button>
+                        </div> 
+
+
+                        <div *ngIf="showTab1" class="page dataPanel">
 
                             <fieldset class="border rounded-3 p-3  " >
-                                <!-- <div [hidden]="!IsCSmodel" class="text-center CSModelRemark"> 
-                                    <label>Debrief PDF not applicable for this Model</label>
-                                </div> -->
+                                
 
                                 <legend class="w-auto labelDetailsheader" style="margin-top:0px;">Project Details
                                     <label [hidden]="!IsCSmodel" class="text-center CSModelRemark">Debrief PDF not applicable for this Model</label>
@@ -130,6 +117,14 @@
                                                         class="default-lblvalue">{{ChekNull(EstimatedSpend|
                                                         number:'1.0-0')}} </label></td>
                                             </tr>
+                                            <tr>
+
+                                                <td> <label for="EngineDisplacement" class="default-lbl">Engine Displacement
+                                                        :</label></td>
+                                                <td> <label for="EngineDisplacement"
+                                                        class="default-lblvalue">{{ChekNull(EngineDisplacement)}}</label></td>
+                                            </tr>
+                                            
 
                                         </table>
                                     </div>
@@ -593,7 +588,7 @@
                         </div>
                     </div>
                     <div class="">
-                        <div class="page dataPanel">
+                        <div *ngIf="showTab1" class="page dataPanel">
 
                             <fieldset class="border rounded-3 p-3">
                                 <legend class="w-auto labelDetailsheader">Material Grade Details</legend>
@@ -761,10 +756,17 @@
                                 </ol>
                             </div>
                         </div>
+                        <div [hidden]="!showTab2" class="page dataPanel">
+                            <div class="container">
+                               
+                                 <app-design-to-cost [PartNumber]="PartNumber"  [ProgramName]="ProjectName" [NounName]="PartName"></app-design-to-cost>
+                            </div>
+                                  
+                        </div>
                     </div>
                 </div>
 
-                <div class="row buttons">
+                <div *ngIf="showTab1" class="row buttons">
                     <div class="col-md-12 text-end" style="padding-right: 40px;">
                         <input type="button" class="btn btn-primary btnDownload" value="Refresh Model⁴"
                             Name="Refresh Model⁴" (click)="SendNewRequest()">
@@ -772,82 +774,10 @@
                             Name="Download Model" (click)="DownloadReport()">
                         <input type="button" class="btn btn-primary btnDownload" value="Update Model³"
                             Name="Update Model³" (click)="UpdateReport()">
-                            <input type="button" class="btn btn-primary btnDownload" value="ADD TO CART"
-                            Name="ADD TO CART" (click)="editModal=false" (click)="openModal()">
-
                     </div>
                 </div>
                 <br>
             </div>
         </form>
-    </div>
-</div>
-<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">{{header}}</h4>
-                <label class="close modal-close-icn" (click)="onCloseHandled()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
-                        viewBox="0 0 16 16">
-                        <path
-                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                    </svg>
-                </label>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="engDis" class="default-lbl" style="font-size: 16px;"><b>Model Mart ID :{{ChekNull(UniqueId)}}</b></label>
-                        
-                        <br/>
-                        <br/>   
-                           
-                            <label for="Cartcategory"  class="default-lbl" *ngIf="AddToCart" style="font-size: 16px;">Cart Category</label>
-                            <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true" 
-                                placeholder="Please select" [(ngModel)]='Cartcategory' *ngIf="AddToCart"><ng-option
-                                    *ngFor="let c2 of cartNameList" [value]="c2.cartName">{{c2.cartName}}</ng-option>
-                            </ng-select>
-
-                            
-                                    <label for="cartName" *ngIf="CreateNewCart" class="default-lbl" style="font-size: 16px;">Cart Name</label>
-                                    <input class="form-control form-control-sm" type="text" name="cartName" id="cartName" *ngIf="CreateNewCart"
-                                        placeholder="Please enter Cart Name" [(ngModel)]='Cartcategory'>
-                                        <!-- (keypress)="keyPressDecimal($event)" -->
-                                    <div class="error-message" *ngIf="showError1" style="font-size: 10px;color: red;">
-                                        Please enter CartName.
-                                    </div>
-                                    <div class="error-message" *ngIf="showError2" style="font-size: 10px;color: red;">
-                                        CartName allready exist please use different Cart Name.
-                                    </div>
-                                
-
-
-                            <!-- (keypress)="keyPressDecimal($event)" -->
-                        
-                    </div>
-
-                    <!-- <div class="form-group">
-                    <label for="exampleInput" class="default-lbl">Status</label>
-                    <select class="form-select form-select-sm " (change)="onSelected($event)"
-                        value="{{statusValue}}"name="status">
-                        <option value="" selected hidden>Please select</option>
-                        <option>Active</option>
-                        <option>Inactive</option>
-                    </select>
-                    <div class="error-message" *ngIf="showError2">
-                        Please select status.</div>
-                </div> -->
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismis="modal"
-                    (click)="onCloseHandled()">Close</button>
-                <button type="button" class="btn btn-sm  btn-default default-btn_popup"
-                    (click)="onSaveButton()">{{txt_btn}}</button>
-                    <button type="button" class="btn btn-sm  btn-default default-btn_popup" *ngIf="ShowHideNewCartButton"
-                    (click)="onCartCreate()">Create New Cart</button>
-            </div>
-        </div>
     </div>
 </div>

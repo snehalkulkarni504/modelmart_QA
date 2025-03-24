@@ -45,9 +45,13 @@
                         <option value="Rejected">Rejected</option>
                     </select>
                 </div>
+                
                 <div class="col-md-3">
                     <button type="button" class="btn btn-sm default-btn" data-bs-dismis="modal"
                         (click)="View()">View</button>
+
+                        <img src="../../../../assets/exportexcel.png" class="exportToExcel" (click)="exportToExcel()"
+                        title="Export to Excel">
                 </div>
 
             </div>
@@ -55,26 +59,13 @@
 
         <div class="MasterHeaderlableSearch">
             <div class="row">
-                <div class="col-md-6 form-group has-search">
+                <div class="col-md-4 form-group has-search">
                     <span class="bi bi-search form-control-feedback"></span>
                     <input type="text" class="form-control search-input" placeholder="Search"
-                        formControlName="textsearch" [(ngModel)]="textsearch">
-                </div>
-                <div class="col-md-6 text-end d-flex justify-content-center " style="font-size: 13px;">
-                    <!-- <div class="set_trcolor" style="width: 30px; height:  30px;"></div>
-                    <label>Refresh Request</label> -->
+                        formControlName="textsearch" [(ngModel)]="textsearch" (keydown.enter)="$event.preventDefault()"> 
                 </div>
             </div>
-            <!-- <div class="form-group has-search" style="width: 50%; float: left;">
-                    <span class="bi bi-search form-control-feedback"></span>
-                    <input type="text" class="form-control search-input" placeholder="Search"
-                        formControlName="textsearch" [(ngModel)]="textsearch">
-                </div>
-                <div style="width: 50%; float: right; background-color: bisque;">
-                    <div class="set_trcolor" style="width: 30px; height:  30px;"></div>
-                </div> -->
         </div>
-
 
         <div class="MasterHeaderlable" style="font-size: 12px !important;">
             <div class="d-flex justify-content-center">
@@ -84,7 +75,10 @@
                     <table class="table table-bordered table-striped ">
                         <thead>
                             <tr class="">
-                                <th style="width: 10%;">Request ID</th>
+                                <th style="width: 5%;">S.No </th>
+                                <th style="width: 100px !important">Request ID
+                                    <i (click)="onSortClick('RequestHeaderId',$event)" class="my-icon bi bi-sort-up"></i>
+                                </th>
                                 <th style="width: 150px !important">Requester Name</th>
                                 <th style="width: 100px !important;">Request Date</th>
                                 <th style="width: 50%;">File</th>
@@ -99,7 +93,8 @@
                         </thead>
                         <tbody class="text-center">
                             <tr
-                                *ngFor="let data of Reportdata | search: textsearch:filterMetadata | paginate: { itemsPerPage: 10, currentPage: page } ">
+                                *ngFor="let data of Reportdata | search: textsearch:filterMetadata | paginate: { itemsPerPage: 10, currentPage: page };let i = index ">
+                                <td>{{ (page - 1) * pageSize + i + 1 }}</td>  <!-- Serial No. Calculation -->
                                 <td [class.set_trcolor]="data.IsRefresh == true" class="text-end">
                                     {{data.RequestHeaderId}}</td>
                                 <td [class.set_trcolor]="data.IsRefresh == true" class="text-start">{{data.UserName}}

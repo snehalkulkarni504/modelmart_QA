@@ -12,10 +12,10 @@
                     <div class="col-md-6 ">
                         <label id="clearFilter">Filters</label>
                     </div>
-                    <div class="col-md-6 text-end">
+                    <!-- <div class="col-md-6 text-end">
                         <label (click)="clearFilter(1)" id="clearFilterall"
-                            title="Clear All Selection & Text">Reset</label>
-                    </div>
+                            title="Clear All Selection & Text">Reset All</label>
+                    </div> -->
                 </div>
             </div>
             <div class="searchboxtext">
@@ -25,9 +25,9 @@
                             placeholder="E.g. Part Number, Part Name, Cat 2, Cat 3, Cat 4, location "
                             (keyup)="searchOnKeyUp($event)" (keydown.enter)="setvalue('0')" (focusout)="hidedropdown()">
                         <!-- (keydown.enter)="setvalue('0')"  -->
-                        <ul class="list-group searchdata" id="searchdata" [hidden]="autoseachhide">
+                        <ul class="list-group searchdata" id="searchdata" [hidden]="autoseachhide" style="font-size: 12px !important;">
                             <li class="list-group-item" *ngFor="let c of results" (click)="setvalue(c)">
-                                {{c.name}}
+                                <span class="searchdatalist"> {{c.filtergroup}} - </span> {{c.name}}
                             </li>
                         </ul>
                     </div>
@@ -39,19 +39,25 @@
                         </svg>
                     </div>
                 </div>
-
+                
             </div>
             
             
             <div class="compare">
+
                 <input type="button" class="btn btn-primary btnDownload" value="Add To Cart"
                             Name="ADD TO CART" (click)="editModal=false" (click)="openModal()">
+ 
+                <input type="button" class="btn btn-primary btnreset" (click)="clearFilter(1)" value="Reset All"
+                    Name="Reset">
+ 
                 <input type="button" class="btn btn-primary btncompare" (click)="getComparison()" value="Compare"
                     Name="Compare">
             </div>
         </div>
 
         <!-- Filters Start -->
+
         <div class="col-md-3 border-bottom position-fixed scroll1" id="Id_Filters">
             <form [formGroup]="SearchboxForm" id="Id_Filtersform">
                 <br>
@@ -223,6 +229,38 @@
                 <br>
                 <div class="row font-size">
                     <div class="col-md-6 ">
+                        <label id="clearFilter">Program Name</label>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <label (click)="clearProgramName()" id="clearFilterall"
+                            title="Clear Selection & Text">Clear</label>
+                    </div>
+                    <div class="col-md-12 ">
+
+                        <div class=" scrollbarsearchcat3">
+                            <input #ProgramNameSearch formControlName="ProgramNameSearch"
+                                placeholder="Search Program Name" id="ProgramnameSearch"
+                                (keyup)="SearchCat('ProgramnameSearch','ProgramnameUL')" class="filter_input_Search">
+
+                            <img src="../../../assets/closed.png" class="closedCat2Text"
+                                (click)="cleartextProgrmaname('ProgramnameUL')" title="Clear Text">
+
+                            <ul #cat2 class="UL_List" id="ProgramnameUL">
+                                <li *ngFor="let g of ProgramNameList">
+                                    <label style="display: block;">
+                                        <input type="checkbox" name="cat3list" class="checkboxsize"
+                                            (change)="getProgramNamelist()" formControlName="ProgramNamecheckbox"
+                                            value="{{g.programName}}" [(ngModel)]="g.selected" />
+                                        {{g.programName}}</label>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row font-size">
+                    <div class="col-md-6 ">
                         <label id="clearFilter">Debrief Date</label>
                     </div>
                     <div class="col-md-6 text-end">
@@ -328,38 +366,7 @@
                     </div>
                 </div>
                 <br>
-                <div class="row font-size">
-                    <div class="col-md-6 ">
-                        <label id="clearFilter">Program Name</label>
-                    </div>
-                    <div class="col-md-6 text-end">
-                        <label (click)="clearProgramName()" id="clearFilterall"
-                            title="Clear Selection & Text">Clear</label>
-                    </div>
-                    <div class="col-md-12 ">
 
-                        <div class=" scrollbarsearchcat3">
-                            <input #ProgramNameSearch formControlName="ProgramNameSearch"
-                                placeholder="Search Program Name" id="ProgramnameSearch"
-                                (keyup)="SearchCat('ProgramnameSearch','ProgramnameUL')" class="filter_input_Search">
-
-                            <img src="../../../assets/closed.png" class="closedCat2Text"
-                                (click)="cleartextProgrmaname('ProgramnameUL')" title="Clear Text">
-
-                            <ul #cat2 class="UL_List" id="ProgramnameUL">
-                                <li *ngFor="let g of ProgramNameList">
-                                    <label style="display: block;">
-                                        <input type="checkbox" name="cat3list" class="checkboxsize"
-                                            (change)="getProgramNamelist()" formControlName="ProgramNamecheckbox"
-                                            value="{{g.programName}}" [(ngModel)]="g.selected" />
-                                        {{g.programName}}</label>
-                                </li>
-                            </ul>
-
-                        </div>
-                    </div>
-                </div>
-                <br>
             </form>
         </div>
         <!-- Filters End -->
@@ -370,9 +377,9 @@
                 <label>We found "<b>0</b>" models for your search. </label>
             </div>
             <div [hidden]="ModelFound" class="row ModelFound">
-                <div class="col-md-12 text-center" >
+                <div class="col-md-12 text-center">
                     <div class="row">
-                        <div class="col-md-3"></div>
+                        <div class="col-md-2"></div>
                         <div class="col-md-5">
                             <label>We found "<b>{{ModelCount}}</b>" models for your search. <br>
                                 <span style="font-style: italic;" [hidden]="ModelCount<100">"You can apply filters on
@@ -380,53 +387,28 @@
                                     or
                                     enter specific part numbers" </span> </label>
                         </div>
-                        <div class="col-md-4">
-                            <ng-select style="float: right; margin-top: 5px; font-size: 8px !important;" class="custom"
-                                [ngModelOptions]="{standalone: true}" [searchable]="false" placeholder="Please select"
-                                class="descsorting" (change)="FilterSearchDataAsceDesc($event)"
-                                [(ngModel)]='selectedSearchDataAsceDesc'>
-                                <ng-option [value]='0'>Sort by A-Z</ng-option>
-                                <ng-option [value]='1'>Sort by Z-A</ng-option>
-                            </ng-select>
+                        <div class="col-md-5 text-end">
 
-                            <ng-select style="margin-top: 5px; font-size: 8px !important;"
-                                [ngModelOptions]="{standalone: true}" [searchable]="false" placeholder="Please select"
-                                class="descsorting" (change)="FilterSearchData($event)"
-                                [(ngModel)]='selectedSearchData'>
-                                <ng-option [value]='0'>Debrief Date </ng-option>
-                                <ng-option [value]='1'>Location</ng-option>
-                                <ng-option [value]='2'>Tooling Cost</ng-option>
-                                <ng-option [value]='3'>Should Cost</ng-option>
-                            </ng-select>
+                            <select name="sortingmodels" id="sortingmodels" (change)="FilterSearchData()"
+                                [(ngModel)]='SortSearchData'>
+                                <option value='0' class="sortingoption">Select Sorting... </option>
+                                <option value='1' class="sortingoption">Debrief Date Ascending to Descending </option>
+                                <option value='2' class="sortingoption">Debrief Date Descending to Ascending </option>
+
+                                <option value='3' class="sortingoption">Location Sort by A-Z</option>
+                                <option value='4' class="sortingoption">Location Sort by Z-A</option>
+
+                                <option value='5' class="sortingoption">Tooling Cost Smallest to Largest</option>
+                                <option value='6' class="sortingoption">Tooling Cost Largest to Smallest</option>
+
+                                <option value='7' class="sortingoption">Should Cost Smallest to Largest</option>
+                                <option value='8' class="sortingoption">Should Cost Largest to Smallest</option>
+                            </select>
+
                         </div>
 
                     </div>
-
-
                 </div>
-                <!-- <span style="font-style: italic;" [hidden]="ModelCount<100">"You can only view 100 parts one
-                    time,
-                    apply filters on left side or
-                    enter specific part numbers" </span> -->
-
-                <!-- <div class="col-md-8"></div> -->
-                <!-- <div class="col-md-4">
-                    <ng-select style="float: right; margin-top: 5px; font-size: 8px !important;" class="custom" [ngModelOptions]="{standalone: true}"
-                        [searchable]="false" placeholder="Please select" class="descsorting"
-                        (change)="FilterSearchDataAsceDesc($event)" [(ngModel)]='selectedSearchDataAsceDesc'>
-                        <ng-option [value]='0'>Sort by A-Z</ng-option>
-                        <ng-option [value]='1'>Sort by Z-A</ng-option>
-                    </ng-select>
-
-                    <ng-select style="margin-top: 5px; font-size: 8px !important;" [ngModelOptions]="{standalone: true}" [searchable]="false"
-                        placeholder="Please select" class="descsorting" (change)="FilterSearchData($event)"
-                        [(ngModel)]='selectedSearchData'>
-                        <ng-option [value]='0'>Debrief Date </ng-option>
-                        <ng-option [value]='1'>Location</ng-option>
-                        <ng-option [value]='2'>Tooling Cost</ng-option>
-                        <ng-option [value]='3'>Should Cost</ng-option>
-                    </ng-select>
-                </div> -->
             </div>
 
             <div class="row setOpacity" id="SearchFilters">
@@ -470,7 +452,9 @@
                     </div>
                     <div>
                         <input #Comparecheckbox class="form-check-input" type="checkbox" class="SearchCheckbox"
+
                             id="{{t.csHeaderId}}" (click)="getPartId(t)" title="Select for Compate" value="{{t.uniqueId}}">
+ 
                     </div>
                     <div>
                         <img src="../../../assets/PDFIcon.png" class="PDFIcon" title="Download PDF"

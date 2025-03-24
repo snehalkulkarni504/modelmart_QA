@@ -12,9 +12,13 @@ export class ContactComponent {
 
    constructor(public router: Router, private location:Location) { }
 
+//HERE I NEED TO COMMENT OUT
+  // toSupportPage(){
+  //   this.router.navigate(['/home/supportpage']);
+  // }
 
-  toSupportPage(){
-    this.router.navigate(['/home/supportpage']);
+  toSendMessagePage(){
+    this.router.navigate(['/home/sendmessage']);
   }
 
   openPDF() {

@@ -20,7 +20,7 @@ export class RequestFileUploadService {
   getSendRequest(): Observable<SendRequest[]> {
     return this.http.get<SendRequest[]>(this.apiUrl + 'getRequestID');
   }
-  
+
   fetchExcelDataColumns() {
     return this.http.get(this.apiUrl + 'getExcelDataColumns', {})
 
@@ -76,12 +76,12 @@ export class RequestFileUploadService {
   DeleteUploadedData(CSHeaderId: number): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}DeleteUploadData?CSHeaderId=${CSHeaderId}`, null);
   }
-  
-  AddUploadDataValidation(DebriefDate:string,Region:string,PartName:string,PartNumber:string){
+
+  AddUploadDataValidation(DebriefDate: string, Region: string, PartName: string, PartNumber: string) {
     return this.http.get<any[]>(this.apiUrl + `AddUploadDataValidation?DebriefDate=${DebriefDate}&Region=${Region}&PartName=${PartName}&PartNumber=${PartNumber}`);
   }
 
-  getBulkUpload(userId:any,modelTypesID:any): Observable<any[]> {
+  getBulkUpload(userId: any, modelTypesID: any): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl + `BulkUpload?userId=${userId}&modelTypesID=${modelTypesID}`);
   }
 
@@ -89,21 +89,41 @@ export class RequestFileUploadService {
   //   return this.http.post<any[]>(this.apiUrl + `UpdateLWHandPW?CSHeaderId=${CSHeaderId}&Length=${Length}&Width=${Width}&Height=${Height}&PartWeight=${PartWeight}`,null);
   // }
 
-  UpdateLWHandPW(data:SendRequest[]): Observable<any>{
-    return this.http.post(this.apiUrl + 'UpdateLWHandPW',data); 
+  UpdateLWHandPW(data: SendRequest[]): Observable<any> {
+    return this.http.post(this.apiUrl + 'UpdateLWHandPW', data);
   }
- 
+
   GetFilteredHopperData(excelData: any): Observable<ExcelData[]> {
     const params = new HttpParams({ fromObject: excelData });
     return this.http.get<ExcelData[]>(`${this.apiUrl}FetchHopperData`, { params });
   }
 
- ReadHoppercolumns(){
+  ReadHoppercolumns() {
     return this.http.get(this.apiUrl + 'ReadHopperColumns', {})
   }
 
-  getModelTypes(){
+  getModelTypes() {
     return this.http.get(this.apiUrl + 'getModelTypes', {})
   }
+
+  yellowsheetupload(data: any) {
+    return this.http.post<any>(this.apiUrl + 'yellowmodelupload', data);
+  }
+
+  yellowmodelfileupload(file: File[], id: any, selectedUniqueID: string, userId: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('id', id);
+    formData.append('uniqueID', selectedUniqueID);
+    formData.append('userId', userId);
+    for (const Dfile of file) {
+      formData.append('files', Dfile, Dfile.name);
+    }
+    return this.http.post<FormData>(`${this.apiUrl}yellowmodelfileupload`, formData);
+  }
+
+  yellowbulkupload(userid: any, modeltypeid: any): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl + `yellowmodelbulkupload?userid=${userid}&modeltypeid=${modeltypeid}`);
+  }
+
 
 }

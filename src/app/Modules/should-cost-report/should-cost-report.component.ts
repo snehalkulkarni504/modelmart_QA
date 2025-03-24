@@ -2,7 +2,7 @@ import { Component, } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { SaveMatetialCost, SaveMatetialCostDetails, SaveMatetialCostHeader } from 'src/app/Model/save-matetial-cost';
+import { SaveMatetialCost, SaveMatetialCostDetails, SaveMatetialCostHeader, SaveProcessDetails } from 'src/app/Model/save-matetial-cost';
 import { SearchService } from 'src/app/SharedServices/search.service';
 import { Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -48,6 +48,7 @@ export class ShouldCostReportComponent {
   //MaterialGridUpdated: any = []
   MaterialGridUpdated: SaveMatetialCostDetails[] = [];
   MatetialTierUpdate: SaveMatetialCostHeader[] = [];
+  SaveProcessDetails: SaveProcessDetails[] = [];
   saveMatetialCost: SaveMatetialCost[] = [];
   ForexDetails: any;
   AluminiumCastingGrade: any;
@@ -75,7 +76,7 @@ export class ShouldCostReportComponent {
     this.router.events.subscribe((event) => {
       window.scrollTo(0, 0)
     });
-    
+
     if (localStorage.getItem("userName") == null) {
       this.router.navigate(['/welcome']);
       return;
@@ -85,7 +86,7 @@ export class ShouldCostReportComponent {
 
     this.CSHeaderId = localStorage.getItem("ComapredId");
     this.GetTierCostData();
-  
+
   }
 
   async GetTierCostData() {
@@ -358,9 +359,19 @@ export class ShouldCostReportComponent {
       this.Non_TotalInLocal_Per = this.Non_TotalInLocal_Per + parseFloat(unitNon[i].value);
     }
 
-    this.Non_TotalInLocal = this.Non_TotalInLocal_Per;
 
-    this.TotalInLocal = this.Manu_TotalInLocal + this.Non_TotalInLocal;
+    this.Non_TotalInLocal = this.Non_TotalInLocal_Per;
+    var TarifT1;
+
+    const TarifUpdatedT1 = document.getElementById('TarifUpdatedT1') as any;
+    if (TarifUpdatedT1.value != "") {
+      TarifT1 = TarifUpdatedT1.value;
+    }
+    else {
+      TarifT1 = 0;
+    }
+
+    this.TotalInLocal = this.Manu_TotalInLocal + this.Non_TotalInLocal + parseFloat(TarifT1);
 
   }
 
@@ -508,81 +519,9 @@ export class ShouldCostReportComponent {
     this.findsumPercentT2();
   }
 
-  // findsumPercentT2() {
-  //   
-  //   this.Manu_TotalInLocal_Per = 0;
-  //   this.Non_TotalInLocal_Per = 0;
-
-  //   const unit = document.getElementsByClassName("form-control UpdateText disabled NotNon T2") as any;
-  //   const unitNon = document.getElementsByClassName("form-control UpdateText Notdisabled Non T2") as any;
-  //   const particular_perValue = document.getElementsByClassName("particular_perValueT2") as any;
-  //   const Enter_PerValue = document.getElementsByClassName("form-control percentText Non T2") as any;
-  //   const NonusdValueT2 = document.getElementsByClassName("text-end NonusdValueT2") as any;
-
-  //   // if (no == 1) {
-  //   for (let i = 0; i < unit.length; i++) {
-  //     if (unit[i].value == "") {
-  //       unit[i].value = 0;
-  //     }
-  //     this.Manu_TotalInLocal_Per = this.Manu_TotalInLocal_Per + parseFloat(unit[i].value);
-  //   }
-  //   this.Manu_TotalInLocalT2 = this.Manu_TotalInLocal_Per;
-  //   //  }
-  //   //else {
-  //   let tt = 0;
-  //   for (let i = 0; i < unitNon.length; i++) {
-  //     // if (unitNon[i].value == "") {
-  //     //   unitNon[i].value = 0;
-  //     // }
-  //     if (Enter_PerValue[i].value != '') {
-  //       tt = (Enter_PerValue[i].value / 100) * parseFloat(this.Manu_TotalInLocal_Per.toFixed(4));
-  //     }
-  //     else {
-  //       if (particular_perValue[i].children.length <= 1) {
-  //         tt = parseFloat(NonusdValueT2[i].innerText);
-  //       }
-  //       else if (particular_perValue[i].children[1] == undefined) {
-  //         tt = 0;
-  //       }
-  //       else {
-  //         tt = (particular_perValue[i].children[1].innerText / 100) * parseFloat(this.Manu_TotalInLocal_Per.toFixed(4));
-  //       }
-  //     }
-  //     unitNon[i].value = tt.toFixed(2);
-  //     this.Non_TotalInLocal_Per = this.Non_TotalInLocal_Per + parseFloat(unitNon[i].value);
-  //   }
-  //   this.Non_TotalInLocalT2 = this.Non_TotalInLocal_Per;
-  //   // }
-
-  //   this.TotalInLocalT2 = this.Manu_TotalInLocalT2 + this.Non_TotalInLocalT2;
-
-  //   
-  //   const updatedTier1Cost = document.getElementById('UpdateCost2') as any;
-  //   const updatedSrcapCost = document.getElementById('UpdateCost0') as any;
-  //   updatedTier1Cost.value = this.TotalInLocalT2.toFixed(2);
-
-  //   let updateMaterialCost_casting = 0;
-  //   let updateMaterialCost_existing_casting = 0;
-
-
-  //   if (this.IsCastingSheet) {
-  //     for (var i = 0; i < this.MaterialGridT2.length; i++) {
-  //       if (this.MaterialGridT2[i].supplyLevel == 'T1') {
-  //         updateMaterialCost_existing_casting = updateMaterialCost_existing_casting + parseFloat(this.MaterialGridT2[i].updateMaterialCostExisting);
-  //         updateMaterialCost_casting = updateMaterialCost_casting + parseFloat(this.MaterialGridT2[i].updateMaterialCost);
-  //       }
-  //     }
-
-  //     let tt = parseFloat(this.TierCostReportList[0].usdValue) - updateMaterialCost_existing_casting;
-  //     updatedSrcapCost.value = (tt + updateMaterialCost_casting).toFixed(2);
-  //   }
-
-  //   this.findsumPercent();
-
-  // }
 
   findsumPercentT2() {
-
+    debugger;
 
     this.Manu_TotalInLocal_Per = 0;
     this.Non_TotalInLocal_Per = 0;
@@ -632,7 +571,17 @@ export class ShouldCostReportComponent {
 
     this.Non_TotalInLocalT2 = this.Non_TotalInLocal_Per;
 
-    this.TotalInLocalT2 = this.Manu_TotalInLocalT2 + this.Non_TotalInLocalT2;
+    var TarifT2;
+
+    const TarifUpdatedT2 = document.getElementById('TarifUpdatedT2') as any;
+    if (TarifUpdatedT2.value != "") {
+      TarifT2 = TarifUpdatedT2.value;
+    }
+    else {
+      TarifT2 = 0;
+    }
+
+    this.TotalInLocalT2 = this.Manu_TotalInLocalT2 + this.Non_TotalInLocalT2 + parseFloat(TarifT2);
 
     const updatedTier1Cost = document.getElementById('UpdateCost2') as any;
     const updatedSrcapCost = document.getElementById('UpdateCost0') as any;
@@ -701,7 +650,7 @@ export class ShouldCostReportComponent {
   Notes3: any;
   Notes4: any;
   Notes5: any;
-  Notes6:any ;
+  Notes6: any;
 
   Direct_haeder1: any;
   Direct_haeder2: any;
@@ -747,7 +696,7 @@ export class ShouldCostReportComponent {
       this.Notes2 = 'Total direct Labour content in cost model ($)';
       this.Notes3 = 'Inflationary increase in Labour in %. If you are unsure of inflationary trends, reach out to COE or send the model for refresh.';
       this.Notes4 = 'This model was costed on ' + this.DebriefDate;
-      
+
     }
     else if (value.particular == "SGA") {
       this.ModelPopUpheaderLable = 'Selling, General & Administrative (SG&A)' + '¹';
@@ -820,7 +769,7 @@ export class ShouldCostReportComponent {
           this.ModelPopUp_usdValue_Updated = UpdateCost.value;
           UpdateCostNonPer_Popup.value = UpdateCostTD_per.value;
           this.Notes5 = '';
-          this.Notes6 = 'Labor cost may increase or decrease based on forex fluctuations.' ;
+          this.Notes6 = 'Labor cost may increase or decrease based on forex fluctuations.';
         }
         else {
           this.IsNotes = false;
@@ -921,7 +870,7 @@ export class ShouldCostReportComponent {
           this.ModelPopUp_usdValue_Updated = UpdateCostT2.value;
           UpdateCostNonPer_Popup.value = UpdateCostTD_per.value;
           this.Notes5 = '';
-          this.Notes6 = 'Labor cost may increase or decrease based on forex fluctuations.' ;
+          this.Notes6 = 'Labor cost may increase or decrease based on forex fluctuations.';
         }
         else {
           this.IsNotes = false;
@@ -1709,11 +1658,11 @@ export class ShouldCostReportComponent {
     else {
       updatedTextbox.value = this.DirectMaterialCostT1;
     }
-   
+
 
     this.findsumPercent();
-   
-     
+
+
   }
 
 
@@ -1853,8 +1802,8 @@ export class ShouldCostReportComponent {
         // let t_existing = this.TotalMaterialRate_Existing - Math.abs(this.TotalMaterialRate_Existing_casting);
         // let t_Updated = this.TotalMaterialRate_Update - Math.abs(this.TotalMaterialRate_Update_casting);
 
-        let t_existing = this.TotalMaterialRate_Existing  ;
-        let t_Updated = this.TotalMaterialRate_Update ;
+        let t_existing = this.TotalMaterialRate_Existing;
+        let t_Updated = this.TotalMaterialRate_Update;
 
         var num = parseFloat(this.DirectMaterialCostT2.replace(",", ""));
         let total = (num - t_existing);
@@ -1883,6 +1832,7 @@ export class ShouldCostReportComponent {
   }
 
   async GetReport() {
+    debugger;
 
     this.SpinnerService.show('spinner');
 
@@ -1953,6 +1903,31 @@ export class ShouldCostReportComponent {
         });
     }
 
+    for (const key in this.userAddedCostList1Update) {
+      this.SaveProcessDetails.push(
+        {
+          PartNumber: this.userAddedCostList1Update[key].partNumber,
+          ManufacturingProcessName: this.userAddedCostList1Update[key].manufacturingProcessName,
+          ManufacturingCost: this.userAddedCostList1Update[key].manufacturingCost,
+          UpdateManufacturingCost: this.userAddedCostList1Update[key].updatedCost,
+          SupplyLevel: this.userAddedCostList1Update[key].supplyLevel,
+          ProcessStatus: this.userAddedCostList1Update[key].processStatus
+        }
+      )
+    }
+
+    for (const key in this.userAddedCostList1UpdateT2) {
+      this.SaveProcessDetails.push(
+        {
+          PartNumber: this.userAddedCostList1UpdateT2[key].partNumber,
+          ManufacturingProcessName: this.userAddedCostList1UpdateT2[key].manufacturingProcessName,
+          ManufacturingCost: this.userAddedCostList1UpdateT2[key].manufacturingCost,
+          UpdateManufacturingCost: this.userAddedCostList1UpdateT2[key].updatedCost,
+          SupplyLevel: this.userAddedCostList1UpdateT2[key].supplyLevel,
+          ProcessStatus: this.userAddedCostList1UpdateT2[key].processStatus
+        }
+      )
+    }
 
     this.GetUpdateReocrdForTier('T1');
     //if (this.T2count) {
@@ -1962,12 +1937,13 @@ export class ShouldCostReportComponent {
     this.saveMatetialCost.push({
       "SaveMatetialCostHeader": this.MatetialTierUpdate,
       "SaveMatetialCostDetails": this.MaterialGridUpdated,
+      "SaveProcessDetails": this.SaveProcessDetails
     });
 
 
     const data = await this.searchservice.SaveMatetialCost(this.saveMatetialCost, this.userId, this.IsCastingSheet).toPromise();
 
-    if (data == 0 ) {
+    if (data == 0) {
       this.SpinnerService.hide('spinner');
       alert("Should Cost Not Updated !!!");
       return
@@ -1994,153 +1970,9 @@ export class ShouldCostReportComponent {
 
   GetUpdateReocrdForTier(t: string) {
 
-
-    // this.obj.DirectMaterialCost_USD = '';
-    // this.obj.BoughtoutFinishCost_USD = '';
-    // this.obj.Tier2Cost = '';
-    // this.obj.RoughPartCost = '';
-    // this.obj.CastingCost = '';
-    // this.obj.ForgingCost = '';
-    // this.obj.DirectLaborCost_USD = '';
-    // this.obj.ProcessOverheadCost_USD = '';
-    // this.obj.SurfaceTreatmentsCost_USD = '';
-    // this.obj.SGA_USD = '';
-    // this.obj.Profit_USD = '';
-    // this.obj.Packaging_USD = '';
-    // this.obj.FreightLogistics_USD = '';
-    // this.obj.HandlingCharges_USD = '';
-    // this.obj.ICC_USD = '';
-    // this.obj.Rejection_USD = '';
-    // this.obj.TotalCost = '';
-
-    // if (t == 'T1') {
-    //   this.TierCostReportTextT1 = document.getElementsByClassName("TierCostReportTextT1") as any;
-
-    //   this.UpdateRate = document.getElementsByClassName("form-control UpdateText disabled NotNon T1") as any;
-    //   this.updateRateNon = document.getElementsByClassName("form-control UpdateText Notdisabled Non T1") as any;
-    // }
-    // else {
-    //   this.UpdateRate = document.getElementsByClassName("form-control UpdateText disabled NotNon T2") as any;
-    //   this.updateRateNon = document.getElementsByClassName("form-control UpdateText Notdisabled Non T2") as any;
-    // }
-
-    // if (this.UpdateRate.length <= 0) {
-    //   return
-    // }
-
-
-    // if (t == 'T1') {
-    //   this.obj.DirectMaterialCost_USD = this.UpdateRate[0].value;
-    //   this.obj.BoughtoutFinishCost_USD = this.UpdateRate[1].value;
-
-    //   var tt = this.TierCostReportTextT1[2].textContent;
-
-    //   switch (tt.trim()) {
-    //     case 'Tier 2 Cost':
-    //       this.obj.Tier2Cost = this.UpdateRate[2].value;
-    //       break;
-    //     case 'Rough part cost':
-    //       this.obj.RoughPartCost = this.UpdateRate[2].value;
-    //       break;
-    //     case 'Casting Cost':
-    //       this.obj.CastingCost = this.UpdateRate[2].value;
-    //       break;
-    //     case 'Forging Cost':
-    //       this.obj.ForgingCost = this.UpdateRate[2].value;
-    //       break;
-    //     default:
-    //       this.obj.Tier2Cost = this.UpdateRate[2].value;
-    //       break;
-    //   }
-
-    //   this.obj.DirectLaborCost_USD = this.UpdateRate[3].value;
-    //   this.obj.ProcessOverheadCost_USD = this.UpdateRate[4].value;
-    //   this.obj.SurfaceTreatmentsCost_USD = this.UpdateRate[5].value;
-    // }
-    // else {
-    //   this.obj.DirectMaterialCost_USD = this.UpdateRate[0].value;
-    //   this.obj.BoughtoutFinishCost_USD = this.UpdateRate[1].value;
-    //   this.obj.Tier2Cost = '0'
-    //   this.obj.DirectLaborCost_USD = this.UpdateRate[3].value;
-    //   this.obj.ProcessOverheadCost_USD = this.UpdateRate[4].value;
-    //   this.obj.SurfaceTreatmentsCost_USD = this.UpdateRate[5].value;
-    // }
-
-    // if (t == 'T1') {
-    //   this.obj.Version = "T1";
-    // }
-    // else {
-    //   this.obj.Version = "T2";
-    // }
-
-    // for (var i = 0; i < this.updateRateNon.length; i++) {
-
-    //   switch (this.updateRateNon[i].name) {
-    //     case 'SGA':
-    //       this.obj.SGA_USD = this.updateRateNon[i].value;
-    //       break;
-    //     case 'Profit':
-    //       this.obj.Profit_USD = this.updateRateNon[i].value;
-    //       break;
-    //     case 'Packaging':
-    //       this.obj.Packaging_USD = this.updateRateNon[i].value;
-    //       break;
-    //     case 'Freight Logistics':
-    //       this.obj.FreightLogistics_USD = this.updateRateNon[i].value;
-    //       break;
-    //     case 'Directed Buy Cost':
-    //       this.obj.DirectedBuyCost_USD = this.updateRateNon[i].value;
-    //       break;
-    //     case 'Handling Charges':
-    //       this.obj.HandlingCharges_USD = this.updateRateNon[i].value;
-    //       break;
-    //     case 'ICC':
-    //       this.obj.ICC_USD = this.updateRateNon[i].value;
-    //       break;
-    //     case 'Rejection':
-    //       this.obj.Rejection_USD = this.updateRateNon[i].value;
-    //       break;
-    //   }
-
-
-    // }
-    // if (t == 'T1') {
-    //   this.obj.TotalCost = this.TotalInLocal.toFixed(3);
-    // }
-    // else {
-    //   this.obj.TotalCost = this.TotalInLocalT2.toFixed(3);
-    // }
-
-    // this.MatetialTierUpdate.push(
-    //   {
-    //     CSHeaderId: this.CSHeaderId,
-    //     DirectMaterialCost_USD: parseFloat(this.obj.DirectMaterialCost_USD),
-    //     BoughtoutFinishCost_USD: parseFloat(this.obj.BoughtoutFinishCost_USD),
-
-    //     Tier2Cost: parseFloat(this.obj.Tier2Cost),
-    //     RoughPartCost_USD: parseFloat(this.obj.RoughPartCost),
-    //     CastingCost: parseFloat(this.obj.CastingCost),
-    //     ForgingCost: parseFloat(this.obj.ForgingCost),
-
-    //     DirectLaborCost_USD: parseFloat(this.obj.DirectLaborCost_USD),
-    //     ProcessOverheadCost_USD: parseFloat(this.obj.ProcessOverheadCost_USD),
-    //     SurfaceTreatmentsCost_USD: parseFloat(this.obj.SurfaceTreatmentsCost_USD),
-    //     SupplyLevel: this.obj.Version,
-    //     SGA_USD: parseFloat(this.obj.SGA_USD),
-    //     Profit_USD: parseFloat(this.obj.Profit_USD),
-    //     Packaging_USD: parseFloat(this.obj.Packaging_USD),
-    //     FreightLogistics_USD: parseFloat(this.obj.FreightLogistics_USD),
-    //     HandlingCharges_USD: parseFloat(this.obj.HandlingCharges_USD),
-    //     ICC_USD: parseFloat(this.obj.ICC_USD),
-    //     Rejection_USD: parseFloat(this.obj.Rejection_USD),
-    //     TotalCost: parseFloat(this.obj.TotalCost),
-    //     CreatedBy: 1
-
-    //   });
-
     // ---------------------- new code start ------------------------------
 
-    //debugger;;
+    debugger;;
 
 
     if (t == 'T1') {
@@ -2151,6 +1983,16 @@ export class ShouldCostReportComponent {
       this.updateRateNon = document.getElementsByClassName("form-control UpdateText Notdisabled Non T1") as any;
       this.existingNonusdValue = document.getElementsByClassName('NonusdValueT1') as any;
       this.percent_updated = document.getElementsByClassName('form-control percentText Non T1') as any;
+
+      var TarifT1;
+      const TarifUpdatedT1 = document.getElementById('TarifUpdatedT1') as any;
+      if (TarifUpdatedT1.value != "") {
+        TarifT1 = TarifUpdatedT1.value;
+      }
+      else {
+        TarifT1 = 0;
+      }
+
 
       for (var i = 0; i < this.TierCostReportTextT1.length; i++) {
         for (var j = i; j < this.UpdateRate.length; j++) {
@@ -2202,6 +2044,17 @@ export class ShouldCostReportComponent {
       this.MatetialTierUpdate.push(
         {
           CSHeaderId: this.CSHeaderId,
+          header: 'Tariff Cost',
+          value_existing: 0,
+          value_updated: TarifT1,
+          Cost_Spec: 'TR',
+          Version: 'T1',
+          percent_updated: 0,
+        });
+
+      this.MatetialTierUpdate.push(
+        {
+          CSHeaderId: this.CSHeaderId,
           header: 'Part Cost',
           value_existing: this.TotalInUSD,
           value_updated: this.TotalInLocal,
@@ -2209,6 +2062,7 @@ export class ShouldCostReportComponent {
           Version: 'T1',
           percent_updated: 0,
         });
+
 
     }
 
@@ -2271,6 +2125,17 @@ export class ShouldCostReportComponent {
         }
       }
 
+      this.MatetialTierUpdate.push(
+        {
+          CSHeaderId: this.CSHeaderId,
+          header: 'Tariff Cost',
+          value_existing: 0,
+          value_updated: TarifT1,
+          Cost_Spec: 'TR',
+          Version: 'T2',
+          percent_updated: 0,
+        });
+
       if (this.TierCostReportTextT1.length > 0) {
         this.MatetialTierUpdate.push(
           {
@@ -2303,5 +2168,376 @@ export class ShouldCostReportComponent {
   backToPreviousPage() {
     this.location.back();
   }
+
+  // ---------------------- mfg process ------------------------------
+
+  totalInitialCost: number = 0;
+  Cal_totalInitialCost: number = 0;
+  Cal_totalInitialCostT2: number = 0;
+  totalInitialCost_T2: number = 0;
+  costDifference: number = 0;
+  costDifferenceT2: number = 0;
+  // isModalOpen = false;
+  userAddedCostList: any = [];
+  userAddedCostList1Update: any = [];
+  userAddedCostList1UpdateT2: any = [];
+  // isModal1Open: boolean = false;
+  // isTier1Modal: boolean = true;
+  totalUpdatedCost: number = 0;
+  newPart: any;
+  newProcess: any;
+  newUpdatedCost: any;
+  costDifference1: number = 0;
+  costDifference_T2: number = 0;
+  initialCostList: any[] = [];
+  togglestates: boolean[] = [];
+  backupUserAddedCostList: any[] = [];
+  previousUserAddedCostList: any[] = [];
+
+  display_process = "none";
+  TarifValueT1: number = 0;
+  IsHiddenT1_process = true;
+
+
+  async openModalProcess(Supplierlevel: any) {
+    debugger;
+
+    this.display_process = "block";
+    this.ModelPopUpheaderLable = "User Added Cost" + '¹';
+
+    this.userAddedCostList = [];
+    try {
+
+      if (Supplierlevel == 'T1') {
+        this.IsHiddenT1_process = true;
+        if (this.userAddedCostList1Update.length > 0) {
+
+          this.userAddedCostList = this.userAddedCostList1Update;
+          this.togglestates = this.userAddedCostList.map((item: { processStatus: any; }) => item.processStatus ?? true);
+
+          console.log(this.userAddedCostList);
+          console.log(this.userAddedCostList1Update);
+
+          this.calculateTotal();
+
+          setTimeout(() => {
+            for (var i = 0; i < this.userAddedCostList.length; i++) {
+              const txt = document.getElementById("PopUpProcess" + i) as any;
+              if (this.userAddedCostList[i].csHeaderId > 0) {
+                if (!this.userAddedCostList[i].processStatus) {
+                  this.userAddedCostList[i].updatedCost = 0;
+                  this.userAddedCostList[i].processStatus = 0;
+                  txt.readOnly = true;
+                  txt.style.backgroundColor = "#8080801a";
+                } else {
+                  this.userAddedCostList[i].updatedCost = this.userAddedCostList[i].manufacturingCost;
+                  this.userAddedCostList[i].processStatus = 1;
+                  txt.readOnly = false;
+                  txt.style.backgroundColor = "#fff";
+                }
+              }
+
+            }
+          }, 150);
+
+          return;
+        }
+      }
+      else {
+        this.IsHiddenT1_process = false;
+        if (this.userAddedCostList1UpdateT2.length > 0) {
+
+          this.userAddedCostList = this.userAddedCostList1UpdateT2;
+          this.togglestates = this.userAddedCostList.map((item: { processStatus: any; }) => item.processStatus ?? true);
+          console.log(this.userAddedCostList);
+          console.log(this.userAddedCostList1UpdateT2);
+          this.calculateTotal();
+
+          setTimeout(() => {
+            for (var i = 0; i < this.userAddedCostList.length; i++) {
+              const txt = document.getElementById("PopUpProcess" + i) as any;
+              if (this.userAddedCostList[i].csHeaderId > 0) {
+                if (!this.userAddedCostList[i].processStatus && this.userAddedCostList[i].csHeaderId > 0) {
+                  this.userAddedCostList[i].updatedCost = 0;
+                  this.userAddedCostList[i].processStatus = 0;
+                  txt.readOnly = true;
+                  txt.style.backgroundColor = "#8080801a";
+                } else {
+                  this.userAddedCostList[i].updatedCost = this.userAddedCostList[i].manufacturingCost;
+                  this.userAddedCostList[i].processStatus = 1;
+                  txt.readOnly = false;
+                  txt.style.backgroundColor = "#fff";
+                }
+              }
+
+            }
+          }, 150);
+
+          return;
+        }
+      }
+
+      this.userAddedCostList = [];
+      const filteredSubPartDetails = await this.searchservice.GetSubpartProcessData(Supplierlevel, this.CSHeaderId).toPromise();
+      this.userAddedCostList = filteredSubPartDetails.map((item: { manufacturingCost: any }) => ({
+        ...item,
+        updatedCost: item.manufacturingCost,
+      }));
+      this.togglestates = this.userAddedCostList.map(() => true);
+    }
+    catch (error: any) {
+      console.error('Error fetching data:', error);
+    }
+
+    this.calculateTotal();
+  }
+
+
+  onCloseHandled_ProcessPopup() {
+    this.display_process = "none";
+  }
+
+
+
+  toggleCost(index: number) {
+    debugger;
+    this.togglestates[index] = !this.togglestates[index];
+    //  this.userAddedCostList[index].isEnabled = !this.userAddedCostList[index];
+    //PopUpProcess
+
+    const txt = document.getElementById("PopUpProcess" + index) as any;
+
+    if (!this.togglestates[index]) {
+      this.userAddedCostList[index].updatedCost = 0;
+      this.userAddedCostList[index].processStatus = 0;
+      txt.readOnly = true;
+      txt.style.backgroundColor = "#8080801a";
+    } else {
+      this.userAddedCostList[index].updatedCost = this.userAddedCostList[index].manufacturingCost;
+      this.userAddedCostList[index].processStatus = 1;
+      txt.readOnly = false;
+      txt.style.backgroundColor = "#fff";
+    }
+
+    localStorage.setItem('toggleStates', JSON.stringify(this.togglestates));
+    this.previousUserAddedCostList = JSON.parse(
+      JSON.stringify(this.userAddedCostList)
+    );
+
+    this.calculateTotal();
+  }
+
+
+  isEnabled(index: number): boolean {
+    return this.togglestates[index] ?? false;
+  }
+
+  updateRowCost(index: number, event: any, item: any) {
+    debugger;
+
+    const value = event.target.value ? parseFloat(event.target.value) : 0;
+    this.userAddedCostList[index].updatedCost = value;
+    // this.previousUserAddedCostList = JSON.parse(
+    //   JSON.stringify(this.userAddedCostList)
+    // );
+    this.calculateTotal();
+
+  }
+
+
+  addNewProcess() {
+    debugger;
+
+    let inputField = document.getElementById("newPart") as any;
+    this.newPart = inputField.value;
+
+    let inputField2 = document.getElementById("newProcess") as any;
+    this.newProcess = inputField2.value;
+
+    let inputField3 = document.getElementById("newUpdatedCost") as any;
+    this.newUpdatedCost = inputField3.value;
+
+    if (inputField.value == "") {
+      this.toastr.warning("Please enter Part Number");
+      return;
+    }
+    if (inputField2.value == "") {
+      this.toastr.warning("Please enter Process Name");
+      return;
+    }
+    if (inputField3.value == "") {
+      this.toastr.warning("Please enter Cost");
+      return;
+    }
+
+    console.log(this.newPart, this.newProcess, this.newUpdatedCost);
+
+    const data = {
+      csHeaderId: 0,
+      manufacturingCost: 0,
+      manufacturingProcessName: this.newProcess,
+      partNumber: this.newPart,
+      supplyLevel: 'T1',
+      updatedCost: Number(this.newUpdatedCost)
+    };
+
+    this.userAddedCostList.push(data);
+
+    this.calculateTotal();
+
+    inputField.value = '';
+    inputField2.value = '';
+    inputField3.value = null;
+
+    const box = document.getElementById("ProcessPopup") as any;
+    box.style.display = "none";
+
+  }
+
+
+  saveUserAddedCost(supplyvalue: any) {
+    debugger;
+    console.log('Saving User Added Costs:', this.userAddedCostList);
+
+    if (supplyvalue == 'T1') {
+      this.userAddedCostList1Update = [];
+
+      for (const key in this.userAddedCostList) {
+        var ProcessStatus;
+        if (this.userAddedCostList[key].csHeaderId == 0) {
+          ProcessStatus = 2;
+        }
+        else {
+          ProcessStatus = this.userAddedCostList[key].processStatus
+        }
+
+        this.userAddedCostList1Update.push(
+          {
+            'csHeaderId': this.userAddedCostList[key].csHeaderId,
+            'partNumber': this.userAddedCostList[key].partNumber,
+            'manufacturingProcessName': this.userAddedCostList[key].manufacturingProcessName,
+            'manufacturingCost': this.userAddedCostList[key].manufacturingCost,
+            'updatedCost': this.userAddedCostList[key].updatedCost,
+            'supplyLevel': supplyvalue,
+            'processStatus': ProcessStatus
+          });
+      }
+
+      // localStorage.setItem('savedUserAddedCostList', JSON.stringify(this.userAddedCostList));
+
+      var manufacturingCost = this.userAddedCostList.reduce((sum: any, item: { manufacturingCost: any; }) => sum + (item.manufacturingCost || 0), 0);
+      var updatedCost = this.userAddedCostList.reduce((sum: any, item: { updatedCost: any; }) => sum + (item.updatedCost || 0), 0);
+
+      this.costDifference = parseFloat(updatedCost) - parseFloat(manufacturingCost);
+      this.Cal_totalInitialCost = manufacturingCost;
+
+      const UpdateCostUserAddedT1 = document.getElementById('UpdateCostUserAddedT1') as any;
+      if (UpdateCostUserAddedT1) {
+        UpdateCostUserAddedT1.value = this.costDifference.toFixed(2);
+      }
+
+      this.findsumPercent();
+
+    }
+    else {
+      this.userAddedCostList1UpdateT2 = [];
+
+      for (const key in this.userAddedCostList) {
+        var ProcessStatus;
+        if (this.userAddedCostList[key].csHeaderId == 0) {
+          ProcessStatus = 2;
+        }
+        else {
+          ProcessStatus = this.userAddedCostList[key].processStatus
+        }
+
+        this.userAddedCostList1UpdateT2.push(
+          {
+            'csHeaderId': this.userAddedCostList[key].csHeaderId,
+            'partNumber': this.userAddedCostList[key].partNumber,
+            'manufacturingProcessName': this.userAddedCostList[key].manufacturingProcessName,
+            'manufacturingCost': this.userAddedCostList[key].manufacturingCost,
+            'updatedCost': this.userAddedCostList[key].updatedCost,
+            'supplyLevel': supplyvalue,
+            'processStatus': ProcessStatus
+          });
+      }
+
+      // localStorage.setItem('savedUserAddedCostList', JSON.stringify(this.userAddedCostList));
+
+      var manufacturingCost = this.userAddedCostList.reduce((sum: any, item: { manufacturingCost: any; }) => sum + (item.manufacturingCost || 0), 0);
+      var updatedCost = this.userAddedCostList.reduce((sum: any, item: { updatedCost: any; }) => sum + (item.updatedCost || 0), 0);
+
+      this.costDifferenceT2 = parseFloat(updatedCost) - parseFloat(manufacturingCost);
+      this.Cal_totalInitialCostT2 = manufacturingCost;
+
+      const UpdateCostUserAddedT2 = document.getElementById('UpdateCostUserAddedT2') as any;
+      if (UpdateCostUserAddedT2) {
+        UpdateCostUserAddedT2.value = this.costDifferenceT2.toFixed(2);
+      }
+
+      this.findsumPercentT2();
+
+    }
+
+
+    //this.backupUserAddedCostList = JSON.parse(JSON.stringify(this.userAddedCostList));
+
+    this.onCloseHandled_ProcessPopup();
+
+  }
+
+
+  calculateTotal() {
+    debugger;
+
+    this.totalInitialCost = this.userAddedCostList.reduce(
+      (sum: any, item: { manufacturingCost: any; }) => sum + (item.manufacturingCost || 0),
+      0
+    );
+
+
+    this.totalUpdatedCost = this.userAddedCostList
+      .filter((_: any, i: number) => this.isEnabled(i)) // Only sum enabled items
+      .reduce((sum: any, item: { updatedCost: any; }) => sum + (item.updatedCost || 0), 0);
+
+    this.totalUpdatedCost = this.userAddedCostList
+      .reduce((sum: any, item: { updatedCost: any; }) => sum + (item.updatedCost || 0), 0);
+
+    this.costDifference1 = this.totalUpdatedCost - this.totalInitialCost;
+
+  }
+
+  removeAddedProcess(item: any) {
+
+    this.userAddedCostList.splice(item, 1);
+    this.calculateTotal();
+
+  }
+
+  ShowNewProcessPopup() {
+    const box = document.getElementById("ProcessPopup") as any;
+    box.style.display = "flex";
+
+  }
+
+  closeaddNewProcess() {
+    const box = document.getElementById("ProcessPopup") as any;
+    box.style.display = "none";
+  }
+
+
+  updateTotalCost(supplyLevel: any) {
+    debugger;
+    if (supplyLevel == 'T1') {
+      this.findsumPercent();
+    }
+    else {
+      this.findsumPercentT2();
+    }
+
+  }
+
+
 
 }

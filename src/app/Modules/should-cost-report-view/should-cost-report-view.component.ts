@@ -602,7 +602,7 @@ export class ShouldCostReportViewComponent {
 
       doc.addPage();
       /// header
-      const headerlogo1 = '../../../assets/welcome/modelmartsliderlogo.jpg';
+      const headerlogo1 = '../../../assets/welcome/Model Mart_Final Logo_130325.png';
       doc.addImage(headerlogo1, 2, 0, 38, 25);
       const headerlogo2 = '../../../assets/newCumminslogo.jpg';
       doc.addImage(headerlogo2, 185, 2, 24, 22);
@@ -653,10 +653,16 @@ export class ShouldCostReportViewComponent {
             margin: { left: data.cell.x + data.cell.padding('left') - 1 },
             didParseCell: function (data) {
               var rows = data.table.body;
-
-              if (data.row.index == 6 || data.row.index === rows.length - 1) {
+              debugger;
+              // if (data.row.index == 6 || data.row.index === rows.length - 1) {
+              //   data.cell.styles.fillColor = [217, 217, 217];
+              // }
+              
+              if (data.row.index == 7 || data.row.index === rows.length - 1) {
                 data.cell.styles.fillColor = [217, 217, 217];
               }
+
+              
               data.table.head[0].cells[0].styles.fillColor = [217, 217, 217];
             },
             willDrawCell: function (data: any) {
@@ -693,9 +699,13 @@ export class ShouldCostReportViewComponent {
             margin: { left: data.cell.x + data.cell.padding('left') },
             didParseCell: function (data: any) {
               var rows = data.table.body;
-              if (data.row.index == 6 || data.row.index === rows.length - 1) {
+              // if (data.row.index == 6 || data.row.index === rows.length - 1) {
+              //   data.cell.styles.fillColor = [217, 217, 217];
+              // }
+              if (data.row.index == 7 || data.row.index === rows.length - 1) {
                 data.cell.styles.fillColor = [217, 217, 217];
               }
+
               data.table.head[0].cells[0].styles.fillColor = [217, 217, 217];
               if (data.cell.section === 'body') {
                 debugger;

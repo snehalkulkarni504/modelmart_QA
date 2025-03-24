@@ -54,13 +54,26 @@ import { ForexreportComponent } from './Modules/Report/forexreport/forexreport.c
 import { UserhistoryComponent } from './Modules/Report/userhistory/userhistory.component';
 import { ShouldCostUserHistoryComponent } from './Modules/Report/should-cost-user-history/should-cost-user-history.component';
 import { FrequentlyusedmaterialgradeComponent } from './Modules/Report/frequentlyusedmaterialgrade/frequentlyusedmaterialgrade.component';
-import { NgApexchartsModule } from 'ng-apexcharts';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { MaintenanceComponent } from './home/maintenance/maintenance.component';
 import { ComparisonnewComponent } from './Modules/comparisonnew/comparisonnew.component';
 import { CostReductionComponent } from './Modules/cost-reduction/cost-reduction.component';
 import { HousingflywheelComponent } from './Modules/housingflywheel/housingflywheel.component';
 import { CartdetailsComponent } from './Modules/cartdetails/cartdetails.component';
+
+
+// import { SendMessageComponent } from './Modules/contact/send-message/send-message.component';
+//import { UserAuditComponent } from './Modules/user-audit/user-audit.component';
+import { TabsComponent } from './Modules/tabs/tabs.component';
+import { UserAnalyticsComponent } from './Modules/Report/user-analytics/user-analytics.component';
+import { MatTabsModule } from '@angular/material/tabs';
+ 
+import { SendMessageComponent } from './Modules/contact/send-message/send-message.component';
+import { CartdetailsComponent } from './Modules/cartdetails/cartdetails.component';
+import { FeedbackComponent } from './Modules/contact/feedback/feedback.component';
+import { FeedbackhistoryComponent } from './Modules/Report/feedbackhistory/feedbackhistory.component';
+import { WelcomeuserComponent } from './home/welcomeuser/welcomeuser.component';
+import { DesignToCostComponent } from "./Modules/should-cost-gen/design-to-cost/design-to-cost.component";
 
 
 @NgModule({
@@ -108,7 +121,17 @@ import { CartdetailsComponent } from './Modules/cartdetails/cartdetails.componen
     ComparisonnewComponent,
     CostReductionComponent,
     HousingflywheelComponent,
+ 
     CartdetailsComponent
+ 
+    TabsComponent,
+    UserAnalyticsComponent,
+    SendMessageComponent,
+    CartdetailsComponent,
+    FeedbackComponent,
+    FeedbackhistoryComponent,
+    WelcomeuserComponent
+ 
   ],
   imports: [
     TreeModule,
@@ -120,7 +143,7 @@ import { CartdetailsComponent } from './Modules/cartdetails/cartdetails.componen
     OrganizationChartModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
-      timeOut: 3500
+        timeOut: 3500
     }),
     TreeviewModule.forRoot(),
     NgxPrintModule,
@@ -129,9 +152,13 @@ import { CartdetailsComponent } from './Modules/cartdetails/cartdetails.componen
     NgxPaginationModule,
     NgbModule,
     NgIdleKeepaliveModule,
-    NgApexchartsModule,
-    CanvasJSAngularChartsModule
-  ],
+    CanvasJSAngularChartsModule,
+    MatTabsModule, BrowserModule,
+    BrowserAnimationsModule,
+    CanvasJSAngularChartsModule,
+    DesignToCostComponent
+],
+  
   providers: [
     {
       provide: LocationStrategy,

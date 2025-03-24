@@ -6,8 +6,11 @@ import { environment } from 'src/environments/environments';
 import { SearchFilters } from '../Model/SearchFilter';
 import { UpdateRequest, UpdateRequestbyAdmin } from '../Model/update-request';
 import { EmailForRequestUpdate } from '../Model/email-for-request-update';
+ 
 import { Cartlist } from '../Model/cartlist';
-
+ 
+import { compareIds } from '../Model/CompareIds';
+ 
 @Injectable({
   providedIn: 'root'
 })
@@ -77,8 +80,8 @@ export class SearchService {
     return this.httpClient.get<any[]>(this.apiUrl + `getCompardata?ids=${ids}`);
   }
 
-  getComparisonDataNew(ids: any): Observable<any> {
-    return this.httpClient.get<any[]>(this.apiUrl + `getCompardatanew?ids=${ids}`);
+  getComparisonDataNew(ids: compareIds[]): Observable<any> {
+    return this.httpClient.post(this.apiUrl + "getCompardatanew",ids);
   }
 
   getComparisonDataNewTier2(ids: any): Observable<any> {
@@ -128,6 +131,7 @@ export class SearchService {
     return this.httpClient.post(this.apiUrl + "SaveMatetialCost?userId=" + userId + "&IsCastingSheet=" + IsCastingSheet, saveMatetialCost)
   }
 
+ 
 ////Post method for save to cart
   SaveToCart(userId:any,uniqueId:any,CartName:any,ScReportId:any): Observable<any> {
     return this.httpClient.post(this.apiUrl + "SaveToCart?userId="+userId+"&uniqueId=" +uniqueId+ "&CartName=" +CartName+ "&SCReportId="+ScReportId, '')
@@ -144,7 +148,7 @@ export class SearchService {
     return this.httpClient.get<any>(this.apiUrl+`GetCartName?UserId=${UserId}`);
   }
 
-
+ 
   GetSourcingManagerReport(id: number, SM_Id: number, IsCastingSheet: any): Observable<any> {
     return this.httpClient.get<any[]>(this.apiUrl + `GetSourcingManagerReport?id=${id}&SM_Id=${SM_Id}&IsCastingSheet=${IsCastingSheet}`);
   }
@@ -177,7 +181,7 @@ export class SearchService {
     }
     return this.httpClient.put(this.apiUrl + "UpdateShouldCostRequest", formData);
   }
-
+ 
   UpdateBomFilter(updatedRow:any,cartname:any,createdby:any): Observable<any> {
     
     return this.httpClient.post(this.apiUrl + `UpdateBomFilter?cartname=${cartname}&createdby=${createdby}`, updatedRow); 
@@ -203,8 +207,35 @@ export class SearchService {
   //   for (const Dfile of file) {
   //     formData.append('files', Dfile, Dfile.name);
   //   }
+ 
+  SearchSimulated(userId: any): Observable<any> {
+    return this.httpClient.get<any[]>(this.apiUrl + `GetSearchSimulated?userId=${userId}`);
+  }
+ 
+  GetSubpartProcessData(Supplierlevel: string, CSHeaderId: string): Observable<any> {
+    return this.httpClient.get<any[]>(this.apiUrl + `GetSubpartProcessData?CSHeaderId=${CSHeaderId}&SupplyLevel=${Supplierlevel}`);
+  }
 
-  //   return this.httpClient.post<FormData>(this.apiUrl + `SendShouldCostRequest`, formData);
-  // }
+  GetDesignToCostDetails(Program: any): Observable<any> {
+    console.log("we are here");
+    return this.httpClient.get<any[]>(this.apiUrl +`GetDesignToCostDetails/${Program}`);
+  }
+ 
+  GetDesignToCostPart(PartNumber: any): Observable<any> {
+    console.log("we are here");
+    return this.httpClient.get<any[]>(this.apiUrl +`GetDesignToCostPart/${PartNumber}`);
+  }
+ 
+  GetDesignToCostNoun(NounName: any): Observable<any> {
+    console.log("we are here");
+    return this.httpClient.get<any[]>(this.apiUrl +`GetDesignToCostNoun/${NounName}`);
+  }
+ 
+  GetDesignToCostNounProgram(NounName: any, Program: any): Observable<any> {
+    console.log("we are here");
+    return this.httpClient.get<any[]>(this.apiUrl +`GetDesignToCostNounProgram/${NounName}/${Program}`);
+  }
+ 
+  
 
 }

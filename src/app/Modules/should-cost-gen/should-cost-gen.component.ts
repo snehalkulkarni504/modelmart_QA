@@ -1,4 +1,3 @@
-import { color } from 'html2canvas/dist/types/css/types/color';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
@@ -6,32 +5,8 @@ import { SearchService } from 'src/app/SharedServices/search.service';
 import { Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { ChartComponent } from "ng-apexcharts";
-
-import {
-  ApexAxisChartSeries,
-  ApexDataLabels,
-  ApexPlotOptions,
-  ApexYAxis,
-  ApexTitleSubtitle,
-  ApexXAxis,
-  ApexFill,
-  ApexChart,
-} from "ng-apexcharts";
 import { environment } from 'src/environments/environments';
-
-export type ChartOptions = {
-  series: ApexAxisChartSeries;
-  chart: ApexChart;
-  dataLabels: ApexDataLabels;
-  plotOptions: ApexPlotOptions;
-  yaxis: ApexYAxis;
-  xaxis: ApexXAxis;
-  fill: ApexFill;
-  title: ApexTitleSubtitle;
-};
-
-
+ 
 export interface Piedata {
   y: number;
   name: string;
@@ -45,12 +20,8 @@ export interface Piedata {
 })
 export class ShouldCostGenComponent implements OnInit {
 
-  @ViewChild("chart") chart!: ChartComponent;
-  public chartOptions!: Partial<ChartOptions>;
-
   imgName: any;
-
-
+  activeTab: string = 'tab1'; // Default active tab
   //private datePipe: DatePipe
   constructor(public searchservice: SearchService,
     public router: Router, private route: ActivatedRoute, private location: Location, private SpinnerService: NgxSpinnerService, public toastr: ToastrService) {
@@ -60,8 +31,7 @@ export class ShouldCostGenComponent implements OnInit {
     // });
 
   }
-  showError2: boolean = false;
-  showError1: boolean = false;
+
   ComapredId: any;
   ShouldeCostData: any = [];
   shouldCostBreakdownList: any = [];
@@ -104,6 +74,7 @@ export class ShouldCostGenComponent implements OnInit {
   PartName: any; IncoTerms: any; Forex: any; BatchSize: any; ForexRegion: any; DebriefDateFormated: any; UniqueId: any;
   ToolingCost: any;
   AnnualVolume: any;
+  EngineDisplacement:any;
   RoleId: any;
   fvOnly: any;
   ShouldCostModeller: any; ToolingCostModeller: any;
@@ -117,24 +88,8 @@ export class ShouldCostGenComponent implements OnInit {
   AluminiumCastingGrade: any;
   modelTypes_Id: any;
   IsCSmodel: boolean = false;
-  display = "none";
-    header: string = '';
-    txt_btn: string = '';
-    date: Date = new Date();
-   // engine: Engine[] = [];
-    newArr: any = {};
-    isErrorEngDis: boolean = false;
-    statusValue: boolean = false;
-    editModal: boolean = false;
-    editRowIndex: any;
-    textsearch: string = '';
-    engineDis: any;
-    Cartcategory:any;
-  cartName:any;
-  CreateNewCart:boolean=false;
-  AddToCart:boolean=true;
-  ShowHideNewCartButton:boolean=true;
-  cartNameList:any={}
+
+
   ngOnInit(): void {
 
     this.router.events.subscribe((event) => {
@@ -167,7 +122,7 @@ export class ShouldCostGenComponent implements OnInit {
       PartNumber: new FormControl(), Projecttype: new FormControl(), SupplierName: new FormControl(),
       Location: new FormControl(), TargetQuote: new FormControl(), Costtype: new FormControl(), PartName: new FormControl(),
       DebriefDate: new FormControl(), IncoTerms: new FormControl(), Forex: new FormControl(), BatchSize: new FormControl(),
-      AnnualVolume: new FormControl()
+      AnnualVolume: new FormControl(),EngineDisplacement: new FormControl()
     });
 
     this.PartDimensionDetails = new FormGroup({
@@ -182,7 +137,7 @@ export class ShouldCostGenComponent implements OnInit {
       this.appexChart();
       // this.getPiedata();
     }, 500);
-    this.getCartName();
+
 
   }
 
@@ -192,6 +147,28 @@ export class ShouldCostGenComponent implements OnInit {
 
   hasDataT2(): boolean {
     return this.MaterialGradeT2.length > 0;
+  }
+
+  setActiveTab(tab: string) {
+    this.activeTab = tab;
+  }
+
+  showTab1 = true;
+  showTab2 = false;
+  showTabs(ActiveTab: any) {
+    this.showTab1 = false;
+    this.showTab2 = false;
+ 
+    switch (ActiveTab) {
+      case 'Tab1': {
+        this.showTab1 = true;
+        break;
+      }
+      case 'Tab2': {
+        this.showTab2 = true;
+        break;
+      }
+    }
   }
 
   async getShouldeCost(id: number) {
@@ -222,8 +199,12 @@ export class ShouldCostGenComponent implements OnInit {
       this.AnnualVolume = data.projectDetails[0].annualVolume;
       this.RoleId = data.projectDetails[0].roleId;
       this.UniqueId = data.projectDetails[0].uniqueId;
+      this.EngineDisplacement = data.projectDetails[0].engineDisplacement;
+
       this.modelTypes_Id = data.projectDetails[0].modelTypes_Id;
+ 
       localStorage.setItem('uniqueId',this.UniqueId);
+  
       if (this.modelTypes_Id == 4) {
         this.IsCSmodel = true;
       }
@@ -1022,13 +1003,11 @@ export class ShouldCostGenComponent implements OnInit {
       }]
     }
 
-    
-
     const si = document.getElementById("graphData") as HTMLElement;
     si.getElementsByClassName('canvasjs-chart-credit')[0].innerHTML = '';
 
   }
-
+ 
   //OPEN MODEL FOR CART VIEW
 
   public options: string[] = ["Cart1", "Cart2", "Cart3","Cart4"];
@@ -1151,3 +1130,6 @@ export class ShouldCostGenComponent implements OnInit {
   }
    
     }
+ 
+}
+ 

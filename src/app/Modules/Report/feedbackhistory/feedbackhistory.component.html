@@ -1,0 +1,250 @@
+<div class="setHeight">
+    <ngx-spinner name="spinner" bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="square-jelly-box"
+        [fullScreen]="true">
+        <img alt="Loading Please Wait..." style="width:100px ; height:100px ;" src="../../../assets/Spin-2.gif" />
+    </ngx-spinner>
+
+    <form [formGroup]="feedbackHistory">
+        <div class="MasterHeader">
+            <div style="width: 50%;">
+                <h2 *ngIf="showTab1">Feedback History Details</h2>
+                <h2 *ngIf="showTab2">Feedback Analysis</h2>
+            </div>
+            <div class="text-end" style="width: 50%;">
+                <button class="btnbackLeft" (click)="backToPreviousPage()">Back</button>
+            </div>
+        </div>
+
+        <div class="TabMenu">
+            <button [ngClass]="{'activeTab': showTab1, 'Tab':!showTab1}" (click)="Fun_showTab1()">History Details</button>
+            <button [ngClass]="{'activeTab': showTab2, 'Tab':!showTab2}" (click)="Fun_showTab2()">History Details Piechart</button>
+        </div>
+
+        <div class="d-flex justify-content-center" style="margin-top: 5px;">
+            <div class="MasterHeaderlable" *ngIf="showTab1">
+                <div class="searchDiv">
+                    <div class="form-group has-search" style="width: 50%;">
+                        <span class="bi bi-search form-control-feedback"></span>
+                        <input type="text" class="form-control search-input" placeholder="Search"
+                            formControlName="textsearch" [(ngModel)]="textsearch">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="d-flex justify-content-center" style="font-size: 12px !important;" *ngIf="showTab1">
+            <table class="table table-bordered table-striped ">
+                <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th hidden>Id</th>
+                        <th hidden>SCReportId</th>
+                        <th hidden>CSHeaderID</th>
+
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Created By</th>
+                        <th>Created On</th>
+                        <th>View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        *ngFor="let val of getData | search: textsearch:filterMetadata | paginate: { itemsPerPage: 10, currentPage: page }  let i=index">
+                        <td>{{(page - 1) * 10 + i + 1}}</td>
+                        <td hidden>{{val.id}}</td>
+                        <td hidden>{{val.SCReportId}}</td>
+                        <td hidden>{{val.CSHeaderID}}</td>
+                        <td>{{val.name}}</td>
+                        <td>{{val.email}}</td>
+                        <td>{{val.createdby}}</td>
+                        <td>{{val.createdon|date :'dd-MMM-yyyy - HH:mm:ss'}}</td>
+                        <td>
+                            <i class="bi bi-eye-fill" style=" color: #da291c; font-size:18px; cursor: pointer;"
+                                (click)="viewfeedback(val)"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between p-2 pagination" *ngIf="showTab1">
+            <ngb-pagination [collectionSize]="filterMetadata.count" [(page)]="page" [pageSize]="pageSize"
+                [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm">
+                <ng-template ngbPaginationPrevious>Prev</ng-template>
+                <ng-template ngbPaginationNext>Next</ng-template>
+            </ngb-pagination>
+            <br>
+        </div>
+
+    </form>
+
+
+    <div class="container" *ngIf="showTab2">
+        <div class="row">
+            <div class="col-md-3" *ngFor="let quesno of tableData | keyvalue">
+                <div class="chart-cardnew">
+                    <h6>{{quesno.key}}</h6>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="padding-left: 10px;">Option</th>
+                                <th>Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let option of quesno.value">
+                                <td style="padding-left: 10px;">{{ option.name }}</td>
+                                <td>{{ option.count }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="width: 100%; padding: 5px;  height: 270px; ">
+                        <canvasjs-chart *ngIf="chartOptions[quesno.key]"
+                            [options]="chartOptions[quesno.key]"></canvasjs-chart>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- <br><br>
+
+    <div class="chart-grid" *ngIf="showpiechart"> -->
+
+    <!-- <div class="chart-grid" *ngIf="showpiechart && tableData && (tableData | keyvalue).length > 0">
+            <div class="chart-card" *ngFor="let quesno of tableData | keyvalue">
+                <h6>{{quesno.key}}</h6>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Option</th>
+                            <th>Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let option of quesno.value">
+                            <td>{{ option.name }}</td>
+                            <td>{{ option.count }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <canvasjs-chart *ngIf="chartOptions[quesno.key]" [options]="chartOptions[quesno.key]"></canvasjs-chart>
+            </div>
+        </div>
+ -->
+
+    <!-- <div class="chart-card">
+            <h6>Model Mart Application</h6>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Excellent</td>
+                        <td>30</td>
+                    </tr>
+                    <tr>
+                        <td>Good</td>
+                        <td>25</td>
+                    </tr>
+                    <tr>
+                        <td>Need Improvement</td>
+                        <td>45</td>
+                    </tr>
+                </tbody>
+            </table>
+            <canvasjs-chart [options]="chartOptions1"></canvasjs-chart>
+        </div>
+
+
+        <div class="chart-card">
+            <h6>Effectiveness of Model Mart</h6>
+            <table>
+                <thead >
+                    <tr>
+                        <th>Option</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Yes</td>
+                        <td>15</td>
+                    </tr>
+                    <tr>
+                        <td>No</td>
+                        <td>35</td>
+                    </tr>
+                    <tr>
+                        <td>Not Sure</td>
+                        <td>50</td>
+                    </tr>
+                </tbody>
+            </table>
+            <canvasjs-chart [options]="chartOptions2"></canvasjs-chart>
+        </div>
+
+        <div class="chart-card">
+            <h6>Reuse of Cost Models</h6>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Yes</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>No</td>
+                        <td>50</td>
+                    </tr>
+                    <tr>
+                        <td>Not Sure</td>
+                        <td>40</td>
+                    </tr>
+                </tbody>
+            </table>
+            <canvasjs-chart [options]="chartOptions3"></canvasjs-chart>
+        </div>
+
+        <div class="chart-card">
+            <h6>Model Mart Application</h6>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Daily</td>
+                        <td>30</td>
+                    </tr>
+                    <tr>
+                        <td>Weekly</td>
+                        <td>20</td>
+                    </tr>
+                    <tr>
+                        <td>Fortnighty</td>
+                        <td>50</td>
+                    </tr>
+                </tbody>
+            </table>
+            <canvasjs-chart [options]="chartOptions4"></canvasjs-chart>
+        </div>
+
+    </div> -->
+
+</div>

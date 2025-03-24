@@ -1,4 +1,3 @@
-import { ApexChart } from './../../../../node_modules/ng-apexcharts/lib/model/apex-types.d';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,11 +5,15 @@ import { TreeviewConfig, TreeviewI18n, TreeviewItem, DefaultTreeviewI18n } from 
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { SearchService } from 'src/app/SharedServices/search.service';
+ 
 import { environment } from 'src/environments/environments';
 import { combineLatest, Subject } from 'rxjs';
 import { AdminService } from 'src/app/SharedServices/admin.service';
 import { firstValueFrom } from 'rxjs';
 import { Cartlist } from 'src/app/Model/cartlist';
+ 
+import { Subject } from 'rxjs';
+
 
 @Component({
   selector: 'app-search',
@@ -108,6 +111,8 @@ export class SearchComponent implements OnInit {
   results: any;
   autoseachhide: boolean = false;
   Productvalue: any = [];
+  SimulatedProductvalue: any = [];
+
   checkcount: number = 0;
   uniquevalue: any = [];
   cartinserted: any=[];
@@ -179,8 +184,8 @@ export class SearchComponent implements OnInit {
   FilterSearchDataAsceDesc_var: any;
   FilterSearchData_var: any;
 
-  selectedSearchDataAsceDesc: any;
-  selectedSearchData: any;
+  SortSearchData: any;
+
 
   page: number = 1;
   pageSize: number = 100;
@@ -239,13 +244,15 @@ export class SearchComponent implements OnInit {
     this.ShowCagetory3("");
     this.GetBusinessUnit();
     this.GetProgramName();
- 
-    if (this.childCategory == " ") {
+
+    if (this.childCategory == " " || localStorage.getItem("childCategory") == null) {
+      localStorage.setItem("childCategory", this.childCategory);
       this.filters.cat4 = '';
     }
     else {
       this.filters.cat4 = this.childCategory;
       flag = 1;
+      localStorage.removeItem('Historywildcardsearch');
     }
     //console.log(this.childCategory);
 
@@ -261,7 +268,6 @@ export class SearchComponent implements OnInit {
     else {
       this.GetSearchdata(this.filters);
     }
-
 
   }
 
@@ -318,6 +324,7 @@ export class SearchComponent implements OnInit {
       myElement?.classList.add("mainsearchborder");
     }
 
+    debugger;
     const data = await this.searchservice.GetSearch(input).toPromise();
     this.results = data;
 
@@ -357,11 +364,14 @@ export class SearchComponent implements OnInit {
 
   setvalue(v: any) {
     this.setvalueFlag = false;
+    localStorage.removeItem("childCategory");
+
     if (v == '0') {
       localStorage.removeItem("Historywildcardsearch");
       this.search(v);
       return;
     }
+
 
     this.clearFilter(0);
 
@@ -566,16 +576,20 @@ export class SearchComponent implements OnInit {
   }
 
   clearFilter(f: any) {
+    //debugger;
     //this.SpinnerService.show('spinner');
-    this.selectedSearchDataAsceDesc = undefined;
-    this.selectedSearchData = undefined;
+    this.SortSearchData = 0;
+
 
     try {
 
       if (f == 1) {
         localStorage.removeItem("Historysearch");
         localStorage.removeItem("Historywildcardsearch");
+        localStorage.removeItem("SortSearchData");
+        localStorage.removeItem("childCategory");
       }
+
 
       if (f != 2) {
         this.searchProduct2.nativeElement.value = "";
@@ -635,14 +649,14 @@ export class SearchComponent implements OnInit {
         li[i].style.display = "";
       }
 
-      //this.clearProgramName();
-      // this.ProgramNameSearch.nativeElement.value = "";
-      // var ul = document.getElementById("ProgramnameUL");
-      // var li = ul!.getElementsByTagName("li") as any;
-      // for (var i = 0; i < li.length; i++) {
-      //   li[i].getElementsByTagName('input')[0].checked = false;
-      //   li[i].style.display = "";
-      // }
+      // this.clearProgramName();
+      this.ProgramNameSearch.nativeElement.value = "";
+      var ul = document.getElementById("ProgramnameUL");
+      var li = ul!.getElementsByTagName("li") as any;
+      for (var i = 0; i < li.length; i++) {
+        li[i].getElementsByTagName('input')[0].checked = false;
+        li[i].style.display = "";
+      }
 
 
       this.filters.cat2 = ''; this.filters.cat3 = ''; this.filters.cat4 = ''; this.filters.location = ''; this.filters.engine = '';
@@ -924,7 +938,7 @@ export class SearchComponent implements OnInit {
 
 
   getCategoryIdcat2() {
-
+    localStorage.removeItem("childCategory");
     var param_value = "";
 
     var ul = document.getElementById("Cat2UL");
@@ -951,6 +965,7 @@ export class SearchComponent implements OnInit {
 
   //// click on cat3 checkbox
   async getCategoryIdcat3() {
+    localStorage.removeItem("childCategory");
 
     var param_value = "";
 
@@ -975,6 +990,7 @@ export class SearchComponent implements OnInit {
 
   //// click on cat4 checkbox
   async getCategoryIdcat4() {
+    localStorage.removeItem("childCategory");
 
     var param_value = "";
 
@@ -1008,6 +1024,7 @@ export class SearchComponent implements OnInit {
   }
 
   async getLocationName() {
+    localStorage.removeItem("childCategory");
 
     var param_value = "";
 
@@ -1033,6 +1050,7 @@ export class SearchComponent implements OnInit {
   }
 
   async getEnginelist() {
+    localStorage.removeItem("childCategory");
 
     var param_value = "";
 
@@ -1059,6 +1077,7 @@ export class SearchComponent implements OnInit {
 
   getProgramNamelist() {
     //debugger;
+    localStorage.removeItem("childCategory");
     var param_value = "";
 
     var ul = document.getElementById("ProgramnameUL");
@@ -1083,6 +1102,7 @@ export class SearchComponent implements OnInit {
 
 
   getBusinessUnitValues() {
+    localStorage.removeItem("childCategory");
 
     var param_value = "";
 
@@ -1108,6 +1128,7 @@ export class SearchComponent implements OnInit {
   }
 
   getFifnishWeightKG(e: any) {
+    localStorage.removeItem("childCategory");
 
     if (this.FromFinishWeight != undefined && this.ToFinishWeight != undefined) {
       if (this.FromFinishWeight != "" && this.ToFinishWeight != "") {
@@ -1138,10 +1159,10 @@ export class SearchComponent implements OnInit {
   async GetSearchdata(filters_list: any) {
     try {
       this.SpinnerService.show('spinner');
-      this.selectedSearchDataAsceDesc = undefined;
-      this.selectedSearchData = undefined;
+      this.SortSearchData = 0;
       this.checkcount = 0;
       this.Productvalue = [];
+      this.SimulatedProductvalue = [];
       //console.log('search Userid function' + localStorage.getItem("userId"));
       this.uniquevalue=[];
       this.userId = localStorage.getItem("userId");
@@ -1166,7 +1187,6 @@ export class SearchComponent implements OnInit {
       }
 
 
-
       if (localStorage.getItem("Historysearch") != null) {
         //console.log(this.filters);
 
@@ -1176,6 +1196,7 @@ export class SearchComponent implements OnInit {
           this.searchProduct2.nativeElement.value = localStorage.getItem('Historywildcardsearch');
         }
 
+      
         const Weight = document.getElementsByName("dolleroptions") as any;
 
 
@@ -1203,6 +1224,15 @@ export class SearchComponent implements OnInit {
           this.DebriefTo_Date = this.filters.T_debriefDate;
         }
       }
+
+      debugger;
+      if (this.SearchList.length > 0) {
+        if (localStorage.getItem("SortSearchData") != null || localStorage.getItem("SortSearchData") != undefined) {
+          this.SortSearchData = localStorage.getItem("SortSearchData");
+          this.FilterSearchData();
+        }
+      }
+
 
       this.SpinnerService.hide('spinner');
     }
@@ -1233,6 +1263,7 @@ export class SearchComponent implements OnInit {
   }
 
   DebriefFilter() {
+    localStorage.removeItem("childCategory");
     if (this.DebriefFrom_Date != undefined && this.DebriefTo_Date != undefined) {
       if (this.DebriefFrom_Date != "" && this.DebriefTo_Date != "") {
         if (Date.parse(this.DebriefFrom_Date) > Date.parse(this.DebriefTo_Date)) {
@@ -1272,6 +1303,8 @@ export class SearchComponent implements OnInit {
   }
 
   ShouldCostFilter() {
+    localStorage.removeItem("childCategory");
+
     if (this.FromShouldCost != undefined && this.ToShouldCost != undefined) {
       if (this.FromShouldCost != "" && this.ToShouldCost != "") {
         if (parseFloat(this.FromShouldCost) > parseFloat(this.ToShouldCost)) {
@@ -1316,6 +1349,8 @@ export class SearchComponent implements OnInit {
   }
 
   WeightFilter() {
+    localStorage.removeItem("childCategory");
+
     if (this.FromFinishWeight != undefined && this.ToFinishWeight != undefined) {
       if (this.FromFinishWeight != "" && this.ToFinishWeight != "") {
 
@@ -1362,8 +1397,35 @@ export class SearchComponent implements OnInit {
     }
   }
 
+  // getComparison() {
+
+  //   if (this.SearchList.length <= 0) {
+  //     this.toastr.error("Record Not Found");
+  //     return
+  //   }
+
+  //   const comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
+  //   let checkcount = 0;
+
+  //   for (let i = 0; i < comparecheckbox.length; i++) {
+  //     if (comparecheckbox[i].checked) {
+  //       checkcount = checkcount + 1;
+  //     }
+  //   }
+  //   if (checkcount < 2) {
+  //     this.toastr.warning("Please select at least 2 Products");
+  //     return
+  //   }
+
+  //   localStorage.setItem("ComapredcheckedboxIds", this.Productvalue);
+  //   this.router.navigate(['/home/comparison']);
+
+  // }
+
   getComparison() {
-    // this.Comparecheckbox;
+
+    debugger;
+
     if (this.SearchList.length <= 0) {
       this.toastr.error("Record Not Found");
       return
@@ -1381,6 +1443,7 @@ export class SearchComponent implements OnInit {
       this.toastr.warning("Please select at least 2 Products");
       return
     }
+ 
     if (checkcount >4 ) {
       this.toastr.warning("You can select only 4 Products");
       for (let i = 0; i < comparecheckbox.length; i++) {
@@ -1392,12 +1455,30 @@ export class SearchComponent implements OnInit {
       return
     }
     localStorage.setItem("ComapredcheckedboxIds", this.Productvalue);
+ 
+
+    this.compareIds = [];
+
+    this.compareIds.push(
+      {
+        "M": this.Productvalue,
+        "S": this.SimulatedProductvalue
+      }
+    )
+   
+    localStorage.setItem("ComapredcheckedboxIds", JSON.stringify(this.compareIds));
+ 
     this.router.navigate(['/home/comparison']);
+
 
   }
 
-  getPartId(e: any) {
+
+  compareIds: any = [];
+  getPartId(e: any, model: any) {
+    debugger;
     this.checkcount = 0;
+ 
     this.Productvalue = [];
     this.uniquevalue=[];
     this.cartdetailslist=[];
@@ -1408,21 +1489,44 @@ export class SearchComponent implements OnInit {
         this.Productvalue.push(Comparecheckbox[i].id);
         this.uniquevalue.push(Comparecheckbox[i].value);
         this.cartdetailslist.push({'chHeaderId':Comparecheckbox[i].id,'Uniqueid':Comparecheckbox[i].value})
+ 
+    const Comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
+
+    const SearchCheckboxSimulated = document.getElementsByClassName("SearchCheckboxSimulated") as any;
+    //SearchCheckboxSimulated
+    if (model == 'M') {
+      this.Productvalue = [];
+      for (let i = 0; i < Comparecheckbox.length; i++) {
+        if (Comparecheckbox[i].checked) {
+          // this.checkcount = this.checkcount + 1;
+          this.Productvalue.push(Comparecheckbox[i].id);
+        }
+      }
+
+      if (Number(this.Productvalue.length) + Number(this.SimulatedProductvalue.length) > 4) {
+        this.toastr.warning("You can select only 4 Products");
+        for (let i = 0; i < Comparecheckbox.length; i++) {
+          if (Comparecheckbox[i].id == e.csHeaderId) {
+            Comparecheckbox[i].checked = false;
+            // this.checkcount = this.checkcount - 1;
+            this.Productvalue.pop();
+            return
+          }
+        }
+        return
+ 
       }
     }
+    else {
+      this.SimulatedProductvalue = [];
+      for (let i = 0; i < SearchCheckboxSimulated.length; i++) {
+        if (SearchCheckboxSimulated[i].checked) {
+          // this.checkcount = this.checkcount + 1;
+          this.SimulatedProductvalue.push(SearchCheckboxSimulated[i].id);
+        }
+      }
 
-    // if (this.checkcount > 4) {
-    //   this.toastr.warning("You can select only 4 Products");
-    //   for (let i = 0; i < Comparecheckbox.length; i++) {
-    //     if (Comparecheckbox[i].id == e.csHeaderId) {
-    //       Comparecheckbox[i].checked = false;
-    //       this.checkcount = this.checkcount - 1;
-    //       this.Productvalue.pop();
-    //       return
-    //     }
-    //   }
-    //   return
-    // }
+ 
   }
 
   openModal() {
@@ -1499,6 +1603,23 @@ export class SearchComponent implements OnInit {
       this.cartNameList = _result;
 
     });
+ 
+      if (Number(this.Productvalue.length) + Number(this.SimulatedProductvalue.length) > 4) {
+        this.toastr.warning("You can select only 4 Products");
+        for (let i = 0; i < SearchCheckboxSimulated.length; i++) {
+          if (SearchCheckboxSimulated[i].id == e.scReportId) {
+            SearchCheckboxSimulated[i].checked = false;
+            // this.checkcount = this.checkcount - 1;
+            this.SimulatedProductvalue.pop();
+            return
+          }
+        }
+        return
+      }
+    }
+
+    this.checkcount = Number(this.Productvalue.length) + Number(this.SimulatedProductvalue.length);
+ 
   }
 
   onCartCreate(){
@@ -1579,6 +1700,37 @@ export class SearchComponent implements OnInit {
   }
 }
 
+
+  // this.checkcount = Number(this.Productvalue.length) + Number(this.SimulatedProductvalue.length);
+
+
+
+  // getPartId(e: any) {
+  //   this.checkcount = 0;
+  //   this.Productvalue = [];
+  //   const Comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
+  //   for (let i = 0; i < Comparecheckbox.length; i++) {
+  //     if (Comparecheckbox[i].checked) {
+  //       this.checkcount = this.checkcount + 1;
+  //       this.Productvalue.push(Comparecheckbox[i].id);
+  //     }
+  //   }
+
+  //   if (this.checkcount > 4) {
+  //     this.toastr.warning("You can select only 4 Products");
+  //     for (let i = 0; i < Comparecheckbox.length; i++) {
+  //       if (Comparecheckbox[i].id == e.csHeaderId) {
+  //         Comparecheckbox[i].checked = false;
+  //         this.checkcount = this.checkcount - 1;
+  //         this.Productvalue.pop();
+  //         return
+  //       }
+  //     }
+  //     return
+  //   }
+  // }
+
+
   keyPressDecimal(event: any) {
     const reg = /^-?\d*(\.\d{0,3})?$/;
     let input = event.target.value + String.fromCharCode(event.charCode);
@@ -1593,13 +1745,13 @@ export class SearchComponent implements OnInit {
 
   async DownloadPDF(data: any) {
 
-    debugger;
+    //debugger;
     console.log(this.SearchList);
 
     this.toastr.success("Report downloading has started.");
 
     var id = data.uniqueId;
-    var staticUrl = environment.apiUrl_Search + 'DownloadPDF?Id=' + id + '&modelTypes_Id=' + data.modelTypes_Id;
+    var staticUrl = environment.apiUrl_Search + 'DownloadPDF?uniqueId=' + id + '&modelTypes_Id=' + data.modelTypes_Id + '&userId=' + this.userId;
 
     var modelTypes_Id_var = data.modelTypes_Id;
 
@@ -1621,7 +1773,7 @@ export class SearchComponent implements OnInit {
           fileLink.href = fileURL;
 
           if (modelTypes_Id_var == 4) {
-            fileLink.download = 'CS Models ' + data.partNumber + ' ' + data.partName;
+            fileLink.download = 'CES Sub level Models ' + data.partNumber + ' ' + data.partName;
           }
           else {
             fileLink.download = data.partNumber + ' ' + data.partName;
@@ -1638,63 +1790,45 @@ export class SearchComponent implements OnInit {
     xhr.send();
   }
 
-  FilterSearchDataAsceDesc(e: any) {
-    // 0 = Sort by A-Z
-    // 1 = Sort by Z-A
-    if (e == undefined) {
+
+  FilterSearchData() {
+    debugger;
+    if (this.SortSearchData == 0 || this.SortSearchData == undefined) {
       return
     }
-    this.FilterSearchDataAsceDesc_var = e;
-    this.filterData();
-  }
-  FilterSearchData(e: any) {
-    // 0 = Debrief Date 
-    // 1 = Location
-    // 2 = Tooling Cost
-    // 3 = Should Cost
-    this.selectedSearchDataAsceDesc = undefined;
-    this.FilterSearchData_var = e;
-  }
 
-  filterData() {
-    // debugger;
-    // console.log(this.SearchList);
-    if (this.FilterSearchDataAsceDesc_var != undefined && this.FilterSearchData_var != undefined)
-      switch (this.FilterSearchData_var) {
-        case 0: // Debrief Date 
-          if (this.FilterSearchDataAsceDesc_var == 0) {
-            this.SearchList = this.SearchList.sort((a: { debriefDateFormated: any; }, b: { debriefDateFormated: any; }) => (Date.parse(a.debriefDateFormated)) - Date.parse(b.debriefDateFormated));
-          }
-          else {
-            this.SearchList = this.SearchList.sort((a: { debriefDateFormated: any; }, b: { debriefDateFormated: any; }) => (Date.parse(b.debriefDateFormated)) - Date.parse(a.debriefDateFormated));
-          }
-          break;
-        case 1: // Location
-          if (this.FilterSearchDataAsceDesc_var == 0) {
-            this.SearchList = this.SearchList.sort((a: { mfgRegion: any; }, b: { mfgRegion: any; }) => (a.mfgRegion == null ? '' : a.mfgRegion.localeCompare(b.mfgRegion == null ? '' : b.mfgRegion)));
-          }
-          else {
-            this.SearchList = this.SearchList.sort((a: { mfgRegion: any; }, b: { mfgRegion: any; }) => (b.mfgRegion == null ? '' : b.mfgRegion.localeCompare(a.mfgRegion == null ? '' : a.mfgRegion)));
-          }
-          break;
-        case 2: // Tooling Cost
-          if (this.FilterSearchDataAsceDesc_var == 0) {
-            this.SearchList = this.SearchList.sort((a: { toolingCostModeller: any; }, b: { toolingCostModeller: any; }) => (a.toolingCostModeller == null ? 0 : parseFloat(a.toolingCostModeller)) - (b.toolingCostModeller == null ? 0 : parseFloat(b.toolingCostModeller)));
-          }
-          else {
-            this.SearchList = this.SearchList.sort((a: { toolingCostModeller: any; }, b: { toolingCostModeller: any; }) => (b.toolingCostModeller == null ? 0 : parseFloat(b.toolingCostModeller)) - (a.toolingCostModeller == null ? 0 : parseFloat(a.toolingCostModeller)));
-          }
-          break;
-        case 3:  // Should Cost
-          if (this.FilterSearchDataAsceDesc_var == 0) {
-            this.SearchList = this.SearchList.sort((a: { totalCost: any; }, b: { totalCost: any; }) => (a.totalCost == null ? 0 : parseFloat(a.totalCost)) - (b.totalCost == null ? 0 : parseFloat(b.totalCost)));
-          }
-          else {
-            this.SearchList = this.SearchList.sort((a: { totalCost: any; }, b: { totalCost: any; }) => (b.totalCost == null ? 0 : parseFloat(b.totalCost)) - (a.totalCost == null ? 0 : parseFloat(a.totalCost)));
-          }
-          break;
-      }
+    localStorage.setItem("SortSearchData", this.SortSearchData);
+
+    switch (this.SortSearchData) {
+      case '1': // Debrief Date Sort by Ascending to Descending
+        this.SearchList = this.SearchList.sort((a: { debriefDateFormated: any; }, b: { debriefDateFormated: any; }) => (Date.parse(a.debriefDateFormated)) - Date.parse(b.debriefDateFormated));
+        break;
+      case '2': // Debrief Date Sort by Descending to Ascending
+        this.SearchList = this.SearchList.sort((a: { debriefDateFormated: any; }, b: { debriefDateFormated: any; }) => (Date.parse(b.debriefDateFormated)) - Date.parse(a.debriefDateFormated));
+        break;
+      case '3': // Location Sort by A-Z
+        this.SearchList = this.SearchList.sort((a: { mfgRegion: any; }, b: { mfgRegion: any; }) => (a.mfgRegion == null ? '' : a.mfgRegion.localeCompare(b.mfgRegion == null ? '' : b.mfgRegion)));
+        break;
+      case '4': // Location Sort by Z-A
+        this.SearchList = this.SearchList.sort((a: { mfgRegion: any; }, b: { mfgRegion: any; }) => (b.mfgRegion == null ? '' : b.mfgRegion.localeCompare(a.mfgRegion == null ? '' : a.mfgRegion)));
+        break;
+      case '5': // Tooling Cost Sort by Smallest to Largest
+        this.SearchList = this.SearchList.sort((a: { toolingCostModeller: any; }, b: { toolingCostModeller: any; }) => (a.toolingCostModeller == null ? 0 : parseFloat(a.toolingCostModeller)) - (b.toolingCostModeller == null ? 0 : parseFloat(b.toolingCostModeller)));
+        break;
+      case '6': // Tooling Cost Sort by Largest to Smallest
+        this.SearchList = this.SearchList.sort((a: { toolingCostModeller: any; }, b: { toolingCostModeller: any; }) => (b.toolingCostModeller == null ? 0 : parseFloat(b.toolingCostModeller)) - (a.toolingCostModeller == null ? 0 : parseFloat(a.toolingCostModeller)));
+        break;
+      case '7': // Should Cost Sort by Smallest to Largest
+        this.SearchList = this.SearchList.sort((a: { totalCost: any; }, b: { totalCost: any; }) => (a.totalCost == null ? 0 : parseFloat(a.totalCost)) - (b.totalCost == null ? 0 : parseFloat(b.totalCost)));
+        break;
+      case '8': // Should Cost Sort by Largest to Smallest
+        this.SearchList = this.SearchList.sort((a: { totalCost: any; }, b: { totalCost: any; }) => (b.totalCost == null ? 0 : parseFloat(b.totalCost)) - (a.totalCost == null ? 0 : parseFloat(a.totalCost)));
+        break;
+    }
+
+
 
   }
+
 
 }
