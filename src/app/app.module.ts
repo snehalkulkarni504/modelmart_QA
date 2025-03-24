@@ -59,6 +59,8 @@ import { MaintenanceComponent } from './home/maintenance/maintenance.component';
 import { ComparisonnewComponent } from './Modules/comparisonnew/comparisonnew.component';
 import { CostReductionComponent } from './Modules/cost-reduction/cost-reduction.component';
 import { HousingflywheelComponent } from './Modules/housingflywheel/housingflywheel.component';
+import { CartdetailsComponent } from './Modules/cartdetails/cartdetails.component';
+
 
 // import { SendMessageComponent } from './Modules/contact/send-message/send-message.component';
 //import { UserAuditComponent } from './Modules/user-audit/user-audit.component';
@@ -119,6 +121,9 @@ import { DesignToCostComponent } from "./Modules/should-cost-gen/design-to-cost/
     ComparisonnewComponent,
     CostReductionComponent,
     HousingflywheelComponent,
+ 
+    CartdetailsComponent
+ 
     TabsComponent,
     UserAnalyticsComponent,
     SendMessageComponent,
@@ -126,6 +131,7 @@ import { DesignToCostComponent } from "./Modules/should-cost-gen/design-to-cost/
     FeedbackComponent,
     FeedbackhistoryComponent,
     WelcomeuserComponent
+ 
   ],
   imports: [
     TreeModule,
