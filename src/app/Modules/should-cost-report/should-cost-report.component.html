@@ -115,7 +115,7 @@
                                             name="GetData" value="Update" (click)="openModalProcess('T1')" />
                                     </td>
                                     <td style="padding: 12px 8px 0px 0px" class="text-end TierCostReportListusdValueT1">
-                                        {{ Cal_totalInitialCost | number : '1.2-2' }}
+                                        <!-- {{ Cal_totalInitialCost | number : '1.2-2' }} --> 0.00
                                     </td>
                                     <td class="hideTextBox">
                                         <input type="text" class="form-control percentText T1" maxlength="4"
@@ -252,7 +252,7 @@
                                                 name="GetData" value="Update" (click)="openModalProcess('T2')" />
                                         </td>
                                         <td style="padding: 12px 8px 0px 0px" class="text-end TierCostReportListusdValueT2">
-                                            {{ Cal_totalInitialCostT2 | number : '1.2-2' }}
+                                            <!-- {{ Cal_totalInitialCostT2 | number : '1.2-2' }} --> 0.00
                                         </td>
                                         <td class="hideTextBox">
                                             <input type="text" class="form-control percentText T2" maxlength="4"
@@ -735,12 +735,7 @@
                         <div class="col-md-9 Remark_nopadding">
                             <b>Remarks : </b>
                             <ol type="1">
-                                <!-- <li>{{Notes1}}</li>
-                                <li>{{Notes2}}</li>
-                                <li>{{Notes3}}</li>
-                                <li>{{Notes4}}</li>
-                                <li class="HideRow" [class.HideRow]="IsNotes == true">{{Notes5}}</li>
-                                <li class="HideRow" [class.HideRow]="IsNotes == false">{{Notes6}}</li> -->
+                                <li>This cost is inclusive of labor, direct overhead and indirect overhead for each processes</li>
                             </ol>
                         </div>
                         <div class="col-md-3 text-center">

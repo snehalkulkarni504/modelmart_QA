@@ -155,6 +155,27 @@ export class SearchService {
   GetSubpartProcessData(Supplierlevel: string, CSHeaderId: string): Observable<any> {
     return this.httpClient.get<any[]>(this.apiUrl + `GetSubpartProcessData?CSHeaderId=${CSHeaderId}&SupplyLevel=${Supplierlevel}`);
   }
+
+  GetDesignToCostDetails(Program: any): Observable<any> {
+    console.log("we are here");
+    return this.httpClient.get<any[]>(this.apiUrl +`GetDesignToCostDetails/${Program}`);
+  }
+ 
+  GetDesignToCostPart(PartNumber: any): Observable<any> {
+    console.log("we are here");
+    return this.httpClient.get<any[]>(this.apiUrl +`GetDesignToCostPart/${PartNumber}`);
+  }
+ 
+  GetDesignToCostNoun(NounName: any): Observable<any> {
+    console.log("we are here");
+    return this.httpClient.get<any[]>(this.apiUrl +`GetDesignToCostNoun/${NounName}`);
+  }
+ 
+  GetDesignToCostNounProgram(NounName: any, Program: any): Observable<any> {
+    console.log("we are here");
+    return this.httpClient.get<any[]>(this.apiUrl +`GetDesignToCostNounProgram/${NounName}/${Program}`);
+  }
+ 
   
 
 }

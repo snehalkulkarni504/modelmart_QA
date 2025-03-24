@@ -24,6 +24,12 @@ export interface SendRequest {
     Volume:number,
     CreatedBy:string,
     ImagePath:string,
-    UniqueID:string
+    UniqueID:string,
+    PartWeight:number,
+    ModelTypes:number,
+    IterationCount:number,
+    AnnualVolume:number,
+    ShoudeCost:number,
+    SourcingManagerEmail:string
 }
  

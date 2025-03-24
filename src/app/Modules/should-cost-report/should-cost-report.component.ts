@@ -2223,21 +2223,23 @@ export class ShouldCostReportComponent {
           setTimeout(() => {
             for (var i = 0; i < this.userAddedCostList.length; i++) {
               const txt = document.getElementById("PopUpProcess" + i) as any;
-              if (!this.userAddedCostList[i].processStatus) {
-                this.userAddedCostList[i].updatedCost = 0;
-                this.userAddedCostList[i].processStatus = 0;
-                txt.readOnly = true;
-                txt.style.backgroundColor = "#8080801a";
-              } else {
-                this.userAddedCostList[i].updatedCost = this.userAddedCostList[i].manufacturingCost;
-                this.userAddedCostList[i].processStatus = 1;
-                txt.readOnly = false;
-                txt.style.backgroundColor = "#fff";
+              if (this.userAddedCostList[i].csHeaderId > 0) {
+                if (!this.userAddedCostList[i].processStatus) {
+                  this.userAddedCostList[i].updatedCost = 0;
+                  this.userAddedCostList[i].processStatus = 0;
+                  txt.readOnly = true;
+                  txt.style.backgroundColor = "#8080801a";
+                } else {
+                  this.userAddedCostList[i].updatedCost = this.userAddedCostList[i].manufacturingCost;
+                  this.userAddedCostList[i].processStatus = 1;
+                  txt.readOnly = false;
+                  txt.style.backgroundColor = "#fff";
+                }
               }
-          
+
             }
           }, 150);
-       
+
           return;
         }
       }
@@ -2254,18 +2256,20 @@ export class ShouldCostReportComponent {
           setTimeout(() => {
             for (var i = 0; i < this.userAddedCostList.length; i++) {
               const txt = document.getElementById("PopUpProcess" + i) as any;
-              if (!this.userAddedCostList[i].processStatus) {
-                this.userAddedCostList[i].updatedCost = 0;
-                this.userAddedCostList[i].processStatus = 0;
-                txt.readOnly = true;
-                txt.style.backgroundColor = "#8080801a";
-              } else {
-                this.userAddedCostList[i].updatedCost = this.userAddedCostList[i].manufacturingCost;
-                this.userAddedCostList[i].processStatus = 1;
-                txt.readOnly = false;
-                txt.style.backgroundColor = "#fff";
+              if (this.userAddedCostList[i].csHeaderId > 0) {
+                if (!this.userAddedCostList[i].processStatus && this.userAddedCostList[i].csHeaderId > 0) {
+                  this.userAddedCostList[i].updatedCost = 0;
+                  this.userAddedCostList[i].processStatus = 0;
+                  txt.readOnly = true;
+                  txt.style.backgroundColor = "#8080801a";
+                } else {
+                  this.userAddedCostList[i].updatedCost = this.userAddedCostList[i].manufacturingCost;
+                  this.userAddedCostList[i].processStatus = 1;
+                  txt.readOnly = false;
+                  txt.style.backgroundColor = "#fff";
+                }
               }
-          
+
             }
           }, 150);
 

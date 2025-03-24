@@ -4,7 +4,7 @@
         <img alt="Loading Please Wait..." style="width:100px ; height:100px ;" src="../../../assets/Spin-2.gif" />
     </ngx-spinner>
 
-    <div class="row">
+    <div class="row" >
         <div class="backbtnDiv text-center">
             <button class="btnback" (click)="backToPreviousPage()">Back</button>
         </div>
@@ -13,6 +13,7 @@
         {{ChekNull(Projecttype)}}-{{ChekNull(BusinessUnit)}}-{{ChekNull(ProjectName)}}-{{Location}}-{{PartName}}-{{PartNumber}}
 
     </div>
+   
     <div class="row panal">
         <form [formGroup]="ProjectDetails">
             <div class="container-fluid">
@@ -22,6 +23,11 @@
                         <div class="imgPanel">
                             <img src="{{mainimg}}" class="img border_img" (mouseover)="ZoomImg($event)"
                                 (mouseout)="ZoomImgclose()">
+    
+                            <!-- <div>
+                                <img class="moneybag" src="../../../assets/img/pngwing.com.png" alt="Avatar" title="redirect to design to cost page" (click)="showTabs('Tab2')"> 
+                                <h6 style="margin-left: 105px;">VAVE Design Ideas</h6>
+                            </div>     -->
                         </div>
                         <div class="Silder_imgPanel">
                             <div *ngFor="let val of imgsilderData;let i=index" style="display: inline-block;">
@@ -33,11 +39,17 @@
                                 {{val }}</div>
                            
                         </div>
-                     
+                        
                         <img src="{{mainimgzoom}}" class="zoomImghide" id="zoomImg">
-                        <!-- </div> -->
+                        
 
-                        <div class="page dataPanel">
+                        <div class="TabMenu">
+                            <button [ngClass]="{'activeTab': showTab1, 'Tab':!showTab1}" (click)="showTabs('Tab1')">Should Cost</button>
+                            <button [ngClass]="{'activeTab': showTab2, 'Tab':!showTab2}" (click)="showTabs('Tab2')">VAVE Design Ideas</button>
+                        </div> 
+
+
+                        <div *ngIf="showTab1" class="page dataPanel">
 
                             <fieldset class="border rounded-3 p-3  " >
                                 
@@ -576,7 +588,7 @@
                         </div>
                     </div>
                     <div class="">
-                        <div class="page dataPanel">
+                        <div *ngIf="showTab1" class="page dataPanel">
 
                             <fieldset class="border rounded-3 p-3">
                                 <legend class="w-auto labelDetailsheader">Material Grade Details</legend>
@@ -744,10 +756,17 @@
                                 </ol>
                             </div>
                         </div>
+                        <div [hidden]="!showTab2" class="page dataPanel">
+                            <div class="container">
+                               
+                                 <app-design-to-cost [PartNumber]="PartNumber"  [ProgramName]="ProjectName" [NounName]="PartName"></app-design-to-cost>
+                            </div>
+                                  
+                        </div>
                     </div>
                 </div>
 
-                <div class="row buttons">
+                <div *ngIf="showTab1" class="row buttons">
                     <div class="col-md-12 text-end" style="padding-right: 40px;">
                         <input type="button" class="btn btn-primary btnDownload" value="Refresh Model⁴"
                             Name="Refresh Model⁴" (click)="SendNewRequest()">

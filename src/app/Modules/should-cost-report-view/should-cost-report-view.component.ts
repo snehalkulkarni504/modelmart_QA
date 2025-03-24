@@ -584,7 +584,7 @@ export class ShouldCostReportViewComponent {
 
       doc.addPage();
       /// header
-      const headerlogo1 = '../../../assets/welcome/modelmartsliderlogo.jpg';
+      const headerlogo1 = '../../../assets/welcome/Model Mart_Final Logo_130325.png';
       doc.addImage(headerlogo1, 2, 0, 38, 25);
       const headerlogo2 = '../../../assets/newCumminslogo.jpg';
       doc.addImage(headerlogo2, 185, 2, 24, 22);

@@ -71,6 +71,7 @@ import { CartdetailsComponent } from './Modules/cartdetails/cartdetails.componen
 import { FeedbackComponent } from './Modules/contact/feedback/feedback.component';
 import { FeedbackhistoryComponent } from './Modules/Report/feedbackhistory/feedbackhistory.component';
 import { WelcomeuserComponent } from './home/welcomeuser/welcomeuser.component';
+import { DesignToCostComponent } from "./Modules/should-cost-gen/design-to-cost/design-to-cost.component";
 
 
 @NgModule({
@@ -136,7 +137,7 @@ import { WelcomeuserComponent } from './home/welcomeuser/welcomeuser.component';
     OrganizationChartModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
-      timeOut: 3500
+        timeOut: 3500
     }),
     TreeviewModule.forRoot(),
     NgxPrintModule,
@@ -145,12 +146,12 @@ import { WelcomeuserComponent } from './home/welcomeuser/welcomeuser.component';
     NgxPaginationModule,
     NgbModule,
     NgIdleKeepaliveModule,
-
     CanvasJSAngularChartsModule,
-    MatTabsModule,BrowserModule,
+    MatTabsModule, BrowserModule,
     BrowserAnimationsModule,
-    CanvasJSAngularChartsModule
-  ],
+    CanvasJSAngularChartsModule,
+    DesignToCostComponent
+],
   
   providers: [
     {

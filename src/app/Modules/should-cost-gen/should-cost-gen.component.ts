@@ -21,6 +21,7 @@ export interface Piedata {
 export class ShouldCostGenComponent implements OnInit {
 
   imgName: any;
+  activeTab: string = 'tab1'; // Default active tab
   //private datePipe: DatePipe
   constructor(public searchservice: SearchService,
     public router: Router, private route: ActivatedRoute, private location: Location, private SpinnerService: NgxSpinnerService, public toastr: ToastrService) {
@@ -146,6 +147,28 @@ export class ShouldCostGenComponent implements OnInit {
 
   hasDataT2(): boolean {
     return this.MaterialGradeT2.length > 0;
+  }
+
+  setActiveTab(tab: string) {
+    this.activeTab = tab;
+  }
+
+  showTab1 = true;
+  showTab2 = false;
+  showTabs(ActiveTab: any) {
+    this.showTab1 = false;
+    this.showTab2 = false;
+ 
+    switch (ActiveTab) {
+      case 'Tab1': {
+        this.showTab1 = true;
+        break;
+      }
+      case 'Tab2': {
+        this.showTab2 = true;
+        break;
+      }
+    }
   }
 
   async getShouldeCost(id: number) {
