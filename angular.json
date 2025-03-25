@@ -40,8 +40,7 @@
               "node_modules/primeng/resources/primeng.min.css"
             ],
             "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.min.js",
-              "node_modules/apexcharts/dist/apexcharts.min.js"
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ]
           },
           "configurations": {
@@ -74,15 +73,15 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "proxyConfig": "./proxy.conf.json",
-            "buildTarget": "projectname:build"
+            "browserTarget": "projectname:build",
+            "proxyConfig": "./proxy.conf.json"
           },
           "configurations": {
             "production": {
-              "buildTarget": "ModelMartUI:build:production"
+              "browserTarget": "ModelMartUI:build:production"
             },
             "development": {
-              "buildTarget": "ModelMartUI:build:development"
+              "browserTarget": "ModelMartUI:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -90,7 +89,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "ModelMartUI:build"
+            "browserTarget": "ModelMartUI:build"
           }
         },
         "test": {

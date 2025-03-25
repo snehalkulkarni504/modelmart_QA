@@ -2,10 +2,7 @@
     font-family: Helvetica, Arial !important;
     font-size: 12px !important;
 }
-.default-lblvalue {
-    font-weight: 600;
-    margin-left: 0px;
-}
+
 
 .headerName {
     width: 100%;
@@ -18,9 +15,6 @@
 
 .headerName p {
     font-size: 20px !important;
-}
-.modal {
-    background: rgba(0, 0, 0, .5);
 }
 
 .headerinfo {

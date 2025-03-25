@@ -41,16 +41,9 @@
                 </div>
                 
             </div>
-            
-            
             <div class="compare">
-
-                <input type="button" class="btn btn-primary btnDownload" value="Add To Cart"
-                            Name="ADD TO CART" (click)="editModal=false" (click)="openModal()">
- 
                 <input type="button" class="btn btn-primary btnreset" (click)="clearFilter(1)" value="Reset All"
                     Name="Reset">
- 
                 <input type="button" class="btn btn-primary btncompare" (click)="getComparison()" value="Compare"
                     Name="Compare">
             </div>
@@ -452,9 +445,7 @@
                     </div>
                     <div>
                         <input #Comparecheckbox class="form-check-input" type="checkbox" class="SearchCheckbox"
-
-                            id="{{t.csHeaderId}}" (click)="getPartId(t)" title="Select for Compate" value="{{t.uniqueId}}">
- 
+                            id="{{t.csHeaderId}}" (click)="getPartId(t,'M')" title="Select for Compate">
                     </div>
                     <div>
                         <img src="../../../assets/PDFIcon.png" class="PDFIcon" title="Download PDF"
@@ -472,80 +463,6 @@
                 </div>
             </div>
 
-        </div>
-    </div>
-</div>
-<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">{{header}}</h4>
-                <label class="close modal-close-icn" (click)="onCloseHandled()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
-                        viewBox="0 0 16 16">
-                        <path
-                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                    </svg>
-                </label>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group" >
-                        <label for="engDis" class="default-lbl" style="font-size: 16px;"><b>Model Mart ID :</b></label>
-                        <div class="row">
-                            <div class="col-md-2" *ngFor="let u of uniquevalue">
-                            <label style="font-size: 14px;">{{ChekNull(u)}}</label>
-                            
-                        </div>
-                        </div>
-                        <br/>
-                        <br/>   
-                           
-                            <label for="Cartcategory"  class="default-lbl" *ngIf="AddToCart" style="font-size: 16px;">Cart Category</label>
-                            <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true" 
-                                placeholder="Please select" [(ngModel)]='Cartcategory' *ngIf="AddToCart"><ng-option
-                                    *ngFor="let c2 of cartNameList" [value]="c2.cartName">{{c2.cartName}}</ng-option>
-                            </ng-select>
-
-                            
-                                    <label for="cartName" *ngIf="CreateNewCart" class="default-lbl" style="font-size: 16px;">Cart Name</label>
-                                    <input class="form-control form-control-sm" type="text" name="cartName" id="cartName" *ngIf="CreateNewCart"
-                                        placeholder="Please enter Cart Name" [(ngModel)]='Cartcategory'>
-                                        <!-- (keypress)="keyPressDecimal($event)" -->
-                                    <div class="error-message" *ngIf="showError1" style="font-size: 10px;color: red;">
-                                        Please enter CartName.
-                                    </div>
-                                    <div class="error-message" *ngIf="showError2" style="font-size: 10px;color: red;">
-                                        CartName allready exist please use different Cart Name.
-                                    </div>
-                                
-
-
-                            <!-- (keypress)="keyPressDecimal($event)" -->
-                        
-                    </div>
-
-                    <!-- <div class="form-group">
-                    <label for="exampleInput" class="default-lbl">Status</label>
-                    <select class="form-select form-select-sm " (change)="onSelected($event)"
-                        value="{{statusValue}}"name="status">
-                        <option value="" selected hidden>Please select</option>
-                        <option>Active</option>
-                        <option>Inactive</option>
-                    </select>
-                    <div class="error-message" *ngIf="showError2">
-                        Please select status.</div>
-                </div> -->
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismis="modal"
-                    (click)="onCloseHandled()">Close</button>
-                <button type="button" class="btn btn-sm  btn-default default-btn_popup"
-                    (click)="onSaveButton()">{{txt_btn}}</button>
-                    <button type="button" class="btn btn-sm  btn-default default-btn_popup" *ngIf="ShowHideNewCartButton"
-                    (click)="onCartCreate()">Create New Cart</button>
-            </div>
         </div>
     </div>
 </div>

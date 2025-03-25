@@ -34,9 +34,6 @@ import { UserhistoryComponent } from '../Report/userhistory/userhistory.componen
 import { ShouldCostUserHistoryComponent } from '../Report/should-cost-user-history/should-cost-user-history.component';
 import { ComparisonnewComponent } from '../comparisonnew/comparisonnew.component';
 import { CostReductionComponent } from '../cost-reduction/cost-reduction.component';
- 
-import { CartdetailsComponent } from '../cartdetails/cartdetails.component';
- 
 
 // import { SendMessageComponent } from '../contact/send-message/send-message.component';
 //import { UserAuditComponent } from '../user-audit/user-audit.component';
@@ -48,6 +45,7 @@ import { FeedbackComponent } from '../contact/feedback/feedback.component';
 import { FeedbackhistoryComponent } from '../Report/feedbackhistory/feedbackhistory.component';
 import { TcoUploadComponent } from '../Request/tco-upload/tco-upload.component';
  
+
 const routes: Routes = [
   {
     path: '', component: DashBoardComponent,
@@ -86,8 +84,6 @@ const routes: Routes = [
       { path : 'frequentlyusedmaterialgrade' , component:FrequentlyusedmaterialgradeComponent},
       { path : 'costinsights' , component:CostReductionComponent},
       { path : 'toolingcost' , component:HousingflywheelComponent},
-      {path: 'cartdetails',component:CartdetailsComponent}
- 
  
       // { path : 'sendmessage' , component:SendMessageComponent},
      // { path : 'useraudit' , component:UserAuditComponent},
@@ -97,7 +93,6 @@ const routes: Routes = [
       { path : 'feedback', component: FeedbackComponent },
       { path : 'feedbackhistory', component: FeedbackhistoryComponent },
       { path : 'tcoupload', component: TcoUploadComponent },
-
 
       
     ]
