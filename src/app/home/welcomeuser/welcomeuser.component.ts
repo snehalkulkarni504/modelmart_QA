@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BUnitMaster } from 'src/app/Model/BUnitMaster';
@@ -14,6 +13,7 @@ import { MasterServiceService } from 'src/app/SharedServices/master-service.serv
 })
 export class WelcomeuserComponent implements OnInit {
 
+ 
   subIndex: number = 0;
   UserId: any;
   showDynamicMenus = false; // Initially hide the dynamic menus
@@ -145,6 +145,18 @@ export class WelcomeuserComponent implements OnInit {
 
   }
 
+  getBackgroundColor(menuName: string): string {
+    switch (menuName) {
+      case 'Reports': return '#003b3f'; 
+      case 'Masters': return '#f48574'; 
+      case 'Request': return '#6e1017'; 
+      // case 'Menu4': return '#FFFF'; 
+      default: return '#FFFFFF'; // Default color
+    }
+  }
+  
+
 
 
 }
+

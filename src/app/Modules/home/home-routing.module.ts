@@ -88,7 +88,7 @@ const routes: Routes = [
       // { path : 'sendmessage' , component:SendMessageComponent},
      // { path : 'useraudit' , component:UserAuditComponent},
       { path : 'useranalytics' , component:UserAnalyticsComponent},
-      { path : 'cartdeta' , component:CartdetailsComponent},
+      { path : 'cartdetails' , component:CartdetailsComponent},
       { path : 'sendmessage' , component:SendMessageComponent},
       { path : 'feedback', component: FeedbackComponent },
       { path : 'feedbackhistory', component: FeedbackhistoryComponent },

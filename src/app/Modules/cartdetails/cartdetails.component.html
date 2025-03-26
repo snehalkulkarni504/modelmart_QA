@@ -3,149 +3,485 @@
         [fullScreen]="true">
         <img alt="Loading Please Wait..." style="width:100px ; height:100px ;" src="../../../assets/Spin-2.gif" />
     </ngx-spinner>
-
+<div class="setheight">
     <div class="MasterHeader">
         <div style="width: 50%;">
-            <h2>Cart Details</h2>
+            <h2>Bom Simulation</h2>
         </div>
-        <div class="text-end" style="width: 50%;">
-            <button class="btnCreateCart">Create New Cart</button>
+        <div class="text-end" style="width: 80%;">
+           <button class="btnCreateCart" (click)="Downloadtemplate()">Download Template</button>
+            <button class="btnCreateCart" (click)="excelU=true" (click)="cartcreate=false"(click)="openUploadModal()">Upload Excel</button>
+           <!-- <button class="btnCreateCart" (click)="cartcreate=true" (click)="excelU=false" (click)="openModal()">Create New Cart</button>-->
             <button class="btnbackLeft" (click)="backToPreviousPage()">Back</button>
         </div>
     </div>
-
-    <div class="row CartDetails">
-        <div class="col-md-3 Cartnameslist">
-            <form [formGroup]="SearchboxForm">
-                <div class="row font-size">
-                    <div class="col-md-6 " style="height: 25px;">
-                        <label id="clearFilter">Cart List</label>
-                    </div>
-                    <div class="col-md-6 text-end" style=" height: 25px;">
-                        <label (click)="clearCategory3()" id="clearFilterall" title="Clear Selection & Text">Clear
-                            All</label>
-                    </div>
-                    <div class="col-md-12 ">
-
-                        <div class=" scrollbarsearchcat3">
-                            <!-- <input #CartSearch formControlName="Cat3Search" placeholder="Search Category 3"
-                                    id="Cat3Search" (keyup)="SearchCat('CartSearch','CartUL')"
-                                    class="filter_input_Search">
-
-                                <img src="../../../assets/closed.png" class="closedCat2Text"
-                                    (click)="cleartext3('CartUL')" title="Clear Text"> -->
-
-                            <ul #cat2 class="UL_List" id="CartUL">
-                                <li *ngFor="let g of Cat3">
-                                    <label style="display: block;" id="{{g.value}}">
-                                        <input type="checkbox" name="cat3list" class="checkboxsize"
-                                            (change)="getCategoryIdcat3()" formControlName="cartcheckbox"
-                                            value="{{g.value}}" />
-                                        {{g.text}}</label>
-                                </li>
-                            </ul>
-
-                        </div>
-                    </div>
+<!--Start model-->
+    <div id="myModal" class="modal fade"  tabindex="-1" role="dialog" >
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Upload Excel File</h4>
+                    <button type="button" class="close" (click)="closeUploadModal()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <br>
+                <div class="modal-body">
+                    <div style="display: flex; align-items: center;">
+                        <div style="flex: 1;">
+                            <input type="file" id='fileInput' (change)="onFileSelected($event)" accept=".xlsx">
+                            <div class="error-message" *ngIf="showError7"> Please select file to upload</div>
+                        </div>
+                        
+                    </div>
+                    <!-- <input type="date" #fromDateCalendar [(ngModel)]="uploadfromdate" dateFormat="dd-mm-yy"> -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeUploadModal()">Close</button>
+                    <button type="button" class="btn btn-primary" (click)="uploadExcel()">Upload</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--end model for upload-->
 
-            </form>
+<form [formGroup]="BUnitMasterForm">
+    
+    <div class="MasterHeaderlable">
+        <div class="row">
+            <div class="col-md-3 form-group has-search" style="margin-top: 2%;">
+                
+                <span class="bi bi-search form-control-feedback"></span>
+                <input type="text" class="form-control search-input" placeholder="Search"
+                    formControlName="textsearch" [(ngModel)]="textsearch" >
+                
+
+            </div>
+           <!-- <div class="col-md-3">
+                <label for="dropdown5" class="default-lbl">Cart Name</label>
+                <ng-select [ngModelOptions]="{standalone: true}"  [searchable]="true" placeholder="Please select"
+                    [(ngModel)]='selectedcatagory' (change)="ClearGird()" (change)="getCategoryIdcat3()">
+                    <ng-option *ngFor="let g of Cat3"
+                        [value]="g.value">{{g.text}}</ng-option>
+                </ng-select>
+
+            </div>-->
+
+          <!--  <div class="col-md-3">
+                <label for="engineDisplace" class="default-lbl">Engine Displacement</label>
+                <br>
+                
+                <input type="text" name="engineDisplace" id="engine" [(ngModel)]="engineDisplace" class="form-control form-control-sm">
+            </div>-->
+
+            <!--<div class="col-md-2">
+                <label for="datepicker1" class="default-lbl">Platform</label>
+                <br>
+                <input type="text" formControlName="platform" [(ngModel)]="selectedplatform"
+                    class="form-control form-control-sm">
+            </div>-->
+            <div class="col-md-6"></div>
+
+            <div class="col-md-1 text-center">
+                <button type="button" class="btn btn-sm default-btn" data-bs-dismis="modal"
+                (click)="enginefilter()">View</button>
+            </div>
+            <div class="col-md-1 text-center">
+                <button type="button" class="btn btn-sm default-btn" data-bs-dismis="modal"
+                (click)="ReseatFilter()">Reset</button>
+            </div>
+            <div class="col-md-1 text-center">
+                <!-- <button type="button" class="btn btn-sm default-btn" data-bs-dismis="modal" (click)="exportToExcel()">Download</button> -->
+                <br>
+                <img src="../../../../assets/exportexcel.png" class="exportToExcel" (click)="exportToExcel()"
+                    title="Export to Excel">
+            </div>
         </div>
 
-        <div class="col-md-9">
-            <div class="row border-bottom text-center CategoryWelcome ">
-                <div class="CartData">
-                    <h4 class="col-md-12 Categoryheader">
-                        <label id="cetegoryname">Cart Name</label>
-                        <button class="btnAddNewItem">Add Item</button>
-                    </h4>
-                    <div class="row itemdata">
-                        <div class="col-md-2 text-end ">
-                            <img src="../../../assets/No-Image.png" width="60px" height="60px">
+        
+    </div>
+  </form>
+  <div class="row">
+    
+  </div>
+    <div class="d-flex table-responsive table-container" style="font-size: 13px !important;">
+        
+        <table class="table table-bordered table-striped table-container">
+            <thead>
+                <tr>
+                    <th hidden>ID</th>
+                    <th hidden>Bomid</th>
+                    
+                    <th ><thead>
+                        <tr class="group-header"><th colspan="13" class="group-header">Part Level Constraints (Filters)</th></tr>
+                        <tr>
+                           <!-- <th>Noune Name</th>-->
+                            <th>Part Number</th>
+                            <!--<th>Part Name</th>-->
+                            <th>Material</th>
+                            <th>Weight</th>
+                            <th>Price Details</th>
+                            <th>Mfg Loc</th>
+                            <th>Parent</th>
+                            <th>Parent Part Id</th>
+                            <th>CostType</th>
+                            <th>Current Program</th>
+                            <th>Parent Program</th>
+                            <th>Utilization</th>
+                            <th>SupplierName</th>
+                            <th>Bom Qty</th>
+                            
+                        </tr></thead>
+                    </th>
+                    <!--<th>Part.Id</th>
+                    <th>Material</th>
+                    <th>Weight</th>
+                    <th>Price</th>
+                    <th>Mfg.Location</th>
+                    <th>Parent</th>
+                    <th>Parent.Part.Id</th>
+                    <th>Bom.Qty</th>
+                    <th>Cost.Region</th>-->
+                    <th>Name</th>
+                    <th>ModelMart Id</th>
+                    <th>Representative Part Number</th>
+                    <th>Representative Program</th>
+                    <th>Representative Region</th>
+                    <th>Representative SC</th>
+                    <th>Representative Simulated Cost</th>
+                    <th>Final.Cost</th>
+                    <th>Gbpa Cost</th>
+                    <th>Representative Invoice</th>
+                    <th>Model.Type</th>
+                    <th>Match.Type</th>
+                    <th>Dimensions</th>
+                    <th>Weight</th>
+                    <th>Raw Material</th>
+                    <th>Mfg Process </th>
+                    <th>Utilization</th>
+                    <th>Supplier Name</th>
+                    <th>Cost Type</th>
+                    <th>Debrief Date</th>
+                    <th colspan="4">Action</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of SearchProductList | search: textsearch:filterMetadata | paginate: { itemsPerPage: 20, currentPage: page }  let i=index">
+                   <!--<tr>--> 
+                    <td hidden>{{row.cartId}}</td>
+                    <td hidden>{{row.bomId}}</td>
+                    
+                    <td>
+                        
+                        <tr>
+                            <td>
+                                <span *ngIf="!row.editable">{{ row.excelpartno }}</span>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelpartno" value="{{row.excelpartno}}" class="editable-input" />
+                              </td>
+                              <!--<td>
+                                <span *ngIf="!row.editable">{{ row.excelname }}</span>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelname"  value="{{row.excelname}}"/>
+                              </td>-->
+                              <td>
+                                <span *ngIf="!row.editable">{{ row.excelmeterial }}</span>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelmeterial" value="{{row.excelmeterial}}" class="editable-input"/>
+                              </td>
+                              <td>
+                                <span *ngIf="!row.editable">{{ row.excelweight }}</span>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelweight" value="{{row.excelweight}}" class="editable-input"/>
+                              </td>
+                              <td>
+                                <span *ngIf="!row.editable">{{ row.excelprice }}</span>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelprice" value="{{row.excelprice}}" class="editable-input"/>
+                              </td>
+                              <td>
+                                <span *ngIf="!row.editable">{{ row.excelcostregion }}</span>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelcostregion" value="{{row.excelcostregion}}" class="editable-input" />
+                              </td>
+                              <td>
+                                <span *ngIf="!row.editable">{{ row.excelparent }}</span>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelparent" value="{{row.excelparent}}" class="editable-input"/>
+                              </td>
+                              <td>
+                                <span *ngIf="!row.editable">{{ row.excelparentpartid }}</span>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelparentpartid" value="{{row.excelparentpartid}}" class="editable-input" />
+                              </td>
+                              <td>
+                                <span *ngIf="!row.editable">{{ row.excelcosttype }}</span>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelcosttype" value="{{row.excelcosttype}}" class="editable-input"/>
+                              </td>
+                              <td>
+                                <span *ngIf="!row.editable">{{ row.excelcurrentprogram}}</span>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelcurrentprogram" value="{{row.excelcurrentprogram}}" class="editable-input" />
+                              </td>
+                              <td>
+                                <span *ngIf="!row.editable">{{ row.excelparentprogram}}</span>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelparentprogram" value="{{row.excelparentprogram}}" class="editable-input" />
+                              </td>
+                              <td>
+                                <span *ngIf="!row.editable">{{ row.excelutilization}}</span>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelutilization" value="{{row.excelutilization}}" class="editable-input"/>
+                              </td>
+                              <td>
+                                <span *ngIf="!row.editable">{{ row.excelsuppliername}}</span>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelsuppliername" value="{{row.excelsuppliername}}" class="editable-input"/>
+                              </td>
+
+                              <td>
+                                <span *ngIf="!row.editable">{{ row.excelitemcount }}</span>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelitemcount" value="{{row.excelitemcount}}" class="editable-input" />
+                              </td>
+                              
+                        <!--<td>{{data.excelname}}</td> -->   
+                        <!--<td>{{data.excelpartno}}</td>
+                        <td>{{data.excelmeterial}}</td>
+                        <td >{{data.excelweight}}</td>
+                        <td >{{data.excelprice}}</td>
+                        <td >{{data.excelcostregion}}</td>
+                        <td >{{data.excelparent}}</td>
+                        <td>{{data.excelparentpartid}}</td>
+                        <td>{{data.excelitemcount}}</td>
+                        <td>{{data.excelcostregion}}</td>-->
+                        </tr>
+                        </td>
+                    <td>{{row.name}}</td>
+                    <td>{{row.categoryId}}</td>
+                    <td>{{row.partNumber}}</td>
+                    <td>{{row.projectName}}</td>
+                    <td>{{row.mfgRegion}}</td>
+                    <td>{{row.scost}}</td>
+                    <td>{{row.ucost}}</td>
+                    <td *ngIf="row.ucost <= 0">
+                    <span *ngIf="!row.editable">{{row.scost}}</span>
+                    <input *ngIf="row.editable" [(ngModel)]="row.scost" value="{{row.scost}}" />
+                    </td>
+                    <td *ngIf="row.ucost > 0">{{row.ucost}}</td>
+                    <!--<td *ngIf="data.ucost === 0 && data.scost===0">0</td>-->
+                    <td>00</td>
+                    <td>{{row.invoice}}</td>
+                    <td *ngIf="row.ucost <= 0">Original</td>
+                    <td *ngIf="row.ucost > 0">Simulated</td>
+                   <!-- <td *ngIf="data.ucost === 0 && data.scost===0">Original</td>-->
+                    <td>{{row.partNumber}}/{{row.name}}-{{row.engineDisplacement}}</td>
+                    <td>{{row.height}} X {{row.length}} X {{row.width}}</td>
+                    <td>{{row.weight}}</td>
+                    <td>{{row.rowmaterial}}</td>
+                    <td>{{row.mfgProcess}}</td>
+                    <td>{{row.utilization}}</td>
+                    <td>{{row.supplierName}}</td>
+                    <td>{{row.costType}}</td>
+                    <td>{{row.dbdate}}</td>
+                    
+                    <td class="action-buttons" *ngIf="row.excelpartno!=''">
+                        <button *ngIf="!row.editable" (click)="editRow(row)">Re-Run</button>
+                        <button *ngIf="row.editable" (click)="saveRow(row)">Save</button>
+                        <button *ngIf="row.editable" (click)="cancelEdit(row)">Cancel</button>
+                        <button  (click)="Override(row)">override</button>
+                    </td>
+
+                    <!--<td><i class="bi bi-trash-fill" style="color: #da291c; font-size:larger;" (click)="deleteRow(data.BUId)"></i>
+                        <i class="bi bi-pencil-fill" style="padding-left: 20px; color: #da291c; font-size:larger;"
+                            (click)="editModalMethod(data)"></i>
+                    </td>-->
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="d-flex justify-content-between p-2 pagination">
+                         
+        <ngb-pagination [collectionSize]="filterMetadata.count" [(page)]="page" [pageSize]="pageSize"
+            [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm" >
+            <ng-template ngbPaginationPrevious>Prev</ng-template>
+            <ng-template ngbPaginationNext>Next</ng-template>
+        </ngb-pagination>
+        <br>
+    </div>
+
+
+</div>
+<!--Start cratdetails-->
+<div class="table-responsive">
+    <div class="modal "  tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
+        <div class="modal-dialog  modal-dialog-centered" role="document">
+            <div class="modal-content" *ngIf="cartcreate">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{header}}</h4>
+                    <label class="close modal-close-icn" (click)="onCloseHandled()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                        </svg>
+                    </label>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                              
+                               
+                                
+    
+                                
+                                        <label for="cartName"  class="default-lbl" style="font-size: 16px;">Cart Name</label>
+                                        <input class="form-control form-control-sm" type="text" name="cartName" id="cartName" 
+                                            placeholder="Please enter Cart Name" [(ngModel)]='Cartcategory'>
+                                            <!-- (keypress)="keyPressDecimal($event)" -->
+                                        <div class="error-message" *ngIf="showError1" style="font-size: 10px;color: red;">
+                                            Please enter CartName.
+                                        </div>
+                                        <div class="error-message" *ngIf="showError2" style="font-size: 10px;color: red;">
+                                            CartName allready exist please use different Cart Name.
+                                        </div>
+                                    
+    
+    
+                                <!-- (keypress)="keyPressDecimal($event)" -->
+                            
                         </div>
-                        <div class="col-md-8 text-start nounName">
-                            <h6>VPI-CBU-CTT-Titanium X1-USA-RING,NOZZLE-6514247</h6>
-                            <div>
-                                <div class="d-flex align-items-center justify-content-center" style="float: left; height: 25px;  font-size: 13px;">
-                                    <label>Model Mart Id :</label>
-                                    <label style="margin-left: 5px;" >2024000100</label>
-                                </div>
-                                <div  class="d-flex align-items-center justify-content-center" style="float: left;height: 25px; margin-left: 50px; font-size: 13px;" >
-                                    <label>Qty.</label>
-                                    <input class="textQty" type="number">
-
-                                    <svg style="margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" width="17"
-                                        height="17" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
-                                        <path
-                                            d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
-                                        <path
-                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-                                    </svg>
-                                    <svg style="margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" width="17"
-                                        height="17" fill="currentColor" class="bi bi-dash-square" viewBox="0 0 16 16">
-                                        <path
-                                            d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
-                                        <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8" />
-                                    </svg>
-
-                                    <svg style="margin-left: 30px;" xmlns="http://www.w3.org/2000/svg" width="22"
-                                        height="22" fill="#da291c" class="bi bi-trash" viewBox="0 0 16 16">
-                                        <path
-                                            d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                                        <path
-                                            d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row itemdata">
-                        <div class="col-md-2 text-end ">
-                            <img src="../../../assets/No-Image.png" width="60px" height="60px">
-                        </div>
-                        <div class="col-md-8 text-start nounName">
-                            <h6>VPI-CBU-CTT-Titanium X1-USA-RING,NOZZLE-6514247</h6>
-                            <div>
-                                <div class="d-flex align-items-center justify-content-center" style="float: left; height: 25px;  font-size: 13px;">
-                                    <label>Model Mart Id :</label>
-                                    <label style="margin-left: 5px;" >2024000100</label>
-                                </div>
-                                <div  class="d-flex align-items-center justify-content-center" style="float: left;height: 25px; margin-left: 50px; font-size: 13px;" >
-                                    <label>Qty.</label>
-                                    <input class="textQty" type="number">
-
-                                    <svg style="margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" width="17"
-                                        height="17" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
-                                        <path
-                                            d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
-                                        <path
-                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-                                    </svg>
-                                    <svg style="margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" width="17"
-                                        height="17" fill="currentColor" class="bi bi-dash-square" viewBox="0 0 16 16">
-                                        <path
-                                            d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
-                                        <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8" />
-                                    </svg>
-
-                                    <svg style="margin-left: 30px;" xmlns="http://www.w3.org/2000/svg" width="22"
-                                        height="22" fill="#da291c" class="bi bi-trash" viewBox="0 0 16 16">
-                                        <path
-                                            d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                                        <path
-                                            d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
+    
+                        <!-- <div class="form-group">
+                        <label for="exampleInput" class="default-lbl">Status</label>
+                        <select class="form-select form-select-sm " (change)="onSelected($event)"
+                            value="{{statusValue}}"name="status">
+                            <option value="" selected hidden>Please select</option>
+                            <option>Active</option>
+                            <option>Inactive</option>
+                        </select>
+                        <div class="error-message" *ngIf="showError2">
+                            Please select status.</div>
+                    </div> -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismis="modal"
+                        (click)="onCloseHandled()">Close</button>
+                    <button type="button" class="btn btn-sm  btn-default default-btn_popup"
+                        (click)="onSaveButton()">{{txt_btn}}</button>
                 </div>
             </div>
 
-        </div>
 
+<!--model for upload excel-->
+            <div class="modal-content" *ngIf="excelU">
+                <div class="modal-header">
+                    <h4 class="modal-title">Upload Excel File</h4>
+                    <button type="button" class="close" (click)="onCloseHandled()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div style="display: flex; align-items: center;">
+                        <div style="flex: 1;">
+                            <input type="file" id='fileInput' (change)="onFileSelected($event)" accept=".xlsx">
+                            <div class="error-message" *ngIf="showError7"> Please select file to upload</div>
+                        </div>
+                        
+                    </div>
+                    <!-- <input type="date" #fromDateCalendar [(ngModel)]="uploadfromdate" dateFormat="dd-mm-yy"> -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" (click)="onCloseHandled()">Close</button>
+                    <button type="button" class="btn btn-sm  btn-default default-btn_popup" (click)="uploadExcel()">Upload</button>
+                </div>
+            </div>
+<!--Model for override--> 
+<div  class="modal-content modalwidth" style="font-size: 10px !important;" *ngIf="override">
+    <div class="modal-header">
+        <h4 class="modal-title">Suggested Bom</h4>
+        <button type="button" class="close" (click)="onCloseHandled()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                    <th>ModelMart Id</th>
+                    <th>Representative Part Number</th>
+                    <th>Representative Program</th>
+                    <th>Representative Region</th>
+                    <th>Representative SC</th>
+                    <th>Representative Simulated Cost</th>
+                    <th>Final.Cost</th>
+                    <th>Gbpa Cost</th>
+                    <th>Representative Invoice</th>
+                    <th>Model.Type</th>
+                    <th>Match.Type</th>
+                    <th>Dimensions</th>
+                    <th>Weight</th>
+                    <th>Raw Material</th>
+                    <th>Mfg Process </th>
+                    <th>Utilization</th>
+                    <th>Supplier Name</th>
+                    <th>Cost Type</th>
+                    <th>Debrief Date</th>
+                
+                <th colspan="4">Action</th>
+            </tr>
+            
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of OverrideProductList | search: textsearch:filterMetadata | paginate: { itemsPerPage: 20, currentPage: page }  let i=index">
+               <!--<tr>--> 
+                <td>{{row.name}}</td>
+                <td>{{row.categoryId}}</td>
+                <td>{{row.partNumber}}</td>
+                <td>{{row.projectName}}</td>
+                <td>{{row.mfgRegion}}</td>
+                <td>{{row.scost}}</td>
+                <td>{{row.ucost}}</td>
+                <td *ngIf="row.ucost <= 0">
+                <span *ngIf="!row.editable">{{row.scost}}</span>
+                <input *ngIf="row.editable" [(ngModel)]="row.scost" value="{{row.scost}}" />
+                </td>
+                <td *ngIf="row.ucost > 0">{{row.ucost}}</td>
+                <!--<td *ngIf="data.ucost === 0 && data.scost===0">0</td>-->
+                <td>00</td>
+                <td>{{row.invoice}}</td>
+                <td *ngIf="row.ucost <= 0">Original</td>
+                <td *ngIf="row.ucost > 0">Simulated</td>
+               <!-- <td *ngIf="data.ucost === 0 && data.scost===0">Original</td>-->
+                <td>{{row.partNumber}}/{{row.name}}-{{row.engineDisplacement}}</td>
+                <td>{{row.height}} X {{row.length}} X {{row.width}}</td>
+                <td>{{row.weight}}</td>
+                <td>{{row.rowmaterial}}</td>
+                <td>{{row.mfgProcess}}</td>
+                <td>{{row.utilization}}</td>
+                <td>{{row.supplierName}}</td>
+                <td>{{row.costType}}</td>
+                <td>{{row.dbdate}}</td>
+
+              
+                <td class="action-buttonsmodel">
+                    <button (click)="Replace(row)">Replace</button>
+                </td>
+                
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-secondary" (click)="onCloseHandled()">Close</button>
     </div>
 </div>
+
+        </div>
+
+        
+
+        
+    </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+

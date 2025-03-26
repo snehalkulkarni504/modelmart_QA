@@ -26,234 +26,244 @@
     </div>
   </div>
 
-  <div class="menu-container" *ngIf="showMainMenus" >
+  <div [hidden]="!showMainMenus" class="menu-container">
 
-    <!-- Main Menu 1: Dashboard -->
-    <div class="menu-section">
-      <!-- Submenu for Dashboard -->
-      <div class="submenu-container">
-        <div class="submenu-card" (click)="navigate('/home/search/ ')">
-          <div class="menu-card-upper">
-            <img src="../../../assets/userwelcome/search2.png" alt="Submenu Icon 1" class="menu-icon2" />
-          </div>
-          <h4 class="menu-heading">
-            Search
-          </h4>
-          <div class="menu-card-lower">
-            <span>Search from thousands of existing historical cost models.
-              Update models based on the latest</span>
-          </div>
+    <!-- *ngIf="showMainMenus" -->
+
+    <div class="mainmenu-container">
+      <div class="mainmenu-card" (click)="navigate('/home/search/ ')" style="border-color: #d52e2a;" >
+        <div class="main-menucard-upper" style="background-color: #d52e2a;">
+
+          <span class="mainmenu-tab" style="background-color: #d52e2a;">
+
+          </span>
+          <img src="../../../assets/userwelcome/M_Search.png" alt="Submenu Icon 6" class="mainmenu-icon" />
+        </div>
+        <h4 class="menu-heading">
+          Search
+        </h4>
+        <div class="main-menucard-lower">
+          <span>Search from thousands of existing historical cost models </span>
         </div>
       </div>
     </div>
 
-    <!-- Main Menu 2: Settings -->
-    <div class="menu-section">
-      <!-- Submenu for Settings -->
-      <div class="submenu-container">
-        <div class="submenu-card" (click)="navigate('/home/shouldcostrequest/:request')">
-          <div class="menu-card-upper">
-            <img src="../../../assets/userwelcome/request_status2.png" alt="Submenu Icon 2" class="menu-icon2" />
-          </div>
-          <h4 class="menu-heading">
-            <!-- <img src="../../../assets/dashboard_icon.png" alt="Settings Icon" class="menu-image" /> -->
-            Request
-          </h4>
-          <div class="menu-card-lower">
-            <span>Couldn't find a relevant model? Request for new models.</span>
-          </div>
+    <div class="mainmenu-container">
+      <div class="mainmenu-card" (click)="showSubMenu('Request')"  style="border-color: #6e1017" >
+        <div class="main-menucard-upper" style="background-color: #6e1017;">
+          <span class="mainmenu-tab" style="background-color: #6e1017;">
+
+          </span>
+          <img src="../../../assets/userwelcome/M_Request.png" alt="Submenu Icon 6" class="mainmenu-icon" />
+        </div>
+        <h4 class="menu-heading">
+          Request
+        </h4>
+        <div class="main-menucard-lower">
+          <span>Couldn't find a relevant model? Request for new models.</span>
         </div>
       </div>
     </div>
 
-    <!-- Main Menu 3: Profile -->
-    <div class="menu-section">
-      <!-- Submenu for Profile -->
-      <div class="submenu-container">
-        <div class="submenu-card" (click)="navigate('/home/shouldcostrequeststatus')">
-          <div class="menu-card-upper">
-            <img src="../../../assets/userwelcome/check2.png" alt="Submenu Icon 3" class="menu-icon2" />
-          </div>
-          <h4 class="menu-heading">
-            Check Status
-          </h4>
-          <div class="menu-card-lower">
-            <span>Already requested a model? See your current request status</span>
-          </div>
+    <div class="mainmenu-container">
+      <div class="mainmenu-card"  (click)="navigate('/home/shouldcostrequeststatus')" style="border-color: #242d4f;">
+        <div class="main-menucard-upper" style="background-color: #242d4f;">
+          <span class="mainmenu-tab" style="background-color: #242d4f;">
+
+          </span>
+          <img src="../../../assets/userwelcome/M_CheckStatus.png" alt="Submenu Icon 6" class="mainmenu-icon" />
+        </div>
+        <h4 class="menu-heading">
+          Check Status
+        </h4>
+        <div class="main-menucard-lower">
+          <span>Already requested a model? See your current request status</span>
         </div>
       </div>
     </div>
 
-    <!-- Main Menu 4: Dashboard -->
-    <div class="menu-section">
-      <!-- Submenu for Dashboard -->
-      <div class="submenu-container">
-        <div class="submenu-card" (click)="navigate('/submenu4-url')">
-          <!-- Submenu Icon -->
-          <div class="menu-card-upper">
-            <img src="../../../assets/userwelcome/materialreport2.png" alt="Submenu Icon 4" class="menu-icon2" />
-          </div>
+    <div class="mainmenu-container">
+      <div class="mainmenu-card"  (click)="navigate('/home/cartdetails')" style="border-color: #52a0d5;">
+        <div class="main-menucard-upper" style="background-color: #52a0d5;">
+          <span class="mainmenu-tab" style="background-color: #52a0d5;"></span>
 
-          <!-- Heading and Dashboard Icon in one line -->
-          <div class="menu-heading-container">
-            <h4 class="menu-heading">Bom Simulation</h4>
-          </div>
-
-          <!-- Description -->
-          <div class="menu-card-lower">
-            <span>Need to simulate a BOM early in the program?</span>
-          </div>
+          <img src="../../../assets/userwelcome/M_BomSimulation.png" alt="Submenu Icon 6" class="mainmenu-icon" />
         </div>
-      </div>
+          <h4 class="menu-heading">Bom Simulation</h4>
 
-    </div>
-
-    <!-- Main Menu 6: Profile -->
-    <div class="menu-section">
-      <!-- Submenu for Profile -->
-      <div class="submenu-container">
-        <div class="submenu-card" (click)="navigate('/submenu6-url')">
-          <div class="menu-card-upper">
-            <img src="../../../assets/userwelcome/design2.png" alt="Submenu Icon 6" class="menu-icon2" />
-          </div>
-          <h4 class="menu-heading">
-            <!-- <img src="../../../assets/dashboard_icon.png" alt="Profile Icon" class="menu-image" /> -->
-            Design to Cost
-          </h4>
-          <div class="menu-card-lower">
-            <span>Compare & correlate design and cost implications.</span>
-          </div>
+        <div class="main-menucard-lower">
+          <span>Need to simulate a BOM early in the program?</span>
         </div>
       </div>
     </div>
 
-    <!-- Main Menu 7: Dashboard -->
-    <div class="menu-section">
-      <!-- Submenu for Dashboard -->
-      <div class="submenu-container">
-        <div class="submenu-card"
-          (click)="showSubMenu('Reports')">
-          <div class="menu-card-upper">
-            <img src="../../../assets/userwelcome/userreport2.png" alt="Submenu Icon 7" class="menu-icon2" />
-          </div>
-          <h4 class="menu-heading">
-            <!-- <img src="../../../assets/dashboard_icon.png" alt="Menu Icon" class="menu-image" /> -->
-            Reports
-          </h4>
-          <div class="menu-card-lower">
-            <span>Generate several program/region level reports</span>
-          </div>
+    <div class="mainmenu-container">
+      <div class="mainmenu-card"  (click)="navigate('/submenu6-url')" style="border-color: #a5d5e1;">
+        <div class="main-menucard-upper" style="background-color: #a5d5e1;">
+          <span class="mainmenu-tab" style="background-color: #a5d5e1;"></span>
+
+          <img src="../../../assets/userwelcome/M_DesignToCost.png" alt="Submenu Icon 6" class="mainmenu-icon" />
+        </div>
+        <h4 class="menu-heading">
+          Design to Cost
+        </h4>
+        <div class="main-menucard-lower">
+          <span>Compare & correlate design and cost implications.</span>
         </div>
       </div>
     </div>
 
-    <!-- Main Menu 8: Settings -->
-    <div class="menu-section">
-      <!-- Submenu for Settings -->
-      <div class="submenu-container">
-        <div class="submenu-card" (click)="navigate('/home/costinsights')">
-          <div class="menu-card-upper">
-            <img src="../../../assets/userwelcome/cost_insights2.png" alt="Submenu Icon 8" class="menu-icon2" />
-          </div>
-          <h4 class="menu-heading">
-            <!-- <img src="../../../assets/dashboard_icon.png" alt="Settings Icon" class="menu-image" /> -->
-            Cost Insights
-          </h4>
-          <div class="menu-card-lower">
-            <span>Find out cost optimization opportunities for your category.</span>
-          </div>
+    <div class="mainmenu-container">
+      <div class="mainmenu-card"  (click)="navigate('/submenu6-url')" style="border-color: #c2d7ec;">
+        <div class="main-menucard-upper" style="background-color: #c2d7ec;">
+          <span class="mainmenu-tab" style="background-color: #c2d7ec;">
+
+          </span>
+          <img src="../../../assets/userwelcome/M_ToolingShouldCost.png" alt="Submenu Icon 6" class="mainmenu-icon" />
+        </div>
+        <h4 class="menu-heading">
+          Tooling Should Cost
+        </h4>
+        <div class="main-menucard-lower">
+          <span> Looking for tooling should cost? </span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="mainmenu-container">
+      <div class="mainmenu-card"  (click)="showSubMenu('Reports')" style="border-color: #003b3f">
+        <div class="main-menucard-upper" style="background-color: #003b3f;">
+          <span class="mainmenu-tab" style="background-color: #003b3f;">
+
+          </span>
+          <img src="../../../assets/userwelcome/M_Reports.png" alt="Submenu Icon 6" class="mainmenu-icon" />
+        </div>
+        <h4 class="menu-heading">
+          Reports
+        </h4>
+        <div class="main-menucard-lower">
+          <span>General several program/region level reports</span>
         </div>
       </div>
     </div>
 
-    <!-- Main Menu 9: Profile -->
-    <div class="menu-section">
-      <!-- Submenu for Profile -->
-      <div class="submenu-container">
-        <div class="submenu-card" (click)="navigate('/home')">
-          <div class="menu-card-upper">
-            <img src="../../../assets/userwelcome/category2.png" alt="Submenu Icon 9" class="menu-icon2" />
-          </div>
-          <h4 class="menu-heading">
-            <!-- <img src="../../../assets/dashboard_icon.png" alt="Profile Icon" class="menu-image" /> -->
-            Cat3 Management
-          </h4>
-          <div class="menu-card-lower">
-            <span>Do you manage a category? Look for the consolidated details of all models for your category.</span>
-          </div>
+    <div class="mainmenu-container">
+      <div class="mainmenu-card"  (click)="navigate('/home/costinsights')" style="border-color: #2fa365;">
+        <div class="main-menucard-upper" style="background-color: #2fa365;">
+          <span class="mainmenu-tab" style="background-color: #2fa365;">
+
+          </span>
+          <img src="../../../assets/userwelcome/M_CostInsights.png" alt="Submenu Icon 6" class="mainmenu-icon" />
         </div>
-      </div>
-    </div>
-    <div class="menu-section">
-      <!-- Submenu for Profile -->
-      <div class="submenu-container">
-        <div class="submenu-card" (click)="navigate('/home/contact')">
-          <div class="menu-card-upper">
-            <img src="../../../assets/userwelcome/help2.png" alt="Submenu Icon 9" class="menu-icon2" />
-          </div>
-          <h4 class="menu-heading">
-            <!-- <img src="../../../assets/dashboard_icon.png" alt="Profile Icon" class="menu-image" /> -->
-            Help & Support
-          </h4>
-          <div class="menu-card-lower">
-            <span>Need help? Navigate to our Help & Support Page</span>
-          </div>
+        <h4 class="menu-heading">
+          Cost Insights
+        </h4>
+        <div class="main-menucard-lower">
+          <span>Find out cost optimization opportunities for your category.</span>
         </div>
       </div>
     </div>
 
-    <div class="menu-section">
-      <!-- Submenu for Profile -->
-      <div class="submenu-container">
-        <div class="submenu-card"   (click)="showSubMenu('Masters')">
-          <div class="menu-card-upper">
-            <img src="../../../assets/userwelcome/useracess2.png" alt="Submenu Icon 9" class="menu-icon2" />
-          </div>
-          <h4 class="menu-heading">
-            <!-- <img src="../../../assets/dashboard_icon.png" alt="Profile Icon" class="menu-image" /> -->
-            Admin Activities
-          </h4>
-          <div class="menu-card-lower">
-            <span>(Limited access - Admin, SC Team)</span>
-          </div>
+    <div class="mainmenu-container">
+      <div class="mainmenu-card" (click)="navigate('/home')" style="border-color: #e0e980;">
+        <div class="main-menucard-upper" style="background-color: #e0e980;">
+          <span class="mainmenu-tab" style="background-color: #e0e980;">
+
+          </span>
+          <img src="../../../assets/userwelcome/M_CategoryManagment.png" alt="Submenu Icon 6" class="mainmenu-icon" />
+        </div>
+        <h4 class="menu-heading">
+          Cat3 Management
+        </h4>
+        <div class="main-menucard-lower">
+          <span>Do you manage a category? Look for the consolidated details of all models for your category.</span>
         </div>
       </div>
     </div>
 
+
+    <div class="mainmenu-container">
+      <div class="mainmenu-card"  (click)="navigate('/home/contact')" style="border-color: #a9a8a6;">
+        <div class="main-menucard-upper" style="background-color: #a9a8a6;">
+          <span class="mainmenu-tab" style="background-color: #a9a8a6;">
+
+          </span>
+          <img src="../../../assets/userwelcome/M_help.png" alt="Submenu Icon 6" class="mainmenu-icon" />
+        </div>
+        <h4 class="menu-heading">
+          Help & Support
+        </h4>
+        <div class="main-menucard-lower">
+          <span>Need help? Navigate to our Help & Support Page</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mainmenu-container">
+      <div class="mainmenu-card" (click)="showSubMenu('Masters')" style="border-color: #ef7659" >
+        <div class="main-menucard-upper" style="background-color: #ef7659;">
+          <span class="mainmenu-tab" style="background-color: #ef7659;">
+
+          </span>
+          <img src="../../../assets/userwelcome/M_Admin.png" alt="Submenu Icon 6" class="mainmenu-icon" />
+        </div>
+        <h4 class="menu-heading">
+          Admin Activities
+        </h4>
+        <div class="main-menucard-lower">
+          <span>Site maintenance & tools for Admin</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="mainmenu-container">
+      <div class="mainmenu-card" (click)="showSubMenu('Reports')">
+        <div class="menu-card-upper">
+          <img src="../../../assets/userwelcome/UserAnalyticReport.png" alt="Submenu Icon 7" class="mainmenu-icon" />
+        </div>
+        <h4 class="menu-heading">
+        </h4>
+        <div class="menu-card-lower">
+          <span class="submenu-tab"></span>
+          <span>Generate several program/region level reports</span>
+        </div>
+
+      </div>
+    </div> -->
   </div>
 
-  <div class="menu-container1">
-  <ng-container *ngIf="showDynamicMenus">
-    <div *ngFor="let menu of submenu; let i = index" [ngClass]="{'large-menu': menu.submenulist?.length > 3 }">
+  <!-- Submenus html -->
+
+
+  <div [hidden]="!showDynamicMenus" class="menu-container1"  >
+    <!-- <ng-container *ngIf="showDynamicMenus"> -->
+      <div *ngFor="let menu of submenu; let i = index" [ngClass]="{'large-menu': menu.submenulist?.length > 1 }">
 
         <h4 class="menu-heading1">
-          <img [src]="menu.imageUrl || '../../../assets/dashboard_icon.png'" 
-               alt="Menu Icon" 
-               class="menu-image1" />
+          <img [src]="menu.imageUrl || '../../../assets/dashboard_icon.png'" alt="Menu Icon" class="menu-image1" />
           {{ menu.SubMenu }}
-        </h4>
-        <div class="text-end">
           <button class="btnbackLeft" (click)="backToPreviousPage()">Back</button>
-        </div>
+        </h4>
 
-
-      <div *ngIf="menu.submenulist?.length" class="submenu-container">
-        <div *ngFor="let submenu of menu.submenulist; let subIndex = index" class="submenu-card"
-          (click)="navigate(submenu.Navigate_Url)">
-
-          <div class="menu-card-upper">
-            <img [src]="submenu.MenuIcon" alt="Submenu Icon" class="menu-icon2" />
+        <div *ngIf="menu.submenulist?.length" class="submenu-cardscontainer">
+          <div *ngFor="let submenu of menu.submenulist; let subIndex = index" class="submenu-containersub"
+            (click)="navigate(submenu.Navigate_Url)">   
+            
+          <div class="menuborder" [style.border-color]="getBackgroundColor(menu.SubMenu)" >   
+            <div class="menu-card-upper">
+              <img [src]="submenu.MenuIcon" alt="Submenu Icon" class="menu-icon1" />
+            </div>
+            <div class="menu-card-lower" [style.background-color]="getBackgroundColor(menu.SubMenu)" >
+              <span class="submenu-tab"></span>
+              <span>{{submenu.SubMenu}}</span>
+            </div>
+             
           </div>
-
-          <div class="menu-card-lower">
-            <span>{{ submenu.SubMenu?.replace('Supplier Manufacturing Location', 'Supplier Mfg Location') }}</span>
           </div>
-
-
         </div>
       </div>
-    </div>
-  </ng-container>
-</div>
+    <!-- </ng-container> -->
+  </div>
 
 </div>

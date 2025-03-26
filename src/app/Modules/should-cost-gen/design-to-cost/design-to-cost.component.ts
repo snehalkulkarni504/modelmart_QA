@@ -36,7 +36,7 @@ export class DesignToCostComponent {
   @Input() table_Data=[];
   @Output() saveTrigger: EventEmitter<any> = new EventEmitter();
 
-
+  message: any="| No records found...";
   config: any;
   page: number=1;
   pageSize: number=5;
@@ -62,13 +62,11 @@ export class DesignToCostComponent {
   filteredNounNameTableData: TableRow[] = [];
   filteredNonunProgramTableData: TableRow[] = [];
 
-
   filteredPartNumberTableData_original: TableRow[] = [];
   filteredNounNameTableData_original: TableRow[] = [];
   filteredNonunProgramTableData_original: TableRow[] = [];
 
   isSecondDropdownDisabled: boolean = true;
-
 
   selectedColumn2: string = '';
   selectedValue2: string = '';
@@ -81,9 +79,6 @@ export class DesignToCostComponent {
   columnValues3: string[] = [];
   filteredTableData3: TableRow[] = [];
   isSecondDropdownDisabled3: boolean = true;
-
-
-  
 
   async ngOnInit(){
     // // console.log("ucProgramName",this.ProgramName);
@@ -224,6 +219,7 @@ export class DesignToCostComponent {
       complete: () => {
         if(this.filteredPartNumberTableData.length>0){
           this.columnNames = Object.keys(this.filteredPartNumberTableData[0]);
+          this.selectedColumn="---Select Filter---";
         }
       },
     });
@@ -244,6 +240,7 @@ export class DesignToCostComponent {
       complete: () => {
         if(this.filteredNounNameTableData.length>0){
           this.columnNames = Object.keys(this.filteredNounNameTableData[0]);
+          this.selectedColumn2="---Select Filter---";
         }
       },
     });
@@ -264,6 +261,7 @@ export class DesignToCostComponent {
       complete: () => {
         if(this.filteredNonunProgramTableData.length>0){
           this.columnNames = Object.keys(this.filteredNonunProgramTableData[0]);
+          this.selectedColumn3="---Select Filter---";
         }
       },
     });
@@ -287,6 +285,7 @@ export class DesignToCostComponent {
             .filter(value => value !== null && value !== undefined) // Filter out null and undefined values
         )
       ];
+      this.selectedValue="---Select Value---";
     } else {
       this.isSecondDropdownDisabled = true;
       this.columnValues = [];
@@ -299,7 +298,14 @@ export class DesignToCostComponent {
     // Enable the second dropdown and populate it with values of the selected column
     if (this.selectedColumn2) {
       this.isSecondDropdownDisabled2 = false;
-      this.columnValues2 = [...new Set(this.filteredNounNameTableData_original.map(row => row[this.selectedColumn2 as keyof TableRow]))];
+      this.columnValues2 = [
+        ...new Set(
+          this.filteredNounNameTableData_original
+            .map(row => row[this.selectedColumn2 as keyof TableRow])
+            .filter(value => value !== null && value !== undefined) // Filter out null and undefined values
+        )
+      ];;
+      this.selectedValue2="---Select Value---";
     } else {
       // If no column is selected, disable the second dropdown
       this.isSecondDropdownDisabled2 = true;
@@ -314,7 +320,14 @@ export class DesignToCostComponent {
     // Enable the second dropdown and populate it with values of the selected column
     if (this.selectedColumn3) {
       this.isSecondDropdownDisabled3 = false;
-      this.columnValues3 = [...new Set(this.filteredNonunProgramTableData_original.map(row => row[this.selectedColumn3 as keyof TableRow]))];
+      this.columnValues3 = [
+        ...new Set(
+          this.filteredNonunProgramTableData_original
+            .map(row => row[this.selectedColumn3 as keyof TableRow])
+            .filter(value => value !== null && value !== undefined) // Filter out null and undefined values
+        )
+      ];
+      this.selectedValue3="---Select Value---";
     } else {
       // If no column is selected, disable the second dropdown
       this.isSecondDropdownDisabled3 = true;
@@ -493,4 +506,5 @@ export class DesignToCostComponent {
     // Generate Excel file and trigger download
     XLSX.writeFile(workbook, fileName);
   }
+  
 }
