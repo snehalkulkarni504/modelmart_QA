@@ -1,11 +1,11 @@
 <div class="table-container">
   
-    <div style="width: 50%; float: left; height: 50px;   ">
+    <div style="width: 90%; float: left; height: 50px;  ">
       <h3 class="title">VAVE Ideas for {{NounName}}<span *ngIf="filteredPartNumberTableData.length <= 0"
           style="margin-left: 10px;">{{message}} </span> </h3>
     </div>
-    <div  style="width: 50%; float: left; height: 50px;  ">
-      <img src="../../../../assets/exportexcel.png" class="exportToExcel"
+    <div  style="width: 10%; float: left; height: 50px;  ">
+      <img [hidden]="IsNoData" src="../../../../assets/exportexcel.png" class="exportToExcel"
         (click)="exportToExcel(filteredPartNumberTableData)" title="Export to Excel">
     </div>
  

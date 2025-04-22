@@ -25,38 +25,38 @@ interface TableRow {
 @Component({
   selector: 'app-design-to-cost',
   standalone: true,
-  imports: [CommonModule, FormsModule,NgSelectModule, NgbPagination, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, NgSelectModule, NgbPagination, NgxPaginationModule],
   templateUrl: './design-to-cost.component.html',
   styleUrls: ['./design-to-cost.component.css']
 })
 
 export class DesignToCostComponent {
 
-  @Input() PartNumber:any;
-  @Input() ProgramName:any;
-  @Input() NounName:any;
-  @Input() table_Data=[];
+  @Input() PartNumber: any;
+  @Input() ProgramName: any;
+  @Input() NounName: any;
+  @Input() table_Data = [];
   @Output() saveTrigger: EventEmitter<any> = new EventEmitter();
 
-  message: any="| No Ideas found...";
+  message: any = "| No Ideas found...";
   config: any;
-  page: number=1;
-  pageSize: number=10;
-  page2: number=1;
-  page3:number=1;
-  itemonperpage: number=10;
+  page: number = 1;
+  pageSize: number = 10;
+  page2: number = 1;
+  page3: number = 1;
+  itemonperpage: number = 10;
 
-  FilterData:any[]=[];
+  FilterData: any[] = [];
   selectedFilteredData: [] = [];
 
-  constructor(public searchservice: SearchService){
-    this.config={
-      currentPage:1,
-      itemsPerPage:10
+  constructor(public searchservice: SearchService) {
+    this.config = {
+      currentPage: 1,
+      itemsPerPage: 10
     }
   }
 
-  columnNames: string[] = ['Idea','Program','Part Number', 'Potential Savings Per Piece', 'Idea Owner'];
+  columnNames: string[] = ['Idea', 'Program', 'Part Number', 'Potential Savings Per Piece', 'Idea Owner'];
   columnValues: string[] = [];
   selectedColumn: string = '';
   selectedValue: string = '';
@@ -83,13 +83,14 @@ export class DesignToCostComponent {
   columnValues3: string[] = [];
   filteredTableData3: TableRow[] = [];
   isSecondDropdownDisabled3: boolean = true;
+  IsNoData = true;
 
-  async ngOnInit(){
-  
+  async ngOnInit() {
+
   }
 
   onValueChange(): void {
-   let column: any;
+    let column: any;
     if (this.selectedColumn && this.selectedValue) {
       column = this.getUpdatedColumnname(this.selectedColumn);
       this.filteredPartNumberTableData = this.filteredPartNumberTableData_original.filter(row => row[column as keyof TableRow] === this.selectedValue);
@@ -98,7 +99,7 @@ export class DesignToCostComponent {
     }
   }
 
-  async ngOnChanges(changes: SimpleChanges){
+  async ngOnChanges(changes: SimpleChanges) {
     //console.log("ucProgramName",this.ProgramName);
     //console.log("ucPartNumber",this.PartNumber);
     //console.log("ucNounName",this.NounName);
@@ -107,114 +108,121 @@ export class DesignToCostComponent {
 
   }
 
-  gettabledata(){
+
+
+  gettabledata() {
     this.searchservice.GetDesignToCostAvailableDetail(this.NounName, this.ProgramName, this.PartNumber)
-    .subscribe({
-      next: (response) => {
-        debugger;
-        //console.log('get data :', response);
-        this.filteredPartNumberTableData_original= response;
-        //console.log("response",response);
-        if(this.filteredPartNumberTableData_original.length>0){
-        this.filteredPartNumberTableData_original.forEach((element, index)=>{
-          this.filteredPartNumberTableData_original[index].sharepoint_ID = element.sharepoint_ID.toString();
-        })
-      }
-        //console.log("this.filteredPartNumberTableData_original",this.filteredPartNumberTableData_original);
+      .subscribe({
+        next: (response) => {
+          debugger;
+          //console.log('get data :', response);
+          this.filteredPartNumberTableData_original = response;
 
-        this.filteredPartNumberTableData = [...this.filteredPartNumberTableData_original];
-        this.filteredData = [...this.filteredPartNumberTableData];
-      },
-      error: (error) => {
-        //console.error('get data for part number failed:', error);
-        //alert(error);
-      },
-      complete: () => {
-          this.selectedColumn="---Select Filter---";
-      },
-    });
+          //console.log("response",response);
+          if (this.filteredPartNumberTableData_original.length > 0) {
+            this.filteredPartNumberTableData_original.forEach((element, index) => {
+              this.filteredPartNumberTableData_original[index].sharepoint_ID = element.sharepoint_ID.toString();
+            })
+
+            this.IsNoData = false;
+          }
+          else{
+            this.IsNoData = true;
+          }
+          //console.log("this.filteredPartNumberTableData_original",this.filteredPartNumberTableData_original);
+
+          this.filteredPartNumberTableData = [...this.filteredPartNumberTableData_original];
+          this.filteredData = [...this.filteredPartNumberTableData];
+        },
+        error: (error) => {
+          //console.error('get data for part number failed:', error);
+          //alert(error);
+          this.IsNoData = true;
+        },
+        complete: () => {
+          this.selectedColumn = "---Select Filter---";
+        },
+      });
   }
 
- 
-  getTabeleDataForPartNumber(PartNumber: any){
+
+  getTabeleDataForPartNumber(PartNumber: any) {
     this.searchservice.GetDesignToCostPart(PartNumber)
-    .subscribe({
-      next: (response) => {
-        //console.log('get data for part number:', response);
-        this.filteredPartNumberTableData_original= response;
+      .subscribe({
+        next: (response) => {
+          //console.log('get data for part number:', response);
+          this.filteredPartNumberTableData_original = response;
 
-        this.filteredPartNumberTableData = [...this.filteredPartNumberTableData_original];
-      },
-      error: (error) => {
-        //console.error('get data for part number failed:', error);
-        //alert(error);
-      },
-      complete: () => {
-          this.selectedColumn="---Select Filter---";
-      },
-    });
+          this.filteredPartNumberTableData = [...this.filteredPartNumberTableData_original];
+        },
+        error: (error) => {
+          //console.error('get data for part number failed:', error);
+          //alert(error);
+        },
+        complete: () => {
+          this.selectedColumn = "---Select Filter---";
+        },
+      });
   }
 
-  getTableDataforNoun(NounName: any){
+  getTableDataforNoun(NounName: any) {
     this.searchservice.GetDesignToCostNoun(NounName)
-    .subscribe({
-      next: (response) => {
-        //console.log('get data for Noun Name:', response);
-        this.filteredNounNameTableData_original= response;
-        this.filteredNounNameTableData =[...this.filteredNounNameTableData_original];
-      },
-      error: (error) => {
-        //console.error('get data for Noun Name failed:', error);
-        //alert(error);
-      },
-      complete: () => {
-          this.selectedColumn2="---Select Filter---";
-    
-      },
-    });
+      .subscribe({
+        next: (response) => {
+          //console.log('get data for Noun Name:', response);
+          this.filteredNounNameTableData_original = response;
+          this.filteredNounNameTableData = [...this.filteredNounNameTableData_original];
+        },
+        error: (error) => {
+          //console.error('get data for Noun Name failed:', error);
+          //alert(error);
+        },
+        complete: () => {
+          this.selectedColumn2 = "---Select Filter---";
+
+        },
+      });
   }
 
-  getTableDataforNounProgram(NounName: any, Porgram: any){
+  getTableDataforNounProgram(NounName: any, Porgram: any) {
     this.searchservice.GetDesignToCostNounProgram(NounName, Porgram)
-    .subscribe({
-      next: (response) => {
-        //console.log('get data for Noun Name:', response);
-        this.filteredNonunProgramTableData_original= response;
-        this.filteredNonunProgramTableData = [...this.filteredNonunProgramTableData_original];
-      },
-      error: (error) => {
-        //console.error('get data for NounName & Program failed:', error);
-        //alert(error);
-      },
-      complete: () => {
-        if(this.filteredNonunProgramTableData.length>0){
-          this.columnNames = Object.keys(this.filteredNonunProgramTableData[0]);
-          this.selectedColumn3="---Select Filter---";
-        }
-      },
-    });
+      .subscribe({
+        next: (response) => {
+          //console.log('get data for Noun Name:', response);
+          this.filteredNonunProgramTableData_original = response;
+          this.filteredNonunProgramTableData = [...this.filteredNonunProgramTableData_original];
+        },
+        error: (error) => {
+          //console.error('get data for NounName & Program failed:', error);
+          //alert(error);
+        },
+        complete: () => {
+          if (this.filteredNonunProgramTableData.length > 0) {
+            this.columnNames = Object.keys(this.filteredNonunProgramTableData[0]);
+            this.selectedColumn3 = "---Select Filter---";
+          }
+        },
+      });
   }
 
-  getUpdatedColumnname(column: string){
-    if(column=="Idea"){
-      return column ="idea";
+  getUpdatedColumnname(column: string) {
+    if (column == "Idea") {
+      return column = "idea";
     }
     // else if(column=="Noun Name"){
     //   return column="nounName";
     // }
-    else if(column=="Program")
-    {
-      return column="program";
+    else if (column == "Program") {
+      return column = "program";
     }
-    else if(column=="Part Number")
-    {
-      return column="partNumber";
+    else if (column == "Part Number") {
+      return column = "partNumber";
     }
-    else if(column=="Potential Savings Per Piece"){
-      return column="potentialSavingsPerPieceMDO";
+    else if (column == "Potential Savings Per Piece") {
+      return column = "potentialSavingsPerPieceMDO";
     }
-    else if(column=="Idea Owner"){
-      return column="ideaOwner"
+    else if (column == "Idea Owner") {
+      return column = "ideaOwner"
     }
     return null;
   }
@@ -234,30 +242,30 @@ export class DesignToCostComponent {
         ...new Set(
           this.filteredPartNumberTableData_original
             .map(row => row[column as keyof TableRow])
-            .filter(value => value !== null && value !== undefined) 
+            .filter(value => value !== null && value !== undefined)
         )
       ];
-      this.selectedValue="---Select Value---";
+      this.selectedValue = "---Select Value---";
     } else {
       this.isSecondDropdownDisabled = true;
       this.columnValues = [];
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     //console.log("destroyed"); 
   }
 
 
   selectedRow: TableRow | null = null;
-  searchText: string = '';  
-  
+  searchText: string = '';
+
   selectRow(row: TableRow) {
-    this.selectedRow = row; 
+    this.selectedRow = row;
   }
 
   exportToExcel(data: any[]): void {
-    let fileName="VAVE Ideas for Part No - " + this.NounName +".xlsx";
+    let fileName = "VAVE Ideas for Part No - " + this.NounName + ".xlsx";
     if (!data || data.length === 0) {
       //alert('No data provided to export.');
       return;
@@ -271,7 +279,7 @@ export class DesignToCostComponent {
   }
 
   OpenVBD() {
-    window.open(environment.VBDLinkHopper); 
+    window.open(environment.VBDLinkHopper);
   }
 
 
@@ -291,16 +299,16 @@ export class DesignToCostComponent {
     this.filteredData = this.filteredPartNumberTableData.filter(item => {
       return Object.keys(this.searchFilters).every(key => {
         if (!this.searchFilters[key]) return true;
-        
+
         // Type assertion
         const itemValue = String((item as any)[key] || '').toLowerCase();
         const filterValue = (this.searchFilters as any)[key].toLowerCase();
-        
+
         return itemValue.includes(filterValue);
       });
     });
-    
+
     this.page = 1;
   }
-  
+
 }
