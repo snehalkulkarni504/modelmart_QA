@@ -6,7 +6,7 @@ import { Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environments';
- 
+
 export interface Piedata {
   y: number;
   name: string;
@@ -74,7 +74,7 @@ export class ShouldCostGenComponent implements OnInit {
   PartName: any; IncoTerms: any; Forex: any; BatchSize: any; ForexRegion: any; DebriefDateFormated: any; UniqueId: any;
   ToolingCost: any;
   AnnualVolume: any;
-  EngineDisplacement:any;
+  EngineDisplacement: any;
   RoleId: any;
   fvOnly: any;
   ShouldCostModeller: any; ToolingCostModeller: any;
@@ -87,7 +87,10 @@ export class ShouldCostGenComponent implements OnInit {
   IsHiddenT2: boolean = false;
   AluminiumCastingGrade: any;
   modelTypes_Id: any;
-  IsCSmodel: boolean = false;
+  IsCESmodel: boolean = false;
+  ModelwiseNote: any;
+  IsYellowModel = false;
+  additional_Information: any;
 
 
   ngOnInit(): void {
@@ -122,7 +125,7 @@ export class ShouldCostGenComponent implements OnInit {
       PartNumber: new FormControl(), Projecttype: new FormControl(), SupplierName: new FormControl(),
       Location: new FormControl(), TargetQuote: new FormControl(), Costtype: new FormControl(), PartName: new FormControl(),
       DebriefDate: new FormControl(), IncoTerms: new FormControl(), Forex: new FormControl(), BatchSize: new FormControl(),
-      AnnualVolume: new FormControl(),EngineDisplacement: new FormControl()
+      AnnualVolume: new FormControl(), EngineDisplacement: new FormControl()
     });
 
     this.PartDimensionDetails = new FormGroup({
@@ -158,7 +161,7 @@ export class ShouldCostGenComponent implements OnInit {
   showTabs(ActiveTab: any) {
     this.showTab1 = false;
     this.showTab2 = false;
- 
+
     switch (ActiveTab) {
       case 'Tab1': {
         this.showTab1 = true;
@@ -174,7 +177,7 @@ export class ShouldCostGenComponent implements OnInit {
   async getShouldeCost(id: number) {
     try {
       this.SpinnerService.show('spinner');
-
+      debugger;
       const data = await this.searchservice.getShouldeCost(id, this.userId).toPromise();
       //this.ShouldeCostData = data;
 
@@ -202,13 +205,28 @@ export class ShouldCostGenComponent implements OnInit {
       this.EngineDisplacement = data.projectDetails[0].engineDisplacement;
 
       this.modelTypes_Id = data.projectDetails[0].modelTypes_Id;
+      this.additional_Information = data.projectDetails[0].additional_Information;
+
 
       if (this.modelTypes_Id == 4) {
-        this.IsCSmodel = true;
+        this.IsCESmodel = true;
+        this.ModelwiseNote = "Refer Top Level Assembly cost model for CES Sub-Level Models Manufacturing process and other Details."
+      }
+      else if (this.modelTypes_Id == 3) {
+        this.IsCESmodel = true;
+        this.ModelwiseNote = "Material rate update can not be performed on this Cost Model"
+      }
+      else if (this.modelTypes_Id == 2) {
+        this.IsCESmodel = true;
+        this.IsYellowModel = true;
+        this.ModelwiseNote = "The update feature can not be performed on this yellow model."
       }
       else {
-        this.IsCSmodel = false;
+        this.IsCESmodel = false;
+        this.IsYellowModel = false;
+        this.ModelwiseNote = "";
       }
+
 
       if (data.projectDetails[0].toolingCost == undefined || data.projectDetails[0].toolingCost == null) {
         this.ToolingCost = this.NA;
@@ -537,11 +555,10 @@ export class ShouldCostGenComponent implements OnInit {
   }
 
 
+ 
   @ViewChild('printsection') printsection!: ElementRef;
   async DownloadReport() {
-
-    this.toastr.success("Report downloading has started.");
-
+    debugger;
     var id = this.UniqueId;
     var staticUrl = environment.apiUrl_Search + 'DownloadPDF?Id=' + id + '&modelTypes_Id=' + this.modelTypes_Id;
 
@@ -561,12 +578,16 @@ export class ShouldCostGenComponent implements OnInit {
     else {
       PartNm = this.PartName;
     }
+ 
+   // this.toastr.success("Report downloading has started.");
 
     var xhr = new XMLHttpRequest();
     xhr.open('GET', staticUrl, true);
     xhr.responseType = 'blob';
+
     xhr.onload = function (e) {
       if (this.status == 200) {
+        //resolve();
         var myBlob = this.response;
         var reader = new window.FileReader();
         reader.readAsDataURL(myBlob);
@@ -590,12 +611,14 @@ export class ShouldCostGenComponent implements OnInit {
         }
       }
       else {
-        alert("File Not Fount");
+        reject();
       }
     };
+
     xhr.send();
 
   }
+ 
 
   setImg(e: any) {
     this.mainimg = e
@@ -725,7 +748,7 @@ export class ShouldCostGenComponent implements OnInit {
       }
       if (i == 3) {
         this.TotalMaterailDetails.push(
-          { label: "Total Material Cost", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "inside",  color: "#d0ddd7" },
+          { label: "Total Material Cost", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "inside", color: "#d0ddd7" },
         );
         break;
       }
@@ -734,7 +757,7 @@ export class ShouldCostGenComponent implements OnInit {
     for (var i = 0; i < this.shouldCostBreakdownList.length; i++) {
       if (i > 2 && this.shouldCostBreakdownList.length - 1) {
         this.TotalMaterailDetails.push(
-          { label: this.shouldCostBreakdownList[i].particular, y: Number(this.shouldCostBreakdownList[i].usdValue.toFixed(2)),indexLabelPlacement: "inside",  color: "#78B3CE" },
+          { label: this.shouldCostBreakdownList[i].particular, y: Number(this.shouldCostBreakdownList[i].usdValue.toFixed(2)), indexLabelPlacement: "inside", color: "#78B3CE" },
         );
       }
     }
@@ -743,7 +766,7 @@ export class ShouldCostGenComponent implements OnInit {
     // );
 
     this.TotalMaterailDetails.push(
-      { label: "Total Manu. Cost", isCumulativeSum: true, indexLabel: "{y}",  indexLabelPlacement: "inside", color: "#a5ae9e" },
+      { label: "Total Manu. Cost", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "inside", color: "#a5ae9e" },
     );
 
     //////////// shouldCostBreakdownNonList /////////////
@@ -751,7 +774,7 @@ export class ShouldCostGenComponent implements OnInit {
     for (var i = 0; i < this.shouldCostBreakdownNonList.length; i++) {
       if (i <= 1) {
         this.TotalMaterailDetails.push(
-          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)), indexLabelPlacement: "inside",  color: "#9EDF9C" },
+          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)), indexLabelPlacement: "inside", color: "#9EDF9C" },
         );
       }
     }
@@ -763,25 +786,25 @@ export class ShouldCostGenComponent implements OnInit {
     for (var i = 0; i < this.shouldCostBreakdownNonList.length; i++) {
       if (i > 1 && i < 4) {
         this.TotalMaterailDetails.push(
-          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)),indexLabelPlacement: "inside",  color: "#9EDF9C" },
+          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)), indexLabelPlacement: "inside", color: "#9EDF9C" },
         );
       }
     }
 
     this.TotalMaterailDetails.push(
-      { label: "Total Packaging", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "inside",  color: "#d0ddd7" },
+      { label: "Total Packaging", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "inside", color: "#d0ddd7" },
     );
 
     for (var i = 0; i < this.shouldCostBreakdownNonList.length; i++) {
       if (i > 4) {
         this.TotalMaterailDetails.push(
-          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)), indexLabelPlacement: "inside",  color: "#9EDF9C" },
+          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)), indexLabelPlacement: "inside", color: "#9EDF9C" },
         );
       }
     }
 
     this.TotalMaterailDetails.push(
-      { label: "Part Cost", isCumulativeSum: true, indexLabel: "{y}",  indexLabelPlacement: "inside", color: "#36BA98" },
+      { label: "Part Cost", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "inside", color: "#36BA98" },
     );
 
 
@@ -1007,3 +1030,9 @@ export class ShouldCostGenComponent implements OnInit {
   }
 
 }
+
+
+function reject() {
+  alert("File Not Found");
+}
+

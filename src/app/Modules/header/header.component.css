@@ -298,6 +298,21 @@
     line-height: 40px;
   }
 
-  .cumminslogo :hover{
-    cursor: pointer !important;
+  .cumminslogo{
+    margin-left: 50px !important;
   }
+/*   
+  .cumminslogo:hover{
+    cursor: pointer !important;
+  } */
+
+  .homeIcon{
+    margin-right: 15px ;
+    cursor: pointer !important;
+  } 
+
+  .homeIcon:hover{
+    color: #000;
+  }
+
+  

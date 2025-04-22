@@ -44,6 +44,8 @@ import { CartdetailsComponent } from '../cartdetails/cartdetails.component';
 import { FeedbackComponent } from '../contact/feedback/feedback.component';
 import { FeedbackhistoryComponent } from '../Report/feedbackhistory/feedbackhistory.component';
 import { TcoUploadComponent } from '../Request/tco-upload/tco-upload.component';
+import { SuppcomparisonComponent } from '../comparisonnew/suppcomparison/suppcomparison.component';
+ 
  
 
 const routes: Routes = [
@@ -93,6 +95,7 @@ const routes: Routes = [
       { path : 'feedback', component: FeedbackComponent },
       { path : 'feedbackhistory', component: FeedbackhistoryComponent },
       { path : 'tcoupload', component: TcoUploadComponent },
+      { path : 'suppcomparison', component: SuppcomparisonComponent }
 
       
     ]

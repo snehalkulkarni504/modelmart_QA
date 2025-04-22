@@ -12,10 +12,10 @@
                     <div class="col-md-6 ">
                         <label id="clearFilter">Filters</label>
                     </div>
-                    <!-- <div class="col-md-6 text-end">
-                        <label (click)="clearFilter(1)" id="clearFilterall"
-                            title="Clear All Selection & Text">Reset All</label>
-                    </div> -->
+                    <div class="col-md-6 text-end">
+                        <label (click)="clearFilter(1)" id="clearFilterall" title="Clear All Selection & Text">Reset
+                            All</label>
+                    </div>
                 </div>
             </div>
             <div class="searchboxtext">
@@ -25,7 +25,8 @@
                             placeholder="E.g. Part Number, Part Name, Cat 2, Cat 3, Cat 4, location "
                             (keyup)="searchOnKeyUp($event)" (keydown.enter)="setvalue('0')" (focusout)="hidedropdown()">
                         <!-- (keydown.enter)="setvalue('0')"  -->
-                        <ul class="list-group searchdata" id="searchdata" [hidden]="autoseachhide" style="font-size: 12px !important;">
+                        <ul class="list-group searchdata" id="searchdata" [hidden]="autoseachhide"
+                            style="font-size: 12px !important;">
                             <li class="list-group-item" *ngFor="let c of results" (click)="setvalue(c)">
                                 <span class="searchdatalist"> {{c.filtergroup}} - </span> {{c.name}}
                             </li>
@@ -39,7 +40,7 @@
                         </svg>
                     </div>
                 </div>
-                
+
             </div>
             <div class="compare">
                 <input type="button" class="btn btn-primary btnreset" (click)="clearFilter(1)" value="Reset All"
@@ -405,6 +406,8 @@
             </div>
 
             <div class="row setOpacity" id="SearchFilters">
+                <!-- <div *ngFor="let t of SearchList  | paginate: { itemsPerPage: 100, currentPage: page }"
+                    class="prodDetails2"> -->
                 <div *ngFor="let t of SearchList  | paginate: { itemsPerPage: 100, currentPage: page }"
                     class="prodDetails">
                     <div class="prdImgDesc" (click)="getShouldeCost(t)">
@@ -440,8 +443,6 @@
                                 Tooling
                                 Cost ($)</label>
                         </div>
-
-
                     </div>
                     <div>
                         <input #Comparecheckbox class="form-check-input" type="checkbox" class="SearchCheckbox"
@@ -460,6 +461,238 @@
                         <ng-template ngbPaginationNext>Next</ng-template>
                     </ngb-pagination>
                     <br>
+                </div>
+            </div>
+
+            <!-- ---- Compare models ------- -->
+            <div (click)="ShowSimulatedPopup()" class="comparerightPanel">
+                Compare
+            </div>
+
+            <div class="compareBottomPanelhide" id="compareBottomPanel">
+                <div class="part">
+
+                    <div [hidden]="compareIdArraylength >= 1" (click)="ShowSimulatedPopup()" class="clicltoaddmodels">
+                        <div>
+                            <img src="../../../assets/costimg.png" style="width: 40px; height: 40px;">
+                        </div>
+                        <div>Select Simulated Model</div>
+                    </div>
+                    <div *ngIf="compareIdArraylength >= 1">
+                        <label class="modal-close-icn1" (click)="RemoveModelfromCompare(this.compareIdArray,0)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#000" class="bi bi-x"
+                                viewBox="0 0 16 16">
+                                <path
+                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                        </label>
+                        <img *ngIf="this.compareIdArray[0].imagePath == '' else imgavailable" src="assets/No-Image.png"
+                            class="prdIcon" style="width: 50px; height: 50px;">
+                        <ng-template #imgavailable>
+                            <img src="{{this.compareIdArray[0].imagePath}}" class="prdIcon"
+                                style="width: 50px; height: 50px;">
+                        </ng-template>
+                        <br>
+                        <div class="part1div">
+                            {{this.compareIdArray[0].uniqueId}} <br>
+                            {{this.compareIdArray[0].partNumber}} <br>
+                            {{this.compareIdArray[0].partName}}
+                        </div>
+                    </div>
+
+                </div>
+                <span class="VS">VS</span>
+
+                <div class="part">
+                    <div [hidden]="compareIdArraylength >= 2" (click)="ShowSimulatedPopup()" class="clicltoaddmodels">
+                        <div>
+                            <img src="../../../assets/costimg.png" style="width: 40px; height: 40px;">
+                        </div>
+                        <div>Select Simulated Model</div>
+                    </div>
+                    <div *ngIf="compareIdArraylength >= 2">
+                        <label class="modal-close-icn2" (click)="RemoveModelfromCompare(this.compareIdArray,1)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#000" class="bi bi-x"
+                                viewBox="0 0 16 16">
+                                <path
+                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                        </label>
+                        <img *ngIf="this.compareIdArray[1].imagePath == '' else imgavailable" src="assets/No-Image.png"
+                            class="prdIcon" style="width: 50px; height: 50px;">
+                        <ng-template #imgavailable>
+                            <img src="{{this.compareIdArray[1].imagePath}}" class="prdIcon"
+                                style="width: 50px; height: 50px;">
+                        </ng-template>
+                        <br>
+                        <div class="part1div">
+                            {{this.compareIdArray[1].uniqueId}} <br>
+                            {{this.compareIdArray[1].partNumber}} <br>
+                            {{this.compareIdArray[1].partName}}
+                        </div>
+                    </div>
+                </div>
+                <span class="VS1">VS</span>
+
+                <div class="part">
+                    <div [hidden]="compareIdArraylength >= 3" (click)="ShowSimulatedPopup()" class="clicltoaddmodels">
+                        <div>
+                            <img src="../../../assets/costimg.png" style="width: 40px; height: 40px;">
+                        </div>
+                        <div>Select Simulated Model</div>
+                    </div>
+                    <div *ngIf="compareIdArraylength >= 3">
+                        <label class="modal-close-icn3" (click)="RemoveModelfromCompare(this.compareIdArray,2)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#000" class="bi bi-x"
+                                viewBox="0 0 16 16">
+                                <path
+                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                        </label>
+                        <img *ngIf="this.compareIdArray[2].imagePath == '' else imgavailable" src="assets/No-Image.png"
+                            class="prdIcon" style="width: 50px; height: 50px;">
+                        <ng-template #imgavailable>
+                            <img src="{{this.compareIdArray[2].imagePath}}" class="prdIcon"
+                                style="width: 50px; height: 50px;">
+                        </ng-template>
+                        <br>
+                        <div class="part1div">
+                            {{this.compareIdArray[2].uniqueId}} <br>
+                            {{this.compareIdArray[2].partNumber}} <br>
+                            {{this.compareIdArray[2].partName}}
+                        </div>
+                    </div>
+                </div>
+                <span class="VS2">VS</span>
+
+                <div class="part">
+                    <div [hidden]="compareIdArraylength >= 4" (click)="ShowSimulatedPopup()" class="clicltoaddmodels">
+                        <div>
+                            <img src="../../../assets/costimg.png" style="width: 40px; height: 40px;">
+                        </div>
+                        <div>Select Simulated Model</div>
+                    </div>
+                    <div *ngIf="compareIdArraylength >= 4">
+                        <label class="modal-close-icn4" (click)="RemoveModelfromCompare(this.compareIdArray,3)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#000" class="bi bi-x"
+                                viewBox="0 0 16 16">
+                                <path
+                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                        </label>
+                        <img *ngIf="this.compareIdArray[3].imagePath == '' else imgavailable" src="assets/No-Image.png"
+                            class="prdIcon" style="width: 50px; height: 50px;">
+                        <ng-template #imgavailable>
+                            <img src="{{this.compareIdArray[3].imagePath}}" class="prdIcon"
+                                style="width: 50px; height: 50px;">
+                        </ng-template>
+                        <br>
+                        <div class="part1div">
+                            {{this.compareIdArray[3].uniqueId}} <br>
+                            {{this.compareIdArray[3].partNumber}} <br>
+                            {{this.compareIdArray[3].partName}}
+                        </div>
+                    </div>
+                </div>
+                <div class="part closecompare  align-items-center justify-content-center">
+
+                    <input type="button" class="btn btn-primary btncompareN btnpopup" (click)="getComparison()"
+                        value="Compare" Name="Compare"> <br>
+                    <button type="button" class="btn btn-outline-dark  btn-save btnpopup" style="margin-top: 10px;"
+                        (click)="CloseComparePopup()">Cancel</button>
+
+                </div>
+            </div>
+
+
+            <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displaySimulatedPopup}">
+                <div class="modelsize" role="document">
+                    <div class="modal-content">
+                        <form [formGroup]="SearchSilulatedForm">
+                            <div class="modal-header">
+                                <h3 class="modal-title">Select Simulated Model</h3>
+                                <div class="form-group has-search" style="width: 50%; margin-left: 100px; ">
+                                    <span class="bi bi-search form-control-feedback"></span>
+                                    <input type="text" class="form-control search-input" placeholder="Search"
+                                        formControlName="textsearch" [(ngModel)]="textsearch">
+                                </div>
+                                <label class="close modal-close-icn" (click)="onCloseHandled_Popup()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000"
+                                        class="bi bi-x" viewBox="0 0 16 16">
+                                        <path
+                                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </label>
+                            </div>
+                            <div class="SimulatedTable">
+                                <table class="table table-bordered ">
+                                    <thead>
+                                        <tr>
+                                            <th class="simulatedheader" style="width: 20px;">Sr. No</th>
+                                            <th class="simulatedheader">Action</th>
+                                            <th class="simulatedheader">Part Image</th>
+                                            <th class="simulatedheader" style="width: 100px;">Part Number</th>
+                                            <th class="simulatedheader" style="width: 150px;">Part Name</th>
+                                            <th class="simulatedheader" style="width: 100px;">Program Name</th>
+                                            <th class="simulatedheader">Debrief Date</th>
+                                            <th class="simulatedheader">Total Cost ($)</th>
+                                            <th class="simulatedheader">Simulated Cost ($)</th>
+                                            <th class="simulatedheader">Simulated Date</th>
+                                            <th class="simulatedheader" hidden>csHeaderId</th>
+                                            <th class="simulatedheader" hidden>scReportId</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let t of SearchListSimulated  | search: textsearch:filterMetadata ; let i=index">
+                                            <td class="text-end">{{i + 1}}</td>
+                                            <td class="text-center">
+                                                <input class="form-check-input" type="checkbox" id="{{t.scReportId}}"
+                                                    [value]="t.scReportId" class="SimulatedCheckbox"
+                                                    (click)="getPartId(t,'S')" [checked]="t.isActive" ngbTooltip="Select Part to Compare">
+
+                                                <span (click)='viewReport(t)' class="viewReport"
+                                                    ngbTooltip="View Simulated Report">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                        fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                                        <path
+                                                            d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                                                        <path
+                                                            d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
+                                                    </svg>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <img *ngIf="t.imagePath == '' else multi" src="assets/No-Image.png"
+                                                    class="prdIcon" style="width: 50px; height: 50px;">
+                                                <ng-template #multi>
+                                                    <img src="{{t.imagePath}}" style="width: 50px; height: 50px;">
+                                                </ng-template>
+                                            </td>
+                                            <td> {{ChekNull(t.partNumber)}} </td>
+                                            <td> {{ChekNull(t.partName)}} </td>
+                                            <td> {{ChekNull(t.programName)}} </td>
+                                            <td> {{ChekNull(t.debriefDateFormated)}} </td>
+                                            <td class="text-end"> {{ChekNull(t.totalCost)}} </td>
+                                            <td class="text-end"> {{ChekNull(t.simulated_TotalCost)}} </td>
+                                            <td> {{ChekNull(t.simulated_Date)}} </td>
+                                            <td hidden> t.csHeaderId </td>
+                                            <td hidden> t.scReportId </td>
+                                        </tr>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <!-- <div class="row" style="width: 100%;">
+                                    <div class="col-md-9 Remark_nopadding">
+                                    </div>
+                                    <div class="col-md-3 text-end">
+                                        <button type="button" class="btn btn-outline-dark  btn-save"
+                                            data-bs-dismis="modal" (click)="onCloseHandled_Popup()">Close</button>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
 

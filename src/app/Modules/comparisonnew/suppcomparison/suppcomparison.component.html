@@ -1,0 +1,243 @@
+<div class="container-fluid maxheight MasterHeader">
+    <ngx-spinner name="spinner" bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="square-jelly-box"
+        [fullScreen]="true">
+        <img alt="Loading Please Wait..." style="width:100px ; height:100px ;" src="../../../assets/Spin-2.gif" />
+    </ngx-spinner>
+
+    <div class="row">
+        <div class="col-md-2 text-center">
+            <button class="btnback" (click)="backToPreviousPage()">Back</button>
+        </div>
+        <div class="col-md-10">
+            <h5 style="padding-top: 2%;padding-left: 30%;">
+                {{this.Shouldcost[1].value}} - {{this.Shouldcost[2].value}}
+            </h5>
+        </div>
+    </div>
+
+
+    <div class="justify-content-center setimage ">
+        <div style="margin-top: 2%;">
+            <!-- <h5  style="padding-top: 1%;text-align: center;">
+                {{i.SupplierNumber}}
+            </h5> -->
+
+            <div class="row" style="margin-left: 2%;width: 100%;">
+                <table class="table CommericalDetails" style="width: 97%;">
+                    <tr>
+                        <th class="particular"></th>
+                        <th class="particular">
+                            Manufacturing Location : {{this.CommericalDetailsSupplierCost[0].mfgRegion}}<br />
+                            Debreif Date : {{this.CommericalDetailsSupplierCost[0].debriefDate}}<br />
+                            Forex Rate : {{this.CommericalDetailsSupplierCost[0].forex}}<br />
+                        </th>
+                        <!-- <ng-container *ngIf="chartloaded"> -->
+                        <ng-container *ngFor="let i of this.CommericalDetailsSupplierCost;let j=index">
+                            <th class="particular"  style="border-right: none;"
+                            *ngIf="(j > 0 && CommericalDetailsSupplierCost[j].supplier_Company!=CommericalDetailsSupplierCost[j-1].supplier_Company)
+                            ||j==0">
+                                Supplier Name : {{this.CommericalDetailsSupplierCost[j].supplier_Company}} - V{{i.tcO_Version}} <br />
+                                Manufacturing Location : {{i.supplier_CountryOfOrigin}} <br />
+                                Quote Date : {{i.cummins_Date}} <br />
+                                Forex Rate : {{i.supplier_ExchangeRateToUSD}}
+                            </th>
+                        </ng-container>
+                    <!-- </ng-container> -->
+                    </tr>
+                    <tr>
+                        <th class="particular">Particulars</th>
+                        <th class="particular">Should Cost</th>
+                        <th *ngFor="let i of this.CommericalDetailsSupplierCost;let j = index" class="particular">
+                            Supplier Cost- V{{i.tcO_Version}}</th>
+                    </tr>
+                    <!-- <tr>
+                        <td hidden class="particular">modelmartId</td>
+                        <td hidden class="right TotalCostData"
+                        *ngFor="let i of this.Shouldcost;let j = index" class="particular"> 
+                            
+                        </td>
+                        <td *ngFor="let i of this.CommericalDetailsSupplierCost" hidden class="right">
+                            {{i.modelmartId}}
+                        </td>
+                    </tr> -->
+                    <tr *ngFor="let j of this.Shouldcost;let k=index">
+                        <ng-container *ngIf="k>2">
+                            <th class="particular">{{j.particular}}</th>
+                            <td class="right TotalCostData">
+                                {{j.value | number:'1.2-2'}}
+                            </td>
+                            <ng-container *ngFor="let i of this.CommericalDetailsSupplierCost;let o=index">
+                                <td *ngIf="j.Id=='4'" class="right TotalCostData"> {{i.pbPerPiece_Material |
+                                    number:'1.2-2'}}</td>
+                                <td *ngIf="j.Id=='6'" class="right TotalCostData"> {{i.pbPerPiece_PurchasedParts |
+                                    number:'1.2-2'}}</td>
+                                <td *ngIf="j.Id==8" class="right TotalCostData"> {{i.pbPerPiece_LabourCostPerPiece |
+                                    number:'1.2-2'}}</td>
+                                <td *ngIf="j.Id==9" class="right TotalCostData"> {{i.pbPerPiece_OHCostPerPiece |
+                                    number:'1.2-2'}}</td>
+                                <td *ngIf="j.Id==10" class="right TotalCostData"> {{i.pbPerPiece_SurfaceTreatments |
+                                    number:'1.2-2'}}</td>
+                                <td *ngIf="j.Id==12" class="right TotalCostData"> {{i.pbPerPiece_SGA | number:'1.2-2'}}
+                                </td>
+                                <td *ngIf="j.Id==13" class="right TotalCostData"> {{i.pbPerPiece_Profit |
+                                    number:'1.2-2'}}</td>
+                                <td *ngIf="j.Id==15" class="right TotalCostData"> {{i.sP_FreightLogisticsCost |
+                                    number:'1.2-2'}}</td>
+                                <td *ngIf="j.Id==14" class="right TotalCostData"> {{i.pbPerPiece_PackLogisticsWare |
+                                    number:'1.2-2'}}</td>
+                                <td *ngIf="j.Id==20" class="right TotalCostData"> {{i.pbPerPiece_TotalPartPrice |
+                                    number:'1.2-2'}}</td>
+                                <td *ngIf="j.Id=='5'||j.Id=='7'||j.Id=='11'||j.Id=='16'||j.Id=='17'||j.Id=='18'||j.Id=='19'"
+                                    class="right TotalCostData">0.00</td>
+                            </ng-container>
+                        </ng-container>
+                    </tr>
+                    <!-- <tr>
+                        <th class="particular">Direct Material Cost ($)</th>
+                        <td class="right TotalCostData">
+                            {{this.Shouldcost[0].directMaterialCost | number:'1.2-2'}}
+                        </td>
+                        <td *ngFor="let i of this.CommericalDetailsSupplierCost" class="right">
+                            {{i.directMaterialCost | number:'1.2-2'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="particular">Material Refund ($)</th>
+                        <td class="right TotalCostData">
+                            {{this.Shouldcost[0].materialRefund | number:'1.2-2'}}
+                        </td>
+                        <td *ngFor="let i of this.CommericalDetailsSupplierCost" class="right">
+                            {{i.materialRefund | number:'1.2-2'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="particular">Bought Out Finish Cost ($)</th>
+                        <td class="right TotalCostData">
+                            {{this.Shouldcost[0].boughtOutFinishCost | number:'1.2-2'}}
+                        </td>
+                        <td *ngFor="let i of this.CommericalDetailsSupplierCost" class="right">
+                            {{i.boughtOutFinishCost | number:'1.2-2'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="particularTier2">Rough Part Cost ($)</th>
+                        <td class="right TotalCostData">
+                            {{this.Shouldcost[0].roughPartCost | number:'1.2-2'}}
+                        </td>
+                        <td *ngFor="let i of this.CommericalDetailsSupplierCost" class="right">
+                            {{i.roughPartCost | number:'1.2-2'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="particular">Direct Labour Cost ($)</th>
+                        <td class="right TotalCostData">
+                            {{this.Shouldcost[0].directLabourCost | number:'1.2-2'}}
+                        </td>
+                        <td *ngFor="let i of this.CommericalDetailsSupplierCost" class="right">
+                            {{i.directLabourCost | number:'1.2-2'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="particular">Process Overhead Cost ($)</th>
+                        <td class="right TotalCostData">
+                            {{this.Shouldcost[0].processOverheadCost | number:'1.2-2'}}
+                        </td>
+                        <td *ngFor="let i of this.CommericalDetailsSupplierCost" class="right">
+                            {{i.processOverheadCost | number:'1.2-2'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="particular">Surface Treatment Cost ($)</th>
+                        <td class="right TotalCostData">
+                            {{this.Shouldcost[0].surfaceTreatmentCost | number:'1.2-2'}}
+                        </td>
+                        <td *ngFor="let i of this.CommericalDetailsSupplierCost" class="right">
+                            {{i.surfaceTreatmentCost | number:'1.2-2'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="particular">Total Manu Cost ($)</th>
+                        <td class="right TotalCostData">
+                            {{this.Shouldcost[0].totalManuCost | number:'1.2-2'}}
+                        </td>
+                        <td *ngFor="let i of this.CommericalDetailsSupplierCost" class="right">
+                            {{i.totalManuCost | number:'1.2-2'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="particular">SGA ($)</th>
+                        <td class="right TotalCostData">
+                            {{this.Shouldcost[0].sga | number:'1.2-2'}}
+                        </td>
+                        <td *ngFor="let i of this.CommericalDetailsSupplierCost" class="right">
+                            {{i.sga | number:'1.2-2'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="particular">Profit ($)</th>
+                        <td class="right TotalCostData">
+                            {{this.Shouldcost[0].profit | number:'1.2-2'}}
+                        </td>
+                        <td *ngFor="let i of this.CommericalDetailsSupplierCost" class="right">
+                            {{i.profit | number:'1.2-2'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="particular">Packaging ($)</th>
+                        <td class="right TotalCostData">
+                            {{this.Shouldcost[0].packaging | number:'1.2-2'}}
+                        </td>
+                        <td *ngFor="let i of this.CommericalDetailsSupplierCost" class="right">
+                            {{i.packaging | number:'1.2-2'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="particular">Fright Logistics ($)</th>
+                        <td class="right TotalCostData">
+                            {{this.Shouldcost[0].fright_Logistics | number:'1.2-2'}}
+                        </td>
+                        <td *ngFor="let i of this.CommericalDetailsSupplierCost" class="right">
+                            {{i.fright_Logistics | number:'1.2-2'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="particular">Directed Buy ($)</th>
+                        <td class="right TotalCostData">
+                            {{this.Shouldcost[0].directedBuy | number:'1.2-2'}}
+                        </td>
+                        <td *ngFor="let i of this.CommericalDetailsSupplierCost" class="right">
+                            {{i.directedBuy | number:'1.2-2'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="particular">Handling Charges ($)</th>
+                        <td class="right TotalCostData">
+                            {{this.Shouldcost[0].handlingCharges | number:'1.2-2'}}
+                        </td>
+                        <td *ngFor="let i of this.CommericalDetailsSupplierCost" class="right">
+                            {{i.handlingCharges | number:'1.2-2'}}
+                        </td>
+                    </tr> -->
+                    <!-- <tr>
+                        <th class="particular">Tariff ($)</th>
+                        <td class="right TotalCostData">
+                            <input type="text" style="height: 25px;;width: 100px;" />
+                        </td>
+                        <td *ngFor="let i of this.CommericalDetailsSupplierCost" class="right TotalCostData">
+                            <input type="text" style="height: 25px;width: 100px;" />
+                        </td>
+                    </tr> -->
+                </table>
+                <!-- </div> -->
+            </div>
+            <div class="row" *ngIf="chartloaded">
+                <div class="col">
+                    <canvasjs-chart [options]="chartOptions" [styles]="{height:'250px'}"></canvasjs-chart>
+                </div>
+                <div class="col" *ngFor="let i of this.CommericalDetailsSupplierCost;let j = index">
+                    <canvasjs-chart [options]="SuppcostchartOptions[j]" [styles]="{height:'250px'}"></canvasjs-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

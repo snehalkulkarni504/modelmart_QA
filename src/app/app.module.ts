@@ -72,8 +72,8 @@ import { FeedbackComponent } from './Modules/contact/feedback/feedback.component
 import { FeedbackhistoryComponent } from './Modules/Report/feedbackhistory/feedbackhistory.component';
 import { WelcomeuserComponent } from './home/welcomeuser/welcomeuser.component';
 import { DesignToCostComponent } from "./Modules/should-cost-gen/design-to-cost/design-to-cost.component";
-
-
+import { SuppcomparisonComponent } from './Modules/comparisonnew/suppcomparison/suppcomparison.component';
+ 
 @NgModule({
   declarations: [
     AppComponent,
@@ -125,7 +125,8 @@ import { DesignToCostComponent } from "./Modules/should-cost-gen/design-to-cost/
     CartdetailsComponent,
     FeedbackComponent,
     FeedbackhistoryComponent,
-    WelcomeuserComponent
+    WelcomeuserComponent,
+    SuppcomparisonComponent
   ],
   imports: [
     TreeModule,

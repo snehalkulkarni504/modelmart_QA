@@ -17,7 +17,7 @@ export class SearchPipe implements PipeTransform {
         .toUpperCase()
         .includes(args.toUpperCase());
     });
-    debugger;
+
     filterMetadata.count = filteredItemss.length;
     return filteredItemss;
 

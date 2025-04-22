@@ -1,3 +1,8 @@
+.feedbackpage{
+  height: auto;
+  margin-bottom: 100px !important;
+}
+
 .MasterHeader {
   width: 80%;
   display: inline-flex;
@@ -55,16 +60,6 @@ form {
   }
   
 
-  /* h2{
-    padding-left: 13%;
-    border-bottom: 1px solid #da291c;
-    padding-bottom: 13px;
-    margin-top: 10px;
-    text-align: left;
-    color: #333;
-    font-family: Helvetica, Arial !important;
-  } */
-
   h3 {
     text-align: left;
     color: #333;
@@ -107,16 +102,61 @@ form {
   }
   
   input[type="radio"] {
-    transform: scale(1.2); /* Slightly enlarge radio buttons */
+    transform: scale(1.2); 
     cursor: pointer;
   }
   
 
-textarea {
+/* textarea {
     width: 100%;
-    /* resize: vertical; */
     height: 60px;
+  } */
+
+  .card {
+    background-color: #fdfdfd;
+    padding: 20px;
+    margin: 20px auto;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,100,0.3);
   }
+  
+  .card h4 {
+    margin-bottom: 10px;
+    color: #da291c;
+    font-family: Helvetica, Arial;
+  }
+  
+  .card li{
+    font-size: 12px !important;
+    color: #555;
+  }
+
+  
+.menu-image1 {
+  width: 26px;
+  height: 26px; 
+  vertical-align: middle;
+  margin-top: -3px;
+}
+
+  .feedback-form {
+    max-width: 850px;
+    margin: auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  textarea {
+    resize: vertical;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+
+
+
   
   button {
     background-color: #de4c41;
@@ -131,9 +171,7 @@ textarea {
   }
 
 
-  
-/* Hide default radio button styles */
-input[type="radio"] {
+  input[type="radio"] {
     appearance: none;
     -webkit-appearance: none;
     width: 16px;
@@ -177,6 +215,7 @@ input[type="radio"] {
     color: #ffffff;
     border: none;
     cursor: pointer;
+    border-radius: 10px !important;
   }
   .thank-you-box button:hover {
     background: #b2221a;
@@ -185,13 +224,15 @@ input[type="radio"] {
 
   .btngroup
   {
-    width: 25%;
+    width: 140px;
     padding: 8px 0px;
     border-radius: 4px;
-    border: 1.5px solid #da291c;
+    border: 1px solid #da291c;
     background-color: white;
     color: #333;
     font-weight: bolder;
+    font-size: 12px !important;
+    transition: all 0.3s ease-in-out;
   }
   .btngroup:hover
   {
@@ -207,14 +248,6 @@ input[type="radio"] {
     margin-bottom: 15px;
   }
 
-  /* .buttongroup button {
-    padding: 10px 20px;
-    margin: 5px;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-    cursor: pointer;
-    border-radius: 5px;
-} */
 
 .buttongroup button.selected {
     background-color: #da291c;

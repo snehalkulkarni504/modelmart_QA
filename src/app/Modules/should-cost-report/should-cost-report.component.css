@@ -447,3 +447,11 @@ input[type=text]:focus {
     rotate: 90deg;
     cursor: pointer;
 }
+
+.CSModelRemark{
+    font-size: 12px;
+    padding-bottom: 5px;
+    color: #da291c;
+    margin-bottom: 0px;
+    margin-left: 50px;
+}

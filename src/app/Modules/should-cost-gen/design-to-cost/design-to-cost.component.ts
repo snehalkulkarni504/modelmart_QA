@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, input, Output, output, Pipe, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, input, Output, output, Pipe, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -7,9 +7,11 @@ import { NgxPaginationModule, PaginatePipe } from 'ngx-pagination';
 import { pipe } from 'rxjs';
 import { SearchService } from 'src/app/SharedServices/search.service';
 import * as XLSX from 'xlsx';
+import { environment } from 'src/environments/environments';
 
 
 interface TableRow {
+  sharepoint_ID: string;
   idea: string;
   nounName: string;
   program: string;
@@ -36,13 +38,13 @@ export class DesignToCostComponent {
   @Input() table_Data=[];
   @Output() saveTrigger: EventEmitter<any> = new EventEmitter();
 
-  message: any="| No records found...";
+  message: any="| No Ideas found...";
   config: any;
   page: number=1;
-  pageSize: number=5;
+  pageSize: number=10;
   page2: number=1;
   page3:number=1;
-  itemonperpage: number=5;
+  itemonperpage: number=10;
 
   FilterData:any[]=[];
   selectedFilteredData: [] = [];
@@ -54,7 +56,7 @@ export class DesignToCostComponent {
     }
   }
 
-  columnNames: string[] = [];
+  columnNames: string[] = ['Idea','Program','Part Number', 'Potential Savings Per Piece', 'Idea Owner'];
   columnValues: string[] = [];
   selectedColumn: string = '';
   selectedValue: string = '';
@@ -62,11 +64,13 @@ export class DesignToCostComponent {
   filteredNounNameTableData: TableRow[] = [];
   filteredNonunProgramTableData: TableRow[] = [];
 
+
   filteredPartNumberTableData_original: TableRow[] = [];
   filteredNounNameTableData_original: TableRow[] = [];
   filteredNonunProgramTableData_original: TableRow[] = [];
 
   isSecondDropdownDisabled: boolean = true;
+
 
   selectedColumn2: string = '';
   selectedValue2: string = '';
@@ -81,146 +85,72 @@ export class DesignToCostComponent {
   isSecondDropdownDisabled3: boolean = true;
 
   async ngOnInit(){
-    // // console.log("ucProgramName",this.ProgramName);
-    // // console.log("ucPartNumber",this.PartNumber);
-    // // console.log("ucNounName",this.NounName);
-
-    // this.columnNames = Object.keys(this.tableData[0]);
-    // console.log("this.columnNames",this.columnNames);
-
-    // // if(changes["ProgramName"]){
-    //   if(this.tableData.length <=0){  
-    //     //call api -- 
-    //   //  console.log("SucProgramName",this.ProgramName);
-    //   //  console.log("SucPartNumber",this.PartNumber);
-    //   //  console.log("SucNounName",this.NounName);
-
-    //   // console.log("we are waiting");
-    //   // const data = await this.searchservice.GetDesignToCostDetails(this.ProgramName).toPromise();
-    //   // console.log("data",data);
-
-    //   }
-    //   else
-    //   {
-    //     this.columnNames = Object.keys(this.tableData[0]);
-    //     console.log("we are waiting");
-    //     const data = await this.searchservice.GetDesignToCostDetails(this.ProgramName).toPromise();
-    //     console.log("data",data);
-    //   }
-
-    //    // Initialize filteredTableData with all data
-    // // this.filteredTableData = [...this.tableData];
-    // this.filteredPartNumberTableData_original = this.tableData.filter(row => row.PartNumber === this.PartNumber);
-    // this.filteredNounNameTableData_original = this.tableData2.filter(row => row.NounName === this.NounName);
-    // this.filteredNonunProgramTableData_original = this.tableData3.filter(row => row.NounName === this.NounName && row.Program === row.Program);
-
-
-    // this.filteredPartNumberTableData = [...this.filteredPartNumberTableData_original];
-    // this.filteredNounNameTableData =[...this.filteredNounNameTableData_original];
-    // this.filteredNonunProgramTableData = [...this.filteredNonunProgramTableData_original];
-    // // } 
+  
   }
 
   onValueChange(): void {
-    // Filter the tableData based on the selected column and value
-   
+   let column: any;
     if (this.selectedColumn && this.selectedValue) {
-      this.filteredPartNumberTableData = this.filteredPartNumberTableData_original.filter(row => row[this.selectedColumn as keyof TableRow] === this.selectedValue);
+      column = this.getUpdatedColumnname(this.selectedColumn);
+      this.filteredPartNumberTableData = this.filteredPartNumberTableData_original.filter(row => row[column as keyof TableRow] === this.selectedValue);
     } else {
-      // If no value is selected, show all data
       this.filteredPartNumberTableData = [...this.filteredPartNumberTableData_original];
     }
   }
 
-
-  onValueChange2(): void {
-    // Filter the tableData based on the selected column and value
-    if (this.selectedColumn2 && this.selectedValue2) {
-      this.filteredNounNameTableData = this.filteredNounNameTableData_original.filter(row => row[this.selectedColumn2 as keyof TableRow] === this.selectedValue2);
-    } else {
-      // If no value is selected, show all data
-      this.filteredNounNameTableData = [...this.filteredNounNameTableData_original];
-    }
-  }
-
-  onValueChange3(): void {
-    // Filter the tableData based on the selected column and value
-    if (this.selectedColumn3 && this.selectedValue3) {
-      this.filteredNonunProgramTableData = this.filteredNonunProgramTableData_original.filter(row => row[this.selectedColumn3 as keyof TableRow] === this.selectedValue3);
-    } else {
-      // If no value is selected, show all data
-      this.filteredNonunProgramTableData = [...this.filteredNonunProgramTableData_original];
-    }
-  }
-
   async ngOnChanges(changes: SimpleChanges){
-    console.log("ucProgramName",this.ProgramName);
-    console.log("ucPartNumber",this.PartNumber);
-    console.log("ucNounName",this.NounName);
+    //console.log("ucProgramName",this.ProgramName);
+    //console.log("ucPartNumber",this.PartNumber);
+    //console.log("ucNounName",this.NounName);
 
-
-    if(this.PartNumber!=undefined && this.NounName!=undefined && this.ProgramName !=undefined){
-    // if(changes["ProgramName"]){
-      if(this.filteredPartNumberTableData_original.length <=0 || this.filteredNonunProgramTableData_original.length <=0 || this.filteredNounNameTableData_original.length <=0){  
-         if(this.PartNumber != undefined){
-          this.getTabeleDataForPartNumber(this.PartNumber);
-         }
-         if(this.NounName != undefined){
-          this.getTableDataforNoun(this.NounName);
-         }
-         if(this.NounName!= undefined && this.ProgramName!= undefined){
-          this.getTableDataforNounProgram(this.NounName, this.ProgramName);
-         }
-          // this.columnNames = Object.keys(this.tableData[0]);
-
-      }
-      // else
-      // {
-      //   // this.columnNames = Object.keys(this.tableData[0]);
-      //   // console.log("we are waiting");
-      //   // const data = await this.searchservice.GetDesignToCostDetails(this.ProgramName).toPromise();
-      //   // console.log("data",data);
-      // }
-
-      debugger;
-       // Initialize filteredTableData with all data
-    // this.filteredTableData = [...this.tableData];
-    // console.log("this.tableData",this.tableData);
-    // this.filteredPartNumberTableData_original = this.tableData;
-    // // this.tableData.filter(row => row.PartNumber === this.PartNumber);
-    // this.filteredNounNameTableData_original = this.tableData.filter(row => row.NounName === this.NounName);
-    // this.filteredNonunProgramTableData_original = this.tableData.filter(row => row.NounName === this.NounName && row.Program === row.Program);
-
-
-    // this.filteredPartNumberTableData = [...this.filteredPartNumberTableData_original];
-    // this.filteredNounNameTableData =[...this.filteredNounNameTableData_original];
-    // this.filteredNonunProgramTableData = [...this.filteredNonunProgramTableData_original];
-
-
-    // console.log("this.filteredPartNumberTableData",this.filteredPartNumberTableData);
-   
-    }
+    this.gettabledata();
 
   }
 
+  gettabledata(){
+    this.searchservice.GetDesignToCostAvailableDetail(this.NounName, this.ProgramName, this.PartNumber)
+    .subscribe({
+      next: (response) => {
+        debugger;
+        //console.log('get data :', response);
+        this.filteredPartNumberTableData_original= response;
+        //console.log("response",response);
+        if(this.filteredPartNumberTableData_original.length>0){
+        this.filteredPartNumberTableData_original.forEach((element, index)=>{
+          this.filteredPartNumberTableData_original[index].sharepoint_ID = element.sharepoint_ID.toString();
+        })
+      }
+        //console.log("this.filteredPartNumberTableData_original",this.filteredPartNumberTableData_original);
+
+        this.filteredPartNumberTableData = [...this.filteredPartNumberTableData_original];
+        this.filteredData = [...this.filteredPartNumberTableData];
+      },
+      error: (error) => {
+        //console.error('get data for part number failed:', error);
+        //alert(error);
+      },
+      complete: () => {
+          this.selectedColumn="---Select Filter---";
+      },
+    });
+  }
+
+ 
   getTabeleDataForPartNumber(PartNumber: any){
     this.searchservice.GetDesignToCostPart(PartNumber)
     .subscribe({
       next: (response) => {
-        console.log('get data for part number:', response);
+        //console.log('get data for part number:', response);
         this.filteredPartNumberTableData_original= response;
 
         this.filteredPartNumberTableData = [...this.filteredPartNumberTableData_original];
       },
       error: (error) => {
-        console.error('get data for part number failed:', error);
-        alert(error);
+        //console.error('get data for part number failed:', error);
+        //alert(error);
       },
       complete: () => {
-        if(this.filteredPartNumberTableData.length>0){
-          this.columnNames = Object.keys(this.filteredPartNumberTableData[0]);
           this.selectedColumn="---Select Filter---";
-        }
       },
     });
   }
@@ -229,19 +159,17 @@ export class DesignToCostComponent {
     this.searchservice.GetDesignToCostNoun(NounName)
     .subscribe({
       next: (response) => {
-        console.log('get data for Noun Name:', response);
+        //console.log('get data for Noun Name:', response);
         this.filteredNounNameTableData_original= response;
         this.filteredNounNameTableData =[...this.filteredNounNameTableData_original];
       },
       error: (error) => {
-        console.error('get data for Noun Name failed:', error);
-        alert(error);
+        //console.error('get data for Noun Name failed:', error);
+        //alert(error);
       },
       complete: () => {
-        if(this.filteredNounNameTableData.length>0){
-          this.columnNames = Object.keys(this.filteredNounNameTableData[0]);
           this.selectedColumn2="---Select Filter---";
-        }
+    
       },
     });
   }
@@ -250,13 +178,13 @@ export class DesignToCostComponent {
     this.searchservice.GetDesignToCostNounProgram(NounName, Porgram)
     .subscribe({
       next: (response) => {
-        console.log('get data for Noun Name:', response);
+        //console.log('get data for Noun Name:', response);
         this.filteredNonunProgramTableData_original= response;
         this.filteredNonunProgramTableData = [...this.filteredNonunProgramTableData_original];
       },
       error: (error) => {
-        console.error('get data for NounName & Program failed:', error);
-        alert(error);
+        //console.error('get data for NounName & Program failed:', error);
+        //alert(error);
       },
       complete: () => {
         if(this.filteredNonunProgramTableData.length>0){
@@ -267,22 +195,46 @@ export class DesignToCostComponent {
     });
   }
 
+  getUpdatedColumnname(column: string){
+    if(column=="Idea"){
+      return column ="idea";
+    }
+    // else if(column=="Noun Name"){
+    //   return column="nounName";
+    // }
+    else if(column=="Program")
+    {
+      return column="program";
+    }
+    else if(column=="Part Number")
+    {
+      return column="partNumber";
+    }
+    else if(column=="Potential Savings Per Piece"){
+      return column="potentialSavingsPerPieceMDO";
+    }
+    else if(column=="Idea Owner"){
+      return column="ideaOwner"
+    }
+    return null;
+  }
+
   onColumnChange(): void {
-    // Reset the selected value and filtered table
-    
+    let column: any;
     this.columnValues = [];
     this.isSecondDropdownDisabled = true;
     debugger;
-    console.log("this.selectedColumn",this.selectedColumn);
+    //console.log("this.selectedColumn",this.selectedColumn);
     this.selectedValue = '';
     this.filteredPartNumberTableData = [...this.filteredPartNumberTableData_original];
     if (this.selectedColumn) {
+      column = this.getUpdatedColumnname(this.selectedColumn);
       this.isSecondDropdownDisabled = false;
       this.columnValues = [
         ...new Set(
           this.filteredPartNumberTableData_original
-            .map(row => row[this.selectedColumn as keyof TableRow])
-            .filter(value => value !== null && value !== undefined) // Filter out null and undefined values
+            .map(row => row[column as keyof TableRow])
+            .filter(value => value !== null && value !== undefined) 
         )
       ];
       this.selectedValue="---Select Value---";
@@ -291,220 +243,64 @@ export class DesignToCostComponent {
       this.columnValues = [];
     }
   }
-  onColumnChange2(): void {
-    this.selectedValue2 = '';
-    this.filteredNounNameTableData = [...this.filteredNounNameTableData_original];
-
-    // Enable the second dropdown and populate it with values of the selected column
-    if (this.selectedColumn2) {
-      this.isSecondDropdownDisabled2 = false;
-      this.columnValues2 = [
-        ...new Set(
-          this.filteredNounNameTableData_original
-            .map(row => row[this.selectedColumn2 as keyof TableRow])
-            .filter(value => value !== null && value !== undefined) // Filter out null and undefined values
-        )
-      ];;
-      this.selectedValue2="---Select Value---";
-    } else {
-      // If no column is selected, disable the second dropdown
-      this.isSecondDropdownDisabled2 = true;
-      this.columnValues2 = [];
-    }
-  }
-
-  onColumnChange3(): void {
-    // Reset the selected value and filtered table
-    this.selectedValue2 = '';
-    this.filteredNonunProgramTableData = [...this.filteredNonunProgramTableData_original];
-    // Enable the second dropdown and populate it with values of the selected column
-    if (this.selectedColumn3) {
-      this.isSecondDropdownDisabled3 = false;
-      this.columnValues3 = [
-        ...new Set(
-          this.filteredNonunProgramTableData_original
-            .map(row => row[this.selectedColumn3 as keyof TableRow])
-            .filter(value => value !== null && value !== undefined) // Filter out null and undefined values
-        )
-      ];
-      this.selectedValue3="---Select Value---";
-    } else {
-      // If no column is selected, disable the second dropdown
-      this.isSecondDropdownDisabled3 = true;
-      this.columnValues3 = [];
-    }
-  }
 
   ngOnDestroy(){
-    // this.TableData[];
-    console.log("destroyed");
-    // this.saveTrigger.emit("test");   
+    //console.log("destroyed"); 
   }
 
-  // ngAfterViewInit(){
-
-  // }
 
   selectedRow: TableRow | null = null;
-  searchText: string = '';  // Search term
-
-  headers: string[] = [
-    'Idea', 'Noun Name', 'Program', 'BU', 'Mfg Location', 'Comments', 
-    'Potential Savings PP', 'Feasibility', 'Idea Owner', 'Idea Generated On', 
-    'Current Status', 'Engg Comment', 'Final Solution'
-  ];
-
-  // tableKeys: (keyof TableRow)[] = [
-  //   'Idea', 'NounName', 'Program',  
-  //   'PotentialSavingsPerPieceMDO', 'Feasibility', 'IdeaOwner', 
-  //   'CurrentStatus'
-  // ];
-
-  // tableData: TableRow[] = [
-  //   { Idea: 'New Innovation', NounName: 'Tech Upgrade', Program: 'AI Initiative', PartNumber: 'IT',  PotentialSavingsPP: '$10K', Feasibility: 'High', IdeaOwner: 'John Doe',  CurrentStatus: 'Approved' },
-  //   { Idea: 'Process Optimization', NounName: 'Workflow', Program: 'Lean Six Sigma', PartNumber: 'Manufacturing',  PotentialSavingsPP: '$20K', Feasibility: 'Medium', IdeaOwner: 'Jane Smith',  CurrentStatus: 'Under Review' }
-  // ];
-  // tableData: TableRow[]=[];
-
-  // tableData: TableRow[] = [
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector Allied connectors as an alternate manufacturer for Amphenol', NounName: 'HARNESS,WIRING', Program: 'Barracuda', PartNumber: '123456',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' },
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'HOUSING,FLYWHEEL', Program: 'Olympus', PartNumber: '12345',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' }
-  // ];
-
-  // tableData2: TableRow[] = [
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'Crankshaft', Program: 'Olympus', PartNumber: 'EBU',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector', NounName: 'Crankshaft', Program: 'Barracuda', PartNumber: 'EBU',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' }
-  // ];
-
-  // tableData3: TableRow[] = [
-  //   { Idea: 'Can we reduce wall thicknesss for the part to make it suitable for HPDC ?', NounName: 'Crankshaft', Program: 'baracudda', PartNumber: 'EBU',   PotentialSavingsPerPieceMDO: '4.06', Feasibility: 'Need further investigation', IdeaOwner: 'Rupesh A Solanke', CurrentStatus: 'Idea Submitted' },
-  //   { Idea: 'Allied connectors as an alternate manufacturer for Amphenol AHDP06-18-21SN-WTA – 21 Pos circular connector', NounName: 'Crankshaft', Program: 'baracudda', PartNumber: 'EBU',  PotentialSavingsPerPieceMDO: '1.32', Feasibility: 'Not-Feasible', IdeaOwner: 'Anshul Arora',  CurrentStatus: 'Need further investigation' }
-  // ];
+  searchText: string = '';  
+  
   selectRow(row: TableRow) {
-    this.selectedRow = row; // Store selected row
+    this.selectedRow = row; 
   }
 
-  async toggleSupplierSelection() {
-    // const isChecked = (event.target as HTMLInputElement).checked;
-    // if (isChecked) {
-    //   this.selectedsuppliers.push(supp);
-    // } else {
-    //   const index = this.selectedsuppliers.indexOf(supp);
-    //   if (index > -1) {
-    //     this.selectedsuppliers.splice(index, 1);
-    //   }
-    // }
-    // console.log('onchange',this.selectedsuppliers)
-    // await this.FillPODropdown();
-    // await this.filterTableData();
-  }
-
-  // Filter data for each table
-  // get filteredData1() {
-  //   return this.tableData.filter(row => 
-  //     row.Idea.toLowerCase().includes(this.searchText.toLowerCase()) || 
-  //     row.NounName.toLowerCase().includes(this.searchText.toLowerCase()) || 
-  //     row.Program.toLowerCase().includes(this.searchText.toLowerCase())
-  //   );
-  // }
-
-  // get filteredData2() {
-  //   return this.tableData.filter(row => 
-  //     row.NounName.toLowerCase().includes(this.searchText.toLowerCase()) || 
-  //     row.Program.toLowerCase().includes(this.searchText.toLowerCase())
-  //   );
-  // }
-
-  // get filteredData3() {
-  //   return this.tableData.filter(row => 
-  //     row.NounName.toLowerCase().includes(this.searchText.toLowerCase()) && 
-  //     row.Program.toLowerCase().includes(this.searchText.toLowerCase())
-  //   );
-  // }
-
-  // Export function (add your own export logic here)
-  exportToExcel(data: any[], fileName: string): void {
+  exportToExcel(data: any[]): void {
+    let fileName="VAVE Ideas for Part No - " + this.NounName +".xlsx";
     if (!data || data.length === 0) {
-      alert('No data provided to export.');
+      //alert('No data provided to export.');
       return;
     }
 
-    // Convert the array to a worksheet
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
 
-    // Create a workbook and add the worksheet
     const workbook: XLSX.WorkBook = { Sheets: { 'Sheet1': worksheet }, SheetNames: ['Sheet1'] };
 
-    // Generate Excel file and trigger download
     XLSX.writeFile(workbook, fileName);
+  }
+
+  OpenVBD() {
+    window.open(environment.VBDLinkHopper); 
+  }
+
+
+  filteredData: any[] = [];
+  searchFilters: any = {
+    idea: '',
+    sharepoint_ID: '',
+    program: '',
+    partNumber: '',
+    potentialSavingsPerPieceMDO: '',
+    ideaOwner: ''
+  };
+
+
+
+  applyFilter() {
+    this.filteredData = this.filteredPartNumberTableData.filter(item => {
+      return Object.keys(this.searchFilters).every(key => {
+        if (!this.searchFilters[key]) return true;
+        
+        // Type assertion
+        const itemValue = String((item as any)[key] || '').toLowerCase();
+        const filterValue = (this.searchFilters as any)[key].toLowerCase();
+        
+        return itemValue.includes(filterValue);
+      });
+    });
+    
+    this.page = 1;
   }
   
 }

@@ -275,7 +275,7 @@ export class SendRequestComponent implements OnInit {
     else if (this.modelTypesID == 2) {
       this.fileUploadService.yellowsheetupload(this.yellowmodeldata).subscribe({
         next: (res) => {
-          this.toastr.success("Excel data Inserted Successfully");
+          // this.toastr.success("Excel data Inserted Successfully");
           this.SpinnerService.hide('spinner');
           this.addSuccess = false;
           this.selectedPartName = this.getArr[0].partName
@@ -487,8 +487,6 @@ export class SendRequestComponent implements OnInit {
                 AnnualVolume: this.getArr[this.editRowIndex].annualVolume,
                 ShoudeCost: Number(this.getArr[this.editRowIndex].shouldCost).toFixed(4),
                 SourcingManagerEmail: this.getArr[this.editRowIndex].sourcingManagerEmail,
-
-
               }
 
               //console.log('insert array', this.sendRequest);
@@ -731,7 +729,9 @@ export class SendRequestComponent implements OnInit {
 
     if (confirm("Are you sure want to start Bulk Upload")) {
       if (this.modelTypesID == 2) {
+       
         try {
+          this.SpinnerService.show('spinner');
           const response: any = await this.fileUploadService.yellowbulkupload(this.userId, this.modelTypesID).toPromise();
 
           if (response.failedIds && response.failedIds.length > 0) {
@@ -742,10 +742,12 @@ export class SendRequestComponent implements OnInit {
             });
           } else {
             this.toastr.success(response.message || "Bulk Upload Completed.");
+            this.SpinnerService.hide('spinner');
           }
         } catch (error) {
           console.error('API call error:', error);
           this.toastr.error("Bulk Upload Failed.");
+          this.SpinnerService.hide('spinner');
         } finally {
           this.SpinnerService.hide('spinner');
         }
@@ -888,8 +890,6 @@ export class SendRequestComponent implements OnInit {
     if (this.modelMartIdFromExcel && this.selectedUniqueID) {
       if (this.modelMartIdFromExcel.toString() === this.selectedUniqueID) {
         this.validationMessage = 'ModelMart ID Matched';
-        alert("Modelmart Id matched");
-
         this.yellowmodeldata = {
           MMID: exceldata[1][0],
           CreatedBy: this.userId,
@@ -924,6 +924,15 @@ export class SendRequestComponent implements OnInit {
       } else {
         this.validationMessage = 'ModelMart ID Not Matched';
         alert("ModelMart ID Not Matched");
+        setTimeout(() => {
+
+          this.takeInputExcel.nativeElement.value = "";
+          this.takeInputPDF.nativeElement.value = "";
+          this.takeInputImage.nativeElement.value = "";
+
+        }, 200);
+
+
       }
 
     }

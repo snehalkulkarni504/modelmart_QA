@@ -348,7 +348,7 @@
     width: 200px !important;
 }
 
-
+    
 .TotalCostData {
     font-weight: 600 !important;
 }
@@ -419,4 +419,10 @@
     height: 300px;
 }
  
+.img1:hover {
+    box-shadow: 0px 0px 5px #8e959c;
+    transition: all .5s ease-in-out;
+    transform: scale(1.02, 1.02);
+    cursor: pointer !important;
+}
 

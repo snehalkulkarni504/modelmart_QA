@@ -16,8 +16,21 @@ table {
 
 th {
     height: 40px !important;
-    max-width: 150px !important;
-    min-width: 150px !important ;
+    /* max-width: 150px !important;
+    min-width: 150px !important ; */
+}
+
+.title{
+    background-color:#fdfbfb;
+    font-family: Helvetica ,  Arial !important;
+    color: rgba(0, 0, 0, 0.726);
+    /* text-align: center; */
+    /* height: 50px;
+    top: 50px; */
+    /* line-height: 50px; */
+    font-size: 16px;
+    font-weight: 600;
+    padding: 0px 0px;
 }
 
 .dropdown-container {
@@ -46,9 +59,15 @@ td {
     text-overflow: ellipsis;
 }
 
+td:hover{
+    max-width: 150px;   
+    white-space: pre-wrap;
+}
+
 th.hidden-header {
     visibility: hidden;
     /* width: 0 !important; */
+    position: sticky; left:-2px; top:-2px; z-index: 4;
     
 }
 
@@ -56,10 +75,21 @@ th.header-box {
     min-width: 100px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border: 1px solid #ddd;
+    position: sticky;
+    background-color: #fff;
+    height: 30px;
+    box-sizing: border-box;
+}
+
+th.header-box-id{
+    min-width: 45px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ddd;
     position: relative;
     background-color: #fff;
     height: 30px;
     box-sizing: border-box;
+    
 }
 
 .header-content {
@@ -70,6 +100,42 @@ th.header-box {
     height: 100%;
     position: relative;
 }
+
+.header-content-id {
+    width: 45px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    position: relative;
+}
+
+/* Add these styles to your CSS file */
+.search-row {
+    background-color: #f8f9fa;
+    /* position: sticky; */
+    top: 40px; /* Adjust based on your header height */
+    /* z-index: 2; */
+  }
+
+  .column-search1 {
+    width: 45px;
+    padding: 5px;
+    margin: 2px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+
+  .column-search {
+    width: 100%;
+    padding: 5px;
+    margin: 2px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 12px;
+  }
 
 .header-line {
     margin-bottom: -3px;
@@ -94,6 +160,11 @@ th.header-box:nth-child(1) .header-line {
 th.header-box:nth-child(2) .header-line {
     background-color: #da291c;
 }
+
+th.header-box-id:nth-child(2) .header-line {
+    background-color: #da291c;
+}
+
 
 th.header-box:nth-child(3) .header-line {
     background-color: #e03a2d;
@@ -255,8 +326,8 @@ h3 {
 }
 
 hr {
-    border: 2px solid red;
-    border-top: 1px solid #ccc;
+    border: 1px solid #da291c;
+    /* border-top: 1px solid #ccc; */
     margin: 15px 0;
 }
 
@@ -357,3 +428,32 @@ hr {
     color: white !important; /* White text for readability */
 }
 
+
+
+.id1{
+    text-align: center;
+    color: blue;
+    cursor: pointer;
+}
+
+.exportToExcel{
+    width: 30px;height: 30px;
+    float: right;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+.exportToExcel:hover{
+    /* transform: translateY(-2px); */
+    cursor: pointer !important;
+}
+
+
+#freeze{
+    position: sticky; left:-2px; top:-2px; z-index: 4;
+}
+
+/* @media (max-width: 883) {
+    #freeze{
+     position: relative;   
+    }
+  } */

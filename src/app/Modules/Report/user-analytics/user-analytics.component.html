@@ -1,4 +1,4 @@
-<div class="setHeight" style="background-color: whitesmoke;">
+<div class="setHeight page">
     <ngx-spinner name="spinner" bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="square-jelly-box"
         [fullScreen]="true">
         <img alt="Loading Please Wait..." style="width:100px ; height:100px ;" src="../../../assets/Spin-2.gif" />
@@ -19,6 +19,16 @@
         <div class="MasterHeaderlable">
             <div class="row">
                 <div class="col-md-2">
+                    <label for="dropdown" class="default-lbl">Select</label>
+    
+                    <select name="dropdown" class="form-select-sm selectdropdown" (change)="assigncategory($event)">
+                        <option *ngFor="let option of dropdownOptions" [value]="option.id" >
+                            {{ option.name }}
+                          </option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
                     <label for="datepicker1" class="default-lbl">From Date</label>
                     <br>
                     <input type="date" formControlName="currentDate" [(ngModel)]="selectedFromDate"
@@ -26,15 +36,14 @@
                 </div>
 
                 <div class="col-md-2">
-                    <label for="datepicker1" class="default-lbl">To Date</label>
+                    <label for="datepicker2" class="default-lbl">To Date</label>
                     <br>
-                    <input type="date" formControlName="currentDate" [(ngModel)]="selectedToDate"
+                    <input type="date" formControlName="currentDate1" [(ngModel)]="selectedToDate"
                         class="form-control form-control-sm">
                 </div>
-                <div class="col-md-3 ">
+                <div class="col-md-3">
                     <button type="button" class="btn btn-sm default-btn" data-bs-dismis="modal"
                         (click)="onClickGetData()">View</button>
-
                     <img src="../../../../assets/exportexcel.png" class="exportToExcel" (click)="exportToExcel()"
                         title="Export to Excel">
                 </div>
@@ -103,7 +112,7 @@
                     <label class="default-lbl" style="font-weight: 700;">Usage by Roles</label>
                     <div class="table-responsive" style="font-size: 12px !important;">
                         <table class="table p-0 table-borderless bsb-table-xl text-nowrap align-middle m-0">
-                            <thead >
+                            <thead>
                                 <tr class="shaded">
                                     <th>Team</th>
                                     <th>Count</th>
@@ -124,9 +133,9 @@
                     <label class="default-lbl" style="font-weight: 700;">Usage by Module</label>
                     <div class="table-responsive" style="font-size: 12px !important;">
                         <table class="table p-0 table-borderless bsb-table-xl text-nowrap align-middle m-0">
-                            <thead >
+                            <thead>
                                 <tr class="shaded">
-                                    <th >Page</th>
+                                    <th>Page</th>
                                     <th>Count</th>
                                 </tr>
                             </thead>
@@ -141,7 +150,7 @@
                     </div>
                 </div>
             </div>
-           
+
         </div>
 
         <div class="row cardsdiv" style="margin-top: 2%;">
@@ -177,12 +186,12 @@
                 </div>
             </div>
         </div>
-        <div class="row cardsdiv"  style="margin-top: 2%;">
+        <div class="row cardsdiv" style="margin-top: 2%;">
             <div class="col">
                 <canvasjs-chart [options]="pagetimechartOptions" [styles]="{width: '100%', height:'400px'}"
                     id="chartOptionsId" (stockChartInstance)="getChartInstance($event)"></canvasjs-chart>
             </div>
-        </div>  
+        </div>
     </form>
     <br>
     <br>

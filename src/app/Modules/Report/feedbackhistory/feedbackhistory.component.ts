@@ -5,6 +5,7 @@ import { MasterServiceService } from 'src/app/SharedServices/master-service.serv
 import { Location } from '@angular/common';
 import { ReportServiceService } from 'src/app/SharedServices/report-service.service';
 import { SearchPipe } from "../../../pipe/search.pipe";
+import { color } from 'html2canvas/dist/types/css/types/color';
 
 @Component({
   selector: 'app-feedbackhistory',
@@ -39,8 +40,14 @@ export class FeedbackhistoryComponent {
   username: any;
   showTab2: boolean = false;
   showTab1: boolean = true
-  
   demo: number = 0;
+
+  selectdates = ['Last 3 Months', 'Last 6 Months', 'Last 1 Year'];
+  selecteddates: any;
+  minDate: string = '';
+  maxDate: string = '';
+  filteredData: any[] = [];
+
 
   ngOnInit(): void {
 
@@ -54,6 +61,8 @@ export class FeedbackhistoryComponent {
 
     this.feedbackHistory = new FormGroup({
       textsearch: new FormControl(),
+      fromDate: new FormControl(),
+      toDate: new FormControl()
     });
 
     this.GetfeedbackHistoryDetails();
@@ -69,11 +78,13 @@ export class FeedbackhistoryComponent {
     this.getData = [];
     const data = await this.reportService.GetFeedbackHistoryDetails(this.username).toPromise();
     this.getData = data;
-    this.demo = data.q1;
+    this.filteredData = data;
   }
+
 
   viewfeedback(val: any) {
     const Params = {
+      username: val.name,
       content: val.q1,
       effectiveness: val.q2,
       reuse: val.q3,
@@ -84,6 +95,164 @@ export class FeedbackhistoryComponent {
 
     this.router.navigate(['/home/feedback'], { queryParams: Params });
   }
+
+  Fun_showTab1() {
+    this.showTab2 = false;
+    this.showTab1 = true;
+  }
+
+  Fun_showTab2() {
+    this.showTab1 = false;
+    this.showTab2 = true;
+  }
+
+
+  async fetchChartData() {
+    debugger;
+    try {
+      const data = await this.reportService.Getpiechartdata().toPromise();
+      this.processChartData(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+  tableData: { [key: string]: { count: number; percentage: number; name: string }[] } = {};
+  chartOptions: { [key: string]: any } = {};
+
+
+  processChartData(apiData: any) {
+    if (!apiData || !Array.isArray(apiData)) {
+      console.error("Invalid API Data:", apiData);
+      return;
+    }
+
+    const groupedData: { [key: string]: { count: number; percentage: number; name: string }[] } = {};
+    const totalCounts: { [key: string]: number } = {};
+
+    apiData.forEach((item: any) => {
+      if (!groupedData[item.quesno]) {
+        groupedData[item.quesno] = [];
+        totalCounts[item.quesno] = 0;
+      }
+      totalCounts[item.quesno] += item.count;
+      groupedData[item.quesno].push({ name: item.options, count: item.count, percentage: 0 });
+    });
+
+    Object.keys(groupedData).forEach((quesno) => {
+      groupedData[quesno] = groupedData[quesno].map(option => ({
+        name: option.name,
+        count: option.count,
+        percentage: (option.count / totalCounts[quesno]) * 100
+      }));
+    });
+
+    this.tableData = groupedData || {};
+
+
+    // function getRandomColor() {
+    //   const letters = '0123456789ABCDEF';
+    //   let color = '#';
+    //   for (let i = 0; i < 6; i++) {
+    //     color += letters[Math.floor(Math.random() * 16)];
+    //   }
+    //   return color;
+    // }
+
+    
+const colors = ["#5DE2E7", "#E4080A", "#7DDA58"]; // Blue, Black, Red
+
+function getColor(index: any) {
+   return colors[index % colors.length];
+}
+
+
+
+    this.chartOptions = Object.keys(groupedData).reduce((acc, quesno) => {
+      acc[quesno] = {
+        animationEnabled: true,
+        width: 250,
+        height: 250,
+        //title: { text: `${quesno}` },
+        data: [{
+          type: "pie",
+          startAngle: -90,
+          indexLabel: "{name}: {y}",
+          indexLabelFontSize: 12,
+          yValueFormatString: "##0.##'%'",
+          radius: "65%",
+          dataPoints: groupedData[quesno].map((option,index) => ({
+            name: option.name,
+            y: option.percentage,
+            color: getColor(index)
+          }))
+        }]
+      };
+      return acc;
+    }, {} as { [key: string]: any });
+
+
+
+  }
+
+
+
+
+
+  onDateRangeChange() {
+    const today = new Date();
+    let pastDate = new Date();
+
+    if (this.selecteddates === 'Last 3 Months') {
+      pastDate.setMonth(today.getMonth() - 3);
+    } else if (this.selecteddates === 'Last 6 Months') {
+      pastDate.setMonth(today.getMonth() - 6);
+    } else if (this.selecteddates === 'Last 1 Year') {
+      pastDate.setFullYear(today.getFullYear() - 1);
+    }
+
+    this.minDate = pastDate.toISOString().split('T')[0];
+    this.maxDate = today.toISOString().split('T')[0];
+
+    this.feedbackHistory.patchValue({
+      fromDate: this.minDate,
+      toDate: this.maxDate
+    });
+  }
+
+  filterByDateRange() {
+    if(this.minDate && this.maxDate)
+    {
+    const fromDate = new Date(this.feedbackHistory.value.fromDate);
+    const toDate = new Date(this.feedbackHistory.value.toDate);
+
+    toDate.setHours(23, 59, 59, 999);
+
+    this.filteredData = this.getData.filter((item: any) => {
+      const createdOn = new Date(item.createdon);
+      return createdOn >= fromDate && createdOn <= toDate;
+    });
+
+    this.filterMetadata.count = this.filteredData.length;
+  }
+  
+  }
+
+  clearFilters() {
+    this.selecteddates = null;
+    this.feedbackHistory.patchValue({
+      fromDate: null,
+      toDate: null,
+      textsearch: ''
+    });
+    this.minDate = '';
+    this.maxDate = '';
+    this.filteredData = this.getData;
+
+    this.page = 1;
+    this.filterMetadata.count = this.filteredData.length;
+  }
+
 
 
 
@@ -129,136 +298,10 @@ export class FeedbackhistoryComponent {
   //   }]
   // }
 
-  // chartOptions3 = {
-  //   exportEnabled: false,
-  //   animationEnabled: true,
-  //   title: {
-  //     text: ""
-  //   },
-  //   data: [{
-  //     type: "pie",
-  //     startAngle: -90,
-  //     indexLabel: "{name}: {y}",
-  //     indexLabelFontSize: 14,
-  //     yValueFormatString: "#,###.##'%'",
-  //     radius: "80%", /* Keeping it the same */
-  //     dataPoints: [
-  //       { y: 10, name: "Yes" },
-  //       { y: 50, name: "No" },
-  //       { y: 40, name: "Not Sure" },
-  //     ]
-  //   }]
-  // }
-
-  // chartOptions4 = {
-  //   exportEnabled: false,
-  //   animationEnabled: true,
-  //   title: {
-  //     text: ""
-  //   },
-  //   data: [{
-  //     type: "pie",
-  //     startAngle: -90,
-  //     indexLabel: "{name}: {y}",
-  //     indexLabelFontSize: 14, /* Ensuring label size is same */
-  //     yValueFormatString: "#,###.##'%'",
-  //     radius: "80%", /* Set a consistent size for all */
-  //     dataPoints: [
-  //       { y: 30, name: "Daily" },
-  //       { y: 20, name: "Weekly" },
-  //       { y: 50, name: "Fortnightly" },
-  //     ]
-  //   }]
-  // }
 
 
 
-  Fun_showTab1( ) {
-    this.showTab2=false;
-    this.showTab1=true;
-  }
 
-  Fun_showTab2() {
-    this.showTab1 = false;
-    this.showTab2 = true;
-  }
-
-
-  async fetchChartData() {
-    debugger;
-    try {
-      const data = await this.reportService.Getpiechartdata().toPromise();
-      this.processChartData(data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  }
-
-  tableData: { [key: string]: { count: number; percentage: number; name: string }[] } = {};
-  chartOptions: { [key: string]: any } = {};
-    
-  
-    processChartData(apiData: any) {
-      if (!apiData || !Array.isArray(apiData)) {
-        console.error("Invalid API Data:", apiData);
-        return;
-      }
-    
-      const groupedData: { [key: string]: { count: number; percentage: number; name: string }[] } = {};
-      const totalCounts: { [key: string]: number } = {}; // Store total count for each question
-    
-      // 1️⃣ Grouping data & calculating total counts
-      apiData.forEach((item: any) => {
-        if (!groupedData[item.quesno]) {
-          groupedData[item.quesno] = [];
-          totalCounts[item.quesno] = 0;
-        }
-        totalCounts[item.quesno] += item.count; // Sum total for the question
-        groupedData[item.quesno].push({ name: item.options, count: item.count, percentage: 0 });
-      });
-    
-      // 2️⃣ Calculate percentages
-      Object.keys(groupedData).forEach((quesno) => {
-        groupedData[quesno] = groupedData[quesno].map(option => ({
-          name: option.name,
-          count: option.count, // Keep count for the table
-          percentage: (option.count / totalCounts[quesno]) * 100 // Calculate percentage
-        }));
-      });
-    
-      // ✅ Ensure tableData is an empty object if no data is available
-      this.tableData = groupedData || {};
-    
-      // ✅ Ensure chartOptions is an empty object if no data is available
-      this.chartOptions = Object.keys(groupedData).reduce((acc, quesno) => {
-        acc[quesno] = {
-          animationEnabled: true,
-          width:250,
-          height: 250,
-          //title: { text: `${quesno}` },
-          data: [{
-            type: "pie",
-            startAngle: -90,
-            indexLabel: "{name}: {y}",
-            indexLabelFontSize: 12,
-            yValueFormatString: "##0.##'%'",
-            radius: "65%",
-            dataPoints: groupedData[quesno].map(option => ({
-              name: option.name,
-              y: option.percentage // ✅ Use percentage for chart
-            }))
-          }]
-        };
-        return acc;
-      }, {} as { [key: string]: any });
-    
-      // console.log("Processed Table Data:", this.tableData);
-      // console.log("Processed Chart Options:", this.chartOptions);
-
-    }
-    
-    
-  
 
 
 }

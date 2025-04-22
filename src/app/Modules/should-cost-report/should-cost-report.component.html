@@ -66,6 +66,10 @@
                                 <input type="button" class="btn btn-outline-danger btn-GetReport" name="GetReport"
                                     value="Update & Get Report" (click)="GetReport()">
                             </div>
+                            <div class="text-center">
+                                <label [hidden]="!IsCESmodel" class="text-center CSModelRemark"
+                                    style="margin-left: 0px;">{{ModelwiseNote}}</label>
+                            </div>
                         </div>
                     </div>
                     <div [hidden]="IsHiddenDiv" class="col-md-2"></div>
@@ -86,7 +90,7 @@
                                     class="ShouldCostBreakdowntabletr">
                                     <td style="padding: 10px 10px; padding-right: 0px;" class="TierCostReportTextT1">
                                         {{val.particular}}
-                                        <input [class.hideTextBox]="val.updateValue == 0" id="getdataTier1"
+                                        <input [class.hideTextBox]="val.updateValue == 0" [hidden]="IsExternalCostmodel && val.particular != 'Direct Labour Cost' "  id="getdataTier1"
                                             type="button" class="btn btn-sm btn-outline-danger" name="GetData"
                                             value="Update" (click)="openModal('T1',val,i)">
                                     </td>
@@ -225,7 +229,7 @@
                                 <tr *ngFor="let val of Tier2CostReportList; let i=index"
                                     class="ShouldCostBreakdowntabletr">
                                     <td style="padding: 10px 10px;" class="TierCostReportTextT2">{{val.particular}}
-                                        <input [class.hideTextBox]="val.updateValue == 0" id="getdataTier2"
+                                        <input [class.hideTextBox]="val.updateValue == 0" [hidden]="IsExternalCostmodel && val.particular != 'Direct Labour Cost' " id="getdataTier2"
                                             type="button" class="btn btn-sm btn-outline-danger" name="GetData"
                                             value="Update" (click)="openModal('T2',val,i)">
                                     </td>
@@ -437,7 +441,14 @@
                                     <td class="HideRow"
                                         [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
                                         class="ShouldCostBreakdowntabletr" style="text-align: right;">
-                                        {{val.grossWeightKG | number:'1.4-4' }}</td>
+                                        <!-- {{val.grossWeightKG | number:'1.4-4' }} -->
+
+                                        <input type="text" class="form-control PopupText RMText" id="PopUpGross{{i}}"
+                                            name="PopUpGross{{i}}" (keypress)="keyPressDecimal($event)"
+                                            value="{{val.grossWeightKG}}"
+                                            (keyup)="CalculateMaterialRate($event, val, i)" maxlength="8">
+                                    
+                                    </td>
                                     <td class="HideRow"
                                         [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
                                         class="ShouldCostBreakdowntabletr" style="text-align: right; display: none ">
@@ -449,7 +460,14 @@
                                     <td class="HideRow"
                                         [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
                                         class="ShouldCostBreakdowntabletr" style="text-align: right; ">
-                                        {{val.grossNetWeightKG | number:'1.4-4' }}</td>
+                                        <!-- {{val.grossNetWeightKG | number:'1.4-4' }} -->
+                                    
+                                        <input type="text" class="form-control PopupText RMText" id="PopUpNet{{i}}"
+                                        name="PopUpGross{{i}}" (keypress)="keyPressDecimal($event)"
+                                        value="{{val.grossNetWeightKG}}"
+                                        (keyup)="CalculateMaterialRate($event, val, i)" maxlength="8">
+
+                                    </td>
                                     <td class="HideRow"
                                         [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
                                         class="ShouldCostBreakdowntabletr" style="text-align: right; display: none ">

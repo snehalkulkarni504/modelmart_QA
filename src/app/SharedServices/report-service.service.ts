@@ -108,7 +108,6 @@ export class ReportServiceService {
    
   GetFeedbackHistoryDetails(username:any):Observable<any> {
     return this.http.get<any[]>(this.apiUrl+`Getfeedbackdata?username=${username}`);
- 
   }
 
   Getpiechartdata():Observable<any> {

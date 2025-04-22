@@ -3,6 +3,7 @@ import { Route, Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { environment } from 'src/environments/environments';
 import { AdminService } from 'src/app/SharedServices/admin.service';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -20,10 +21,12 @@ export class AppComponent implements OnInit {
 
   IsMaintenances = environment.IsMaintenance;
 
-  constructor(private router: Router, public admin: AdminService,) {
-  }
+  constructor(private router: Router, public admin: AdminService) { }
+
+
 
   ngOnInit() {
+
     this.UserId = localStorage.getItem("userId");
     this.SessionId = localStorage.getItem("sessionId");
 
@@ -32,7 +35,7 @@ export class AppComponent implements OnInit {
         this.previousUrl = this.currentUrl; // Store the previous page
         this.previouspage = this.getpagename(this.previousUrl)
         if (this.previouspage != '') {
-          this.admin.updatepageexit(this.UserId, this.SessionId, this.previouspage).subscribe({
+          this.admin.updatepageexit(localStorage.getItem("userId"), localStorage.getItem("sessionId"), this.previouspage).subscribe({
             next: (_res: any) => {
             },
             error: (error: any) => {
@@ -47,7 +50,7 @@ export class AppComponent implements OnInit {
         console.log(`Navigated from: ${this.previousUrl} to ${this.currentUrl}`);
         this.currentpage = this.getpagename(this.currentUrl)
         if (this.currentpage != '') {
-          this.admin.insertpageentry(this.UserId, this.SessionId, this.currentpage).subscribe({
+          this.admin.insertpageentry(localStorage.getItem("userId"), localStorage.getItem("sessionId"), this.currentpage).subscribe({
             next: (_res: any) => {
             },
             error: (error: any) => {
@@ -59,9 +62,7 @@ export class AppComponent implements OnInit {
 
     })
 
-
   }
-
 
 
   getpagename(url: string): string {
@@ -135,6 +136,7 @@ export class AppComponent implements OnInit {
 
     return ''
   }
+
 
 
 }

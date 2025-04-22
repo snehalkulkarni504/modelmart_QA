@@ -126,7 +126,8 @@ export class ShouldCostRequestStatusComponent {
   async DownloadExcel(data: any) {
 
     // var id = data.uniqueId;
-    var staticUrl = environment.apiUrl_Admin + 'DownloadExcel?fname=' + data.ExcelFileName;
+    var staticUrl = environment.apiUrl_Admin + 'DownloadExcel?requestId=' + data.RequestHeaderId;
+    
     console.log(staticUrl);
 
     var xhr = new XMLHttpRequest();

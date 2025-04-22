@@ -81,6 +81,7 @@ export class SearchComponent implements OnInit {
   Catlist4: any;
   Cat4Value: any;
   SearchboxForm!: FormGroup;
+  SearchSilulatedForm!: FormGroup;
   BusinessUnit: any;
   BusinessUnitValue: any;
   Location: any;
@@ -166,6 +167,9 @@ export class SearchComponent implements OnInit {
   page: number = 1;
   pageSize: number = 100;
   configPagination: any;
+  SearchListSimulated: any;
+  textsearch: string = '';
+  filterMetadata = { count: 0 };
 
   async ngOnInit(): Promise<void> {
 
@@ -179,7 +183,13 @@ export class SearchComponent implements OnInit {
       return;
     }
 
-    await this.getUserId(localStorage.getItem("userName"));
+    var uname = String(localStorage.getItem("userName"));
+    if (environment.IsMaintenance && uname.toUpperCase() != environment.IsMaintenance_userName.toUpperCase()) {
+      this.router.navigate(['/maintenance']);
+      return;
+    }
+
+   // await this.getUserId(localStorage.getItem("userName"));
 
     this.usernm = localStorage.getItem("userName");
     this.userId = localStorage.getItem("userId");
@@ -211,7 +221,9 @@ export class SearchComponent implements OnInit {
       cat3checkbox: new FormControl()
     });
 
-
+    this.SearchSilulatedForm = new FormGroup({
+      textsearch: new FormControl()
+    });
 
     let flag = 0;
     this.GetEngine();
@@ -219,6 +231,9 @@ export class SearchComponent implements OnInit {
     this.ShowCagetory3("");
     this.GetBusinessUnit();
     this.GetProgramName();
+
+    console.log(this.childCategory);
+    console.log(localStorage.getItem("childCategory"));
 
     if (this.childCategory == " " || localStorage.getItem("childCategory") == null) {
       localStorage.setItem("childCategory", this.childCategory);
@@ -246,6 +261,7 @@ export class SearchComponent implements OnInit {
 
   }
 
+
   async getUserId(username: any) {
     this.SpinnerService.show('spinner');
 
@@ -257,15 +273,9 @@ export class SearchComponent implements OnInit {
       localStorage.setItem("userId", this.UserList[0].Id);
       localStorage.setItem("userFullName", this.UserList[0].FullName);
       localStorage.setItem("roleId", this.UserList[0].RoleId);
-      //console.log("userId search " + localStorage.getItem("userId"));
-
-      //  this.GetSearchdata(this.filters);
-      // this.GetBusinessUnit();
-      // this.SpinnerService.hide('spinner');
     }
 
   }
-
 
   checkedCategory() {
 
@@ -299,7 +309,7 @@ export class SearchComponent implements OnInit {
       myElement?.classList.add("mainsearchborder");
     }
 
-    debugger;
+    // debugger;
     const data = await this.searchservice.GetSearch(input).toPromise();
     this.results = data;
 
@@ -1130,9 +1140,9 @@ export class SearchComponent implements OnInit {
   ModelCount: any;
   radiobtn: any;
 
-
   async GetSearchdata(filters_list: any) {
     try {
+      //debugger;
       this.SpinnerService.show('spinner');
       this.SortSearchData = 0;
       this.checkcount = 0;
@@ -1145,6 +1155,7 @@ export class SearchComponent implements OnInit {
 
       const data = await this.searchservice.SearchFilters(filters_list, this.userId).toPromise();
 
+      console.log(data);
       this.SearchList = data;
       this.flag = false;
 
@@ -1171,7 +1182,7 @@ export class SearchComponent implements OnInit {
           this.searchProduct2.nativeElement.value = localStorage.getItem('Historywildcardsearch');
         }
 
-      
+
         const Weight = document.getElementsByName("dolleroptions") as any;
 
 
@@ -1200,7 +1211,7 @@ export class SearchComponent implements OnInit {
         }
       }
 
-      debugger;
+      //debugger;
       if (this.SearchList.length > 0) {
         if (localStorage.getItem("SortSearchData") != null || localStorage.getItem("SortSearchData") != undefined) {
           this.SortSearchData = localStorage.getItem("SortSearchData");
@@ -1399,7 +1410,7 @@ export class SearchComponent implements OnInit {
 
   getComparison() {
 
-    debugger;
+    //debugger;
 
     if (this.SearchList.length <= 0) {
       this.toastr.error("Record Not Found");
@@ -1427,7 +1438,7 @@ export class SearchComponent implements OnInit {
         "S": this.SimulatedProductvalue
       }
     )
-   
+
     localStorage.setItem("ComapredcheckedboxIds", JSON.stringify(this.compareIds));
     this.router.navigate(['/home/comparison']);
 
@@ -1436,9 +1447,128 @@ export class SearchComponent implements OnInit {
 
 
   compareIds: any = [];
+  displaySimulatedPopup = "none";
+  compareIdArray: any = [0];
+  compareIdArraylength = 0;
+
   getPartId(e: any, model: any) {
     debugger;
+
+
+    // // -- new compare code ----
+    // this.compareIdArray = [];
+    // this.compareIdArraylength = 0;
+
+    // const myElement = document.getElementById("compareBottomPanel");
+    // myElement?.classList.remove("compareBottomPanelhide");
+    // myElement?.classList.add("compareBottomPanel");
+
+    // this.checkcount = 0;
+    // const Comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
+
+    // // --- main models---------
+    // for (let i = 0; i < Comparecheckbox.length; i++) {
+    //   if (Comparecheckbox[i].checked) {
+    //     this.checkcount = this.checkcount + 1;
+    //     const dd = this.SearchList.find((p: { csHeaderId: any; }) => p.csHeaderId == Comparecheckbox[i].id)
+    //     if (this.compareIdArray.length < 4) {
+    //       this.compareIdArray.push(
+    //         {
+    //           "scReportId": '0',
+    //           "csHeaderId": dd.csHeaderId,
+    //           "partNumber": dd.partNumber,
+    //           "partName": dd.partName,
+    //           "uniqueId": dd.uniqueId,
+    //           "imagePath": dd.imagePath
+    //         }
+    //       );
+    //     }
+    //     else {
+    //       this.toastr.warning("You can select only 4 Parts");
+    //       Comparecheckbox[i].checked = false;
+    //     }
+    //     this.compareIdArraylength = this.compareIdArray.length;
+    //   }
+    // }
+
+
+    // // -- simulated models ---------
+    // console.log(this.SearchListSimulated);
+    // const SimulatedCheckbox = document.getElementsByClassName("SimulatedCheckbox") as any;
+    // for (let i = 0; i < this.SearchListSimulated.length; i++) {
+    //   if (this.SearchListSimulated[i].isActive == 1) {
+    //     this.checkcount = this.checkcount + 1;
+    //     //const dd = this.SearchListSimulated.find((p: { scReportId: any; }) => p.scReportId == SimulatedCheckbox[i].id)
+    //     if (this.compareIdArray.length < 4) {
+    //       this.compareIdArray.push(
+    //         {
+    //           "scReportId": this.SearchListSimulated[i].scReportId,
+    //           "csHeaderId": '0',
+    //           "partNumber": this.SearchListSimulated[i].partNumber,
+    //           "partName": this.SearchListSimulated[i].partName,
+    //           "uniqueId": this.SearchListSimulated[i].uniqueId,
+    //           "imagePath": this.SearchListSimulated[i].imagePath
+    //         }
+    //       );
+
+    //       this.SearchListSimulated[i].isActive = 1;
+    //       console.log(this.SearchListSimulated);
+
+    //     }
+    //     else {
+    //       this.toastr.warning("You can select only 4 Parts");
+    //       SimulatedCheckbox[i].checked = false;
+    //       this.SearchListSimulated[i].isActive = 0;
+    //     }
+    //     this.compareIdArraylength = this.compareIdArray.length;
+    //   }
+    // }
+
+    // for (let i = 0; i < SimulatedCheckbox.length; i++) {
+    //   if (SimulatedCheckbox[i].checked) {
+    //     this.checkcount = this.checkcount + 1;
+    //     const dd = this.SearchListSimulated.find((p: { scReportId: any; }) => p.scReportId == SimulatedCheckbox[i].id)
+    //     if (this.compareIdArray.length < 4) {
+    //       this.compareIdArray.push(
+    //         {
+    //           "scReportId": dd.scReportId,
+    //           "csHeaderId": '0',
+    //           "partNumber": dd.partNumber,
+    //           "partName": dd.partName,
+    //           "uniqueId": dd.uniqueId,
+    //           "imagePath": dd.imagePath
+    //         }
+    //       );
+          
+    //       dd.isActive = 1;
+    //     }
+    //     else {
+    //       this.toastr.warning("You can select only 4 Parts");
+    //       SimulatedCheckbox[i].checked = false;
+    //       this.SearchListSimulated[i].isActive = 0;
+    //     }
+    //     this.compareIdArraylength = this.compareIdArray.length;
+    //   }
+
+    // }
+
+
+    // if (this.checkcount <= 0) {
+    //   myElement?.classList.remove("compareBottomPanel");
+    //   myElement?.classList.add("compareBottomPanelhide");
+    //   this.compareIdArray = [];
+    // }
+
+
+
+    // // -- new compare code end ----
+
+
     this.checkcount = 0;
+
+    const compareBottomPanel = document.getElementsByClassName("compareBottomPanel") as any;
+    compareBottomPanel.display = "block";
+
     const Comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
 
     const SearchCheckboxSimulated = document.getElementsByClassName("SearchCheckboxSimulated") as any;
@@ -1447,17 +1577,15 @@ export class SearchComponent implements OnInit {
       this.Productvalue = [];
       for (let i = 0; i < Comparecheckbox.length; i++) {
         if (Comparecheckbox[i].checked) {
-          // this.checkcount = this.checkcount + 1;
           this.Productvalue.push(Comparecheckbox[i].id);
         }
       }
 
       if (Number(this.Productvalue.length) + Number(this.SimulatedProductvalue.length) > 4) {
-        this.toastr.warning("You can select only 4 Products");
+        this.toastr.warning("You can select only 4 Parts");
         for (let i = 0; i < Comparecheckbox.length; i++) {
           if (Comparecheckbox[i].id == e.csHeaderId) {
             Comparecheckbox[i].checked = false;
-            // this.checkcount = this.checkcount - 1;
             this.Productvalue.pop();
             return
           }
@@ -1469,17 +1597,15 @@ export class SearchComponent implements OnInit {
       this.SimulatedProductvalue = [];
       for (let i = 0; i < SearchCheckboxSimulated.length; i++) {
         if (SearchCheckboxSimulated[i].checked) {
-          // this.checkcount = this.checkcount + 1;
           this.SimulatedProductvalue.push(SearchCheckboxSimulated[i].id);
         }
       }
 
       if (Number(this.Productvalue.length) + Number(this.SimulatedProductvalue.length) > 4) {
-        this.toastr.warning("You can select only 4 Products");
+        this.toastr.warning("You can select only 4 Parts");
         for (let i = 0; i < SearchCheckboxSimulated.length; i++) {
           if (SearchCheckboxSimulated[i].id == e.scReportId) {
             SearchCheckboxSimulated[i].checked = false;
-            // this.checkcount = this.checkcount - 1;
             this.SimulatedProductvalue.pop();
             return
           }
@@ -1492,6 +1618,80 @@ export class SearchComponent implements OnInit {
 
   }
 
+
+  CloseComparePopup() {
+    const myElement = document.getElementById("compareBottomPanel");
+    myElement?.classList.remove("compareBottomPanel");
+    myElement?.classList.add("compareBottomPanelhide");
+
+    // -- main models
+    const comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
+    for (let i = 0; i < comparecheckbox.length; i++) {
+      if (comparecheckbox[i].checked) {
+        comparecheckbox[i].checked = false;
+      }
+    }
+
+    // --- simulated models
+    const SimulatedCheckbox = document.getElementsByClassName("SimulatedCheckbox") as any;
+    for (let i = 0; i < SimulatedCheckbox.length; i++) {
+      if (SimulatedCheckbox[i].checked) {
+        SimulatedCheckbox[i].checked = false;
+      }
+    }
+
+  }
+
+
+  RemoveModelfromCompare(arr: any, index: any) {
+    debugger;
+
+    // -- main models
+    const comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
+    for (let i = 0; i < comparecheckbox.length; i++) {
+      if (Number(comparecheckbox[i].id) == Number(arr[index].csHeaderId)) {
+        comparecheckbox[i].checked = false;
+        break;
+      }
+    }
+
+    // --- simulated models
+    const SimulatedCheckbox = document.getElementsByClassName("SimulatedCheckbox") as any;
+    for (let i = 0; i < SimulatedCheckbox.length; i++) {
+      if (Number(SimulatedCheckbox[i].id) == Number(arr[index].scReportId)) {
+        SimulatedCheckbox[i].checked = false;
+        break;
+      }
+    }
+
+    this.compareIdArray.splice(index, 1);
+    this.compareIdArraylength = this.compareIdArray.length;
+
+    if (this.compareIdArraylength <= 0) {
+      const myElement = document.getElementById("compareBottomPanel");
+      myElement?.classList.remove("compareBottomPanel");
+      myElement?.classList.add("compareBottomPanelhide");
+    }
+
+  }
+
+  onCloseHandled_Popup() {
+    this.displaySimulatedPopup = "none";
+  }
+
+  async ShowSimulatedPopup() {
+    debugger;
+    this.SpinnerService.show('spinner');
+    if (this.SearchListSimulated == undefined) {
+      const data = await this.searchservice.SearchSimulated(this.userId).toPromise();
+      this.SearchListSimulated = data;
+      console.log(this.SearchListSimulated);
+    }
+
+    console.log(this.SearchListSimulated);
+    this.displaySimulatedPopup = "block";
+    this.SpinnerService.hide('spinner');
+  }
 
 
   // this.checkcount = Number(this.Productvalue.length) + Number(this.SimulatedProductvalue.length);
@@ -1510,7 +1710,7 @@ export class SearchComponent implements OnInit {
   //   }
 
   //   if (this.checkcount > 4) {
-  //     this.toastr.warning("You can select only 4 Products");
+  //     this.toastr.warning("You can select only 4 Parts");
   //     for (let i = 0; i < Comparecheckbox.length; i++) {
   //       if (Comparecheckbox[i].id == e.csHeaderId) {
   //         Comparecheckbox[i].checked = false;
@@ -1585,7 +1785,7 @@ export class SearchComponent implements OnInit {
 
 
   FilterSearchData() {
-    debugger;
+    //debugger;
     if (this.SortSearchData == 0 || this.SortSearchData == undefined) {
       return
     }
@@ -1619,9 +1819,18 @@ export class SearchComponent implements OnInit {
         break;
     }
 
-
-
   }
+
+  viewReport(val: any) {
+    debugger;
+    const Params = {
+      param_CSHeaderId: val.csHeaderId,
+      param_SCReportId: val.scReportId
+    };
+
+    this.router.navigate(['/home/shouldcostuserhistory/:data'], { queryParams: Params });
+  }
+
 
 
 }

@@ -235,3 +235,12 @@
         margin-bottom: 20px;
         /* box-shadow: 0 6px 2px -6px #da291c; */
     }
+
+    .survay{
+        cursor: pointer; color:cornflowerblue;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .survay:hover{
+        color: #da291c;
+    }
