@@ -261,10 +261,6 @@ export class UserAnalyticsComponent implements OnInit {
           interval:5,
           gridThickness: 2,
         },
-        axisY: {
-          interval:5,
-          gridThickness: 2,
-        },
         axisX: {
           title: "Time in Hrs",
            labelMaxWidth: 100,           

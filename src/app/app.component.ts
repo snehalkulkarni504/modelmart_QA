@@ -119,7 +119,7 @@ export class AppComponent implements OnInit {
       return 'Frequently Used Material Grade Details Report'
     }
     else if (url == '/home/userhistory') {
-      return 'User History Details Report Report'
+      return 'User History Details Report'
     }
     else if (url == '/home/useranalytics') {
       return 'User Analytics Report'
@@ -127,15 +127,16 @@ export class AppComponent implements OnInit {
     else if (url == '/home/feedbackhistory') {
       return 'Feedback History Details Report'
     }
-    else if(url=='/home/frequentlyusedmaterialgrade')
-    {
-      return 'Frequently Used Material Grade Details Report'
+    else if (url == '/home/costinsights') {
+      return 'Cost Insights'
     }
-    else if(url=='/home/userhistory')
-    {
-      return 'User History Details'
+    else if (url == '/home/comparison') {
+      return 'Comparison'
     }
-      
-    return''
-}
+
+    return ''
+  }
+
+
+
 }
