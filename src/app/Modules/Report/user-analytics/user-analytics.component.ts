@@ -23,8 +23,11 @@ export class UserAnalyticsComponent implements OnInit {
   UnqLogin!: string
   FromDate!: any;
   ToDate!: any;
+  deployedDate!: any;
   currentDate: any;
-  dd: any;
+  currentDate1: any;
+  category!: string
+  dropdownOptions: any[] = [];
   TeamcountArray: { Team: string; Count: number }[] = [];
   PagecountArray: { Page: string; Count: number }[] = [];
   PagetimeArray: { Page: string; Time: string }[] = [];
@@ -60,115 +63,68 @@ export class UserAnalyticsComponent implements OnInit {
   // ];
 
   async ngOnInit(): Promise<void> {
-    // this.chartDataPoints = this.TeamcountArray.map(item => ({
-    //   label: item.Team, 
-    //   y: item.Count 
-    // }));
-    // console.log(this.chartDataPoints)
+    
+    this.deployedDate = this.datePipe.transform(new Date(2025,3,3), "yyyy-MM-dd");
+    
+    this.dropdownOptions = [
+      { id: 1, name: 'Last 3 Months' },
+      { id: 2, name: 'Last 6 Months' },
+      { id: 3, name: 'Last 1 Year' }
+    ];
 
     this.useranalytics = new FormGroup({
       currentDate: new FormControl(),
+      currentDate1: new FormControl(),
+      selectedOption: new FormControl(this.dropdownOptions[1].id)
     });
-
-    this.dd = this.datePipe.transform(new Date(), "yyyy-MM-dd");
-    var dd1: string = this.dd.toLocaleString();
-    this.currentDate = dd1;
-
-    var date = new Date();
-    this.FromDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth() - 6, 1), "yyyy-MM-dd");
-    console.log(this.FromDate)
-    this.ToDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth(), 0), "yyyy-MM-dd");
-    console.log(this.ToDate)
-    await this.GetData(this.FromDate, this.ToDate);
-    this.resetcharts();
-
-    // this.TeamChartOptions = {
-    //   animationEnabled: true,
-    //   title: {
-    //     text: 'Usage by Roles',
-    //   },
-    //   data: [
-    //     {
-    //       // Change type to "doughnut", "line", "splineArea", etc.
-    //       type: 'column',
-    //       dataPoints: this.TeamchartDataPoints
-    //     },
-    //   ],
-    // };
-
-    // this.PageChartOptions = {
-    //   animationEnabled: true,
-    //   title: {
-    //     text: 'Usage by Module',
-    //   },
-    //   data: [
-    //     {
-    //       // Change type to "doughnut", "line", "splineArea", etc.
-    //       type: 'pie',
-    //       dataPoints: this.PagechartDataPoints
-    //     },
-    //   ],
-    // };
-    // this.pagetimechartOptions = {
-    //   animationEnabled: true,
-    //   title: {
-    //     text: 'Average time spent per page',
-    //   },
-    //   axisX: {
-    //     title: "Time in Hrs",
-    //     interval:1,
-    //      labelMaxWidth: 100,           
-    //      labelAngle: -30,
-    //   },
-    //   data: [
-    //     {
-    //       // Change type to "doughnut", "line", "splineArea", etc.
-    //       type: 'column',
-    //       dataPoints: this.PageTimechartDataPoints
-    //     },
-    //   ],
-    // }
+    this.Setdatefilter('2')
 
   }
 
-  UserData = [
-    { UsageStats: 'Active Users', Count: 19 },
-    { UsageStats: 'Application Logins', Count: 24 },
-    { UsageStats: 'Average Usage time per user', Count: 9 },
-    { UsageStats: 'Unique User Logins', Count: 32 },
-  ];
+  assigncategory(e: any) {
+    console.log('e.srcElement.value',e.srcElement.value)
+    this.category = e.srcElement.value
+    this.Setdatefilter(this.category)
+  }
 
-
-
-  // PagecountArray = [
-  //   { Page: 'Search', Count: '54' },
-  //   { Page: 'Reports', Count: '29' },
-  //   { Page: 'Simulation', Count: '36' }  
-  // ];
-
-  // PagetimeArray = [
-  //   { Page: 'Search', Count: 5 },
-  //   { Page: 'Project', Count: 3.5 },
-  //   { Page: 'Simulation', Count: 2 },
-  //   { Page: 'Cat Management', Count: 2 } ,
-  //   { Page: 'Request', Count: 1.5 }  
-  // ];
-
-  // chartPagetimePoints = [
-  //   { label: 'Search', y: 5 },
-  //   { label: 'Project', y: 3.5 },
-  //   { label: 'Simulation', y: 2 },
-  //   { label: 'Cat Management', y: 2 } ,
-  //   { label: 'Request', y: 1.5 }  
-  // ];
-
-
-
-
-
-
-
-
+  async Setdatefilter(category:string)
+  {
+    var date = new Date();
+    if(category=='1')
+    {
+      this.FromDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth() - 3, 1), "yyyy-MM-dd");
+      console.log(this.FromDate)
+      this.ToDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth(), date.getDate()), "yyyy-MM-dd");
+      console.log(this.ToDate)
+    }
+    if(category=='2')
+    {
+      this.FromDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth() - 6, 1), "yyyy-MM-dd");
+      console.log(this.FromDate)
+      this.ToDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth(), date.getDate()), "yyyy-MM-dd");
+      console.log(this.ToDate)
+    }
+    if(category=='3')
+    {
+      this.FromDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth() - 12, 1), "yyyy-MM-dd");
+      console.log(this.FromDate)
+      this.ToDate = this.datePipe.transform(new Date(date.getFullYear(), date.getMonth(), date.getDate()), "yyyy-MM-dd");
+      console.log(this.ToDate)
+    }
+    if (this.deployedDate>this.FromDate)
+    {
+      this.selectedFromDate=this.deployedDate
+      this.selectedToDate=this.ToDate
+      await this.GetData(this.deployedDate, this.ToDate);
+    }
+    else
+    {
+      this.selectedFromDate=this.FromDate
+      this.selectedToDate=this.ToDate
+      await this.GetData(this.FromDate, this.ToDate);
+    }
+    this.resetcharts();
+  }
 
 
   backToPreviousPage() {
@@ -264,6 +220,8 @@ export class UserAnalyticsComponent implements OnInit {
         animationEnabled: true,
         title: {
           text: 'Usage by Roles',
+          fontSize: 18,
+          fontWeight: "lighter",
         },
         data: [
           {
@@ -278,6 +236,8 @@ export class UserAnalyticsComponent implements OnInit {
         animationEnabled: true,
         title: {
           text: 'Usage by Module',
+          fontSize: 18,
+          fontWeight: "lighter",
         },
         data: [
           {
@@ -294,6 +254,12 @@ export class UserAnalyticsComponent implements OnInit {
         },
         title: {
           text: 'Average time spent per page',
+          fontSize: 18,
+          fontWeight: "lighter",
+        },
+        axisY: {
+          interval:5,
+          gridThickness: 2,
         },
         axisY: {
           interval:5,
@@ -332,6 +298,7 @@ export class UserAnalyticsComponent implements OnInit {
     this.chart = chart;
     setTimeout(this.updateChart, 1000); //Chart updated every 1 second
   }
+  
   updateChart = () => {
     var yVal =
       this.PageTimechartDataPoints[this.PageTimechartDataPoints.length - 1].y +

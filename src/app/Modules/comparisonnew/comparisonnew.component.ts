@@ -13,6 +13,7 @@ import { compareIds } from 'src/app/Model/CompareIds';
   templateUrl: './comparisonnew.component.html',
   styleUrls: ['./comparisonnew.component.css']
 })
+
 export class ComparisonnewComponent implements OnInit {
 
   chartOptions: any = [];
@@ -33,9 +34,11 @@ export class ComparisonnewComponent implements OnInit {
   data: any[] = [];
   userId: any;
   NA: any = "NA*";
+  suppshouldcost:any[]=[];
 
   shouldCostBreakdownList: any;
   shouldCostBreakdownNonList: any;
+  showChild = false; 
 
   Manu_TotalInUSD: number = 0;
   TotalInUSD: number = 0;
@@ -53,6 +56,7 @@ export class ComparisonnewComponent implements OnInit {
       this.router.navigate(['/maintenance']);
       return;
     }
+    
     this.SpinnerService.show('spinner');
 
     this.userId = localStorage.getItem("userId");
@@ -60,6 +64,7 @@ export class ComparisonnewComponent implements OnInit {
 
     this.compare_Ids = JSON.parse(this.ids);
 
+    debugger;
     this.GetData();
     this.GetDataTier2();
     this.InsertCompareLog();
@@ -120,6 +125,41 @@ export class ComparisonnewComponent implements OnInit {
       this.Hidematerial_Detailedtable3 = false;
       this.Hidematerial_Detailedtable4 = false;
     }
+
+    //   this.partDetails= [
+    //     { "csHeaderId": 2022002837, "partName": "Manifold Exhaust","partNumber":"8739300",
+    //     "caT2":"Manufactured Materials","caT3":"Castings", "cAT4":"Exhaust Manifold",
+    //     "programName": "Titanium","businessUnit": "EBU","modelMartID": 2022002837,"isExpand": 0,"imagePath": "",},
+    //     { "csHeaderId": 2022002586, "partName": "Exhaust Manifold","partNumber":"6517168",
+    //     "caT2":"Manufactured Materials","caT3":"Castings", "caT4":"Exhaust Manifold",
+    //     "programName": "Wave","businessUnit": "PSBU","modelMartID": 2022002586,"isExpand": 0,"imagePath": "",},
+    // ];
+
+    // this.technicalParatameters =[
+    //   { "CSHeaderId": 2022002837, "EngineDisplacement": "15L","FinishWeight":"5.15",
+    //   "TotalCost":"Manufactured Materials","Length":"265.90", "Width":"289.10",
+    //   "Height": "176.98","Rough_Weight": "6.08","PartVolume": "714847","SurfaceArea": "190397",
+    //   "CastingForging_Yield": "65","AverageWallThickness": "7.48","MaterialRemovag": "0.93",
+    //   "NoofCores": "4",
+    //   "NoofCavity": "2",
+    //   },
+    //   { "CSHeaderId": 2022002586, "EngineDisplacement": "60L","FinishWeight":"15.00",
+    //   "TotalCost":"Manufactured Materials","Length":"378.01", "Width":"328.9",
+    //   "Height": "208.9","Rough_Weight": "16","PartVolume": "1874168","SurfaceArea": "462829",
+    //   "CastingForging_Yield": "65","AverageWallThickness": "12.5","MaterialRemovag": "1.00",
+    //   "NoofCores": "4",
+    //   "NoofCavity": "1",
+    //   }
+    // ]
+
+    // if (this.partDetails.length == 3) {
+    //   this.Hidematerial_Detailedtable3 = false;
+    //   this.Hidematerial_Detailedtable4 = true;
+    // }
+    // if (this.partDetails.length == 4) {
+    //   this.Hidematerial_Detailedtable3 = false;
+    //   this.Hidematerial_Detailedtable4 = false;
+    // }
 
 
     this.SpinnerService.hide('spinner');
@@ -580,6 +620,8 @@ export class ComparisonnewComponent implements OnInit {
       },
       data: this.CostInfo
     };
+    console.log(this.chartOptionssupplier)
+
 
 
 
@@ -590,6 +632,29 @@ export class ComparisonnewComponent implements OnInit {
     const data = await this.reportservice.InsertCompareLogData(this.ids, this.userId).toPromise();
     return;
   }
+
+  getsuppComparison(e: string) {
+    debugger;
+    var colindex: number;
+    const ShouldCost: any[][] = (this.CommericalDetailsShouldCost as any[]).map(item => [item.id,item.particular, item.details1,
+    item.details2, item.details3, item.details4]);
+    for (let i = 2; i <= 5; i++) {
+      if (ShouldCost?.[0]?.[i] != undefined) {
+        if (ShouldCost[0][i] == e) {
+          colindex = i
+        }
+      }
+    }
+
+    this.suppshouldcost = ShouldCost.map((obj: { [s: string]: unknown; } | ArrayLike<unknown>) => {
+      const values = Object.values(obj);
+      return { Id: values[0],particular: values[1], value: values[colindex] };  // Index-based mapping
+    });
+    console.log("array", this.suppshouldcost);
+    localStorage.setItem("suppcomshouldcost", JSON.stringify(this.suppshouldcost));
+    this.router.navigate(['/home/suppcomparison']);
+  }
+
 
 }
 

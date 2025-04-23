@@ -115,13 +115,6 @@
 }
 
 .prodDetails {
-    /* position: relative;
-    width: 18%;
-    padding: 10px;
-    border: 1px solid #8080802c;
-    transition: all .3s ease-in-out;
-    margin: 5px;
-    animation: showpanal alternate 1s; */
     position: relative;
     width: 21%;
     padding: 10px;
@@ -149,7 +142,16 @@
         margin: 10px;
     }
 
-    .SearchCheckbox, .SearchCheckboxSimulated {
+    .prodDetails2 {
+        position: relative;
+        width: 30%;
+        padding: 10px;
+        border: 1px solid #FFBF00;
+        transition: all .3s ease-in-out;
+        margin: 10px;
+    }
+
+    .SearchCheckbox {
         width: 15px;
         height: 15px;
         font-weight: 500;
@@ -169,7 +171,16 @@
         margin: 10px;
     }
 
-    .SearchCheckbox, .SearchCheckboxSimulated {
+    .prodDetails2 {
+        position: relative;
+        width: 43%;
+        padding: 10px;
+        border: 1px solid #FFBF00;
+        transition: all .3s ease-in-out;
+        margin: 10px;
+    }
+
+    .SearchCheckbox {
         width: 15px;
         height: 15px;
         font-weight: 500;
@@ -180,10 +191,23 @@
 }
 
 
-/* 
-.prodDetails:hover::after {
-    opacity: 1;
-  } */
+.prodDetails2 {
+    position: relative;
+    width: 21%;
+    padding: 10px;
+    border: 1px solid #FFBF00;
+    transition: all .3s ease-in-out;
+    margin: 15px;
+    animation: showpanal alternate 1s;
+    border-radius: 10px;
+}
+
+
+.prodDetails2:hover {
+    box-shadow: 0px 0px 10px #FFBF00;
+    transition: all .3s ease-in-out;
+    transform: scale(1.02, 1.02);
+}
 
 #PartNumber {
     font-size: 12px;
@@ -235,7 +259,7 @@
     cursor: pointer;
 } */
 
-.SearchCheckbox, .SearchCheckboxSimulated {
+.SearchCheckbox {
     width: 15px;
     height: 15px;
     font-weight: 500;
@@ -260,8 +284,8 @@
     font-weight: 500;
     border-radius: 5px;
     border: 1px solid #da291c;
-    padding: 2px 30px 5px 30px;
-    margin-left: 50%;
+    padding: 2px 20px 5px 20px;
+    float: right;
 }
 
 .btncompare:hover {
@@ -270,6 +294,26 @@
     border: 1px solid #ffffff;
     cursor: pointer;
 }
+
+
+.btnreset {
+    background-color: #ffffff;
+    color: #da291c;
+    font-weight: 500;
+    border-radius: 5px;
+    border: 1px solid #da291c;
+    padding: 3px 5px;
+    font-size: 12px;
+    margin-left: 2px;
+}
+
+.btnreset:hover {
+    background-color: #da291c;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    cursor: pointer;
+}
+
 
 .scrollbarsearchcat2 {
     height: auto;
@@ -457,8 +501,7 @@
     z-index: 999;
     width: 440px;
     height: auto;
-    /* height: 400px;
-    overflow-y: scroll; */
+    overflow-y: scroll;
     border-radius: 0px;
 }
 
@@ -481,6 +524,10 @@
     padding: 5px 0px 5px 5px;
     color: #000000db;
     font-size: 12px;
+}
+
+.searchdatalist {
+    color: #00000061;
 }
 
 #searchLogoDiv {
@@ -544,7 +591,7 @@ input[type=checkbox] {
 #FromDate:focus,
 #ToDate:focus {
     box-shadow: none;
-    border-color: #da291c;
+    border-color:1px solid #da291c !important;
 }
 
 .filter_input_Search {
@@ -743,68 +790,337 @@ input[type="text"]:focus {
 }
 
 
-.descsorting{
-    width: 130px;
-} 
- 
 
 /* ///////////////////////////////////////////////////////////////////// */
 
 
-.SimulatedModelFound {
-    width: 100%;
-    margin-top: 5px;
-    font-family: Helvetica, Arial !important;
-    font-size: 12px;
-}
-
-
-.TabMenu {
-    margin-top: 5px;
-    overflow: hidden;
-    /* border-top: 1px solid #cccccc90;
-    border-bottom: 1px solid #cccccc90; */
-    /* background-color: #f1f1f1; */
-    height: 30px;
-}
-
-.TabMenu button {
-    background-color: inherit;
-    float: left;
-    cursor: pointer;
-    /* padding: 5px 10px; */
-    padding: 0px 10px;
-    font-size: 12px;
-    border: none;
-    outline: none;
-    height: 30px;
-    /* border-bottom: 1px solid #ccc; */
+#sortingmodels {
+    width: 70%;
+    font-size: 11px;
+    padding: 5px 5px;
     border: 1px solid #ccc;
-    border-radius: 3px;
-    margin-left: 3px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+#sortingmodels:hover {
+    background-color: #f1f1f1;
+    /* Change background color on hover */
+}
+
+.sortingoption {
+    font-size: 11px !important;
+    font-family: Helvetica, Arial;
+}
+
+/* //////// compare ///////// */
+
+.comparerightPanel {
+    position: fixed;
+    right: 0px;
+    bottom: 10px;
+    background-color: #003b3f;
+    color: #fff;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    font-size: 12px;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    padding: 5px 10px;
+    bottom: 20px;
+    cursor: pointer !important;
+    border: 1px solid #003b3f;
+    transition: all .1s ease-in-out;
 
 }
 
-/* Change background color of buttons on hover */
-.TabMenu .Tab {
-    background-color: inherit;
-    /* border-bottom: 1px solid inherit; */
+.comparerightPanel:hover {
+    cursor: pointer !important;
+    background-color: #fff;
+    color: #003b3f;
+    border: 1px solid #003b3f;
+    font-weight: bold;
 }
 
-.TabMenu .InsideTabLine{
+.compareBottomPanelhide {
+    animation: showcomparelist 0.5s alternate;
+    display: none;
+}
+
+.compareBottomPanel {
+    text-align: center;
+    position: fixed;
+    left: 25%;
+    bottom: 0px;
+    background-color: #fff;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    width: 60%;
+    border: 1px solid #da291c;
+    animation: showcomparelist 0.5s normal;
+    display: block;
+    z-index: 3;
+    box-shadow: 0px 0px 10px #000;
+    color: #000;
+}
+
+@keyframes showcomparelist {
+    from {
+        height: 0px;
+    }
+
+    to {
+        height: 110px;
+    }
+}
+
+.compareBottomPanel .part {
     float: left;
-    /* border: 1px solid #ccc; */
-    height: 20px;
+    width: 20%;
+    padding: 20px;
+    padding-top: 10px;
+    height: 110px;
+    border-right: 1px solid #000;
+    font-size: 12px;
+}
+
+.part div {
+    cursor: pointer !important;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.closecompare {
+    border-right: none !important;
+}
+
+
+.btncompareN {
+    background-color: #ffffff;
+    color: #da291c;
+    font-weight: 500;
+    border-radius: 5px;
+    border: 1px solid #da291c;
     margin-top: 5px;
 }
 
-/* Create an active/current tablink class */
-.TabMenu .activeTab {
-    background-color: #da291c25; 
-    /* border-top: 1px solid #da291c; */
+.btncompareN:hover {
+    background-color: #da291c;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    cursor: pointer;
 }
 
-.TabMenu button:hover {
-    background-color: #ddd;
+.part1div {
+    font-size: 10px;
+    font-weight: 500;
 }
 
+.btnpopup {
+    font-weight: 500;
+    padding: 2px 0px;
+    width: 80px;
+    font-size: 12px;
+}
+
+.clicltoaddmodels {
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.clicltoaddmodels:hover {
+    background-color: #a8a7a734;
+}
+
+
+.modal-close-icn {
+    position: absolute;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .2s ease-in-out;
+
+}
+
+.modal-close-icn:hover {
+    rotate: 90deg;
+    cursor: pointer;
+}
+
+.modal {
+    background: rgba(0, 0, 0, .5);
+}
+
+.modal-body {
+    overflow-y: auto;
+    max-height: 350px !important;
+}
+
+ 
+
+.modal-header {
+    border-bottom: 1px solid #da291c;
+}
+
+.modal-footer {
+    border-top: 1px solid #da291c;
+    height: 20px !important;
+}
+
+.modelsize {
+    margin-top: 50px;
+    width: 84% !important;
+    margin-left: 7%;
+    max-height: 450px !important;
+}
+
+.modelsize>.modal-content {
+    height: 400px !important;
+}
+
+
+.modal-title {
+    font-size: 17px !important;
+}
+
+
+.modal-close-icn1, .modal-close-icn2, .modal-close-icn3, .modal-close-icn4{
+    /* background-color: #da291c; */
+    position: absolute;
+    top: 0px;
+    left: 16.5%;
+    width: 25px;
+    height: 25px;
+    color: #000;
+    justify-content: center;
+    align-items: center;
+    transition: .2s ease-in-out;
+}
+
+.modal-close-icn2 {
+    top: 0px;
+    left: 36.5%;
+}
+
+.modal-close-icn3 {
+    top: 0px;
+    left: 56.5%;
+}
+
+.modal-close-icn4 {
+    top: 0px;
+    left: 76.5%;
+}
+
+.modal-close-icn1:hover, .modal-close-icn2:hover, .modal-close-icn3:hover, .modal-close-icn4:hover {
+    rotate: 90deg;
+    cursor: pointer;
+}
+
+.VS,
+.VS1,
+.VS2 {
+    position: absolute;
+    left: 18%;
+    bottom: 32px;
+    border: 1px solid #da291c;
+    font-weight: 500;
+    padding: 6px;
+    border-radius: 100px;
+    font-size: 14px;
+    background-color: #fff;
+    animation: show_VS 0.5s normal;
+}
+
+.VS1 {
+    left: 38%;
+}
+
+.VS2 {
+    left: 58%;
+}
+
+@keyframes show_VS {
+    0% {
+        opacity: 0;
+    }
+
+    80% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.SimulatedTable{
+    overflow: auto;  
+    height: 300px !important ;  
+    width: 98%;
+    margin-left: 1%;
+}
+
+
+.SimulatedTable table thead {
+    position: sticky;
+    top: -1px;
+    z-index: 1;
+    background-color: #fff;
+} 
+
+.SimulatedTable table{
+  font-size: 12px !important;
+  font-family: Helvetica ,Arial !important;
+}
+
+.simulatedheader{
+    background-color: #da291c0d !important;
+  }
+
+  .viewReport{
+    margin-left: 10px;
+    cursor: pointer !important;
+    position: relative;
+    top:-5px;
+  }
+
+  .SimulatedCheckbox{
+    margin-top: 5px;
+    width: 15px;
+    height: 15px;
+  }
+   
+
+.has-search .form-control {
+    padding-left: 2.8rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 38px;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #f8f6f6;
+    background-color: #da291c;
+}
+
+.search-input {
+    height: 38px;
+}
+
+.search-input:hover {
+   border: 1px solid  #da291c;
+}
+
+.search-input:focus {
+    border: 1px solid  #da291c !important;
+} 

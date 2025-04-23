@@ -339,8 +339,8 @@ export class ShouldCostReportViewComponent {
       doc.setPage(i);
       // var currentPage = doc.getCurrentPageInfo().pageNumber;
       /// header
-      const headerlogo1 = '../../../assets/welcome/modelmartsliderlogo.jpg';
-      doc.addImage(headerlogo1, 2, 0, 38, 25);
+      const headerlogo1 = '../../../assets/welcome/Model Mart_Final Logo_130325.png';
+      doc.addImage(headerlogo1, 4, 3, 34, 20);
       const headerlogo2 = '../../../assets/newCumminslogo.jpg';
       doc.addImage(headerlogo2, 185, 2, 24, 22);
 
@@ -355,7 +355,7 @@ export class ShouldCostReportViewComponent {
           doc.text(splitText[j], fileWidth / 2, 80 + line, { align: 'center' });
           line = line + 10;
         }
-        debugger;
+       // debugger;
         this.hh = localStorage.getItem("imagePath")?.toString();
         //'../../../assets/CRANKSHAFT,ENGINE-5714721/ISO.JPG' ;
 
@@ -577,6 +577,7 @@ export class ShouldCostReportViewComponent {
 
     });
 
+    debugger;
     let finalY = (doc as any).lastAutoTable.finalY;
 
     // this.MaterailGrade.length
@@ -584,8 +585,8 @@ export class ShouldCostReportViewComponent {
 
       doc.addPage();
       /// header
-      const headerlogo1 = '../../../assets/welcome/modelmartsliderlogo.jpg';
-      doc.addImage(headerlogo1, 2, 0, 38, 25);
+      const headerlogo1 = '../../../assets/welcome/Model Mart_Final Logo_130325.png';
+      doc.addImage(headerlogo1, 4, 3, 34, 20);
       const headerlogo2 = '../../../assets/newCumminslogo.jpg';
       doc.addImage(headerlogo2, 185, 2, 24, 22);
 
@@ -635,10 +636,16 @@ export class ShouldCostReportViewComponent {
             margin: { left: data.cell.x + data.cell.padding('left') - 1 },
             didParseCell: function (data) {
               var rows = data.table.body;
-
-              if (data.row.index == 6 || data.row.index === rows.length - 1) {
+              //debugger;
+              // if (data.row.index == 6 || data.row.index === rows.length - 1) {
+              //   data.cell.styles.fillColor = [217, 217, 217];
+              // }
+              
+              if (data.row.index == 7 || data.row.index === rows.length - 1) {
                 data.cell.styles.fillColor = [217, 217, 217];
               }
+
+              
               data.table.head[0].cells[0].styles.fillColor = [217, 217, 217];
             },
             willDrawCell: function (data: any) {
@@ -675,12 +682,16 @@ export class ShouldCostReportViewComponent {
             margin: { left: data.cell.x + data.cell.padding('left') },
             didParseCell: function (data: any) {
               var rows = data.table.body;
-              if (data.row.index == 6 || data.row.index === rows.length - 1) {
+              // if (data.row.index == 6 || data.row.index === rows.length - 1) {
+              //   data.cell.styles.fillColor = [217, 217, 217];
+              // }
+              if (data.row.index == 7 || data.row.index === rows.length - 1) {
                 data.cell.styles.fillColor = [217, 217, 217];
               }
+
               data.table.head[0].cells[0].styles.fillColor = [217, 217, 217];
               if (data.cell.section === 'body') {
-                debugger;
+                //debugger;
                 for (let i = 0; i < rows.length; i++) {
                   if (rows[i].cells[0].raw.className.includes('UpdateValueGreaterThan')) {
                     rows[i].cells[0].styles.fillColor = Greaterthan;
@@ -711,17 +722,20 @@ export class ShouldCostReportViewComponent {
         }
       },
     });
+    debugger;
 
-    let finalYMark = (doc as any).lastAutoTable.finalY;
+    //let finalYMark = (doc as any).lastAutoTable.finalY;
+
+    let remark = doc.internal.pageSize.getHeight() - 20;
 
     doc.setFontSize(6);
     doc.setFillColor(246, 203, 203);
-    doc.rect(5, finalYMark - 3, 5, 5, 'F');
-    doc.text('Greater than Existing Cost', 11, finalYMark);
+    doc.rect(5, remark - 3, 5, 5, 'F');
+    doc.text('Greater than Existing Cost', 11, remark);
 
     doc.setFillColor(193, 232, 194);
-    doc.rect(40, finalYMark - 3, 5, 5, 'F');
-    doc.text('Less than Existing Cost', 46, finalYMark);
+    doc.rect(40, remark - 3, 5, 5, 'F');
+    doc.text('Less than Existing Cost', 46, remark);
 
     doc.setTextColor("#C0C0C0");
     doc.setFontSize(17);

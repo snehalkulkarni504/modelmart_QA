@@ -214,6 +214,13 @@ export class AdminService {
     return this.httpClient.post(this.apiUrl + `UpdatePageExit`, formdata);
   }
 
+  
+  Getwelcomelist(username:any) {
+    return this.httpClient.get(this.apiUrl + `GetWelcomeMenu?username=${username}`);
+  }
 
+  
+
+  
 
 }

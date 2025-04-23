@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environments';
 import { Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-should-cost-request-status',
@@ -31,21 +32,21 @@ export class ShouldCostRequestStatusComponent {
   From_Date: any;
   To_Date: any;
   Status: any = "All";
-  
+
   page: number = 1;
   pageSize: number = 10;
   config: any;
   filterMetadata = { count: 0 };
   textsearch: string = '';
-  UserID:any;
-  RoleID :any;
+  UserID: any;
+  RoleID: any;
 
   refreshmodel = 'Model refresh';
 
   constructor(public adminservice: AdminService,
-     public router: Router,
-      private toastr: ToastrService,
-       private location:Location,
+    public router: Router,
+    private toastr: ToastrService,
+    private location: Location,
     private SpinnerService: NgxSpinnerService,
   ) {
     this.config = {
@@ -75,7 +76,7 @@ export class ShouldCostRequestStatusComponent {
 
   async View() {
     this.SpinnerService.show('spinner');
-    
+
     if (this.FromDate == undefined || this.FromDate == "") {
       // this.toastr.warning("Please select From Date");
       // return;
@@ -90,12 +91,12 @@ export class ShouldCostRequestStatusComponent {
     //   this.toastr.warning("Please select Status");
     //   return;
     // }
- 
+
 
     this.UserID = localStorage.getItem("userId");
     this.RoleID = localStorage.getItem("roleId");
 
-    const data = await this.adminservice.GetRequestGenStatus(this.FromDate, this.ToDate, this.Status,this.UserID,this.RoleID).toPromise();
+    const data = await this.adminservice.GetRequestGenStatus(this.FromDate, this.ToDate, this.Status, this.UserID, this.RoleID).toPromise();
     this.Reportdata = data;
     if (this.Reportdata.length <= 0) {
       this.SpinnerService.hide('spinner');
@@ -103,18 +104,18 @@ export class ShouldCostRequestStatusComponent {
       return;
     }
 
-    for(var i= 0 ;  i < this.Reportdata.length ; i++){
-      if( String(this.Reportdata[i].SMComments).includes(this.refreshmodel)){
-        this.Reportdata[i].IsRefresh = true ;
+    for (var i = 0; i < this.Reportdata.length; i++) {
+      if (String(this.Reportdata[i].SMComments).includes(this.refreshmodel)) {
+        this.Reportdata[i].IsRefresh = true;
       }
-      else{
+      else {
         this.Reportdata[i].IsRefresh = false;
       }
     }
 
 
     this.SpinnerService.hide('spinner');
-    console.log('report data',this.Reportdata);
+    console.log('report data', this.Reportdata);
   }
 
   GetStatus(e: any) {
@@ -123,11 +124,12 @@ export class ShouldCostRequestStatusComponent {
   }
 
   async DownloadExcel(data: any) {
- 
+
     // var id = data.uniqueId;
-    var staticUrl = environment.apiUrl_Admin + 'DownloadExcel?fname=' + data.ExcelFileName;
-    console.log(staticUrl);
+    var staticUrl = environment.apiUrl_Admin + 'DownloadExcel?requestId=' + data.RequestHeaderId;
     
+    console.log(staticUrl);
+
     var xhr = new XMLHttpRequest();
     xhr.open('GET', staticUrl, true);
     xhr.responseType = 'blob';
@@ -145,13 +147,13 @@ export class ShouldCostRequestStatusComponent {
           var fileLink = document.createElement('a');
           fileLink.href = fileURL;
 
-          fileLink.download ='Request Id ' + data.RequestHeaderId +' '+ data.UserName;
+          fileLink.download = 'Request Id ' + data.RequestHeaderId + ' ' + data.UserName;
 
           fileLink.click();
         }
       }
       else {
-         alert("File Not Fount");
+        alert("File Not Fount");
       }
     };
     xhr.send();
@@ -160,13 +162,109 @@ export class ShouldCostRequestStatusComponent {
   backToPreviousPage() {
     this.location.back();
   }
-  
-  UpdateRequest(RequestId: string){
-    
+
+  UpdateRequest(RequestId: string) {
+
     const Params = {
       RequestId: RequestId
     };
-    this.router.navigate(['/home/shouldcostrequest/:request'],{queryParams:Params})
+    this.router.navigate(['/home/shouldcostrequest/:request'], { queryParams: Params })
   }
+
+
+
+  // exportToExcel() {
+  //   debugger;
+  //   if (!this.Reportdata || this.Reportdata.length === 0) {
+  //     this.toastr.warning('No data available to export.');
+  //     return;
+  //   }
+
+  //   // Convert data to worksheet
+  //   const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.Reportdata);
+  //   // Create a workbook and add the worksheet
+  //   const workbook: XLSX.WorkBook = { Sheets: { 'Request Status': worksheet }, SheetNames: ['Request Status'] };
+
+  //   // Export the workbook to Excel file
+  //   const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+  //   // Save the file
+  //   this.saveAsExcelFile(excelBuffer, 'Request_Status');
+  // }
+  exportToExcel() {
+    if (!this.Reportdata || this.Reportdata.length === 0) {
+      this.toastr.warning('No data available to export.');
+      return;
+    }
+
+    debugger;
+    // Mapping data to only include required columns
+    const modifiedData = this.Reportdata.map((item: any, index: number) => ({
+      'S.No': index + 1,
+      'Request ID': item.RequestHeaderId,
+      'Requester Name': item.UserName,
+      'Request Date': new Date(item.CreatedOn).toLocaleDateString('en-US'),
+      'File': item.ExcelFileName,
+      'Status': item.Status,
+      'COE Comments': item.SCTeamComments,
+      'Requester Comments': item.SMComments
+    }));
+
+    // Convert data to worksheet
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(modifiedData);
+
+    // Create a workbook and add the worksheet
+    const workbook: XLSX.WorkBook = { Sheets: { 'Request Status': worksheet }, SheetNames: ['Request Status'] };
+
+    // Export the workbook to Excel file
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    // Save the file
+    this.saveAsExcelFile(excelBuffer, 'Request_Status');
+  }
+
+  private saveAsExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
+    const link = document.createElement('a');
+    const url = window.URL.createObjectURL(data);
+    link.href = url;
+    link.download = `${fileName}_${new Date().toISOString().slice(0, 10)}.xlsx`;
+    link.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+
+  sortProperty: string = 'id';
+  sortOrder = 1;
+  items: any[] = [];
+
+  onSortClick(property: any,event:any) {
+    debugger;
+    let target = event.currentTarget,
+      classList = target.classList;
+
+    if (classList.contains('bi-sort-up')) {
+      classList.remove('bi-sort-up');
+      classList.add('bi-sort-down');
+    } else {
+      classList.add('bi-sort-up');
+      classList.remove('bi-sort-down');
+    }
+
+    this.sortOrder = property === this.sortProperty ? (this.sortOrder * -1) : 1;
+    this.sortProperty = property;
+    this.Reportdata = [...this.Reportdata.sort((a: any, b: any) => {
+      // sort comparison function
+      let result = 0;
+      if (a[property] < b[property]) {
+        result = -1;
+      }
+      if (a[property] > b[property]) {
+        result = 1;
+      }
+      return result * this.sortOrder;
+    })];
+  }
+
 
 }

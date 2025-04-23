@@ -7,6 +7,7 @@ import { SearchFilters } from '../Model/SearchFilter';
 import { UpdateRequest, UpdateRequestbyAdmin } from '../Model/update-request';
 import { EmailForRequestUpdate } from '../Model/email-for-request-update';
 import { compareIds } from '../Model/CompareIds';
+import { Cartlist } from '../Model/cartlist';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,7 @@ export class SearchService {
   }
 
   GetCagetory3(CatName: string): Observable<any> {
-   // const headers = { 'Authorization': token } ,{headers}
+    // const headers = { 'Authorization': token } ,{headers}
     return this.httpClient.get<any[]>(this.apiUrl + `getcat3?CatName=${CatName}`);
   }
 
@@ -65,7 +66,7 @@ export class SearchService {
   }
 
   getComparisonDataNew(ids: compareIds[]): Observable<any> {
-    return this.httpClient.post(this.apiUrl + "getCompardatanew",ids);
+    return this.httpClient.post(this.apiUrl + "getCompardatanew", ids);
   }
 
   getComparisonDataNewTier2(ids: any): Observable<any> {
@@ -76,7 +77,7 @@ export class SearchService {
     return this.httpClient.get<any[]>(this.apiUrl + `getCompardataTier2?ids=${ids}`);
   }
 
-  
+
   getShouldeCost(id: any, userId: any): Observable<any> {
     return this.httpClient.get<any[]>(this.apiUrl + `getShouldeCost?id=${id}&userId=${userId}`);
   }
@@ -135,7 +136,7 @@ export class SearchService {
     return this.httpClient.get<any[]>(this.apiUrl + `GetRequestGenDataById?Id=${Id}`);
   }
 
-  UpdateShouldCostRequest(file: File[], RequesterId: any, Comments: Blob, FolderLink: any,RequestId:any,Status:any): Observable<any> {
+  UpdateShouldCostRequest(file: File[], RequesterId: any, Comments: Blob, FolderLink: any, RequestId: any, Status: any): Observable<any> {
     const formData = new FormData();
     formData.append('RequesterId', RequesterId);
     formData.append('Comments', Comments);
@@ -151,5 +152,39 @@ export class SearchService {
   SearchSimulated(userId: any): Observable<any> {
     return this.httpClient.get<any[]>(this.apiUrl + `GetSearchSimulated?userId=${userId}`);
   }
+
+  GetSubpartProcessData(Supplierlevel: string, CSHeaderId: string): Observable<any> {
+    return this.httpClient.get<any[]>(this.apiUrl + `GetSubpartProcessData?CSHeaderId=${CSHeaderId}&SupplyLevel=${Supplierlevel}`);
+  }
+
+  GetDesignToCostDetails(Program: any): Observable<any> {
+    console.log("we are here");
+    return this.httpClient.get<any[]>(this.apiUrl + `GetDesignToCostDetails/${Program}`);
+  }
+
+  GetDesignToCostPart(PartNumber: any): Observable<any> {
+    console.log("we are here");
+    return this.httpClient.get<any[]>(this.apiUrl + `GetDesignToCostPart/${PartNumber}`);
+  }
+
+  GetDesignToCostNoun(NounName: any): Observable<any> {
+    console.log("we are here");
+    return this.httpClient.get<any[]>(this.apiUrl + `GetDesignToCostNoun/${NounName}`);
+  }
+
+  GetDesignToCostNounProgram(NounName: any, Program: any): Observable<any> {
+    console.log("we are here");
+    return this.httpClient.get<any[]>(this.apiUrl + `GetDesignToCostNounProgram/${NounName}/${Program}`);
+  }
+
+  
+  Gettcosuppliercost(modelmartid: string): Observable<any> {
+    return this.httpClient.get<any[]>(this.apiUrl + `GetSupplierCost?id=${modelmartid}`);
+  }
+  
+  GetDesignToCostAvailableDetail(NounName: any, Program: any, partNumber: any): Observable<any> {
+    return this.httpClient.get<any[]>(this.apiUrl + `GetDesignToCostAvailableDetail/${partNumber}/${NounName}/${Program}`);
+}
+
 
 }

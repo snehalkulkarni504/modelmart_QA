@@ -20,44 +20,63 @@ export class WelcomeuserComponent implements OnInit {
   showMainMenus = true;
 
   userFullname: any;
+  mainmenulist: any;
 
   menulist: any;
   submenu: any;
+  idleState: any;
+  userName: any;
 
 
   constructor(
     public router: Router,
     private adminService: AdminService,
-      private location:Location,
+    private location: Location,
 
   ) { }
 
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    debugger
+
+    this.userName = localStorage.getItem('userName');
 
     if (localStorage.getItem("userName") == null) {
       this.router.navigate(['/welcome']);
       return;
     }
+    
+    await this.getMenusUserInfo(this.userName);
 
-    const userName = this.getUserName(); // Get the username dynamically.
-    this.Getmenulist(userName);
+    this.Getwelcomelist();
+    this.Getmenulist();
 
-    console.log("Username header localStorage", localStorage.getItem("userName"));
-
-    this.getMenusUserInfo(localStorage.getItem("userName"));
 
   }
 
-  async Getmenulist(userName: string) {
+  async Getmenulist() {
     try {
-      const data = await this.adminService.getMenus(userName).toPromise();
+
+      const data = await this.adminService.getMenus(this.userName).toPromise();
       this.menulist = data;
 
       // Initialize `isHovered` for each menu item.
       this.menulist.forEach((menu: any) => (menu.isHovered = false));
     } catch (error) {
       console.error('Error fetching menu list:', error);
+    }
+
+  }
+
+  async Getwelcomelist() {
+    try {
+      const data = await this.adminService.Getwelcomelist(this.userName).toPromise();
+      this.mainmenulist = data;
+
+    }
+    catch (error) {
+      console.error('Error fetching welcome:', error);
+
     }
   }
 
@@ -72,14 +91,12 @@ export class WelcomeuserComponent implements OnInit {
     console.log('Navigating to:', event);
 
   }
+
   public navigateToMasters(menu: any): void {
     // this.filterSubMenus(menu);
     this.showDynamicMenus = true;
   }
 
-  getUserName(): string {
-    return localStorage.getItem('userName') || 'DefaultUser';
-  }
   UserList: any;
   async getMenusUserInfo(username: any) {
     debugger;
@@ -102,6 +119,7 @@ export class WelcomeuserComponent implements OnInit {
       //this.router.navigate(['/home/search/ ']);
     }
     else {
+      localStorage.removeItem("sessionId");
       localStorage.removeItem("userName");
       localStorage.removeItem("userFullName");
       localStorage.removeItem("userEmailId");
@@ -118,6 +136,8 @@ export class WelcomeuserComponent implements OnInit {
 
   Logout() {
     if (confirm("Are you sure? Do you want to Logout?")) {
+
+      localStorage.removeItem("sessionId");
       localStorage.removeItem("userName");
       localStorage.removeItem("userFullName");
       localStorage.removeItem("userEmailId");
@@ -129,10 +149,10 @@ export class WelcomeuserComponent implements OnInit {
     }
   }
   backToPreviousPage() {
-    this.showDynamicMenus =  false;
-    this.showMainMenus =  true;
+    this.showDynamicMenus = false;
+    this.showMainMenus = true;
   }
-  
+
 
   showSubMenu(menu: any) {
     debugger;
@@ -140,10 +160,26 @@ export class WelcomeuserComponent implements OnInit {
     console.log(this.menulist);
     this.submenu = this.menulist.filter((d: { SubMenu: any; }) => d.SubMenu == menu);
 
-    this.showDynamicMenus =  true;
-    this.showMainMenus =  false;
+    this.showDynamicMenus = true;
+    this.showMainMenus = false;
 
   }
+
+  getBackgroundColor(menuName: string): string {
+    switch (menuName) {
+      case 'Reports': return '#003b3f';
+      case 'Masters': return '#f48574';
+      case 'Request': return '#6e1017';
+      // case 'Menu4': return '#FFFF'; 
+      default: return '#FFFFFF'; // Default color
+    }
+  }
+
+  gowelcome() {
+    this.router.navigate(['/welcomeuser']);
+  }
+
+
 
 
 

@@ -114,7 +114,7 @@ input[type=text]:focus {
     background-image: linear-gradient(to right, #da291c, #da291c0d);
 }
  
-.UpdateText, .percentText{
+.UpdateText, .percentText, .UpdateTarif{
     width: 100%;
     height: 30px;
     font-size: 13px !important;
@@ -151,6 +151,8 @@ input[type=text]:focus {
 
  
 .modal-close-icn {
+    position: absolute;
+    right: 10px;
     width: 30px;
     height: 30px;
     color: #000;
@@ -158,6 +160,7 @@ input[type=text]:focus {
     justify-content: center;
     align-items: center;
     transition: .2s ease-in-out;
+   
 }
 
 .modal-close-icn:hover {
@@ -328,4 +331,127 @@ input[type=text]:focus {
 .MasterHeader h2{
     margin: 20px 0px;
     font-size: 30px !important; 
+}
+
+.toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  
+.tableFixHead_Process{
+    overflow-y: auto;  
+    height: 380px !important ;  
+    width: 80%;
+    margin-left: 10%;
+}
+
+.modelsize_DirectCostProcess{
+    margin-top: 50px;
+    width:  80% !important;
+    margin-left: 10%;  
+}
+
+.modelsize_DirectCostProcess > .modal-content{
+    height: 520px !important;
+}
+
+.processtr{
+    margin: 0px; padding: 0px;
+    padding-left: 5px;padding-top: 2px;
+}
+
+.processtrnumber{
+    margin: 0px; padding: 0px;
+    padding-right: 5px;padding-top: 2px;
+}
+
+.PopupTextProcess{
+    width: 98%;
+    /* margin-left: 5%; */
+    height: 22px; 
+    font-size: 12px !important;
+    text-align: center;
+    border-radius: none;
+}
+ 
+.tableFixHead_Process table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+
+.tableFixHead_Process table thead {
+    position: sticky;
+    top: -1px;
+    z-index: 1;
+    background-color: #fff;
+} 
+ 
+
+.tableFixHead_Process table tfoot {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    background-color: #fff;
+} 
+
+.ProcessCostDifference{
+    width: 80%; margin-left: 10%; 
+    height: 20px;
+    border-top: 1px solid #80808056;
+}
+.ProcessCostDifference p{
+    height: 20px;
+    float: right;
+    padding-left: 50px;
+    width: 300px;
+}
+
+.removeAddedProcess:hover{
+    cursor: pointer;
+}
+ 
+.ProcessPopup {
+    display: none;
+    background-color: #80808056;
+    width: 60%;
+    margin-left: 20%;
+    padding: 3px 10px;
+    gap: 3px;
+    height: 36px;
+}
+ 
+.addnewprocessbtn:hover{
+    cursor: pointer;
+}
+
+.Processtablefooterth {
+    background-color: #da291c0d;
+    padding: 0px;
+}
+
+.process-close-icn {
+    width: 30px;
+    height: 30px;
+    color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .2s ease-in-out;
+   
+}
+
+.process-close-icn:hover {
+    rotate: 90deg;
+    cursor: pointer;
+}
+
+.CSModelRemark{
+    font-size: 12px;
+    padding-bottom: 5px;
+    color: #da291c;
+    margin-bottom: 0px;
+    margin-left: 50px;
 }

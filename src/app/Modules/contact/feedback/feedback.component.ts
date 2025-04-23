@@ -26,6 +26,7 @@ export class FeedbackComponent {
     login: '',
     comments: '',
   };
+  routeusername:any;
 
 
 
@@ -37,7 +38,6 @@ export class FeedbackComponent {
   userFullName: any;
 
   ngOnInit(): void {
-    // Fetch user data from localStorage
     debugger;
     this.showsubmitbtn;
     this.userName = localStorage.getItem('userName');
@@ -47,8 +47,10 @@ export class FeedbackComponent {
 
 
     this.actrouter.queryParams.subscribe((params) => {
+      debugger;
+      this.routeusername = params['username'] || null;
       this.feedbackData = {
-        ...this.feedbackData, // Keep existing values
+        ...this.feedbackData, 
         content: params['content'] || this.feedbackData.content,
         effectiveness: params['effectiveness'] || this.feedbackData.effectiveness,
         reuse: params['reuse'] || this.feedbackData.reuse,
@@ -68,10 +70,7 @@ export class FeedbackComponent {
 
   onSubmit() {
     debugger
-    // Collecting form values
-    // const form = event.target as HTMLFormElement;
 
-    // Collecting form values
     this.feedbackData = {
       name: this.userFullName,
       email: this.userEmail,
@@ -82,7 +81,6 @@ export class FeedbackComponent {
       login: this.feedbackData.login,
       comment: this.feedbackData.comments
     };
-    //this.showthankyou=true;
     debugger;
     console.log(this.feedbackData);
 

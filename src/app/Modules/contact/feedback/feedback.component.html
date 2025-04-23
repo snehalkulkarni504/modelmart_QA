@@ -1,4 +1,4 @@
-
+<!-- 
 
 <div class="MasterHeader">
     <div style="width: 68%;">
@@ -106,4 +106,101 @@
     <h1>Thank You!</h1>
     <p>Your feedback has been submitted successfully.</p>
     <button (click)="closethankyoubox()">Close</button>
+</div> -->
+
+
+
+
+<div class="feedbackpage">
+
+  <div class="MasterHeader">
+    <div style="width: 68%;">
+      <h2 *ngIf="!routeusername">Model Mart Feedback Form</h2>
+      <h2 *ngIf="routeusername">Model Mart Feedback Form - {{routeusername}}</h2>
+    </div>
+    <div class="text-end" style="width: 32%;">
+      <button class="btnbackLeft" (click)="backToPreviousPage()">Back</button>
+    </div>
+  </div>
+
+  <form *ngIf="!showthankyou" class="feedback-form">
+    <div class="card">
+      <h4><img src="../../../../assets/dashboard_icon.png" alt="Menu Icon" class="menu-image1" /> Overall Experience</h4>
+      <p>  
+        How would you rate your experience with the Model Mart application in terms of:</p>
+      <ul>
+        <li>Content quality, filters, comparisons, downloads, etc.</li>
+        <li>User interface design and performance (speed/access time).</li>
+        <li>Available modules (Search, Request, Reports, CAT3, etc.).</li>
+      </ul>
+
+      <div class="buttongroup">
+        <button class="btngroup" [ngClass]="{'selected': feedbackData.content === 'Excellent'}"
+          (click)="feedbackData.content = 'Excellent'" [disabled]="!showsubmitbtn">Excellent</button>
+        <button class="btngroup" [ngClass]="{'selected': feedbackData.content === 'Good'}"
+          (click)="feedbackData.content = 'Good'" [disabled]="!showsubmitbtn">Good</button>
+        <button class="btngroup" [ngClass]="{'selected': feedbackData.content === 'Needs Improvement'}"
+          (click)="feedbackData.content = 'Needs Improvement'" [disabled]="!showsubmitbtn">Needs Improvement</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4> <img src="../../../../assets/dashboard_icon.png" alt="Menu Icon" class="menu-image1" /> Data Relevance</h4>
+      <p>Are you finding enough relevant cost models or data points as per your requirements?</p>
+
+      <div class="buttongroup">
+        <button class="btngroup" [ngClass]="{'selected': feedbackData.effectiveness === 'Yes'}"
+          (click)="feedbackData.effectiveness = 'Yes'" [disabled]="!showsubmitbtn">Yes</button>
+        <button class="btngroup" [ngClass]="{'selected': feedbackData.effectiveness === 'No'}"
+          (click)="feedbackData.effectiveness = 'No'" [disabled]="!showsubmitbtn">No</button>
+        <button class="btngroup" [ngClass]="{'selected': feedbackData.effectiveness === 'Not Sure'}"
+          (click)="feedbackData.effectiveness = 'Not Sure'" [disabled]="!showsubmitbtn">Not Sure</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4> <img src="../../../../assets/dashboard_icon.png" alt="Menu Icon" class="menu-image1" /> Model Customization</h4>
+      <p>Are you able to easily modify cost models to suit your needs?</p>
+
+      <div class="buttongroup">
+        <button class="btngroup" [ngClass]="{'selected': feedbackData.reuse === 'Yes'}"
+          (click)="feedbackData.reuse = 'Yes'" [disabled]="!showsubmitbtn">Yes</button>
+        <button class="btngroup" [ngClass]="{'selected': feedbackData.reuse === 'No'}"
+          (click)="feedbackData.reuse = 'No'" [disabled]="!showsubmitbtn">No</button>
+        <button class="btngroup" [ngClass]="{'selected': feedbackData.reuse === 'Not Sure'}"
+          (click)="feedbackData.reuse = 'Not Sure'" [disabled]="!showsubmitbtn">Not Sure</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4><img src="../../../../assets/dashboard_icon.png" alt="Menu Icon" class="menu-image1" /> Usage Frequency</h4>
+      <p>How often do you use the Model Mart site?</p>
+
+      <div class="buttongroup">
+        <button class="btngroup" [ngClass]="{'selected': feedbackData.login === 'Daily'}"
+          (click)="feedbackData.login = 'Daily'" [disabled]="!showsubmitbtn">Daily</button>
+        <button class="btngroup" [ngClass]="{'selected': feedbackData.login === 'Weekly'}"
+          (click)="feedbackData.login = 'Weekly'" [disabled]="!showsubmitbtn">Weekly</button>
+        <button class="btngroup" [ngClass]="{'selected': feedbackData.login === 'Rarely'}"
+          (click)="feedbackData.login = 'Rarely'" [disabled]="!showsubmitbtn">Rarely</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4><img src="../../../../assets/dashboard_icon.png" alt="Menu Icon" class="menu-image1" /> Additional Comments</h4>
+      <p>What improvements or features would you like to see added or enhanced?</p>
+      <textarea name="comment" [(ngModel)]="feedbackData.comments" rows="5" placeholder="Type your suggestions here..."
+        [disabled]="!showsubmitbtn"></textarea>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px; margin-bottom: 5px;">
+      <button *ngIf="showsubmitbtn" type="button" (click)="onSubmit()">Submit Feedback</button>
+    </div>
+  </form>
+
+  <div *ngIf="showthankyou" class="thank-you-box">
+    <h1>🎉 Thank You!</h1>
+    <p>Your feedback has been submitted successfully.</p>
+    <button (click)="closethankyoubox()">Close</button>
+  </div>
 </div>

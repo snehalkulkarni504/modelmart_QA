@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { ReportServiceService } from 'src/app/SharedServices/report-service.service';
- 
+
 
 
 @Component({
@@ -44,19 +44,17 @@ export class FrequentlyusedmaterialgradeComponent implements OnInit {
       textsearch: new FormControl(),
     });
 
-    this.GetForexDetails();
+    this.GetFrequentlyuse();
   }
 
   backToPreviousPage() {
     this.location.back();
   }
 
-
-  async GetForexDetails() {
+  async GetFrequentlyuse() {
     const data = await this.reportService.GetFrequentlyusedmaterialgrade().toPromise();
     this.getData = data;
   }
-
 
 
 }

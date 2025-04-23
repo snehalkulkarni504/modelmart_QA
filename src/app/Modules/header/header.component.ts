@@ -52,6 +52,7 @@ export class HeaderComponent implements OnInit {
   submenu: any;
   usernm: any;
   userFullname: any;
+  Ismenuload = true;
 
   async ngOnInit() {
   
@@ -93,6 +94,7 @@ export class HeaderComponent implements OnInit {
       localStorage.removeItem("userFullName");
       localStorage.removeItem("userEmailId");
       localStorage.removeItem("userId");
+      localStorage.removeItem("sessionId");
 
       this.router.navigate(['/invaliduser']);
 
@@ -101,6 +103,7 @@ export class HeaderComponent implements OnInit {
     this.mainmenu = [];
     const data = await this.adminService.getMenus(username).toPromise();
     this.mainmenu = data;
+    this.Ismenuload = false;
  
   }
 
@@ -161,8 +164,7 @@ export class HeaderComponent implements OnInit {
   async Logout() {
     if (confirm("Are you sure? Do you want to Logout?")) {
       
-      const sessionid=await this.admin.UpdateLogout(localStorage.getItem("userId")
-      ,localStorage.getItem("sessionId"),false).toPromise();
+      const sessionid=await this.admin.UpdateLogout(localStorage.getItem("userId"),localStorage.getItem("sessionId"),false).toPromise();
 
       localStorage.removeItem("sessionId")
       localStorage.removeItem("userName");
@@ -177,10 +179,7 @@ export class HeaderComponent implements OnInit {
   }
 
   async AutoLogout() {
-
-    const sessionid=await this.admin.UpdateLogout(localStorage.getItem("userId")
-    ,localStorage.getItem("sessionId"),true).toPromise();
-
+    
     localStorage.removeItem("sessionId")
     localStorage.removeItem("userName");
     localStorage.removeItem("userFullName");

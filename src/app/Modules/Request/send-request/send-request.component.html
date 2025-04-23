@@ -48,8 +48,8 @@
                             <label for="dropdown0" class="default-lbl">Model Types <span
                                     style="color: red;">*</span></label>
                             <ng-select class="ngModelTypeID" [ngModelOptions]="{standalone: true}" [searchable]="true"
-                                placeholder="Please select" [(ngModel)]='modelTypesID'><ng-option
-                                    *ngFor="let item of ModelTypes"
+                                placeholder="Please select" [(ngModel)]='modelTypesID'>
+                                <ng-option *ngFor="let item of ModelTypes"
                                     [value]="item.id">{{item.modelTypes_Desc}}</ng-option>
                             </ng-select>
                             <div class="error-message" *ngIf="showError11"> Please select Model Types.</div>
@@ -69,7 +69,7 @@
 
                 </div>
 
-                <div class="row" id="panleborder">
+                <div *ngIf="modelTypesID!=2" class="row" id="panleborder"> 
                     <div class="row">
                         <div class="col-md-2">
                             <label for="dropdown6" class="default-lbl">Length (mm)<span
@@ -224,9 +224,9 @@
                         <button type="button" class="btn btn-lg btn-upload" (click)="onUpload();" data-bs-dismis="modal"
                             [disabled]="!addSuccess">Upload</button>
 
-                            <button type="button" id="testbtn" (click)="ngSelectRequestID.clearModel(); ngSelectUniqueID.clearModel();ngSelectCat4.clearModel()" style="visibility: hidden;">
+                            <button type="button" id="testbtn" (click)="ngSelectRequestID.clearModel(); ngSelectUniqueID.clearModel(); " style="visibility: hidden;">
                             </button>
-
+                            <!-- ngSelectCat4.clearModel() -->
 
                     </div>
                 </div>

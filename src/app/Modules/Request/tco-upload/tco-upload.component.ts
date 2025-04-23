@@ -97,43 +97,8 @@ BulkUpload() {
 
   this.selectedFiles = [];
 }
+ 
 
-async getMenusUserInfo(username: any) {
-  debugger;
-
-  if (this.UserList.length > 0) {;
-    this.userFullname = this.UserList[0].FullName;
-    localStorage.setItem("userFullName", this.userFullname);
-    // this.usernm = this.UserList[0].UserName;
-    console.log("userId " + localStorage.getItem("userId"));
-
-    //this.router.navigate(['/home/search/ ']);
-  }
-  else {
-    localStorage.removeItem("userName");
-    localStorage.removeItem("userFullName");
-    localStorage.removeItem("userEmailId");
-    localStorage.removeItem("userId");
-
-    // this.router.navigate(['/invaliduser']);
-
-  }
-
-}
-Logout() {
-  if (confirm("Are you sure? Do you want to Logout?")) {
-    localStorage.removeItem("userName");
-    localStorage.removeItem("userFullName");
-    localStorage.removeItem("userEmailId");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("HopperColumns");
-    localStorage.removeItem("Historysearch");
-    // this.router.navigate(['/welcome']);
-
-  }
-}
-
-// }
 async gettcodetails() {
   debugger;
   const tcodata = await this.TcoService.GetTcoDetails().toPromise();
@@ -146,14 +111,7 @@ async gettcodetails() {
     };
   });
 
-  // console.log(this.modelMartIDList); 
-  // const uniqueRequestIDs = new Set(tcodata.map((item: { RequestHeaderId: any; }) => item.RequestHeaderId));
-  // this.requestIDList = tcodata.map((item: { RequestHeaderId: any; }) => {
-  //   return {
-  //     value: item.RequestHeaderId,  
-  //     label: item.RequestHeaderId   
-  //   };
-  // });
+   
 
 const uniqueRequestIDs = new Set(tcodata.map((item: { RequestHeaderId: any; }) => item.RequestHeaderId));
 

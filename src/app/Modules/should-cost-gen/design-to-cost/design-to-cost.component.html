@@ -1,0 +1,134 @@
+<div class="table-container">
+  
+    <div style="width: 90%; float: left; height: 50px;  ">
+      <h3 class="title">VAVE Ideas for {{NounName}}<span *ngIf="filteredPartNumberTableData.length <= 0"
+          style="margin-left: 10px;">{{message}} </span> </h3>
+    </div>
+    <div  style="width: 10%; float: left; height: 50px;  ">
+      <img [hidden]="IsNoData" src="../../../../assets/exportexcel.png" class="exportToExcel"
+        (click)="exportToExcel(filteredPartNumberTableData)" title="Export to Excel">
+    </div>
+ 
+  <!-- <hr> -->
+  <div *ngIf="filteredPartNumberTableData.length > 0" >
+    <!-- <div class="table-controls">
+
+      <div class="dropdown-container">
+
+        <ng-select #columnSelect class="ng-selectcustomer" [items]="columnNames" [(ngModel)]="selectedColumn"
+          (change)="onColumnChange()" placeholder="---Select Filter---" style="width: 200px;" title="{{selectedColumn}}"
+          [ngModelOptions]="{standalone: true}">
+        </ng-select>
+
+        <ng-select #valueSelect class="ng-selectcustomer" [items]="columnValues" [(ngModel)]="selectedValue"
+          (change)="onValueChange()" placeholder="---Select Value---" style="width: 200px;"
+          [ngModelOptions]="{standalone: true}" [disabled]="isSecondDropdownDisabled">
+        </ng-select>
+      </div>
+      
+    </div> -->
+
+    <div style="overflow-x: auto; border: 1px solid #80808064; padding: 5px; border-radius: 5px;">
+      <table>
+        <thead>
+          <tr>
+            <th style=" position: sticky; left:-2px; top:0px; z-index: 4; min-width: 400px; background-color: white;">
+            </th>
+            <th class="header-box-id">
+              <div class="header-content-id">
+                ID
+                <div class="header-line"></div>
+              </div>
+            </th>
+            <th class="header-box">
+              <div class="header-content">
+                Program
+                <div class="header-line"></div>
+              </div>
+            </th>
+            <th class="header-box">
+              <div class="header-content">
+                Part Number
+                <div class="header-line"></div>
+              </div>
+            </th>
+            <th class="header-box">
+              <div class="header-content">
+                Potential Savings PP($)
+                <div class="header-line"></div>
+              </div>
+            </th>
+            <th class="header-box">
+              <div class="header-content">
+                Idea Owner
+                <div class="header-line"></div>
+              </div>
+            </th>
+          </tr>
+
+          <!-- Search Filters Row -->
+          <tr>
+            <td style="position: sticky; left:-2px; z-index: 3; background-color: white;">
+              <input type="text" class="column-search" placeholder="Idea..." title="Search Idea..."
+                [(ngModel)]="searchFilters.idea" (input)="applyFilter()">
+            </td>
+            <td>
+              <input type="text" class="column-search1" placeholder="ID..." title="Search ID..."
+                [(ngModel)]="searchFilters.sharepoint_ID" (input)="applyFilter()">
+            </td>
+            <td>
+              <input type="text" class="column-search" placeholder="Program..." title="Search Program..."
+                [(ngModel)]="searchFilters.program" (input)="applyFilter()">
+            </td>
+            <td>
+              <input type="text" class="column-search" placeholder="Part Number..." title="Search Part Number..."
+                [(ngModel)]="searchFilters.partNumber" (input)="applyFilter()">
+            </td>
+            <td>
+              <input type="text" class="column-search" placeholder="Savings..." title="Search Savings..."
+                [(ngModel)]="searchFilters.potentialSavingsPerPieceMDO" (input)="applyFilter()">
+            </td>
+            <td>
+              <input type="text" class="column-search" placeholder="Owner..." title="Search Owner..."
+                [(ngModel)]="searchFilters.ideaOwner" (input)="applyFilter()">
+            </td>
+          </tr>
+
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let row of filteredData | paginate: {itemsPerPage:itemonperpage, currentPage: page}">
+            <td id="freeze"> {{ row.idea }}</td>
+            <td class="id1" (click)="OpenVBD()" title="{{row.sharepoint_ID}}"> {{row.sharepoint_ID}} </td>
+            <!-- <td  style="text-align: center;" title="{{row.nounName}}">{{ row.nounName }}</td> -->
+            <td style="text-align: start;" title="{{row.program}}">{{ row.program }}</td>
+            <td style="text-align: start;" title="{{row.partNumber}}">{{ row.partNumber }}</td>
+            <td style="text-align: center;" title="{{row.potentialSavingsPerPieceMDO}}">{{
+              row.potentialSavingsPerPieceMDO }}</td>
+            <td style="text-align: start;" title="{{row.ideaOwner}}">{{ row.ideaOwner }}</td>
+            <!-- <td style="text-align: center;"> <i class="bi bi-arrow-up-right" style="cursor: pointer;"></i> </td> -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-between p-2 pagination">
+      <ngb-pagination class="custom-pagination" [collectionSize]="filteredData.length" [(page)]="page"
+        [pageSize]="pageSize" [rotate]="true" [boundaryLinks]="true" [maxSize]="100" size="sm">
+        <ng-template ngbPaginationPrevious>Prev</ng-template>
+        <ng-template ngbPaginationNext>Next</ng-template>
+      </ngb-pagination>
+
+      <!-- <div style="margin-left: -640px;">
+        <select class="form-control" style="width: auto;" [(ngModel)]="itemonperpage">
+          <option [ngValue]="5">5 </option>
+          <option [ngValue]="10">10 </option>
+          <option [ngValue]="50">50 </option>
+          <option [ngValue]="100">100 </option>
+        </select>
+        <span>Items per page</span>
+      </div> -->
+      <br>
+    </div>
+  </div>
+
+</div>

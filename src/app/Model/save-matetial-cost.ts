@@ -1,7 +1,8 @@
- 
+
 export class SaveMatetialCost {
-    SaveMatetialCostHeader!: SaveMatetialCostHeader[];   
+    SaveMatetialCostHeader!: SaveMatetialCostHeader[];
     SaveMatetialCostDetails!: SaveMatetialCostDetails[];
+    SaveProcessDetails!: SaveProcessDetails[];
 }
 
 export interface SaveMatetialCostHeader {
@@ -10,9 +11,9 @@ export interface SaveMatetialCostHeader {
     header?: any,
     value_existing?: number,
     value_updated?: number,
-    Cost_Spec:any,
-    Version :any,
-    percent_updated:number,
+    Cost_Spec: any,
+    Version: any,
+    percent_updated: number,
 }
 
 // export interface SaveMatetialCostHeader {
@@ -59,11 +60,20 @@ export interface SaveMatetialCostDetails {
     NetWeightKG?: number,
     GrossNetWeightKG?: number,
     ScrapRate?: number,
-    UnitScrapRate?:number,
+    UnitScrapRate?: number,
     MaterialScrapRate?: number,
     UpdateMaterialRate?: number,
     UpdateMaterialCost?: number,
     Created_By?: number,
-    SupplyLevel:string,
-    Casting:number,
+    SupplyLevel: string,
+    Casting: number,
+}
+
+export interface SaveProcessDetails {
+    PartNumber?: any,
+    ManufacturingProcessName?: any,
+    ManufacturingCost?: any,
+    UpdateManufacturingCost?: any,
+    SupplyLevel?: any,
+    ProcessStatus?: any
 }

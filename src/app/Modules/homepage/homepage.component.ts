@@ -5,6 +5,7 @@ import { TreeviewConfig, TreeviewItem } from '@charmedme/ngx-treeview';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AdminService } from 'src/app/SharedServices/admin.service';
 import { SearchService } from 'src/app/SharedServices/search.service';
+import { environment } from 'src/environments/environments';
  
 @Component({
   selector: 'app-homepage',
@@ -66,9 +67,12 @@ export class HomepageComponent implements OnInit {
       return;
     }
 
-   // this.UserForModelMart(localStorage.getItem("userName"));
-
-
+    var uname = String(localStorage.getItem("userName"));
+    if(environment.IsMaintenance && uname.toUpperCase() != environment.IsMaintenance_userName.toUpperCase()){
+      this.router.navigate(['/maintenance']);
+      return;
+    }
+    
     this.SearchboxForm = new FormGroup({
       Cat2List: new FormControl(),
       EngineList: new FormControl(),
@@ -147,6 +151,7 @@ export class HomepageComponent implements OnInit {
 
   showProduct(event: any) {
     let ss = event.categoryId;
+    localStorage.setItem("childCategory",event.categoryId);
     this.router.navigate(['/home/search', event.categoryId]);
   }
 

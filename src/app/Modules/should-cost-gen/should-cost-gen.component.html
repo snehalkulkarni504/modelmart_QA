@@ -13,6 +13,7 @@
         {{ChekNull(Projecttype)}}-{{ChekNull(BusinessUnit)}}-{{ChekNull(ProjectName)}}-{{Location}}-{{PartName}}-{{PartNumber}}
 
     </div>
+
     <div class="row panal">
         <form [formGroup]="ProjectDetails">
             <div class="container-fluid">
@@ -22,6 +23,11 @@
                         <div class="imgPanel">
                             <img src="{{mainimg}}" class="img border_img" (mouseover)="ZoomImg($event)"
                                 (mouseout)="ZoomImgclose()">
+
+                            <!-- <div>
+                                <img class="moneybag" src="../../../assets/img/pngwing.com.png" alt="Avatar" title="redirect to design to cost page" (click)="showTabs('Tab2')"> 
+                                <h6 style="margin-left: 105px;">VAVE Design Ideas</h6>
+                            </div>     -->
                         </div>
                         <div class="Silder_imgPanel">
                             <div *ngFor="let val of imgsilderData;let i=index" style="display: inline-block;">
@@ -31,21 +37,28 @@
                             <br>
                             <div *ngFor="let val of imgName" style="display: inline-block;" class="silder_img_name">
                                 {{val }}</div>
-                           
+
                         </div>
-                     
+
                         <img src="{{mainimgzoom}}" class="zoomImghide" id="zoomImg">
-                        <!-- </div> -->
 
-                        <div class="page dataPanel">
 
-                            <fieldset class="border rounded-3 p-3  " >
-                                
+                        <div class="TabMenu">
+                            <div class="tab-container">
+                                <div class="tab" [ngClass]="{'active-tab': showTab1}" (click)="showTabs('Tab1')">   Should Cost </div>
+                                <div class="tab" [ngClass]="{'active-tab': showTab2}" (click)="showTabs('Tab2')"> VAVE Design Ideas </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="showTab1" class="page dataPanel">
+
+                            <fieldset class="border rounded-3 p-3  ">
+
 
                                 <legend class="w-auto labelDetailsheader" style="margin-top:0px;">Project Details
-                                    <label [hidden]="!IsCSmodel" class="text-center CSModelRemark">Debrief PDF not applicable for this Model</label>
+                                    <label [hidden]="!IsCESmodel" class="text-center CSModelRemark">{{ModelwiseNote}}</label>
                                 </legend>
-                                
+
                                 <div class="row">
                                     <label class="labelDetails" style="margin-top: 0px !important;">Part Details</label>
                                     <div class="col-md-12">
@@ -107,12 +120,14 @@
                                             </tr>
                                             <tr>
 
-                                                <td> <label for="EngineDisplacement" class="default-lbl">Engine Displacement
+                                                <td> <label for="EngineDisplacement" class="default-lbl">Engine
+                                                        Displacement
                                                         :</label></td>
                                                 <td> <label for="EngineDisplacement"
-                                                        class="default-lblvalue">{{ChekNull(EngineDisplacement)}}</label></td>
+                                                        class="default-lblvalue">{{ChekNull(EngineDisplacement)}}</label>
+                                                </td>
                                             </tr>
-                                            
+
 
                                         </table>
                                     </div>
@@ -559,8 +574,9 @@
                                 </div>  -->
 
                                 <div>
-                                    <canvasjs-chart [options]="WaterfallchartOptions" [styles]="{width: '100%', height:'360px'}"></canvasjs-chart>    
-                                </div>                        
+                                    <canvasjs-chart [options]="WaterfallchartOptions"
+                                        [styles]="{width: '100%', height:'360px'}"></canvasjs-chart>
+                                </div>
 
                                 <!-- <div>
                                     <canvasjs-chart [options]="BarchartOptions" [styles]="{width: '100%', height: '360px'}"></canvasjs-chart>
@@ -576,7 +592,7 @@
                         </div>
                     </div>
                     <div class="">
-                        <div class="page dataPanel">
+                        <div *ngIf="showTab1" class="page dataPanel" style="margin-top: -30px;">
 
                             <fieldset class="border rounded-3 p-3">
                                 <legend class="w-auto labelDetailsheader">Material Grade Details</legend>
@@ -672,6 +688,17 @@
                                     <p>NA</p>
                                 </ng-template>
                             </fieldset>
+                            <br [hidden]="modelTypes_Id != 2">
+                            <fieldset [hidden]="modelTypes_Id != 2" class="border rounded-3 p-3">
+                                <legend class="w-auto labelDetailsheader">Additional Information</legend>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="PartWeight" class="default-lbl">
+                                            {{ChekNull(additional_Information)}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </fieldset>
                             <br>
                             <fieldset class="border rounded-3 p-3">
                                 <legend class="w-auto labelDetailsheader">Part Dimension Details</legend>
@@ -681,33 +708,17 @@
                                         <label for="EstimatedSpend" class="default-lblvalue">
                                             {{ChekNull_LWH(PartLength)}} X {{ChekNull_LWH(PartWidth)}} X
                                             {{ChekNull_LWH(PartHeight)}} </label>
-                                        <!-- <label for="EstimatedSpend" class="default-lblvalue">
-                                            {{PartLength}} *{{PartWidth}}*{{PartHeight}}</label> -->
                                     </div>
 
-                                    <!-- <div class="col-md-4">
-                                        <label for="PartVolume" class="default-lbl">Part Volume in mm^3 :</label>
-                                        <label for="EstimatedSpend" class="default-lblvalue">{{PartVolume}}</label>
-                                    </div> -->
                                     <div class="col-md-6">
-
                                         <label for="PartWeight" class="default-lbl">Part Weight :</label>
-
-
                                         <label for="EstimatedSpend" class="default-lblvalue">
                                             {{ChekNull_Wt()}}
-                                            <!-- {{PartWeight}} kg / {{ PartWeight_in_Pounds }} lbs -->
                                         </label>
                                     </div>
                                     <ng-template #noData>
                                         <label class="default-lblvalue">na</label>
                                     </ng-template>
-
-                                    <!-- <div class="container">
-                                        <label for="PartNumber" class="default-lbl">Manufacturing Process Flow :</label>
-                                        <br>
-                                        
-                                    </div> -->
                                 </div>
                             </fieldset>
                             <br>
@@ -743,17 +754,31 @@
                                         Refresh, Request approach.</li>
                                 </ol>
                             </div>
+
+                            <div>
+                                <label [hidden]="!IsCESmodel" class="text-center CSModelRemark"
+                                    style="margin-left: 0px;">{{ModelwiseNote}}</label>
+                            </div>
+
+                        </div>
+                        <div [hidden]="!showTab2" class="page dataPanel">
+                            <div class="container">
+
+                                <app-design-to-cost [PartNumber]="PartNumber" [ProgramName]="ProjectName"
+                                    [NounName]="PartName"></app-design-to-cost>
+                            </div>
+
                         </div>
                     </div>
                 </div>
 
-                <div class="row buttons">
+                <div *ngIf="showTab1" class="row buttons">
                     <div class="col-md-12 text-end" style="padding-right: 40px;">
                         <input type="button" class="btn btn-primary btnDownload" value="Refresh Model⁴"
                             Name="Refresh Model⁴" (click)="SendNewRequest()">
                         <input type="button" class="btn btn-primary btnDownload" value="Download Model"
                             Name="Download Model" (click)="DownloadReport()">
-                        <input type="button" class="btn btn-primary btnDownload" value="Update Model³"
+                        <input [hidden]="IsYellowModel" type="button" class="btn btn-primary btnDownload" value="Update Model³"
                             Name="Update Model³" (click)="UpdateReport()">
                     </div>
                 </div>
