@@ -45,6 +45,12 @@ import { FeedbackComponent } from '../contact/feedback/feedback.component';
 import { FeedbackhistoryComponent } from '../Report/feedbackhistory/feedbackhistory.component';
 import { TcoUploadComponent } from '../Request/tco-upload/tco-upload.component';
 import { SuppcomparisonComponent } from '../comparisonnew/suppcomparison/suppcomparison.component';
+import { BomdetailsComponent } from '../bomdetails/bomdetails.component';
+import { DesigntocostStartComponent } from '../design-to-cost-engg/designtocost-start/designtocost-start.component';
+import { DesigntocostStep1Component } from '../design-to-cost-engg/designtocost-step1/designtocost-step1.component';
+import { DesigntocostStep2Component } from '../design-to-cost-engg/designtocost-step2/designtocost-step2.component';
+import { DesigntocostStep3Component } from '../design-to-cost-engg/designtocost-step3/designtocost-step3.component';
+import { DesigntocostStep4Component } from '../design-to-cost-engg/designtocost-step4/designtocost-step4.component';
  
  
 
@@ -95,11 +101,17 @@ const routes: Routes = [
       { path : 'feedback', component: FeedbackComponent },
       { path : 'feedbackhistory', component: FeedbackhistoryComponent },
       { path : 'tcoupload', component: TcoUploadComponent },
-      { path : 'suppcomparison', component: SuppcomparisonComponent }
+      { path : 'suppcomparison', component: SuppcomparisonComponent },
+      { path : 'bom' , component:BomdetailsComponent},
+      { path : 'designtocost', component: DesigntocostStartComponent},
+      { path : 'designtocost/step1', component: DesigntocostStep1Component },
+      { path : 'designtocost/step2', component: DesigntocostStep2Component },
+      { path : 'designtocost/step3', component: DesigntocostStep3Component },
+      { path : 'designtocost/step4', component: DesigntocostStep4Component },
 
-      
     ]
   },
+
   
 ];
 

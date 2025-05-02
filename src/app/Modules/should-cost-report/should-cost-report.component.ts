@@ -6,9 +6,7 @@ import { SaveMatetialCost, SaveMatetialCostDetails, SaveMatetialCostHeader, Save
 import { SearchService } from 'src/app/SharedServices/search.service';
 import { Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { NotFoundError } from 'rxjs';
-import { __values } from 'tslib';
-
+ 
 @Component({
   selector: 'app-should-cost-report',
   templateUrl: './should-cost-report.component.html',
@@ -235,6 +233,7 @@ export class ShouldCostReportComponent {
     }
   }
 
+
   CalculatePercent(e: any, val: any, no: number) {
 
     //debugger;;
@@ -312,7 +311,7 @@ export class ShouldCostReportComponent {
 
   findsumPercent() {
 
-
+debugger;
     this.Manu_TotalInLocal_Per = 0;
     this.Non_TotalInLocal_Per = 0;
 
@@ -327,7 +326,8 @@ export class ShouldCostReportComponent {
       if (unit[i].value == "") {
         unit[i].value = 0;
       }
-      this.Manu_TotalInLocal_Per = this.Manu_TotalInLocal_Per + parseFloat(unit[i].value);
+      // this.Manu_TotalInLocal_Per = this.Manu_TotalInLocal_Per + parseFloat(unit[i].value);
+      this.Manu_TotalInLocal_Per = this.Manu_TotalInLocal_Per + parseFloat(unit[i].value.replace(/,/g, ""));
     }
     this.Manu_TotalInLocal = this.Manu_TotalInLocal_Per;
     // if (this.IsCastingSheet) {
@@ -554,7 +554,8 @@ export class ShouldCostReportComponent {
       if (unit[i].value == "") {
         unit[i].value = 0;
       }
-      this.Manu_TotalInLocal_Per = this.Manu_TotalInLocal_Per + parseFloat(unit[i].value);
+      // this.Manu_TotalInLocal_Per = this.Manu_TotalInLocal_Per + parseFloat(unit[i].value);
+      this.Manu_TotalInLocal_Per = this.Manu_TotalInLocal_Per +  parseFloat(unit[i].value.replace(/,/g, ""));
     }
     this.Manu_TotalInLocalT2 = this.Manu_TotalInLocal_Per;
 
@@ -685,7 +686,7 @@ export class ShouldCostReportComponent {
 
   async openModal(t: string, value: any, id: any) {
 
-    debugger;;
+    //debugger;;
     this.UpdateCostfromPopup_id = id;
     this.ModelPopUpheaderLable = '';
     this.DirectMaterialCostT1 = 0;
@@ -913,7 +914,6 @@ export class ShouldCostReportComponent {
     if (t == "T1") {
       if (this.MaterialGridT1.length > 0) {
         this.MaterialGrade = this.MaterialGridT1;
-        console.log(this.MaterialGrade);
         this.CalculateTotalMaterialRate(0);
         return
       }
@@ -921,7 +921,6 @@ export class ShouldCostReportComponent {
     else {
       if (this.MaterialGridT2.length > 0) {
         this.MaterialGrade = this.MaterialGridT2;
-        console.log(this.MaterialGrade);
         this.CalculateTotalMaterialRate(0);
         return
       }
@@ -1197,7 +1196,7 @@ export class ShouldCostReportComponent {
   //// old code
   CalculateMaterialRate(e: any, val: any, index: any) {
 
-    debugger;;
+    //debugger;;
     for (var j = 0; j < this.AluminiumCastingGrade.length; j++) {
       var rr = this.AluminiumCastingGrade[j].materialName.toLowerCase();
       if (val.materialType.toLowerCase().includes(rr)) {
@@ -1205,10 +1204,6 @@ export class ShouldCostReportComponent {
         break;
       }
     }
-
-   var grossWeightKG = document.getElementById("PopUpGross"+index) as any ;
-   var grossNetWeightKG = document.getElementById("PopUpNet"+index) as any ;
-
 
     if (this.IsCastingSheet) {
       const updated_Rate = document.getElementsByClassName("form-control PopupText RMUpdateRate disabled") as any;
@@ -1273,16 +1268,16 @@ export class ShouldCostReportComponent {
 
       ////////// old rate //////////
       //let t1_existing = val.grossWeightKG * val.unitMaterialRate;
-      let t1_existing = parseFloat(grossWeightKG.value) * unit_Material_Rate;
-      let t2_existing = (parseFloat(grossWeightKG.value) - parseFloat(grossNetWeightKG.value)) * parseFloat(val.unitScrapRate);
+      let t1_existing = val.grossWeightKG * unit_Material_Rate;
+      let t2_existing = (val.grossWeightKG - val.grossNetWeightKG) * parseFloat(val.unitScrapRate);
       this.new_Rate_existing = t1_existing - t2_existing;
       /////////////  new rate /////////////
 
       // if (this.IsCastingSheet) {
       let new_unitScrapRate = (e_currentTarget_value * parseFloat(scrapPercent)).toFixed(4);
-      let t1 = parseFloat(grossWeightKG.value) * e_currentTarget_value;
+      let t1 = val.grossWeightKG * e_currentTarget_value;
       //let t2 = (val.grossWeightKG - val.grossNetWeightKG) * parseFloat(val.unitScrapRate);
-      let t2 = (parseFloat(grossWeightKG.value) - parseFloat(grossNetWeightKG.value)) * parseFloat(new_unitScrapRate);
+      let t2 = (val.grossWeightKG - val.grossNetWeightKG) * parseFloat(new_unitScrapRate);
       this.new_Rate = t1 - t2;
       //}
       // else {
@@ -1376,8 +1371,8 @@ export class ShouldCostReportComponent {
       }
 
       ////////// old rate //////////
-      let t1_existing = parseFloat(grossWeightKG.value) * val.unitMaterialRate;
-      let t2_existing = (parseFloat(grossWeightKG.value) - parseFloat(grossNetWeightKG.value)) * parseFloat(val.unitScrapRate);
+      let t1_existing = val.grossWeightKG * val.unitMaterialRate;
+      let t2_existing = (val.grossWeightKG - val.grossNetWeightKG) * parseFloat(val.unitScrapRate);
       this.new_Rate_existing = t1_existing - t2_existing;
 
       if (val.casting == 1) { ///  check casting in material type
@@ -1413,8 +1408,8 @@ export class ShouldCostReportComponent {
 
         // if (this.IsCastingSheet) {
         let new_unitScrapRate = (e_currentTarget_value * parseFloat(scrapPercent)).toFixed(4);
-        let t1 = parseFloat(grossWeightKG.value) * e_currentTarget_value;
-        let t2 = (parseFloat(grossWeightKG.value) - parseFloat(grossNetWeightKG.value)) * parseFloat(new_unitScrapRate);
+        let t1 = val.grossWeightKG * e_currentTarget_value;
+        let t2 = (val.grossWeightKG - val.grossNetWeightKG) * parseFloat(new_unitScrapRate);
         this.new_Rate = t1 - t2;
         //}
         // else {
@@ -1512,8 +1507,8 @@ export class ShouldCostReportComponent {
         }
         /////////////  new rate /////////////
         let new_unitScrapRate = (e_currentTarget_value * parseFloat(scrapPercent)).toFixed(4);
-        let t1 = parseFloat(grossWeightKG.value) * e_currentTarget_value;
-        let t2 = (parseFloat(grossWeightKG.value) - parseFloat(grossNetWeightKG.value)) * parseFloat(new_unitScrapRate);
+        let t1 = val.grossWeightKG * e_currentTarget_value;
+        let t2 = (val.grossWeightKG - val.grossNetWeightKG) * parseFloat(new_unitScrapRate);
         this.new_Rate = t1 - t2;
 
 
@@ -1590,7 +1585,7 @@ export class ShouldCostReportComponent {
   }
 
   GetMaterialData(t: string) {
-    debugger;;
+    //debugger;;
 
     this.MaterialGridUpdated = [];
     if (t == 'T1') {
@@ -1615,10 +1610,6 @@ export class ShouldCostReportComponent {
     const updated_Cost = document.getElementsByClassName("form-control PopupText RMUpdateRate disabled") as any;
     const updated_Cost_Existing = document.getElementsByClassName("form-control PopupText disabled Existing") as any;
 
-    const updated_Rate_1 = updated_Rate[2].value;
-
-    console.log(this.MaterialGrade);
-
     for (const key in this.MaterialGrade) {
       this.MaterialGridT1.push(
         {
@@ -1632,7 +1623,7 @@ export class ShouldCostReportComponent {
           'netWeightKG': this.MaterialGrade[key].netWeightKG,
           'scrapRate': this.MaterialGrade[key].scrapRate,
           'unitScrapRate': this.MaterialGrade[key].unitScrapRate,
-          'updateMaterialRate': updated_Rate_1[key].value,
+          'updateMaterialRate': updated_Rate[key].value,
           'updateMaterialCost': updated_Cost[key].value,
           'updateMaterialCostExisting': updated_Cost_Existing[key].value,
           'supplyLevel': this.MaterialGrade[key].supplyLevel,
@@ -1762,8 +1753,6 @@ export class ShouldCostReportComponent {
     const updated_Cost = document.getElementsByClassName("form-control PopupText RMUpdateRate disabled") as any;
     const updated_Cost_Existing = document.getElementsByClassName("form-control PopupText disabled Existing") as any;
 
-    const updated_Rate_1 = updated_Rate[2].value;
-
     for (const key in this.MaterialGrade) {
       this.MaterialGridT2.push(
         {
@@ -1777,7 +1766,7 @@ export class ShouldCostReportComponent {
           'netWeightKG': this.MaterialGrade[key].netWeightKG,
           'scrapRate': this.MaterialGrade[key].scrapRate,
           'unitScrapRate': this.MaterialGrade[key].unitScrapRate,
-          'updateMaterialRate': updated_Rate_1[key].value,
+          'updateMaterialRate': updated_Rate[key].value,
           'updateMaterialCost': updated_Cost[key].value,
           'updateMaterialCostExisting': updated_Cost_Existing[key].value,
           'supplyLevel': this.MaterialGrade[key].supplyLevel,

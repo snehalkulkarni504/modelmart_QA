@@ -1,20 +1,319 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-declare var bootstrap: any;
-// import { NgModelGroup } from '@angular/forms';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild } from '@angular/core';
+// declare var bootstrap: any;
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
+import { SearchService } from 'src/app/SharedServices/search.service';
+import Swal from 'sweetalert2';
+import { AdminService } from 'src/app/SharedServices/admin.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { display } from 'html2canvas/dist/types/css/property-descriptors/display';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { TreeviewConfig, TreeviewItem } from '@charmedme/ngx-treeview';
+import { fontFamily } from 'html2canvas/dist/types/css/property-descriptors/font-family';
+import { style } from '@angular/animations';
+import { ChangeDetectorRef } from '@angular/core';
+import { CommericalArbitrage } from 'src/app/Model/CommericalArbitrage';
 
 @Component({
+  // standalone : true,
   selector: 'app-cost-reduction',
   templateUrl: './cost-reduction.component.html',
   styleUrls: ['./cost-reduction.component.css'],
+  // imports:[CommonModule,NgbModule,],
 })
-export class CostReductionComponent {
+
+export class CostReductionComponent implements OnInit {
+
+  editingIndex: number | null = null;
+  showModal: any;
+  selectedComment: any;
+  selectedFiles: File[] = [];
+  showTcoUploadModal: boolean = false;
+  showDocumentUploadModal: boolean = false;
+  showcostinsights: boolean = false;
+  showFileUpload: boolean = false;
+  showregioncomment:boolean= false;
+  selectedCommercialID: any;
+  selectedUniqueId: any;
+  selectedRequestId: any;
+  Cat3: any;
+  showdesign = false;
+  CategoryId: any;
+  filters = {
+    year: null
+  };
+  selectdates = ['Last 3 Months', 'Last 6 Months', 'Last 1 Year'];
+
+  minDate: string = '';
+  maxDate: string = '';
+  filteredData: any[] = [];
+  RegionData: any =[];
+  fromDate: any; 
+  toDate: any;   
+  selectedRange: string = "";    
+  datefilter!: FormGroup
+  isEditing = false;
+
+
+
+  data1: any = [];
+  selectedCategoryIds: number[] = [];
+  cat4: any = [116];
+  test: any = [];
+  selectAllText: string = 'Select All';
+  showCat3Management: boolean = true; 
+  showArbitrage: boolean = false;
+  SearchboxForm!: FormGroup;
+  @ViewChild('cat3') private cat3: any;
+  SearchProductList: any;
+  config = TreeviewConfig.create({
+    hasAllCheckBox: false,
+    hasFilter: false,
+    hasCollapseExpand: false,
+    decoupleChildFromParent: false,
+  });
+  availableYears: number[] = [];
+  selectedYear: string = '';
+  chart: any;
+
+
+  constructor(public router: Router,
+    private cdr: ChangeDetectorRef,
+    private AdminService: AdminService,
+    private toastr: ToastrService,
+    private actroute: ActivatedRoute,
+    private SpinnerService: NgxSpinnerService, private Searchservice: SearchService) {
+
+  }
+
   activeButton: string = '';
   showRegionalContent = false;
   showContent: boolean = false;
-  showmgfprocess:boolean = false;
-  showdesign=false;
+  showmgfprocess: boolean = false;
+  CategoryID: any;
+  Regional: any[]=[];
+  opportunities: any[] = [];
+  data: any = [];
+
+
+  ngOnInit(): void {
+    debugger
+    this.SearchboxForm = new FormGroup({
+      Cat2List: new FormControl(),
+      EngineList: new FormControl(),
+      FromDate: new FormControl(),
+      ToDate: new FormControl(),
+      Cat2search: new FormControl(),
+      Cat3search: new FormControl(),
+      Cat4search: new FormControl(),
+      EngineDisplsearch: new FormControl(),
+      BusinessUnitsearch: new FormControl(),
+      Locationsearch: new FormControl(),
+    });
+
+    this.ShowLandingPage(0, "0");
+    this.ShowCagetory3();
+
+  }
+
+  chartOptions = {
+
+    animationEnabled: true,
+
+    title: {
+      text: "Part Number vs Commerical Artibage ($)",
+      fontFamily: "Trebuchet MS, Helvetica, sans-serif",
+
+    },
+    axisX: {
+      title: "Part Number",
+      interval: 1,
+      labelFontSize: 9,
+      showInLegend: true,
+      indexLabelFontColor: "#000",
+
+      labelAngle: -240,
+
+    },
+    axisY: {
+
+      title: "Commerical Artibage",
+      labelFontSize: 10,
+      showInLegend: true,
+      indexLabelFontColor: "#000",
+      interval: 1000000,
+    },
+    dataPointWidth: 50,
+    data: [
+      {
+        type: "column",
+        color: "#da291c",
+        indexLabelFontColor: "#000",
+        toolTipContent: "{label} : {y}$",
+        name: "Commercial Arbitrage",
+        showInLegend: true,
+        dataPoints: [] as { label: string; y: any }[],
+      },
+      {
+        type: "column",
+        color: "#2fa365",
+        indexLabelFontColor: "#000",
+        toolTipContent: "{label} : {y}$",
+        name: "User Calculated Commercial Arbitrage",
+        showInLegend: true,
+        dataPoints: [] as { label: string; y: any }[],
+      },
+    ],
+
+  }
+
+
+  async GetCommericalArtibage() {
+    debugger
+    const categoryID = this.test;
+    this.AdminService.GetCommericalArtibage(categoryID).subscribe(
+      (response :any) => {
+        debugger
+        this.data = response;
+        this.opportunities = this.data;
+
+        this.opportunities.forEach(opportunity => {
+          if (!opportunity.ProjectStatus) {
+            opportunity.ProjectStatus = 'Open'; // Default to "Open" if no value exists
+          }
+          opportunity.UserSimulatedArbitrage =
+            Number(opportunity.UserSimulatedArbitrage) || 0; // Convert to number
+          opportunity.CommercialArbitrage =
+            Number(opportunity.CommercialArbitrage) || 0;
+        });
+        // Process the data for chart
+        this.chartOptions.data[0].dataPoints = this.opportunities.map(opportunity => ({
+          label: opportunity.PartNumber,
+          y: opportunity.CommercialArbitrage,
+
+        }));
+
+        this.chartOptions.data[1].dataPoints = this.opportunities
+          .map(opportunity => ({
+            label: opportunity.PartNumber,
+            y: opportunity.UserSimulatedArbitrage,
+
+          }));
+        this.gettotaloppurtunity();
+
+      },
+      (error :any) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+
+  }
+
+  onViewClick() {
+    debugger;
+    if (this.fromDate && this.toDate) {
+      const filteredData: any[] = [];
+      this.opportunities = this.data;
+      for (let i = 0; i < this.opportunities.length; i++) {
+        const opportunity = this.opportunities[i];
+
+        try {
+          const debriefDate = opportunity.DebriefDate;
+
+          if (
+            debriefDate >= this.fromDate &&
+            debriefDate <= this.toDate
+          ) {
+            filteredData.push(opportunity);
+          }
+        } catch (error) {
+          console.error('Error parsing DebriefDate:', opportunity.DebriefDate, error);
+        }
+      }
+      this.filteredData = filteredData;
+      this.opportunities = this.filteredData;
+      
+      // Update chart data points based on filtered data
+      // this.chartOptions.data[0].dataPoints = this.filteredData.map(opportunity => ({
+      //   label: opportunity.PartNumber,
+      //   y: opportunity.CommercialArbitrage,
+      // }));
+
+      // this.chartOptions.data[1].dataPoints = this.filteredData.map(opportunity => ({
+      //   label: opportunity.PartNumber,
+      //   y: opportunity.UserSimulatedArbitrage,
+      // }));
+
+      console.log('Updated Chart Data:', this.chartOptions);
+    } else {
+      console.error('Invalid Date Range');
+
+    }
+
+  }
+  
+
+  onDateRangeChange(): void {
+    const today = new Date();
+    let fromDate: Date | null = null;;
+    // Calculate the 'From Date' based on the selected range
+    switch (this.selectedRange) {
+      case "3":
+        fromDate = new Date(today.getFullYear(), today.getMonth() - 3, today.getDate());
+        break;
+      case "6":
+        fromDate = new Date(today.getFullYear(), today.getMonth() - 6, today.getDate());
+        break;
+      case "12":
+        fromDate = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
+        break;
+      default:
+        fromDate = null;
+        break;
+    }
+
+    // Update the bound variables
+    if (fromDate) {
+      this.fromDate = fromDate.toISOString().split('T')[0]; // Format 'From Date' as 'YYYY-MM-DD'
+      this.toDate = today.toISOString().split('T')[0];      // Format 'To Date' as 'YYYY-MM-DD'
+    } else {
+      this.fromDate = null;
+      this.toDate = null;
+    }
+  }
+  ClearAll(): void {
+    this.selectedRange = ""; // Reset dropdown
+    this.fromDate = null;    // Clear 'From Date'
+    this.toDate = null;      // Clear 'To Date'
+    this.filteredData = [];
+    this.opportunities = this.data;
+     // Process the data for chart
+     this.chartOptions.data[0].dataPoints = this.opportunities.map(opportunity => ({
+      label: opportunity.PartNumber,
+      y: opportunity.CommercialArbitrage,
+
+    }));
+
+    this.chartOptions.data[1].dataPoints = this.opportunities
+      .map(opportunity => ({
+        label: opportunity.PartNumber,
+        y: opportunity.UserSimulatedArbitrage,
+
+      }));
+    this.gettotaloppurtunity();
+
+  }
+
+
+
+
+  hidename() {
+    debugger
+    const r = document.getElementById("chartOptionsId") as any;
+    r.getElementsByClassName('canvasjs-chart-credit')[0].style.display = "none";
+  }
 
 
   setActiveButton(buttonName: string) {
@@ -24,626 +323,442 @@ export class CostReductionComponent {
     this.showRegionalContent = buttonName === 'regional';
     this.showmgfprocess = buttonName === 'manufacturing';
     this.showdesign = buttonName === 'design';
+
+
+    setTimeout(() => { 
+      this.hidename();
+    }, 200);
+  }
+
+  editRow(index: number) {
+    this.isEditing=!this.isEditing;
+    this.editingIndex = index; // Enable edit mode for the selected row
+  }
+  
+
+
+
+  saveChanges(opportunity: CommericalArbitrage) {
+    debugger;
+    // Default values for nullable columns
+    if (!opportunity.UserSimulatedCostAttainment) {
+      opportunity.UserSimulatedCostAttainment = "0"; // Default simulated cost attainment value
+    }
+    if (!opportunity.CommercialArbitrage) {
+      opportunity.CommercialArbitrage = "0"; // Default arbitrage value
+    }
+    opportunity.UserSimulatedArbitrage = this.calculateOpportunityValue(opportunity) || "0.00";
+    opportunity.ModifiedBy = (localStorage.getItem("userFullName"))
+
+    // Default CommercialArtibageID to 0 if null or undefined
+    if (!opportunity.CommericalArtibageID) {
+      opportunity.CommericalArtibageID = 0;
+    }
+
+    console.log('Updated data:', opportunity);
+
+    this.AdminService.SaveCommericalArtibage(opportunity).subscribe({
+      next: (response :any) => {
+        console.log('Opportunity saved successfully:', response);
+        this.editingIndex = null; // Exit edit mode
+        this.GetCommericalArtibage();
+        this.chartOptions;
+      },
+      error: (error :any) => {
+        console.error('Error saving opportunity:', error);
+      }
+    });
   }
 
 
-  //imagePath: string = 'assets/image1.jpg'; // path to your image
+  cancelEditing() {
+    this.editingIndex = null; // Cancel edit mode without saving
+  }
+  openCommentsPopup(comment: string, index: number): void {
+    this.showModal = true;
+    this.selectedComment = comment || '';
+    this.editingIndex = index;
+  }
+  closeCommentsPopup(): void {
+    this.showModal = false;
+    this.selectedComment = '';
 
-  opportunities = [
-    {
-      PartNumber: '5674974',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'CHINA',
-      TotalShouldCost: 31.54,
-      AnnualVolume: 1800,
-      SupplierQuoted_InvoicePrice: 44.09,
-      SupplierName: 'FEILONG AUTO COMPONENTS CO., LTD.',
-      Invoice: 12.55,
-      ShouldCostOpportunity: 22595,
-      SCAttainment: 72
-    },
-    {
-      PartNumber: '5675361',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'CHINA',
-      TotalShouldCost: 30.31,
-      AnnualVolume: 1000,
-      SupplierQuoted_InvoicePrice: 42.98,
-      SupplierName: 'FEILONG AUTO COMPONENTS CO., LTD.',
-      Invoice: 12.67,
-      ShouldCostOpportunity: 12670,
-      SCAttainment: 71
-    },
-    {
-      PartNumber: '6382128',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'CHINA',
-      TotalShouldCost: 15.70,
-      AnnualVolume: 65000,
-      SupplierQuoted_InvoicePrice: 19.20,
-      SupplierName: 'FEILONG AUTO COMPONENTS CO., LTD.',
-      Invoice: 3.50,
-      ShouldCostOpportunity: 227500,
-      SCAttainment: 82
-    },
-    {
-      PartNumber: '6382132',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'CHINA',
-      TotalShouldCost: 22.58,
-      AnnualVolume: 65000,
-      SupplierQuoted_InvoicePrice: 26.69,
-      SupplierName: 'FEILONG AUTO COMPONENTS CO., LTD.',
-      Invoice: 4.11,
-      ShouldCostOpportunity: 267150,
-      SCAttainment: 85
-    },
-    {
-      PartNumber: '6382132',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'INDIA',
-      TotalShouldCost: 17.42,
-      AnnualVolume: 65000,
-      SupplierQuoted_InvoicePrice: 30.90,
-      SupplierName: 'SPM AUTO- INDIA',
-      Invoice: 13.48,
-      ShouldCostOpportunity: 876200,
-      SCAttainment: 56
-    },
-    {
-      PartNumber: '6409902',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'INDIA',
-      TotalShouldCost: 26.32,
-      AnnualVolume: 33500,
-      SupplierQuoted_InvoicePrice: 53.68,
-      SupplierName: 'SPM AUTO- INDIA',
-      Invoice: 27.36,
-      ShouldCostOpportunity: 916560,
-      SCAttainment: 49
-    },
-    {
-      PartNumber: '3640464',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'BELGIUM',
-      TotalShouldCost: 681.87,
-      AnnualVolume: 3,
-      SupplierQuoted_InvoicePrice: 2315.56,
-      SupplierName: 'OMCO INTERNATIONAL NV- Belgium',
-      Invoice: 1633.69,
-      ShouldCostOpportunity: 4901,
-      SCAttainment: 29
-    },
-    {
-      PartNumber: '3640750',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'BELGIUM',
-      TotalShouldCost: 106.92,
-      AnnualVolume: 1211,
-      SupplierQuoted_InvoicePrice: 396.11,
-      SupplierName: 'OMCO INTERNATIONAL NV- Belgium',
-      Invoice: 289.19,
-      ShouldCostOpportunity: 350209,
-      SCAttainment: 27
-    },
-    {
-      PartNumber: '3641592',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'BELGIUM',
-      TotalShouldCost: 114.75,
-      AnnualVolume: 1254,
-      SupplierQuoted_InvoicePrice: 336.86,
-      SupplierName: 'OMCO INTERNATIONAL NV- Belgium',
-      Invoice: 222.11,
-      ShouldCostOpportunity: 278522,
-      SCAttainment: 34
-    },
-    {
-      PartNumber: '3641593',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'BELGIUM',
-      TotalShouldCost: 108.69,
-      AnnualVolume: 1100,
-      SupplierQuoted_InvoicePrice: 335.42,
-      SupplierName: 'OMCO INTERNATIONAL NV- Belgium',
-      Invoice: 226.73,
-      ShouldCostOpportunity: 249403,
-      SCAttainment: 32
-    },
-    {
-      PartNumber: '3641635',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'BELGIUM',
-      TotalShouldCost: 56.46,
-      AnnualVolume: 1521,
-      SupplierQuoted_InvoicePrice: 125.92,
-      SupplierName: 'OMCO INTERNATIONAL NV- Belgium',
-      Invoice: 69.46,
-      ShouldCostOpportunity: 105649,
-      SCAttainment: 45
-    },
-    {
-      PartNumber: '3642647',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'GERMANY',
-      TotalShouldCost: 346.42,
-      AnnualVolume: 257,
-      SupplierQuoted_InvoicePrice: 502.10,
-      SupplierName: 'HARZ GUSS ZORGE GMBH - Germany',
-      Invoice: 155.68,
-      ShouldCostOpportunity: 40010,
-      SCAttainment: 69
-    },
-    {
-      PartNumber: '3642647',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'WESTERN EUROPE',
-      TotalShouldCost: 331.82,
-      AnnualVolume: 352,
-      SupplierQuoted_InvoicePrice: 482.42,
-      SupplierName: 'NA',
-      Invoice: 150.60,
-      ShouldCostOpportunity: 53011,
-      SCAttainment: 69
-    },
-    {
-      PartNumber: '3642647',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'EASTERN EUROPE',
-      TotalShouldCost: 295.48,
-      AnnualVolume: 352,
-      SupplierQuoted_InvoicePrice: 456.98,
-      SupplierName: 'NA',
-      Invoice: 161.50,
-      ShouldCostOpportunity: 56847,
-      SCAttainment: 65
-    },
-    {
-      PartNumber: '3642655',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'GERMANY',
-      TotalShouldCost: 136.61,
-      AnnualVolume: 800,
-      SupplierQuoted_InvoicePrice: 170.18,
-      SupplierName: 'HARZ GUSS ZORGE GMBH- Germany',
-      Invoice: 33.57,
-      ShouldCostOpportunity: 26856,
-      SCAttainment: 80
-    },
-    {
-      PartNumber: '3642655',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'CHINA',
-      TotalShouldCost: 59.62,
-      AnnualVolume: 1280,
-      SupplierQuoted_InvoicePrice: 81.37,
-      SupplierName: 'IMPRO Industries LTD',
-      Invoice: 21.75,
-      ShouldCostOpportunity: 27840,
-      SCAttainment: 73
-    },
-    {
-      PartNumber: '3642655',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'INDIA',
-      TotalShouldCost: 53.62,
-      AnnualVolume: 800,
-      SupplierQuoted_InvoicePrice: 57.12,
-      SupplierName: 'SPM AUTO- INDIA',
-      Invoice: 3.50,
-      ShouldCostOpportunity: 2800,
-      SCAttainment: 94
-    },
-    {
-      PartNumber: '3642661',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'GERMANY',
-      TotalShouldCost: 317.29,
-      AnnualVolume: 232,
-      SupplierQuoted_InvoicePrice: 411.53,
-      SupplierName: 'HARZ GUSS ZORGE GMBH - Germany',
-      Invoice: 94.24,
-      ShouldCostOpportunity: 21863,
-      SCAttainment: 77
-    },
-    {
-      PartNumber: '4100728',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'BELGIUM',
-      TotalShouldCost: 508.68,
-      AnnualVolume: 4,
-      SupplierQuoted_InvoicePrice: 2560.45,
-      SupplierName: 'OMCO INTERNATIONAL NV- Belgium',
-      Invoice: 2051.77,
-      ShouldCostOpportunity: 8207,
-      SCAttainment: 20
-    },
-    {
-      PartNumber: '4100732',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'BELGIUM',
-      TotalShouldCost: 538.97,
-      AnnualVolume: 10,
-      SupplierQuoted_InvoicePrice: 1675.00,
-      SupplierName: 'OMCO INTERNATIONAL NV- Belgium',
-      Invoice: 1136.03,
-      ShouldCostOpportunity: 11360,
-      SCAttainment: 32
-    },
-    {
-      PartNumber: '5374631',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'BELGIUM',
-      TotalShouldCost: 422.74,
-      AnnualVolume: 723,
-      SupplierQuoted_InvoicePrice: 747.73,
-      SupplierName: 'OMCO INTERNATIONAL NV- Belgium',
-      Invoice: 324.99,
-      ShouldCostOpportunity: 234968,
-      SCAttainment: 57
-    },
-    {
-      PartNumber: '5374631',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'UK',
-      TotalShouldCost: 438.82,
-      AnnualVolume: 251,
-      SupplierQuoted_InvoicePrice: 881.32,
-      SupplierName: 'OMCO INTERNATIONAL',
-      Invoice: 442.50,
-      ShouldCostOpportunity: 111067,
-      SCAttainment: 50
-    },
-    {
-      PartNumber: '5374631',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'WESTERN EUROPE',
-      TotalShouldCost: 456.05,
-      AnnualVolume: 251,
-      SupplierQuoted_InvoicePrice: 896.69,
-      SupplierName: 'NA',
-      Invoice: 440.64,
-      ShouldCostOpportunity: 110602,
-      SCAttainment: 51
-    },
-    {
-      PartNumber: '5374631',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'EASTERN EUROPE',
-      TotalShouldCost: 405.53,
-      AnnualVolume: 251,
-      SupplierQuoted_InvoicePrice: 641.55,
-      SupplierName: 'NA',
-      Invoice: 236.02,
-      ShouldCostOpportunity: 59242,
-      SCAttainment: 63
-    },
-    {
-      PartNumber: '5374635',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'BELGIUM',
-      TotalShouldCost: 529.57,
-      AnnualVolume: 147,
-      SupplierQuoted_InvoicePrice: 885.50,
-      SupplierName: 'OMCO INTERNATIONAL NV- Belgium',
-      Invoice: 355.93,
-      ShouldCostOpportunity: 52322,
-      SCAttainment: 60
-    },
-    {
-      PartNumber: '5374639',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'BELGIUM',
-      TotalShouldCost: 528.48,
-      AnnualVolume: 174,
-      SupplierQuoted_InvoicePrice: 892.24,
-      SupplierName: 'OMCO INTERNATIONAL NV- Belgium',
-      Invoice: 363.76,
-      ShouldCostOpportunity: 63294,
-      SCAttainment: 59
-    },
-    {
-      PartNumber: '5450589',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'CHINA',
-      TotalShouldCost: 38.09,
-      AnnualVolume: 154000,
-      SupplierQuoted_InvoicePrice: 53.12,
-      SupplierName: 'FEILONG AUTO COMPONENTS CO., LTD.',
-      Invoice: 15.03,
-      ShouldCostOpportunity: 2314466,
-      SCAttainment: 72
-    },
-    {
-      PartNumber: '5672644',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'UK',
-      TotalShouldCost: 417.47,
-      AnnualVolume: 800,
-      SupplierQuoted_InvoicePrice: 1046.65,
-      SupplierName: 'NA',
-      Invoice: 629.18,
-      ShouldCostOpportunity: 503344,
-      SCAttainment: 40
-    },
-    {
-      PartNumber: '5672644',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'CHINA',
-      TotalShouldCost: 318.47,
-      AnnualVolume: 800,
-      SupplierQuoted_InvoicePrice: 950.98,
-      SupplierName: 'NA',
-      Invoice: 632.51,
-      ShouldCostOpportunity: 506008,
-      SCAttainment: 33
-    },
-    {
-      PartNumber: '5674972',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'CHINA',
-      TotalShouldCost: 55.99,
-      AnnualVolume: 1000,
-      SupplierQuoted_InvoicePrice: 65.69,
-      SupplierName: 'FEILONG AUTO COMPONENTS CO., LTD.',
-      Invoice: 9.70,
-      ShouldCostOpportunity: 9700,
-      SCAttainment: 85
-    },
-    {
-      PartNumber: '5674977',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'CHINA',
-      TotalShouldCost: 116.72,
-      AnnualVolume: 500,
-      SupplierQuoted_InvoicePrice: 222.14,
-      SupplierName: 'FEILONG AUTO COMPONENTS CO., LTD.',
-      Invoice: 105.42,
-      ShouldCostOpportunity: 52710,
-      SCAttainment: 53
-    },
-    {
-      PartNumber: '5714523',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'INDIA',
-      TotalShouldCost: 15.45,
-      AnnualVolume: 2000,
-      SupplierQuoted_InvoicePrice: 26.48,
-      SupplierName: 'NA',
-      Invoice: 11.03,
-      ShouldCostOpportunity: 22050,
-      SCAttainment: 58
-    },
-    {
-      PartNumber: '5714523',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'CHINA',
-      TotalShouldCost: 16.85,
-      AnnualVolume: 2000,
-      SupplierQuoted_InvoicePrice: 25.53,
-      SupplierName: 'NA',
-      Invoice: 8.68,
-      ShouldCostOpportunity: 17351,
-      SCAttainment: 66
-    },
-    {
-      PartNumber: '5714523',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'UK',
-      TotalShouldCost: 26.82,
-      AnnualVolume: 2000,
-      SupplierQuoted_InvoicePrice: 42.31,
-      SupplierName: 'NA',
-      Invoice: 15.49,
-      ShouldCostOpportunity: 30979,
-      SCAttainment: 63
-    },
-    {
-      PartNumber: '5717637',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'INDIA',
-      TotalShouldCost: 16.30,
-      AnnualVolume: 1500,
-      SupplierQuoted_InvoicePrice: 26.18,
-      SupplierName: 'NA',
-      Invoice: 9.88,
-      ShouldCostOpportunity: 14818,
-      SCAttainment: 62
-    },
-    {
-      PartNumber: '6377526',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'INDIA',
-      TotalShouldCost: 8.08,
-      AnnualVolume: 1500,
-      SupplierQuoted_InvoicePrice: 18.05,
-      SupplierName: 'NA',
-      Invoice: 9.97,
-      ShouldCostOpportunity: 14955,
-      SCAttainment: 45
-    },
-    {
-      PartNumber: '6382128',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'INDIA',
-      TotalShouldCost: 12.41,
-      AnnualVolume: 65000,
-      SupplierQuoted_InvoicePrice: 20.11,
-      SupplierName: 'SPM AUTO- INDIA',
-      Invoice: 7.70,
-      ShouldCostOpportunity: 500500,
-      SCAttainment: 62
-    },
-    {
-      PartNumber: '6409902',
-      PartName: 'MANIFOLD,EXHAUST',
-      SuppManfLoc: 'CHINA',
-      TotalShouldCost: 32.68,
-      AnnualVolume: 33500,
-      SupplierQuoted_InvoicePrice: 38.59,
-      SupplierName: 'FEILONG AUTO COMPONENTS CO., LTD.',
-      Invoice: 5.91,
-      ShouldCostOpportunity: 197985,
-      SCAttainment: 85
+  }
+
+  saveComment(): void {
+    if (this.editingIndex !== null && this.editingIndex >= 0) {
+      this.opportunities[this.editingIndex].Comments = this.selectedComment;
     }
-  ]
+    this.closeCommentsPopup();
+  }
+
+
+  gettotaloppurtunity(): string {
+    let total = 0;
+    // Iterate over the opportunities array and sum up the UserCalculatedCost values
+    this.opportunities.forEach(opportunity => {
+      total += opportunity.CommercialArbitrage || 0;
+    });
+    return `$${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+  }
+
+  calculatePercentage(opportunity: any): string {
+    if (opportunity.SupplierQuoted && opportunity.UserCalculatedCost > 0 && opportunity.SupplierQuoted > 0) {
+      const percentage = ((opportunity.UserCalculatedCost / (opportunity.SupplierQuoted) * 100))
+      return percentage.toFixed(2) + '%'; // Format to 2 decimal places and append '%'
+    }
+    return ''; // Return an empty string if conditions are not met
+  }
+
+
+  calculateOpportunityValue(opportunity: any): string {
+    if (opportunity.UpdatedAnnualVolume && opportunity.SupplierQuoted && opportunity.UserCalculatedCost) {
+      const value = opportunity.UpdatedAnnualVolume * (opportunity.SupplierQuoted - opportunity.UserCalculatedCost);
+      return value.toFixed(2);
+    }
+    return '';
+  }
+  formatToMillions(value: any): string {
+    if (value > 0) {
+      return (value / 1000000).toFixed(2) + 'm';
+    }
+    return value.toString();
+  }
+
+  async uploadTCO(CommericalArtibageID: any, MMID: any, RequestHeaderId: any): Promise<void> {
+    this.selectedUniqueId = MMID;
+    this.selectedRequestId = RequestHeaderId;
+
+
+    debugger
+    const result = await Swal.fire({
+      title: 'TCO Upload is opening. Do you want to proceed?',
+      showCancelButton: true,
+      confirmButtonColor: '#28a745', // Green color for OK button
+      cancelButtonColor: '#d33', // Red color for Cancel button
+      confirmButtonText: 'Yes, proceed!',
+      cancelButtonText: 'Cancel',
+      customClass: {
+        popup: 'custom-swal-popup', // Class for customizing the popup
+      },
+    });
+
+
+    if (result.isConfirmed) {
+      // const UniqueId = this.selectedUniqueId;
+      // const RequestId = this.selectedRequestId;
+      const encryptedUniqueId = btoa(this.selectedUniqueId); // Base64 encoding
+      const encryptedRequestId = btoa(this.selectedRequestId); // Base64 encoding
+      this.router.navigate(['/home/tcoupload'], {
+        queryParams: {
+          UniqueId: encryptedUniqueId,
+          RequestId: encryptedRequestId
+        }
+      });
+    }
+  }
+
+
+  closeUploadPopup(): void {
+    this.showFileUpload = false;
+    this.showTcoUploadModal = false;
+  }
+
   
-  Regional = [
-    {
-        'srNo': 1,
-        'partName': "MANIFOLD,EXHAUST",
-        'partNumber': 5374631,
-        'suppManfLocation': "BELGIUM",
-        'annualVolume': 723,
-        'supplierQuotedInvoicePrice': 747.73,
-        'supplierName': "OMCO INTERNATIONAL NV- Belgium",
-        'bestRegionCost': 641.55,
-        'bestRegion': "EASTERN EUROPE",
-        'regionArbitrage': "76,765",
-        'regionArbitrageValue': "106.18",
-        'fromTo': "BELGIUM->EASTERN EUROPE"
-    },
-    {
-        'srNo': 2,
-        'partName': "MANIFOLD,EXHAUST",
-        'partNumber': 3642647,
-        'suppManfLocation': "GERMANY",
-        'annualVolume': 257,
-        'supplierQuotedInvoicePrice': 502.10,
-        'supplierName': "HARZ GUSS ZORGE GMBH - Germany",
-        'bestRegionCost': 456.98,
-        'bestRegion': "EASTERN EUROPE",
-        'regionArbitrage': "11,596",
-        'regionArbitrageValue': "45.12",
-        'fromTo': "GERMANY->EASTERN EUROPE"
-    },
-    {
-        'srNo': 3,
-        'partName': "MANIFOLD,EXHAUST",
-        'partNumber': 5672644,
-        'suppManfLocation': "UK",
-        'annualVolume': 800,
-        'supplierQuotedInvoicePrice': 1046.65,
-        'supplierName': "NA",
-        'bestRegionCost': 950.98,
-        'bestRegion': "CHINA",
-        'regionArbitrage': "76,536",
-        'regionArbitrageValue': "95.67",
-        'fromTo': "UK->CHINA"
-    },
-    {
-        'srNo': 4,
-        'partName': "MANIFOLD,EXHAUST",
-        'partNumber': 3642655,
-        'suppManfLocation': "GERMANY",
-        'annualVolume': 800,
-        'supplierQuotedInvoicePrice': 170.18,
-        'supplierName': "HARZ GUSS ZORGE GMBH- Germany",
-        'bestRegionCost': 57.12,
-        'bestRegion': "INDIA",
-        'regionArbitrage': "90,448",
-        'regionArbitrageValue': "113.06",
-        'fromTo': "GERMANY->INDIA"
-    },
-    {
-        'srNo': 5,
-        'partName': "MANIFOLD,EXHAUST",
-        'partNumber': 3642655,
-        'suppManfLocation': "CHINA",
-        'annualVolume': 1280,
-        'supplierQuotedInvoicePrice': 81.37,
-        'supplierName': "IMPRO Indutries LTD",
-        'bestRegionCost': 57.12,
-        'bestRegion': "INDIA",
-        'regionArbitrage': "31,040",
-        'regionArbitrageValue': "24.25",
-        'fromTo': "CHINA->INDIA"
-    },
-    {
-        'srNo': 6,
-        'partName': "MANIFOLD,EXHAUST",
-        'partNumber': 6382132,
-        'suppManfLocation': "INDIA",
-        'annualVolume': 65000,
-        'supplierQuotedInvoicePrice': 30.90,
-        'supplierName': "SPM AUTO- INDIA",
-        'bestRegionCost': 26.69,
-        'bestRegion': "CHINA",
-        'regionArbitrage': "273,650",
-        'regionArbitrageValue': "4.21",
-        'fromTo': "INDIA->CHINA"
-    },
-    {
-        'srNo': 7,
-        'partName': "MANIFOLD,EXHAUST",
-        'partNumber': 5374631,
-        'suppManfLocation': "UK",
-        'annualVolume': 251,
-        'supplierQuotedInvoicePrice': 881.32,
-        'supplierName': "OMCO INTERNATIONAL",
-        'bestRegionCost': 641.55,
-        'bestRegion': "EASTERN EUROPE",
-        'regionArbitrage': "60,180",
-        'regionArbitrageValue': "239.76",
-        'fromTo': "UK->EASTERN EUROPE"
-    },
-    {
-        'srNo': 8,
-        'partName': "MANIFOLD,EXHAUST",
-        'partNumber': 5374631,
-        'suppManfLocation': "WESTERN EUROPE",
-        'annualVolume': 251,
-        'supplierQuotedInvoicePrice': 896.69,
-        'supplierName': "NA",
-        'bestRegionCost': 641.55,
-        'bestRegion': "EASTERN EUROPE",
-        'regionArbitrage': "64,040",
-        'regionArbitrageValue': "255.14",
-        'fromTo': "WESTERN EUROPE->EASTERN EUROPE"
-    },
-    {
-        'srNo': 9,
-        'partName': "MANIFOLD,EXHAUST",
-        'partNumber': 3642647,
-        'suppManfLocation': "WESTERN EUROPE",
-        'annualVolume': 352,
-        'supplierQuotedInvoicePrice': 482.42,
-        'supplierName': "NA",
-        'bestRegionCost': 456.98,
-        'bestRegion': "EASTERN EUROPE",
-        'regionArbitrage': "8,955",
-        'regionArbitrageValue': "25.44",
-        'fromTo': "WESTERN EUROPE->EASTERN EUROPE"
-    },
-    {
-        'srNo': 10,
-        'partName': "MANIFOLD,EXHAUST",
-        'partNumber': 5714523,
-        'suppManfLocation': "INDIA",
-        'annualVolume': 2000,
-        'supplierQuotedInvoicePrice': 26.48,
-        'supplierName': "NA",
-        'bestRegionCost': 25.53,
-        'bestRegion': "CHINA",
-        'regionArbitrage': "1,899",
-        'regionArbitrageValue': "0.95",
-        'fromTo': "INDIA->CHINA"
-    },
-    {
-        'srNo': 11,
-        'partName': "MANIFOLD,EXHAUST",
-        'partNumber': 5714523,
-        'suppManfLocation': "UK",
-        'annualVolume': 2000,
-        'supplierQuotedInvoicePrice': 42.31,
-        'supplierName': "NA",
-        'bestRegionCost': 25.53,
-        'bestRegion': "CHINA",
-        'regionArbitrage': "33,568",
-        'regionArbitrageValue': "16.78",
-        'fromTo': "UK->CHINA"
+  openUploadPopup(CommericalArtibageID: any, MMID: any, RequestHeaderId: any): void {
+
+    debugger
+    this.selectedCommercialID = CommericalArtibageID;
+    this.selectedUniqueId = MMID;
+    this.selectedRequestId = RequestHeaderId;
+
+    this.showTcoUploadModal = true;
+
+  }
+
+  savedoc(): void {
+
+  }
+
+
+  handleFileSelection(event: any): void {
+
+    debugger
+
+    const files: FileList = event.target.files; // Get selected files
+    this.selectedFiles = []; // Clear previous selections
+
+    if (files && files.length > 0) {
+      console.log(`Number of files selected: ${files.length}`);
+      for (let i = 0; i < files.length; i++) {
+        console.log(`File ${i + 1}: ${files[i].name}`);
+        this.selectedFiles.push(files[i]); // Store files in an array
+      }
+    } else {
+      console.log('No files selected.');
     }
-]
+  }
+
+  uploadFiles(commercialId: string): void {
+    debugger
+    if (this.selectedFiles && this.selectedFiles.length > 0) {
+      this.AdminService.Uploadfiles(commercialId, this.selectedFiles).subscribe({
+        next: (response :any) => {
+          console.log('Files uploaded successfully:', response);
+          alert('Files uploaded successfully!');
+          this.selectedFiles = []; // Clear selected files after upload
+        },
+        error: (error :any) => {
+          console.error('File upload failed:', error);
+          alert('File upload failed!');
+        },
+      });
+    } else {
+      alert('Please select files to upload.');
+    }
+  }
+
+
+  downloadFolderAsZip(CommericalArtibageID: string): void {
+    debugger
+    this.AdminService.downloadZipFile(CommericalArtibageID).subscribe(
+      (response: Blob) => {
+        const url = window.URL.createObjectURL(response); // Create a blob URL
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = `${CommericalArtibageID}.zip`; // Name the ZIP file with the commercial ID
+        anchor.click();
+        window.URL.revokeObjectURL(url); // Clean up the URL
+      },
+      (error :any) => {
+        console.error('Error downloading ZIP file:', error);
+      }
+    );
+  }
+
+  async ShowLandingPage(flag: number, CategoryID: string) {
+    try {
+      this.SpinnerService.show('spinner');
+      const data = await this.Searchservice.GetLandingPage(flag, CategoryID).toPromise();
+      this.SearchProductList = data;
+      console.log(this.SearchProductList);
+
+      this.SearchProductList = data.map((item: any) => ({
+        ...item,
+        selected: false // Initialize each item as unselected
+      }));
+
+      this.SpinnerService.hide('spinner');
+    } catch (e) {
+      this.SpinnerService.hide('spinner');
+      console.error(e);
+    }
+  }
+
+  dateRanges = [
+    { value: '', label: 'Select Range' },
+    { value: '3', label: 'Last 3 Months' },
+    { value: '6', label: 'Last 6 Months' },
+    { value: '12', label: 'Last 1 Year' }
+  ];
+
+  //-------------------------------------------------- Commerical Arbitrage End------------------------------------------------ //
+
+
+  selectAll(): void {
+    debugger
+    const allSelected = this.SearchProductList.every((group: { selected: boolean; }) => group.selected);
+    this.SearchProductList.forEach((group: { selected: boolean; }) => group.selected = !allSelected);
+
+    if (!allSelected) {
+      this.selectedCategoryIds = this.SearchProductList.map((group: { categoryId: any; }) => group.categoryId);
+    } else {
+      this.selectedCategoryIds = [];
+    }
+    this.test = this.selectedCategoryIds
+  }
+
+
+  onCheckboxChange(item: any) {
+    debugger;
+
+    if (item.selected) {
+      if (!this.selectedCategoryIds.includes(item.categoryId)) {
+        this.selectedCategoryIds.push(item.categoryId);
+      }
+    } else {
+      this.selectedCategoryIds = this.selectedCategoryIds.filter(id => id !== item.categoryId);
+    }
+    this.test = this.selectedCategoryIds
+  }
+
+
+  navigateToCostInsight(CategoryID: number) {
+    debugger;
+    this.router.navigate(['/home/costinsights1', CategoryID]);
+  }
+  
+
+  getCategoryId(e: any) {
+    debugger
+    const cat3 = document.getElementsByClassName("Cat3Checkbox") as any;
+    var param_value = "";
+
+    for (let i = 0; i < e.length; i++) {
+      param_value += e[i] + ",";
+    }
+
+    param_value = param_value.substring(0, param_value.length - 1);
+
+    if (param_value == "") {
+      this.ShowLandingPage(0, "0");
+      return;
+    }
+
+    this.ShowLandingPage(1, param_value);
+  }
+
+
+  public clearall() {
+
+    for (let i = 0; i < this.cat3.filterItems.length; i++) {
+      this.cat3.filterItems[i].checked = false;
+    }
+
+    this.ShowLandingPage(0, "0");
+  }
+
+  toggleView() {
+    debugger;
+    this.showcostinsights = true;
+
+    if (!this.test || this.test.length === 0) {
+      this.selectAll();
+    }
+
+    if (this.showArbitrage === false) {
+      this.GetCommericalArtibage();
+      //this.GetRegionalArbitrage();
+    }
+    this.showArbitrage = !this.showArbitrage;
+    this.showCat3Management = !this.showCat3Management;
+    this.showContent = false;
+
+    this.showRegionalContent = false;
+    this.showmgfprocess = false;
+    this.showdesign = false;
+  }
+
+  async ShowCagetory3() {
+    const data = await this.Searchservice.GetCagetory3("0").toPromise();
+    this.Cat3 = data.filter((d: { groupCategory: any; }) => d.groupCategory == "Cat3");
+    this.Cat3 = this.Cat3.map((value: { text: any; value: any; }) => {
+      return new TreeviewItem({ text: value.text, value: value.value, checked: false });
+    });
+
+  }
+
+
+  // async GetRegionalArbitrage(): Promise<void> {
+  //   debugger
+   
+  //   const categoryID = this.test;
+  //   try {
+  //     const response = await this.AdminService.GetRegionalArbitrage(categoryID).toPromise();
+  //     this.RegionData = response;
+  //     this.Regional= this.RegionData;
+  //     this.Regional.forEach((region) => {
+  //       console.log(region); 
+  //     });
+  //     this.RegionchartOptions.data[0].dataPoints = this.Regional.map(region => ({
+  //       label: region.PartNumber,
+  //       y: Math.abs(Number(region.RegionalArbitrage)) || 0,
+  //     }));
+  //     this.Regional.forEach(Region => {
+  //       if (!Region.ProjectStatus) {
+  //         Region.ProjectStatus = 'Open'; // Default to "Open" if no value exists
+  //       }
+  //     });
+      
+  //   } catch (err) {
+  //     console.error('Error fetching regional arbitrage:', err);
+  //   }
+  // }
+
+
+   RegionchartOptions = {
+
+    animationEnabled: true,
+
+    title: {
+      text: "Part Number vs Regional Artibage ($)",
+      fontFamily: "Trebuchet MS, Helvetica, sans-serif",
+
+    },
+    axisX: {
+      title: "Part Number",
+      interval: 1,
+      labelFontSize: 9,
+      showInLegend: true,
+      indexLabelFontColor: "#000",
+
+      labelAngle: -240,
+
+    },
+    axisY: {
+
+      title: "Regional Artibage",
+      labelFontSize: 10,
+      showInLegend: true,
+      indexLabelFontColor: "#000",
+      interval: 1000,
+    },
+    dataPointWidth: 20,
+    data: [{
+      indexLabelFontColor: "#000",
+      toolTipContent: "{label} : {y}$ ",
+
+      type: "column",
+      color: "#da291c",
+      dataPoints: [] as { label: string, y: number }[]
+
+    }],
+    
+
+  }
+  openregioncomment(comment: string, index: number): void {
+    this.showregioncomment = true;
+    this.selectedComment = comment || '';
+    this.editingIndex = index;
+  }
+
+  closeregioncomment(): void {
+    this.selectedComment = '';
+    // this.showFileUpload = false;
+    // Logic to close the popup
+    this.showregioncomment = false;
+  }
+  openRegionUploadPopup(){
+
+  }
+
+  RegionUploadTCO(){
+
+  }
+  RegionFileDownloadAsZip(){
+
+  }
+  SaveRegional(Region:any)
+  {
+     // Default values for nullable columns
+     if (!Region.ProjectStatus) {
+      Region.ProjectStatus = "Open"; // Default simulated cost attainment value
+    }
+
+  }
+
+
 
   mgfprocess = [
     {
@@ -913,244 +1028,235 @@ export class CostReductionComponent {
       "highlevelprocess": "Sand Casting & Machining"
     }
   ]
-  
+
 
   design = [
     {
-        'partname': 'MANIFOLD EXHAUST',
-        'partnumber': '5374631',
-        'suppmanilocation': 'BELGIUM',
-        'annualvol': 723,
-        'material': '41103 - Ductile Cast Iron (ASTM A439, Grade D5S)',
-        'matrate': 1.03,
-        'avgwall': 12.35,
-        'rmgrade': 41103,
-        'matratee': 1.03,
-        'mincostgrade': 41081,
-        'mincostrmrate': 0.92,
-        'techcostarbitage': 2.62,
-        'fromtotechspec': '41103->41081'
+      'partname': 'MANIFOLD EXHAUST',
+      'partnumber': '5374631',
+      'suppmanilocation': 'BELGIUM',
+      'annualvol': 723,
+      'material': '41103 - Ductile Cast Iron (ASTM A439, Grade D5S)',
+      'matrate': 1.03,
+      'avgwall': 12.35,
+      'rmgrade': 41103,
+      'matratee': 1.03,
+      'mincostgrade': 41081,
+      'mincostrmrate': 0.92,
+      'techcostarbitage': 2.62,
+      'fromtotechspec': '41103->41081'
     },
     {
-        'partname': 'MANIFOLD EXHAUST',
-        'partnumber': '5450589',
-        'suppmanilocation': 'CHINA',
-        'annualvol': 154000,
-        'material': '41118-IRON,FERRITIC DUCTILE-high silicon - high molybdenum - SiMo5-1',
-        'matrate': 1.06,
-        'avgwall': 8.63,
-        'rmgrade': 41118,
-        'matratee': 1.06,
-        'mincostgrade': 41081,
-        'mincostrmrate': 0.92,
-        'techcostarbitage': 1.69,
-        'fromtotechspec': '41118->41081'
+      'partname': 'MANIFOLD EXHAUST',
+      'partnumber': '5450589',
+      'suppmanilocation': 'CHINA',
+      'annualvol': 154000,
+      'material': '41118-IRON,FERRITIC DUCTILE-high silicon - high molybdenum - SiMo5-1',
+      'matrate': 1.06,
+      'avgwall': 8.63,
+      'rmgrade': 41118,
+      'matratee': 1.06,
+      'mincostgrade': 41081,
+      'mincostrmrate': 0.92,
+      'techcostarbitage': 1.69,
+      'fromtotechspec': '41118->41081'
     },
     {
-        'partname': 'MANIFOLD EXHAUST',
-        'partnumber': '5672644',
-        'suppmanilocation': 'UK',
-        'annualvol': 800,
-        'material': '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)',
-        'matrate': 1.17,
-        'avgwall': 8.00,
-        'rmgrade': 41081,
-        'matratee': 1.17,
-        'mincostgrade': 41081,
-        'mincostrmrate': 0.92,
-        'techcostarbitage': 15.58,
-        'fromtotechspec': '41081->41081'
+      'partname': 'MANIFOLD EXHAUST',
+      'partnumber': '5672644',
+      'suppmanilocation': 'UK',
+      'annualvol': 800,
+      'material': '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)',
+      'matrate': 1.17,
+      'avgwall': 8.00,
+      'rmgrade': 41081,
+      'matratee': 1.17,
+      'mincostgrade': 41081,
+      'mincostrmrate': 0.92,
+      'techcostarbitage': 15.58,
+      'fromtotechspec': '41081->41081'
     },
     {
-        'partname': 'MANIFOLD EXHAUST',
-        'partnumber': '5674972',
-        'suppmanilocation': 'CHINA',
-        'annualvol': 1000,
-        'material': '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)',
-        'matrate': 1.22,
-        'avgwall': 9.50,
-        'rmgrade': 41081,
-        'matratee': 1.22,
-        'mincostgrade': 41081,
-        'mincostrmrate': 0.92,
-        'techcostarbitage': 3.27,
-        'fromtotechspec': '41081->41081'
+      'partname': 'MANIFOLD EXHAUST',
+      'partnumber': '5674972',
+      'suppmanilocation': 'CHINA',
+      'annualvol': 1000,
+      'material': '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)',
+      'matrate': 1.22,
+      'avgwall': 9.50,
+      'rmgrade': 41081,
+      'matratee': 1.22,
+      'mincostgrade': 41081,
+      'mincostrmrate': 0.92,
+      'techcostarbitage': 3.27,
+      'fromtotechspec': '41081->41081'
     },
     {
-        'partname': 'MANIFOLD EXHAUST',
-        'partnumber': '5674974',
-        'suppmanilocation': 'CHINA',
-        'annualvol': 1800,
-        'material': '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)',
-        'matrate': 1.22,
-        'avgwall': 10.92,
-        'rmgrade': 41081,
-        'matratee': 1.22,
-        'mincostgrade': 41081,
-        'mincostrmrate': 0.92,
-        'techcostarbitage': 1.98,
-        'fromtotechspec': '41081->41081'
+      'partname': 'MANIFOLD EXHAUST',
+      'partnumber': '5674974',
+      'suppmanilocation': 'CHINA',
+      'annualvol': 1800,
+      'material': '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)',
+      'matrate': 1.22,
+      'avgwall': 10.92,
+      'rmgrade': 41081,
+      'matratee': 1.22,
+      'mincostgrade': 41081,
+      'mincostrmrate': 0.92,
+      'techcostarbitage': 1.98,
+      'fromtotechspec': '41081->41081'
     },
     {
-        'partname': 'MANIFOLD EXHAUST',
-        'partnumber': '5675361',
-        'suppmanilocation': 'CHINA',
-        'annualvol': 1000,
-        'material': '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)',
-        'matrate': 1.22,
-        'avgwall': 10.92,
-        'rmgrade': 41081,
-        'matratee': 1.22,
-        'mincostgrade': 41081,
-        'mincostrmrate': 0.92,
-        'techcostarbitage': 1.98,
-        'fromtotechspec': '41081->41081'
+      'partname': 'MANIFOLD EXHAUST',
+      'partnumber': '5675361',
+      'suppmanilocation': 'CHINA',
+      'annualvol': 1000,
+      'material': '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)',
+      'matrate': 1.22,
+      'avgwall': 10.92,
+      'rmgrade': 41081,
+      'matratee': 1.22,
+      'mincostgrade': 41081,
+      'mincostrmrate': 0.92,
+      'techcostarbitage': 1.98,
+      'fromtotechspec': '41081->41081'
     },
     {
-        'partname': 'MANIFOLD EXHAUST',
-        'partnumber': '5674977',
-        'suppmanilocation': 'CHINA',
-        'annualvol': 500,
-        'material': '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)',
-        'matrate': 1.10,
-        'avgwall': 11.20,
-        'rmgrade': 41081,
-        'matratee': 1.10,
-        'mincostgrade': 41081,
-        'mincostrmrate': 0.92,
-        'techcostarbitage': 5.51,
-        'fromtotechspec': '41081->41081'
+      'partname': 'MANIFOLD EXHAUST',
+      'partnumber': '5674977',
+      'suppmanilocation': 'CHINA',
+      'annualvol': 500,
+      'material': '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)',
+      'matrate': 1.10,
+      'avgwall': 11.20,
+      'rmgrade': 41081,
+      'matratee': 1.10,
+      'mincostgrade': 41081,
+      'mincostrmrate': 0.92,
+      'techcostarbitage': 5.51,
+      'fromtotechspec': '41081->41081'
     },
     {
-        'partname': 'MANIFOLD EXHAUST',
-        'partnumber': '3642655',
-        'suppmanilocation': 'CHINA',
-        'annualvol': 1280,
-        'material': '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)',
-        'matrate': 1.15,
-        'avgwall': 11.40,
-        'rmgrade': 41081,
-        'matratee': 1.15,
-        'mincostgrade': 41081,
-        'mincostrmrate': 0.92,
-        'techcostarbitage': 3.45,
-        'fromtotechspec': '41081->41081'
+      'partname': 'MANIFOLD EXHAUST',
+      'partnumber': '3642655',
+      'suppmanilocation': 'CHINA',
+      'annualvol': 1280,
+      'material': '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)',
+      'matrate': 1.15,
+      'avgwall': 11.40,
+      'rmgrade': 41081,
+      'matratee': 1.15,
+      'mincostgrade': 41081,
+      'mincostrmrate': 0.92,
+      'techcostarbitage': 3.45,
+      'fromtotechspec': '41081->41081'
     },
     {
-        'partname': 'MANIFOLD EXHAUST',
-        'partnumber': '6409902',
-        'suppmanilocation': 'INDIA',
-        'annualvol': 33500,
-        'material': '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)',
-        'matrate': 1.23,
-        'avgwall': 9.15,
-        'rmgrade': 41081,
-        'matratee': 1.23,
-        'mincostgrade': 41081,
-        'mincostrmrate': 0.92,
-        'techcostarbitage': 2.57,
-        'fromtotechspec': '41081->41081'
+      'partname': 'MANIFOLD EXHAUST',
+      'partnumber': '6409902',
+      'suppmanilocation': 'INDIA',
+      'annualvol': 33500,
+      'material': '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)',
+      'matrate': 1.23,
+      'avgwall': 9.15,
+      'rmgrade': 41081,
+      'matratee': 1.23,
+      'mincostgrade': 41081,
+      'mincostrmrate': 0.92,
+      'techcostarbitage': 2.57,
+      'fromtotechspec': '41081->41081'
     },
     {
-        'partname': 'MANIFOLD EXHAUST',
-        'partnumber': '5374631',
-        'suppmanilocation': 'UK',
-        'annualvol': 251,
-        'material': '41103 - Ductile Cast Iron (ASTM A439, Grade D5S)',
-        'matrate': 8.36,
-        'avgwall': 12.35,
-        'rmgrade': 41103,
-        'matratee': 8.36,
-        'mincostgrade': 41081,
-        'mincostrmrate': 0.92,
-        'techcostarbitage': 177.30,
-        'fromtotechspec': '41103->41081'
+      'partname': 'MANIFOLD EXHAUST',
+      'partnumber': '5374631',
+      'suppmanilocation': 'UK',
+      'annualvol': 251,
+      'material': '41103 - Ductile Cast Iron (ASTM A439, Grade D5S)',
+      'matrate': 8.36,
+      'avgwall': 12.35,
+      'rmgrade': 41103,
+      'matratee': 8.36,
+      'mincostgrade': 41081,
+      'mincostrmrate': 0.92,
+      'techcostarbitage': 177.30,
+      'fromtotechspec': '41103->41081'
     },
     {
-        'partname': 'MANIFOLD EXHAUST',
-        'partnumber': '5374631',
-        'suppmanilocation': 'WESTERN EUROPE',
-        'annualvol': 251,
-        'material': '41103 - Ductile Cast Iron (ASTM A439, Grade D5S)',
-        'matrate': 8.42,
-        'avgwall': 12.35,
-        'rmgrade': 41103,
-        'matratee': 8.42,
-        'mincostgrade': 41081,
-        'mincostrmrate': 0.92,
-        'techcostarbitage': 178.73,
-        'fromtotechspec': '41103->41081'
+      'partname': 'MANIFOLD EXHAUST',
+      'partnumber': '5374631',
+      'suppmanilocation': 'WESTERN EUROPE',
+      'annualvol': 251,
+      'material': '41103 - Ductile Cast Iron (ASTM A439, Grade D5S)',
+      'matrate': 8.42,
+      'avgwall': 12.35,
+      'rmgrade': 41103,
+      'matratee': 8.42,
+      'mincostgrade': 41081,
+      'mincostrmrate': 0.92,
+      'techcostarbitage': 178.73,
+      'fromtotechspec': '41103->41081'
     },
     {
-        'partname': 'MANIFOLD EXHAUST',
-        'partnumber': '5374631',
-        'suppmanilocation': 'EASTERN EUROPE',
-        'annualvol': 251,
-        'material': '41103 - Ductile Cast Iron (ASTM A439, Grade D5S)',
-        'matrate': 8.42,
-        'avgwall': 12.35,
-        'rmgrade': 41103,
-        'matratee': 8.42,
-        'mincostgrade': 41081,
-        'mincostrmrate': 0.92,
-        'techcostarbitage': 178.73,
-        'fromtotechspec': '41103->41081'
+      'partname': 'MANIFOLD EXHAUST',
+      'partnumber': '5374631',
+      'suppmanilocation': 'EASTERN EUROPE',
+      'annualvol': 251,
+      'material': '41103 - Ductile Cast Iron (ASTM A439, Grade D5S)',
+      'matrate': 8.42,
+      'avgwall': 12.35,
+      'rmgrade': 41103,
+      'matratee': 8.42,
+      'mincostgrade': 41081,
+      'mincostrmrate': 0.92,
+      'techcostarbitage': 178.73,
+      'fromtotechspec': '41103->41081'
     },
     {
-        'partname': 'MANIFOLD EXHAUST',
-        'partnumber': '5714523',
-        'suppmanilocation': 'UK',
-        'annualvol': 2000,
-        'material': '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)',
-        'matrate': 1.38,
-        'avgwall': 6.70,
-        'rmgrade': 41081,
-        'matratee': 1.38,
-        'mincostgrade': 41081,
-        'mincostrmrate': 0.92,
-        'techcostarbitage': 2.10,
-        'fromtotechspec': '41081->41081'
+      'partname': 'MANIFOLD EXHAUST',
+      'partnumber': '5714523',
+      'suppmanilocation': 'UK',
+      'annualvol': 2000,
+      'material': '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)',
+      'matrate': 1.38,
+      'avgwall': 6.70,
+      'rmgrade': 41081,
+      'matratee': 1.38,
+      'mincostgrade': 41081,
+      'mincostrmrate': 0.92,
+      'techcostarbitage': 2.10,
+      'fromtotechspec': '41081->41081'
     },
     {
-        'partname': 'MANIFOLD EXHAUST',
-        'partnumber': '5717637',
-        'suppmanilocation': 'INDIA',
-        'annualvol': 1500,
-        'material': '41118-IRON,FERRITIC DUCTILE-high silicon - high molybdenum - SiMo5-1',
-        'matrate': 1.39,
-        'avgwall': 7.50,
-        'rmgrade': 41118,
-        'matratee': 1.39,
-        'mincostgrade': 41081,
-        'mincostrmrate': 0.92,
-        'techcostarbitage': 2.55,
-        'fromtotechspec': '41118->41081'
+      'partname': 'MANIFOLD EXHAUST',
+      'partnumber': '5717637',
+      'suppmanilocation': 'INDIA',
+      'annualvol': 1500,
+      'material': '41118-IRON,FERRITIC DUCTILE-high silicon - high molybdenum - SiMo5-1',
+      'matrate': 1.39,
+      'avgwall': 7.50,
+      'rmgrade': 41118,
+      'matratee': 1.39,
+      'mincostgrade': 41081,
+      'mincostrmrate': 0.92,
+      'techcostarbitage': 2.55,
+      'fromtotechspec': '41118->41081'
     },
     {
-        'partname': 'MANIFOLD EXHAUST',
-        'partnumber': '6377526',
-        'suppmanilocation': 'INDIA',
-        'annualvol': 1500,
-        'material': '41118-IRON,FERRITIC DUCTILE-high silicon - high molybdenum - SiMo5-1',
-        'matrate': 1.43,
-        'avgwall': 8.51,
-        'rmgrade': 41118,
-        'matratee': 1.43,
-        'mincostgrade': 41081,
-        'mincostrmrate': 0.92,
-        'techcostarbitage': 1.22,
-        'fromtotechspec': '41118->41081'
+      'partname': 'MANIFOLD EXHAUST',
+      'partnumber': '6377526',
+      'suppmanilocation': 'INDIA',
+      'annualvol': 1500,
+      'material': '41118-IRON,FERRITIC DUCTILE-high silicon - high molybdenum - SiMo5-1',
+      'matrate': 1.43,
+      'avgwall': 8.51,
+      'rmgrade': 41118,
+      'matratee': 1.43,
+      'mincostgrade': 41081,
+      'mincostrmrate': 0.92,
+      'techcostarbitage': 1.22,
+      'fromtotechspec': '41118->41081'
     }
-]
-  // openModal(): void {
-  //   const modalElement = document.getElementById('exampleModal');
-  //   if (modalElement) {
-  //     const modal = new bootstrap.Modal(modalElement);
-  //     modal.show();
-  //   }
-  // }
-
-
+  ]
   highlightedRow: number | null = null;
 
   highlightRow(index: number) {

@@ -103,8 +103,7 @@
             <!-- <td  style="text-align: center;" title="{{row.nounName}}">{{ row.nounName }}</td> -->
             <td style="text-align: start;" title="{{row.program}}">{{ row.program }}</td>
             <td style="text-align: start;" title="{{row.partNumber}}">{{ row.partNumber }}</td>
-            <td style="text-align: center;" title="{{row.potentialSavingsPerPieceMDO}}">{{
-              row.potentialSavingsPerPieceMDO }}</td>
+            <td style="text-align: center;" title="{{row.potentialSavingsPerPieceMDO}}">{{row.potentialSavingsPerPieceMDO | number:'0.0-2' }}</td>
             <td style="text-align: start;" title="{{row.ideaOwner}}">{{ row.ideaOwner }}</td>
             <!-- <td style="text-align: center;"> <i class="bi bi-arrow-up-right" style="cursor: pointer;"></i> </td> -->
           </tr>

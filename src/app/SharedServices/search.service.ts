@@ -182,9 +182,15 @@ export class SearchService {
     return this.httpClient.get<any[]>(this.apiUrl + `GetSupplierCost?id=${modelmartid}`);
   }
   
-  GetDesignToCostAvailableDetail(NounName: any, Program: any, partNumber: any): Observable<any> {
-    return this.httpClient.get<any[]>(this.apiUrl + `GetDesignToCostAvailableDetail/${partNumber}/${NounName}/${Program}`);
-}
+  GetDesignToCostAvailableDetail(nounName: string, program: string, partNumber: string): Observable<any> {
+    const encodedPartNumber = encodeURIComponent(partNumber);
+    const encodedNounName = encodeURIComponent(nounName);
+    const encodedProgram = encodeURIComponent(program);
+ 
+    return this.httpClient.get<any[]>(
+      `${this.apiUrl}GetDesignToCostAvailableDetail/${encodedPartNumber}/${encodedNounName}/${encodedProgram}`
+    );
+  }
 
 
 }

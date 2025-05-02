@@ -1,0 +1,105 @@
+* {
+    font-family: Helvetica, Arial !important;
+}
+
+.fixsubheader {
+    position: fixed;
+    width: 100%;
+    display: inline-flex;
+    height: 70px;
+    background-color: #fff;
+    z-index: 20;
+    border-bottom: 1px solid #da291c;
+    top: 50px;
+}
+
+.MasterHeader {
+    position: fixed;
+    width: 80%;
+    display: inline-flex;
+    height: 70px;
+    margin-left: 10%;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #da291c;
+}
+
+.MasterHeader h2 {
+    margin: 20px 0px;
+    font-size: 20px;
+}
+
+/* ------------ steps design start ------------ */
+.DTO_steps {
+    display: flex;
+    width: 90%;
+    height: 50px;
+    margin-left: 10%;
+    margin-top: 10px;
+
+}
+
+.DTO_step1,
+.DTO_step2,
+.DTO_step3,
+.DTO_step4 {
+    width: 100px;
+    height: 50px;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    text-align: center;
+    vertical-align: middle;
+    color: #fff;
+    background-color: #267eb8;
+    line-height: 50px;
+    cursor: pointer !important;
+}
+
+.DTO_step1:hover {
+    cursor: pointer !important;
+}
+
+.DTO_step2 {
+    background-color: #1b9a85;
+}
+
+.DTO_step3 {
+    background-color: #9ebe5b;
+}
+
+.DTO_step4 {
+    background-color: #f19c0c;
+    opacity: 0.4;
+}
+
+span {
+    content: "\2192";
+}
+
+.gradient-icon {
+    background: linear-gradient(to right, #267eb8, #1b9a85);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gradient-icon2 {
+    background: linear-gradient(to right, #1b9a85, #9ebe5b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gradient-icon3 {
+    background: linear-gradient(to right, #9ebe5b, #f19c0c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.DTO_connect1_2 {
+    margin-top: -10px;
+    font-size: 50px;
+    vertical-align: top;
+
+}
+
+/* ------------- steps design end ---------------- */
+

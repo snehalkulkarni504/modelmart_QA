@@ -73,6 +73,12 @@ import { FeedbackhistoryComponent } from './Modules/Report/feedbackhistory/feedb
 import { WelcomeuserComponent } from './home/welcomeuser/welcomeuser.component';
 import { DesignToCostComponent } from "./Modules/should-cost-gen/design-to-cost/design-to-cost.component";
 import { SuppcomparisonComponent } from './Modules/comparisonnew/suppcomparison/suppcomparison.component';
+import { BomdetailsComponent } from './Modules/bomdetails/bomdetails.component';
+import { DesigntocostStartComponent } from './Modules/design-to-cost-engg/designtocost-start/designtocost-start.component';
+import { DesigntocostStep1Component } from './Modules/design-to-cost-engg/designtocost-step1/designtocost-step1.component';
+import { DesigntocostStep2Component } from './Modules/design-to-cost-engg/designtocost-step2/designtocost-step2.component';
+import { DesigntocostStep3Component } from './Modules/design-to-cost-engg/designtocost-step3/designtocost-step3.component';
+import { DesigntocostStep4Component } from './Modules/design-to-cost-engg/designtocost-step4/designtocost-step4.component';
  
 @NgModule({
   declarations: [
@@ -126,7 +132,13 @@ import { SuppcomparisonComponent } from './Modules/comparisonnew/suppcomparison/
     FeedbackComponent,
     FeedbackhistoryComponent,
     WelcomeuserComponent,
-    SuppcomparisonComponent
+    SuppcomparisonComponent,
+    BomdetailsComponent,
+    DesigntocostStartComponent,
+    DesigntocostStep1Component,
+    DesigntocostStep2Component,
+    DesigntocostStep3Component,
+    DesigntocostStep4Component
   ],
   imports: [
     TreeModule,

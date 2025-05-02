@@ -1,8 +1,74 @@
-<div style="text-align: center; padding: 20px;">
+<div *ngIf="showCat3Management">
+  <div class="container-fluid maxheight">
+    <ngx-spinner name="spinner" bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="square-jelly-box"
+      [fullScreen]="true">
+      <img alt="Loading Please Wait..." style="width: 100px; height: 100px" src="../../../assets/Spin-2.gif" />
+    </ngx-spinner>
+
+    <div class="row searchbox">
+      <!-- Filters Start -->
+      <div class="col-md-3 border-bottom position-fixed scroll1" id="Id_Filters">
+        <form [formGroup]="SearchboxForm" id="Id_Filtersform">
+          <br />
+          <div class="row font-size">
+            <div class="col-md-12">
+              <label class="form-label">Category 3 </label>
+              <label class="form-label clearall" (click)="clearall()">Clear All </label><br />
+
+              <div class="row border-bottom"></div>
+              <div class="scrollbarsearch">
+                <ngx-treeview #cat3 [config]="config" [items]="Cat3"
+                  (selectedChange)="getCategoryId($event)"></ngx-treeview>
+              </div>
+            </div>
+          </div>
+          <br />
+        </form>
+      </div>
+
+      <div class="col-md-9" id="SearchFiltersdiv">
+        <div class="row border-bottom text-center CategoryWelcome">
+          <div class="text-end">
+            <button class="costbtn" (click)="selectAll()" style="margin-right: 10px;"> {{ selectAllText }}</button>
+            <button class="costbtn" (click)="toggleView()"> Cost Insight</button>
+          </div>
+        </div>
+
+        <div class="row setOpacity" id="SearchFilters">
+          <div *ngFor="let c of SearchProductList | groupBy : 'parentCategory'">
+            <h4 class="col-md-12 Categoryheader">
+              <label id="cetegoryname">{{ c.key }}</label>
+            </h4>
+            <div *ngFor="let item of c.value" id="prodDetailsId" class="prodDetails">
+              <div class="image-container">
+                <input class="input1" type="checkbox" [value]="item.value" [(ngModel)]="item.selected"
+                  (change)="onCheckboxChange(item)" />
+
+                <img *ngIf="item.imagePath == ''; else multi" src="assets/No-Image.png" class="prdIcon" />
+                <ng-template #multi>
+                  <img src="{{ item.imagePath }}" class="prdIcon" />
+                </ng-template>
+              </div>
+              <div class="prdDescription">
+                <label id="PartName">{{ item.childCategory }}</label><br />
+              </div>
+            </div>
+            <br /><br />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ---------------  Arbitrage --------------- -->
+ 
+<div *ngIf="showcostinsights" style="text-align: center; padding: 20px;">
   <h1>Welcome to Category Management Page - Exhaust Manifolds</h1>
 
   <p>Your current SC Attainment is <strong>59%</strong></p>
-  <p>You have current opportunities worth <strong>$8,376,516</strong></p>
+  <p>You have current opportunities worth <strong>{{ gettotaloppurtunity() }}</strong></p>
 
   <div style="margin-top: 10px;">
 
@@ -26,107 +92,379 @@
   </div>
 
 </div>
+<!-- 
+<div *ngIf="showContent" class="container-fluid">
+  <div class="container">
+      <app-commercial-arbitrage [Cat4Ids]="test"></app-commercial-arbitrage>
+  </div>
 
+</div> -->
+
+ 
 <div *ngIf="showContent" class="container-fluid"
   style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
   <div class="row" style="width: 100%; display: flex; justify-content: center;">
 
-    <div class="col-md-6" style="max-width: 100%;width: 100%; text-align: center; margin-bottom: 20px;">
-      <img src="../../../assets/Commerical_10.png" style="width: 100%; max-width: 90%; height: 400px;  border: 1px solid #808080;" />
+
+
+    <div class="graph">
+      <div class="chart-box">
+        <canvasjs-chart class="canvas-chart" s [options]="chartOptions" [styles]="{width: 'auto', height:'375px'}"
+          id="chartOptionsId"></canvasjs-chart>
+      </div>
     </div>
-    
+
+    <div class="filterlabel">
+      <label for="date-range">Select:</label>
+      <select id="date-range" [(ngModel)]="selectedRange" (change)="onDateRangeChange()" class="custom-input"
+        style="padding: 5px;">
+        <option *ngFor="let range of dateRanges" [value]="range.value">
+          {{ range.label }}
+        </option>
+      </select>
+
+      <label for="from-date" style="margin-left: 10px;">From Date:</label>
+      <input type="date" id="from-date" [(ngModel)]="fromDate" [attr.min]="minDate" [attr.max]="maxDate"
+        class="custom-input" style="padding: 5px;" />
+
+      <label for="to-date" style="margin-left: 10px;">To Date:</label>
+      <input type="date" id="to-date" [(ngModel)]="toDate" [attr.min]="minDate" [attr.max]="maxDate"
+        class="custom-input" style="padding: 5px;" />
+
+      <button class="btn view-btn" style="margin-right: 10px;" (click)="onViewClick()">View</button>
+      <button class="btn view-btn" (click)="ClearAll()">clear</button>
+    </div>
+
     <div class="col-md-6" style="max-width: 100%;width: 90%; overflow-x: auto;margin-bottom: 60px;">
-      <div class="table-responsive" style="border: 1px solid #808080;">
-        <table class="table table-bordered table-hover table-striped" style="width: 100%; table-layout: 100%;">
-          <thead >
+      <div class="table-responsive " style="border: 1px solid #808080 ">
+        <table class="table table-hover table-striped " style="width: 100%; table-layout: 100%; overflow: auto;">
+          <thead>
             <tr>
-              <th>Sr<br>no</th>
+              <th style="position: sticky; left:-1px; top:-1px; z-index: 4;">Sr<br>no</th>
+              <th style="position: sticky; left: 29px; top: -1px;  z-index: 4;">Part Number</th>
               <th>Part Name</th>
-              <th>Part Number</th>
-              <th>Supp Mfg Location</th>
-              <th>Should Cost(USD)</th>
-              <th>Annual Volume</th>
-              <th>Supplier Quoted/Invoice<br>Price (USD)</th>
+              <th>MMID</th>
               <th>Supplier Name</th>
-              <th>Invoice Price-ShouldCose</th>
-              <th>Should Cost <br> Opportunity (USD)</th>
-              <th>SC<br>Attainment (%)</th>
+              <th>Supp Mfg <br>Location</th>
+              <th>Annual<br> Volume</th>
+              <th>Updated Annual<br> Volume</th>
+              <th>Should Cost</th>
+              <th>User Calculated<br> Cost</th>
+              <th>Supplier Quoted/<br>Invoice Price</th>
+              <th>Invoice Price<br>Should Cost</th>
+              <th>SC<br>Attainment</th>
+              <th>User SC<br> Attainment</th>
+              <th>Commerical<br> Arbitrage</th>
+              <th>User Simulalated <br>Arbitrage</th>
+              <th>Submitted By</th>
+              <th>Project Status</th>
+              <th hidden>Debreif Date</th>
+              <th>Comments</th>
+              <th>Documents <br>Upload</th>
+              <th style="position: sticky; right: -1px; z-index: 3;">Action</th>
+
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let opportunity of opportunities; let i=index">
-              <td>{{i + 1}}</td>
-              <td>{{opportunity.PartName}}</td>
-              <td>{{opportunity.PartNumber}}</td>
-              <td>{{opportunity.SuppManfLoc}}</td>
-              <td>$ {{opportunity.TotalShouldCost}}</td>
-              <td>{{opportunity.AnnualVolume | number:'1.0-0'}}</td>
-              <td>$ {{opportunity.SupplierQuoted_InvoicePrice}}</td>
-              <td>{{opportunity.SupplierName}}</td>
-              <td>$ {{opportunity.Invoice}}</td>
-              <td>$ {{opportunity.ShouldCostOpportunity}}</td>
-              <td>{{opportunity.SCAttainment}}%</td>
+            <tr *ngFor="let opportunity of opportunities;  let i=index">
+
+              <td style="position: sticky; left: -1px; ">{{i + 1}}</td>
+              <td style="position: sticky; left: 29px;">
+                <span title="{{opportunity.PartNumber}}">
+                  {{opportunity.PartNumber.length > 10 ? opportunity.PartNumber.slice(0, 10) + '...' :
+                  opportunity.PartNumber}}
+                </span>
+              </td>
+              <td>
+                <span title="{{opportunity.PartName}}">
+                  {{opportunity.PartName.length > 12 ? opportunity.PartName.slice(0, 12) + '...' :
+                  opportunity.PartName}}
+                </span>
+              </td>
+              <td class="align-center">{{opportunity.MMID}}</td>
+              <td>
+                <span class="hover-text" title="{{opportunity.SupplierName}}">
+                  {{ opportunity.SupplierName ? (opportunity.SupplierName.length > 12 ?
+                  opportunity.SupplierName.slice(0, 12) + '...' : opportunity.SupplierName) : '' }}
+
+                </span>
+              </td>
+
+              <td>{{opportunity.SupplierMfgRegion}}</td>
+              <td class="align-center">{{opportunity.AnnualVolume | number:'1.0-0'}}</td>
+              <td class="align-center">
+
+                <ng-container *ngIf="editingIndex === i; else displayUpdatedAnnualVolume">
+                  <input type="text-box" [(ngModel)]="opportunity.UpdatedAnnualVolume" />
+                </ng-container>
+                <ng-template #displayUpdatedAnnualVolume>
+                  {{opportunity.UpdatedAnnualVolume | number:'1.0-0'}}
+                </ng-template>
+
+              </td>
+              <td class="align-center">{{opportunity.ShouldCost? ('$ '+ opportunity.ShouldCost.toFixed(2)) : ''}}</td>
+              <td>
+
+                <ng-container *ngIf="editingIndex === i; else displayUserCalculatedCost">
+                  <input type="text-box" [(ngModel)]="opportunity.UserCalculatedCost" />
+                </ng-container>
+                <ng-template #displayUserCalculatedCost>
+                  <span *ngIf="opportunity.UserCalculatedCost">{{ '$ ' + opportunity.UserCalculatedCost }}</span>
+                </ng-template>
+
+              </td>
+              <td class="align-center"> {{opportunity.SupplierQuoted ? ('$ '+ opportunity.SupplierQuoted): ''}}</td>
+              <td class="align-center"> {{ opportunity.InvoicePriceShouldCost ? ('$ ' +
+                opportunity.InvoicePriceShouldCost.toFixed(2)): '' }}</td>
+              <td>{{opportunity.SCAttainment? (opportunity.SCAttainment+'%'):''}}</td>
+              <td class="align-center">{{ calculatePercentage(opportunity) }}</td>
+              <td class="align-center">{{formatToMillions(opportunity.CommercialArbitrage)}}</td>
+              <td class="align-center">{{ formatToMillions(calculateOpportunityValue(opportunity)) }}</td>
+
+              <td>{{opportunity.ModifiedBy}}</td>
+              <td>
+                <select [(ngModel)]="opportunity.ProjectStatus" class="form-select"
+                  style="width: 100%; height: 25px; font-size: 9px; font-weight: bold;">
+                  <option class="ttt" value="Open" selected>Open</option>
+                  <option value="WIP">WIP</option>
+                  <option value="Close">Close</option>
+                  <option value="Reject">Reject</option>
+                </select>
+              </td>
+              <td hidden>{{opportunity.DebriefDate}}</td>
+
+              <td>
+                <span (click)="openCommentsPopup(opportunity.Comments, i)" style="cursor: pointer; color: #ef7659;">
+                  {{ opportunity.Comments && opportunity.Comments.length > 12
+                  ? (opportunity.Comments | slice:0:12) + '...'
+                  : opportunity.Comments || 'Add Comment' }}
+                </span>
+              </td>
+
+              <td style="text-align: center;">
+                <i class="bi bi-cloud-upload-fill"
+                  (click)="openUploadPopup(opportunity.CommericalArtibageID,opportunity.MMID,opportunity.RequestHeaderId)"
+                  style="color: #185ca4; font-size: 17px; cursor: pointer;" ngbTooltip="Upload Document"></i>
+                <i class="bi bi-download" (click)="downloadFolderAsZip(opportunity.CommericalArtibageID)"
+                  style="color: #2fa365; font-size: 17px; cursor: pointer; margin-left: 10px;"
+                  ngbTooltip="Download Document"></i>
+                <i class="bi bi-box-arrow-in-up-right"
+                  (click)="uploadTCO(opportunity.CommericalArtibageID,opportunity.MMID,opportunity.RequestHeaderId)"
+                  style="color: #f0ad4e; font-size: 17px; cursor: pointer; margin-left: 10px;"
+                  ngbTooltip="Go to TCO Upload"></i>
+              </td>
+
+              <td style="position: sticky; right: -1px; text-align: center;">
+                <ng-container *ngIf="editingIndex === i; else editIcon">
+                  <i class="bi bi-check-circle-fill" (click)="saveChanges(opportunity)"
+                    style="color: #2fa365;  font-size: 17px ; cursor: pointer;" ngbTooltip="Save"></i>
+                  <i class="bi bi-x-circle-fill" (click)="cancelEditing()"
+                    style="color: #da291c; font-size: 17px; cursor: pointer; margin-left: 10px;"
+                    ngbTooltip="Cancel"></i>
+                </ng-container>
+                <ng-template #editIcon>
+                  <i class="bi bi-pencil-fill" style="color: #da291c; font-size:larger; cursor: pointer; "
+                    (click)="editRow(i)" ngbTooltip="Edit" placement="top"></i>
+                </ng-template>
+              </td>
             </tr>
           </tbody>
         </table>
+
+        <div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': showModal}" style="display: block;"
+          *ngIf="showModal">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Edit Comment</h5>
+                <label class="close modal-close-icn" (click)="closeCommentsPopup()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
+                    viewBox="0 0 16 16">
+                    <path
+                      d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                  </svg>
+                </label>
+              </div>
+              <div class="modal-body">
+                <textarea [(ngModel)]="selectedComment" rows="4" style="width: 100%;"></textarea>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" (click)="saveComment()">Save</button>
+                <button type="button" class="btn btn-sm  btn-default default-btn_popup"
+                  (click)="closeCommentsPopup()">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': showTcoUploadModal}" style="display: block;"
+          *ngIf="showTcoUploadModal">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Upload Documents</h5>
+                <label class="close modal-close-icn" (click)="closeUploadPopup()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
+                    viewBox="0 0 16 16">
+                    <path
+                      d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                  </svg>
+                </label>
+              </div>
+              <div class="modal-body">
+                <button type="button" class="btn btn-sm default-btn" (click)="showFileUpload = true">Document
+                  Upload</button>
+                <div class="input-group custom-file-button" *ngIf="showFileUpload"
+                  style="margin-top: 10px; text-align: center; width: 300px !important ;">
+                  <label for="fileInput" class="input-group-text"> Select File</label>
+                  <input type="file" class="form-control" style="margin-right: 10px;"
+                    (change)="handleFileSelection($event)" multiple />
+                  <button type="button" class="btn btn-sm default-btn"
+                    (click)="uploadFiles(selectedCommercialID)">Upload</button>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" (click)="savedoc()">Save</button>
+                <button type="button" class="btn btn-sm  btn-default default-btn_popup"
+                  (click)="closeUploadPopup()">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <!-- <div class="col-md-6" style="max-width: 100%;width: 100%; text-align: center; margin-bottom: 20px;">
-      <img src="../../../assets/Commerical_10.png" style="width: 100%; max-width: 91%; height: 400px;  border: 1px solid #808080;" />
-    </div> -->
   </div>
-</div>
+</div>  
+<!------------------------------------------------End of Commerical Arbitrage --------------------------->
+
 
 <div *ngIf="showRegionalContent" class="container-fluid"
   style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
   <div class="col-12" style="margin-bottom: 20px; display: flex; justify-content: center;">
 
-    <div style="width: 90%; border: 1px solid #808080; text-align: center;">
-      <img src="../../../assets/RegionArbitrage_10.png"
-           style="width: 100%; height: 400px" alt="Commercial Image" />
-    </div>
-
-  </div>
-    <div class="col-md-6"
-      style="max-width: 100%;width: 90%; overflow-x: auto; margin-bottom: 60px; ">
-      <div class="table-responsive" style="border: 1px solid #808080;">
-        <table class="table table-bordered table-hover table-striped" style="width: 100%; table-layout: 100%;">
-          <thead>
-            <tr>
-              <th>SrNo</th>
-              <th>Part Name</th>
-              <th>Part<br>Number</th>
-              <th>Supplier Mfg Location</th>
-              <th>Annual<br>volume</th>
-              <th>Supplier<br>Quoted/Invoice<br>Price (USD)</th>
-              <th>Supplier Name</th>
-              <th>Best<br>Region</th>
-              <th>Best<br>Region<br>Cost (USD)</th>
-              <th>Region<br>Arbitrage (USD)</th>
-              <th>Region<br>Arbitrage<br>Value</th>
-              <th>From -> To</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let Region of Regional ; let i=index">
-              <td>{{i + 1}}</td>
-              <td>{{Region.partName}}</td>
-              <td>{{Region.partNumber}}</td>
-              <td>{{Region.suppManfLocation}}</td>
-              <td>{{Region.annualVolume | number:'1.0-0'}}</td>
-              <td>$ {{Region.supplierQuotedInvoicePrice}}</td>
-              <td>{{Region.supplierName}}</td>
-              <td>{{Region.bestRegion}}</td>
-              <td>$ {{Region.bestRegionCost}}</td>
-              <td>$ {{Region.regionArbitrage}}</td>
-              <td>$ {{Region.regionArbitrageValue}}</td>
-              <td>{{Region.fromTo}}</td>
-            </tr>
-          </tbody>
-        </table>
+    <!-- <div style="width: 90%; border: 1px solid #808080; text-align: center;">
+      <img src="../../../assets/RegionArbitrage_10.png" style="width: 100%; height: 400px" alt="Commercial Image" />
+    </div> -->
+    <div class="graph">
+      <div class="chart-box">
+        <canvasjs-chart class="canvas-chart" s [options]="RegionchartOptions" [styles]="{width: 'auto', height:'375px'}"
+          id="chartOptionsId"></canvasjs-chart>
       </div>
     </div>
-    <!-- <div class="col-md-6" style="max-width: 100%;width: 100%; text-align: center; margin-bottom: 20px;">
+
+
+  </div>
+  <div class="col-md-6" style="max-width: 100%;width: 90%; overflow-x: auto; margin-bottom: 60px; ">
+    <div class="table-responsive" style="border: 1px solid #808080;">
+      <table class="table  table-hover table-striped" style="width: 100%; table-layout: 100%;">
+        <thead>
+          <tr>
+            <!-- <th>SrNo</th>
+            <th>Part Name</th> -->
+            <th style="position: sticky; left:-1px; top:-1px; z-index: 4;">Sr<br>no</th>
+            <th style="position: sticky; left: 29px; top: -1px;  z-index: 4;">Part Number</th>
+            <th>Part<br>Name</th>
+            <th>Supplier Mfg Location</th>
+            <th>Annual<br>volume</th>
+            <th>TotalCost</th>
+            <th>Supplier Name</th>
+            <th>Best<br>Region</th>
+            <th>Best<br>Region Cost</th>
+            <th>Region<br>Arbitrage (USD)</th>
+            <!-- <th>Region<br>Arbitrage<br>Value</th> -->
+            <th>RegionRelation</th>
+            <th>Project Status</th>
+            <th hidden>Debreif Date</th>
+            <th>Comments</th>
+            <th>Documents Upload</th>
+            <th style="position: sticky; right: -1px; z-index: 3;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let Region of Regional ; let i=index">
+            <td style="position: sticky; left: -1px; ">{{i + 1}}</td>
+            <td style="position: sticky; left: 29px;">{{Region.PartNumber}}</td>
+            <td>{{Region.PartName}}</td>
+            <td>{{Region.MainRegion}}</td>
+            <td>{{Region.AnnualVolume | number:'1.0-0'}}</td>
+            <td>$ {{Region.TotalCost}}</td>
+            <td>{{Region.Supplier}}</td>
+            <td>{{Region.BestRegion}}</td>
+            <td>$ {{Region.BestRegionCost}}</td>
+            <td>$ {{Region.RegionalArbitrage}}</td>
+            <!-- <td>$ {{Region.regionArbitrageValue}}</td> -->
+            <td>{{Region.RegionRelation}}</td>
+            <td>
+              <select [(ngModel)]="Region.ProjectStatus" class="form-select"
+                style="width: 100%; height: 25px; font-size: 9px; font-weight: bold;">
+                <option value="Open" selected>Open</option>
+                <option value="WIP">WIP</option>
+                <option value="Close">Close</option>
+                <option value="Reject">Reject</option>
+              </select>
+            </td>
+            <td hidden>{{Region.DebriefDate}}</td>
+
+            <td>
+              <span (click)="openregioncomment(Region.Comments, i)" style="cursor: pointer; color: #ef7659;">
+                {{ Region.Comments && Region.Comments.length > 12
+                ? (Region.Comments | slice:0:12) + '...'
+                : Region.Comments || 'Add Comment' }}
+              </span>
+            </td>
+            <td style="text-align: center;">
+              <i class="bi bi-cloud-upload-fill" (click)="openRegionUploadPopup()"
+                style="color: #185ca4; font-size: 17px; cursor: pointer;" ngbTooltip="Upload Document"></i>
+              <i class="bi bi-download" (click)="RegionFileDownloadAsZip()"
+                style="color: #2fa365; font-size: 17px; cursor: pointer; margin-left: 10px;"
+                ngbTooltip="Download Document"></i>
+              <i class="bi bi-box-arrow-in-up-right" (click)="RegionUploadTCO()"
+                style="color: #f0ad4e; font-size: 17px; cursor: pointer; margin-left: 10px;"
+                ngbTooltip="Go to TCO Upload"></i>
+            </td>
+            <td style="position: sticky; right: -1px; text-align: center;">
+              <ng-container *ngIf="editingIndex === i; else editIcon">
+                <i class="bi bi-check-circle-fill" (click)="SaveRegional(Region)"
+                  style="color: #2fa365;  font-size: 17px ; cursor: pointer;" ngbTooltip="Save"></i>
+                <i class="bi bi-x-circle-fill" (click)="cancelEditing()"
+                  style="color: #da291c; font-size: 17px; cursor: pointer; margin-left: 10px;" ngbTooltip="Cancel"></i>
+              </ng-container>
+              <ng-template #editIcon>
+                <i class="bi bi-pencil-fill" style="color: #da291c; font-size:larger; cursor: pointer; "
+                  (click)="editRow(i)" ngbTooltip="Edit" placement="top"></i>
+              </ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': showregioncomment}" style="display: block;"
+        *ngIf="showregioncomment">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Edit Comment</h5>
+              <label class="close modal-close-icn" (click)="closeregioncomment()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                </svg>
+              </label>
+            </div>
+            <div class="modal-body">
+              <textarea [(ngModel)]="selectedComment" rows="4" style="width: 100%;"></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-sm btn-secondary" (click)="saveComment()">Save</button>
+              <button type="button" class="btn btn-sm  btn-default default-btn_popup"
+                (click)="closeregioncomment()">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="col-md-6" style="max-width: 100%;width: 100%; text-align: center; margin-bottom: 20px;">
       <img src="../../../assets/RegionArbitrage_10.png"
         style="width: 70%; max-width: 91%; height: 300px; border: 1px solid #808080;" />
     </div> -->
@@ -136,14 +474,12 @@
   style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
   <div class="row" style="width: 100%; display: flex; justify-content: center; ">
     <div class="col-md-6" style="max-width: 100%;width: 100%; text-align: center; margin-bottom: 20px;">
-      <img src="assets/noimg.png"
-        style="width: 100%; max-width: 91%; height: 400px; border: 1px solid #808080;" />
+      <img src="assets/noimg.png" style="width: 100%; max-width: 91%; height: 400px; border: 1px solid #808080;" />
     </div>
-    <div class="col-md-6"
-      style="max-width: 90%;width: 100%; overflow-x: auto; margin-bottom: 60px;  ">
+    <div class="col-md-6" style="max-width: 90%;width: 100%; overflow-x: auto; margin-bottom: 60px;  ">
       <div class="table-responsive" style="border: 1px solid #808080;">
         <table class="table table-bordered table-hover table-striped" style="width: 100%; table-layout: 100%;">
-          <thead >
+          <thead>
             <tr>
               <th>Sr<br>no</th>
               <th>Part Name</th>
@@ -180,11 +516,11 @@
       <img src="../../../assets/DesignArbitrage_10.png"
         style="width: 100%; max-width: 90%; height: 400px; border: 1px solid #808080;" />
     </div>
-    <div class="col-md-6"
-      style="max-width: 100%;width: 90%; overflow-x: auto;margin-bottom: 60px;  ">
+    <div class="col-md-6" style="max-width: 100%;width: 90%; overflow-x: auto;margin-bottom: 60px;  ">
       <div class="table-responsive" style="border: 1px solid #808080;">
-        <table class="table table-bordered table-hover table-striped" style="width: 100%; table-layout: 100%; font-size: 7px;">
-          <thead >
+        <table class="table table-bordered table-hover table-striped"
+          style="width: 100%; table-layout: 100%; font-size: 7px;">
+          <thead>
             <tr>
               <th>Sr<br>no</th>
               <th>Part Name</th>

@@ -1,0 +1,185 @@
+<div class="container-fluid maxheight">
+    <ngx-spinner name="spinner" bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="square-jelly-box"
+        [fullScreen]="true">
+        <img alt="Loading Please Wait..." style="width:100px ; height:100px ;" src="../../../assets/Spin-2.gif" />
+    </ngx-spinner>
+
+    <div class="MasterHeader">
+        <div style="width: 50%;">
+            <h2>BOM Simulation Screen</h2>
+        </div>
+        <div class="text-end" style="width: 50%;">
+            <button class="btnbackLeft" (click)="backToPreviousPage()">Back</button>
+        </div>
+    </div>
+
+    <div class="text-end addbutton">
+        <button class="btnCreateCart" (click)="openModal1()" >Add Program</button>
+        <button class="btnCreateCart" (click)="openModal2()" >Add Cart</button>
+    </div>
+
+    <div class="row CartDetails">
+        <div class="col-md-3 Cartnameslist">
+            <form [formGroup]="SearchboxForm">
+                <div class="row font-size">
+                    <div class="col-md-8 "
+                        style="height: 42px; border-bottom: 1px solid black; padding: 0; background-color: #da291c; width: 100%; text-align: center;">
+                        <label id="clearFilter"
+                            style="font-size: 13px;font-weight: bold;padding-left: 13px;margin-top: 12px;color: white;">User
+                            Simulated BOMs</label>
+                    </div>
+                    <div class="col-md-12" style="height: 350px;">
+
+                        <div class=" scrollbarsearchcat3" style="height: 103%; overflow: auto;">
+                            <div *ngFor="let data of allprogramdata" class="program-card"
+                                [class.active]="visiblecartlist[data.programid]" (click)="toggleviewchild(data)">
+
+                                <div class="program-name">
+                                    {{ data.programname }}
+                                </div>
+
+                                <div class="program-owner">
+                                    <i class="fa fa-user"></i>
+                                    Owner: {{data.owner }}
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                <br>
+
+            </form>
+        </div>
+
+        <!-- <div class="col-md-9" style="padding: 0;">
+            <div class="carttitle"
+                style="border-bottom: 1px solid black;padding-bottom: 5.5px;background-color: #da291c;text-align: center;color: white;">
+                <label style="margin-top: 7px;font-size: larger;">Cart Details</label>
+            </div>
+            <div class="cartdata">
+                <div class="col-md-12 cartlist" *ngFor="let data of cartlist">
+
+                    <div style="width: 74%;padding-left: 15px;">
+                        <p style="font-weight: bold;margin: 0;">{{data.CartName}}</p>
+                        <div style="display: inline-flex; font-size: smaller; gap: 5px;">
+                            <p>Unique Qty:{{data.UniqueQty||0}},</p>
+                            <p>BOM Qty:{{data.BOMQty||0}},</p>
+                            <p>BOM Cost:${{data.BOMCost||0}},</p>
+                            <p>Last Simulated:{{data.LastSim||'Na'}}</p>
+
+                        </div>
+                    </div>
+                    <div style="display: inline-flex; gap: 10px;padding-top: 5px;padding-bottom: 5px;">
+                        <button class="btnCreateCart" (click)="opencopycart(data.CartId,data.CartName)"
+                            ngbTooltip="Copy Cart">Copy Cart</button>
+                        <button class="btnCreateCart" (click)="onroute(data)" ngbTooltip="View">View</button>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="col-md-9" style="padding: 0;">
+            <div class="carttitle"
+            style="border-bottom: 1px solid black;padding-bottom: 10px;background-color: #da291c;text-align: center;color: white;">
+            <label style="margin-top: 7px;font-size: medium;">Cart Details &nbsp;{{cartdetailshead}}</label>
+        </div>
+          
+            <div class="cartdata">
+              <div class="cartlist-card" *ngFor="let data of cartlist">
+                <div class="cart-info">
+                  <p class="cart-name">{{ data.cartName }}</p>
+                  <div class="cart-meta">
+                    <span>Unique Qty: <strong>{{ data.uniqueQty || 0 }}</strong></span>
+                    <span>BOM Qty: <strong>{{ data.bomQty || 0 }}</strong></span>
+                    <span>BOM Cost: <strong>${{ data.bomCost || 0 }}</strong></span>
+                    <span>Last Simulated: <strong>{{ data.lastSim || 'N/A' }}</strong></span>
+                    <!-- <span>Unique Qty: <strong>100000</strong></span>
+                    <span>BOM Qty: <strong>100000</strong></span>
+                    <span>BOM Cost: <strong>$10000000</strong></span>
+                    <span>Last Simulated: <strong>{{ data.LastSim || 'N/A' }}</strong></span> -->
+                  </div>
+                </div>
+          
+                <div class="cart-actions">
+                  <button class="btnCreateCart" (click)="opencopycart(data.cartId,data.cartName)">
+                    Copy Cart
+                  </button>
+                  <button class="btnCreateCart" (click)="onroute(data)" >
+                    View
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+
+    </div>
+
+
+    <div *ngIf="modalprogram" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="background-color: #da291c; color: whitesmoke; margin: 0; padding-bottom: 10px;">Add New Program
+            </h3>
+            <input type="text" [(ngModel)]="newprogramname" placeholder="Program Name" class="modal-input" />
+            <div class="modal-buttons">
+                <button (click)="closeModal1()" class="modalbtn">Close</button>
+                <button class="modalbtn" (click)="addnewprogram()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="modalcart" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="background-color: #da291c; color: whitesmoke; margin: 0; padding-bottom: 10px;">Add New Cart</h3>
+
+            <ng-select style="width: 90%; margin-left: 20px; margin-top: 12px;" placeholder="Select Program"
+                (change)="selectprogram($event)">
+                <ng-option *ngFor="let item of addcartprogram" [value]="item">{{item.programname}}</ng-option>
+            </ng-select>
+
+            <input type="text" [(ngModel)]="cartname" placeholder=" Enter Cart Name" class="modal-input"
+                style="padding: 3px; padding-left: 10px;" />
+
+            <div class="modal-buttons">
+                <button (click)="closeModal2()" class="modalbtn">Close</button>
+                <button class="modalbtn" (click)="addcartname()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="copycartmodal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="background-color: #da291c; color: whitesmoke; margin: 0; padding-bottom: 10px;">Copy Cart</h3>
+
+            <div class="copycart-label-container">
+                <div style="width: 100%;">
+                    <label class="copycart-label">To</label>
+                    <div class="copycart-to-field">{{ tocopycart }}</div>
+                </div>
+
+                <div style="width: 100%;">
+                    <label class="copycart-label">From</label>
+                    <ng-select class="copycart-dropdown" #ngSelectCartID [ngModelOptions]="{standalone: true}"
+                        [searchable]="true" placeholder="Please select" [(ngModel)]="fromcopycartid">
+                        <ng-option *ngFor="let cart of copycartlist" [value]="cart.cartId">
+                            {{cart.cartName}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+
+            <div class="modal-buttons">
+                <button (click)="closecopycart()" class="modalbtn">Close</button>
+                <button class="modalbtn" (click)="copycart()">Copy</button>
+            </div>
+        </div>
+    </div>
+
+
+</div>

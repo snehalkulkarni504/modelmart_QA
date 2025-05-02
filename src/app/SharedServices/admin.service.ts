@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environments';
 import { BUnitMaster } from 'src/app/Model/BUnitMaster';
 import { Authclass } from '../Model/authclass';
 import { Form } from '@angular/forms';
+import { CommericalArbitrage } from '../Model/CommericalArbitrage';
 
 
 @Injectable({
@@ -214,13 +215,37 @@ export class AdminService {
     return this.httpClient.post(this.apiUrl + `UpdatePageExit`, formdata);
   }
 
-  
-  Getwelcomelist(username:any) {
+
+  Getwelcomelist(username: any) {
     return this.httpClient.get(this.apiUrl + `GetWelcomeMenu?username=${username}`);
   }
 
-  
 
-  
+  GetCommericalArtibage(CategoryID: number[]) {
+    debugger
+    return this.httpClient.get(this.apiUrl + `GetCommericalArtibage?CategoryID=${CategoryID}`);
+  }
+
+  SaveCommericalArtibage(opportunity: CommericalArbitrage): Observable<any> {
+    debugger
+    return this.httpClient.post(this.apiUrl + `AddCommericalArtibage`, opportunity);
+  }
+
+  downloadZipFile(CommericalArtibageID: any): Observable<Blob> {
+    return this.httpClient.get(`${this.apiUrl}downloadfolder?folderName=${CommericalArtibageID}`, { responseType: 'blob' });
+  }
+
+  Uploadfiles(commercialId: string, selectedFiles: File[]): Observable<any> {
+    debugger
+    const formData = new FormData();
+
+    formData.append('commercialId', commercialId);
+    for (const dfile of selectedFiles) {
+      formData.append('files', dfile, dfile.name);
+    }
+    return this.httpClient.post(this.apiUrl + "CommericalUpload", formData);
+  }
+
+
 
 }

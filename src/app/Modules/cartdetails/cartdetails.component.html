@@ -48,7 +48,13 @@
     
     <div class="MasterHeaderlable">
         <div class="row">
-            <div class="col-md-3 form-group has-search" style="margin-top: 2%;">
+            <div class="col-md-4">
+                <button class="btn btn-sm default-btn" (click)="addRow()" (click)="scroll(target)" style="margin-top: 0px;">Add Row</button>
+            </div>
+            <div class="col-md-4">
+                
+            </div>
+            <div class="col-md-3 form-group has-search" >
                 
                 <span class="bi bi-search form-control-feedback"></span>
                 <input type="text" class="form-control search-input" placeholder="Search"
@@ -56,6 +62,8 @@
                 
 
             </div>
+            <div class="col-md-1 pull right"><img src="../../../../assets/exportexcel.png" class="exportToExcel" (click)="exportToExcel()"
+                title="Export to Excel"></div>
            <!-- <div class="col-md-3">
                 <label for="dropdown5" class="default-lbl">Cart Name</label>
                 <ng-select [ngModelOptions]="{standalone: true}"  [searchable]="true" placeholder="Please select"
@@ -79,9 +87,9 @@
                 <input type="text" formControlName="platform" [(ngModel)]="selectedplatform"
                     class="form-control form-control-sm">
             </div>-->
-            <div class="col-md-6"></div>
+            
 
-            <div class="col-md-1 text-center">
+           <!-- <div class="col-md-1 text-center">
                 <button type="button" class="btn btn-sm default-btn" data-bs-dismis="modal"
                 (click)="enginefilter()">View</button>
             </div>
@@ -89,49 +97,71 @@
                 <button type="button" class="btn btn-sm default-btn" data-bs-dismis="modal"
                 (click)="ReseatFilter()">Reset</button>
             </div>
-            <div class="col-md-1 text-center">
+            <div class="col-md-1 text-center">-->
                 <!-- <button type="button" class="btn btn-sm default-btn" data-bs-dismis="modal" (click)="exportToExcel()">Download</button> -->
-                <br>
+               <!-- <br>
                 <img src="../../../../assets/exportexcel.png" class="exportToExcel" (click)="exportToExcel()"
                     title="Export to Excel">
-            </div>
+            </div>-->
         </div>
 
         
     </div>
   </form>
+  <br/>
   <div class="row">
+    <div class="col-md-3">
+  <div class="btn-group mb-1">
+    <button (click)="toggleGroup('group2')" style="font-size: 10px;">
+        {{ columnGroupVisibility.group2 ? 'Collapse Input' : 'Expand Input' }}
+    </button>
+    
     
   </div>
-    <div class="d-flex table-responsive table-container" style="font-size: 13px !important;">
+  </div>
+  <div class="col-md-4">
+    <div class="btn-group mb-1">
+    <button (click)="toggleGroup('group3')" style="font-size: 10px;">
+        {{ columnGroupVisibility.group3 ? 'Collapse output' : 'Expand output' }}
+    </button>
+</div>
+</div>
+  <div class="col-md-5">
+    <div class="btn-group mb-1">
+    <button (click)="toggleGroup('group4')" style="font-size: 10px;">
+        {{ columnGroupVisibility.group4 ? 'Collapse output' : 'Expand output' }}
+    </button>
+  </div>
+</div>
+</div>
+    <div  class="d-flex table-responsive table-container tableFixHead" style="font-size: 10px !important;">
         
-        <table class="table table-bordered table-striped table-container">
+        <table class="table table-bordered table-striped table-container table-fixed">
             <thead>
                 <tr>
                     <th hidden>ID</th>
                     <th hidden>Bomid</th>
                     
-                    <th ><thead>
-                        <tr class="group-header"><th colspan="13" class="group-header">Part Level Constraints (Filters)</th></tr>
-                        <tr>
+                    
                            <!-- <th>Noune Name</th>-->
                             <th>Part Number</th>
+                            <th>Part Name</th>
+                            <th>Displacement</th>
                             <!--<th>Part Name</th>-->
-                            <th>Material</th>
-                            <th>Weight</th>
-                            <th>Price Details</th>
-                            <th>Mfg Loc</th>
-                            <th>Parent</th>
-                            <th>Parent Part Id</th>
-                            <th>CostType</th>
-                            <th>Current Program</th>
-                            <th>Parent Program</th>
-                            <th>Utilization</th>
-                            <th>SupplierName</th>
-                            <th>Bom Qty</th>
+                            <th [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">Material</th>
+                            <th [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">Weight</th>
+                            <!--<th [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">Price Details</th>-->
+                            <th [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">Mfg Loc</th>
+                          <!-- <th [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">Parent</th>-->
+                            <th [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">Parent Part Number</th>
+                            <th [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">CostType</th>
+                            <th [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">Current Program</th>
+                            <th [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">Parent Program</th>
+                            <!--<th [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">Utilization</th>-->
+                            <!--<th [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">SupplierName</th>-->
+                            <th [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">Bom Qty</th>
                             
-                        </tr></thead>
-                    </th>
+                       
                     <!--<th>Part.Id</th>
                     <th>Material</th>
                     <th>Weight</th>
@@ -141,93 +171,98 @@
                     <th>Parent.Part.Id</th>
                     <th>Bom.Qty</th>
                     <th>Cost.Region</th>-->
-                    <th>Name</th>
-                    <th>ModelMart Id</th>
-                    <th>Representative Part Number</th>
-                    <th>Representative Program</th>
-                    <th>Representative Region</th>
-                    <th>Representative SC</th>
-                    <th>Representative Simulated Cost</th>
-                    <th>Final.Cost</th>
-                    <th>Gbpa Cost</th>
-                    <th>Representative Invoice</th>
-                    <th>Model.Type</th>
-                    <th>Match.Type</th>
-                    <th>Dimensions</th>
-                    <th>Weight</th>
-                    <th>Raw Material</th>
-                    <th>Mfg Process </th>
-                    <th>Utilization</th>
-                    <th>Supplier Name</th>
-                    <th>Cost Type</th>
-                    <th>Debrief Date</th>
-                    <th colspan="4">Action</th>
+                    <th [ngClass]="{'collapsed': !columnGroupVisibility.group3}" *ngIf="columnGroupVisibility.group3" style="background-color: rgb(142, 142, 245); color: black;">Name</th>
+                    <th style="background-color: rgb(142, 142, 245); color: black;">ModelMart Id</th>
+                    <th style="background-color: rgb(142, 142, 245); color: black;">Representative Part Number</th>
+                    <th style="background-color: rgb(142, 142, 245); color: black;">Representative Part Name</th>
+                    <th [ngClass]="{'collapsed': !columnGroupVisibility.group3}" *ngIf="columnGroupVisibility.group3" style="background-color: rgb(142, 142, 245); color: black;">Representative Program</th>
+                    <th [ngClass]="{'collapsed': !columnGroupVisibility.group3}" *ngIf="columnGroupVisibility.group3" style="background-color: rgb(142, 142, 245); color: black;">Representative Region</th>
+                    <th [ngClass]="{'collapsed': !columnGroupVisibility.group3}" *ngIf="columnGroupVisibility.group3" style="background-color: rgb(142, 142, 245); color: black;">Representative SC</th>
+                    <th [ngClass]="{'collapsed': !columnGroupVisibility.group3}" *ngIf="columnGroupVisibility.group3" style="background-color: rgb(142, 142, 245); color: black;">Representative Simulated Cost</th>
+                    <th [ngClass]="{'collapsed': !columnGroupVisibility.group3}" *ngIf="columnGroupVisibility.group3" style="background-color: rgb(142, 142, 245); color: black;">Final.Cost</th>
+                    <th [ngClass]="{'collapsed': !columnGroupVisibility.group3}" *ngIf="columnGroupVisibility.group3" style="background-color: rgb(142, 142, 245); color: black;">Gbpa Cost</th>
+                    <th [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4" style="background-color: rgb(142, 142, 245); color: black;">Representative Invoice</th>
+                    <th [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4" style="background-color: rgb(142, 142, 245); color: black;">Model.Type</th>
+                    <th [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4" style="background-color: rgb(142, 142, 245); color: black;">Match.Type</th>
+                    <th [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4" style="background-color: rgb(142, 142, 245); color: black;">Dimensions</th>
+                    <th style="background-color: rgb(142, 142, 245); color: black;">Weight</th>
+                    <th style="background-color: rgb(142, 142, 245); color: black;" >Raw Material</th>
+                    <th [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4" style="background-color: rgb(142, 142, 245); color: black;">Engine Displace </th>
+                    <th [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4" style="background-color: rgb(142, 142, 245); color: black;">Mfg Process </th>
+                    <th [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4" style="background-color: rgb(142, 142, 245); color: black;">Utilization</th>
+                    <th [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4" style="background-color: rgb(142, 142, 245); color: black;">Supplier Name</th>
+                    <th [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4" style="background-color: rgb(142, 142, 245); color: black;">Cost Type</th>
+                    <th [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4" style="background-color: rgb(142, 142, 245); color: black;">Debrief Date</th>
+                    <th colspan="4" style="background-color: rgb(46, 46, 74);">Action</th>
                 </tr>
                 
             </thead>
-            <tbody>
-                <tr *ngFor="let row of SearchProductList | search: textsearch:filterMetadata | paginate: { itemsPerPage: 20, currentPage: page }  let i=index">
+            <tbody #tableRows><!--paginate: { itemsPerPage: 20, currentPage: page }  let i=index-->
+                <tr *ngFor="let row of SearchProductList | search: textsearch:filterMetadata ">
                    <!--<tr>--> 
                     <td hidden>{{row.cartId}}</td>
                     <td hidden>{{row.bomId}}</td>
                     
-                    <td>
-                        
-                        <tr>
-                            <td>
+                                               <td>
                                 <span *ngIf="!row.editable">{{ row.excelpartno }}</span>
                                 <input *ngIf="row.editable" [(ngModel)]="row.excelpartno" value="{{row.excelpartno}}" class="editable-input" />
+                              </td>
+                              <td><span *ngIf="!row.editable">{{ row.excelname }}</span>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelname" value="{{row.excelname}}" class="editable-input" />
+                              </td>
+                              <td><span *ngIf="!row.editable">{{ row.excelenginedisplacement }}</span>
+                                <input *ngIf="row.editable" [(ngModel)]="row.excelenginedisplacement" value="{{row.excelenginedisplacement}}" class="editable-input" />
                               </td>
                               <!--<td>
                                 <span *ngIf="!row.editable">{{ row.excelname }}</span>
                                 <input *ngIf="row.editable" [(ngModel)]="row.excelname"  value="{{row.excelname}}"/>
                               </td>-->
-                              <td>
+                              <td [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">
                                 <span *ngIf="!row.editable">{{ row.excelmeterial }}</span>
                                 <input *ngIf="row.editable" [(ngModel)]="row.excelmeterial" value="{{row.excelmeterial}}" class="editable-input"/>
                               </td>
-                              <td>
+                              <td [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">
                                 <span *ngIf="!row.editable">{{ row.excelweight }}</span>
                                 <input *ngIf="row.editable" [(ngModel)]="row.excelweight" value="{{row.excelweight}}" class="editable-input"/>
                               </td>
-                              <td>
+                              <!--<td [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">
                                 <span *ngIf="!row.editable">{{ row.excelprice }}</span>
                                 <input *ngIf="row.editable" [(ngModel)]="row.excelprice" value="{{row.excelprice}}" class="editable-input"/>
-                              </td>
-                              <td>
+                              </td>-->
+                              <td [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">
                                 <span *ngIf="!row.editable">{{ row.excelcostregion }}</span>
                                 <input *ngIf="row.editable" [(ngModel)]="row.excelcostregion" value="{{row.excelcostregion}}" class="editable-input" />
                               </td>
-                              <td>
+                             <!-- <td [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">
                                 <span *ngIf="!row.editable">{{ row.excelparent }}</span>
                                 <input *ngIf="row.editable" [(ngModel)]="row.excelparent" value="{{row.excelparent}}" class="editable-input"/>
-                              </td>
-                              <td>
+                              </td>-->
+                              <td [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">
                                 <span *ngIf="!row.editable">{{ row.excelparentpartid }}</span>
                                 <input *ngIf="row.editable" [(ngModel)]="row.excelparentpartid" value="{{row.excelparentpartid}}" class="editable-input" />
                               </td>
-                              <td>
+                              <td [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">
                                 <span *ngIf="!row.editable">{{ row.excelcosttype }}</span>
                                 <input *ngIf="row.editable" [(ngModel)]="row.excelcosttype" value="{{row.excelcosttype}}" class="editable-input"/>
                               </td>
-                              <td>
+                              <td [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">
                                 <span *ngIf="!row.editable">{{ row.excelcurrentprogram}}</span>
                                 <input *ngIf="row.editable" [(ngModel)]="row.excelcurrentprogram" value="{{row.excelcurrentprogram}}" class="editable-input" />
                               </td>
-                              <td>
+                              <td [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">
                                 <span *ngIf="!row.editable">{{ row.excelparentprogram}}</span>
                                 <input *ngIf="row.editable" [(ngModel)]="row.excelparentprogram" value="{{row.excelparentprogram}}" class="editable-input" />
                               </td>
-                              <td>
+                            <!--  <td [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">
                                 <span *ngIf="!row.editable">{{ row.excelutilization}}</span>
                                 <input *ngIf="row.editable" [(ngModel)]="row.excelutilization" value="{{row.excelutilization}}" class="editable-input"/>
-                              </td>
-                              <td>
+                              </td>-->
+                             <!-- <td [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">
                                 <span *ngIf="!row.editable">{{ row.excelsuppliername}}</span>
                                 <input *ngIf="row.editable" [(ngModel)]="row.excelsuppliername" value="{{row.excelsuppliername}}" class="editable-input"/>
-                              </td>
+                              </td>-->
 
-                              <td>
+                              <td [ngClass]="{'collapsed': !columnGroupVisibility.group2}" *ngIf="columnGroupVisibility.group2">
                                 <span *ngIf="!row.editable">{{ row.excelitemcount }}</span>
                                 <input *ngIf="row.editable" [(ngModel)]="row.excelitemcount" value="{{row.excelitemcount}}" class="editable-input" />
                               </td>
@@ -242,41 +277,46 @@
                         <td>{{data.excelparentpartid}}</td>
                         <td>{{data.excelitemcount}}</td>
                         <td>{{data.excelcostregion}}</td>-->
-                        </tr>
-                        </td>
-                    <td>{{row.name}}</td>
+                        
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group3}" *ngIf="columnGroupVisibility.group3">{{row.name}}</td>
                     <td>{{row.categoryId}}</td>
                     <td>{{row.partNumber}}</td>
-                    <td>{{row.projectName}}</td>
-                    <td>{{row.mfgRegion}}</td>
-                    <td>{{row.scost}}</td>
-                    <td>{{row.ucost}}</td>
-                    <td *ngIf="row.ucost <= 0">
+                    <td>{{row.partName}}</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group3}" *ngIf="columnGroupVisibility.group3">{{row.projectName}}</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group3}" *ngIf="columnGroupVisibility.group3">{{row.mfgRegion}}</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group3}" *ngIf="columnGroupVisibility.group3">{{row.scost}}</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group3}" *ngIf="columnGroupVisibility.group3">{{row.ucost}}</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group3}" *ngIf="row.ucost <= 0 && columnGroupVisibility.group3">
                     <span *ngIf="!row.editable">{{row.scost}}</span>
                     <input *ngIf="row.editable" [(ngModel)]="row.scost" value="{{row.scost}}" />
                     </td>
-                    <td *ngIf="row.ucost > 0">{{row.ucost}}</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group3}" *ngIf="row.ucost > 0 && columnGroupVisibility.group3">{{row.ucost}}</td>
                     <!--<td *ngIf="data.ucost === 0 && data.scost===0">0</td>-->
-                    <td>00</td>
-                    <td>{{row.invoice}}</td>
-                    <td *ngIf="row.ucost <= 0">Original</td>
-                    <td *ngIf="row.ucost > 0">Simulated</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group3}" *ngIf="columnGroupVisibility.group3">00</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4">{{row.invoice}}</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="row.ucost <= 0 && columnGroupVisibility.group4">Original</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="row.ucost > 0 && columnGroupVisibility.group4">Simulated</td>
                    <!-- <td *ngIf="data.ucost === 0 && data.scost===0">Original</td>-->
-                    <td>{{row.partNumber}}/{{row.name}}-{{row.engineDisplacement}}</td>
-                    <td>{{row.height}} X {{row.length}} X {{row.width}}</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4">{{row.partNumber}}/{{row.name}}-{{row.engineDisplacement}}</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4">{{row.height| number:'1.0-0'}} X {{row.length| number:'1.0-0'}} X {{row.width| number:'1.0-0'}}</td>
                     <td>{{row.weight}}</td>
-                    <td>{{row.rowmaterial}}</td>
-                    <td>{{row.mfgProcess}}</td>
-                    <td>{{row.utilization}}</td>
-                    <td>{{row.supplierName}}</td>
-                    <td>{{row.costType}}</td>
-                    <td>{{row.dbdate}}</td>
+                    <td style="width: 10px;">{{row.rowmaterial}}</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4">{{row.engineDisplacement}}</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4">{{row.mfgProcess}}</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4">{{row.utilization}}</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4">{{row.supplierName}}</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4">{{row.costType}}</td>
+                    <td [ngClass]="{'collapsed': !columnGroupVisibility.group4}" *ngIf="columnGroupVisibility.group4">{{row.dbdate}}</td>
                     
-                    <td class="action-buttons" *ngIf="row.excelpartno!=''">
-                        <button *ngIf="!row.editable" (click)="editRow(row)">Re-Run</button>
-                        <button *ngIf="row.editable" (click)="saveRow(row)">Save</button>
+                   <!-- <td class="action-buttons" *ngIf="row.excelpartno!=''">-->
+                    <td>
+                        <button *ngIf="!row.editable" (click)="editRow(row)">Edit</button>
+                        <button *ngIf="row.editable && !row.isNew" (click)="saveRow(row)">Re-Run</button>
+                        <button *ngIf="row.isNew" (click)="saveNewRow(row)">Re-Run</button>
                         <button *ngIf="row.editable" (click)="cancelEdit(row)">Cancel</button>
                         <button  (click)="Override(row)">override</button>
+                        <button (click)="deleteRow(row.bomId)" *ngIf="!row.isNew">Delete</button>
+                        <button *ngIf="row.isNew" (click)="cancelRow(row)">Delete</button>
                     </td>
 
                     <!--<td><i class="bi bi-trash-fill" style="color: #da291c; font-size:larger;" (click)="deleteRow(data.BUId)"></i>
@@ -285,11 +325,20 @@
                     </td>-->
                 </tr>
             </tbody>
+            
         </table>
 
     </div>
-
-    <div class="d-flex justify-content-between p-2 pagination">
+    <div class="row">
+    <div class="col-md-4" #target>
+        
+        <button class="btn btn-sm default-btn" (click)="SaveRow()">Save Row</button>
+    </div>
+    <div class="col-md-8">
+        
+    </div>
+</div>
+    <!--<div class="d-flex justify-content-between p-2 pagination">
                          
         <ngb-pagination [collectionSize]="filterMetadata.count" [(page)]="page" [pageSize]="pageSize"
             [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm" >
@@ -297,7 +346,7 @@
             <ng-template ngbPaginationNext>Next</ng-template>
         </ngb-pagination>
         <br>
-    </div>
+    </div>-->
 
 
 </div>
@@ -398,6 +447,7 @@
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
+                
                 <th>Name</th>
                     <th>ModelMart Id</th>
                     <th>Representative Part Number</th>
@@ -413,6 +463,7 @@
                     <th>Dimensions</th>
                     <th>Weight</th>
                     <th>Raw Material</th>
+                    <th>Engine Displacement</th>
                     <th>Mfg Process </th>
                     <th>Utilization</th>
                     <th>Supplier Name</th>
@@ -448,6 +499,7 @@
                 <td>{{row.height}} X {{row.length}} X {{row.width}}</td>
                 <td>{{row.weight}}</td>
                 <td>{{row.rowmaterial}}</td>
+                <td>{{row.excelenginedisplacement}}L</td>
                 <td>{{row.mfgProcess}}</td>
                 <td>{{row.utilization}}</td>
                 <td>{{row.supplierName}}</td>

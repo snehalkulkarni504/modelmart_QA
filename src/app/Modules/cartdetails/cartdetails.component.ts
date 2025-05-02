@@ -1,14 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild,ElementRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router,ActivatedRoute } from '@angular/router';
 import { TreeviewConfig, TreeviewItem } from '@charmedme/ngx-treeview';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AdminService } from 'src/app/SharedServices/admin.service';
-import { Location } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { ChangeDetectorRef } from '@angular/core';
 import { BomService } from 'src/app/SharedServices/bom.service';
 import { SearchService } from 'src/app/SharedServices/search.service';
+import * as XLSX from 'xlsx';
+import { DatePipe, Location } from '@angular/common';
+
 
 
 
@@ -20,12 +22,14 @@ import { SearchService } from 'src/app/SharedServices/search.service';
 export class CartdetailsComponent {
 
   constructor(public router: Router,
+    public actrouter:ActivatedRoute,
     public bomService: BomService,
     public SearchService:SearchService,
     public adminService: AdminService,
     public toastr: ToastrService,
     private location: Location,
     public SpinnerService: NgxSpinnerService,
+    private datePipe: DatePipe,
     private cdr: ChangeDetectorRef) {
     // this.myScriptElement = document.createElement("script");
     // this.myScriptElement.src = "assets/slider.js";
@@ -33,6 +37,8 @@ export class CartdetailsComponent {
   }
 
   @ViewChild('cat3') public cat3: any;
+  @ViewChild('tableContainer') tableContainer!: ElementRef;
+  @ViewChild('tableRows') tableRows!: ElementRef;
   selectedFile!: File | undefined;
   uploadfromdate:any
   Cat2: any;
@@ -101,19 +107,27 @@ export class CartdetailsComponent {
   selectedEngine:any;
   selectedplatform:any;
   exceltemppartno:any=0;
+  getroutecartid:any;
+  getroutecartname:any;
+ 
   
   ngOnInit(): void {
     if (localStorage.getItem("userName") == null) {
       this.router.navigate(['/welcome']);
       return;
-     
-
-      
-    }
+     }
 
    // this.UserForModelMart(localStorage.getItem("userName"));
 
    this.userId = localStorage.getItem("userId");
+
+   this.actrouter.queryParams.subscribe((params) =>
+    {
+      this.getroutecartid=params['cartid'] || null,
+      this.getroutecartname=params['cartname'] || null
+    });
+   
+    console.log("demo:-",this.getroutecartid,this.getroutecartname);
    
     this.SearchboxForm = new FormGroup({
       Cat2List: new FormControl(),
@@ -128,7 +142,7 @@ export class CartdetailsComponent {
       Locationsearch: new FormControl(),
     });
 
-    this.ShowLandingPage(0, "0");
+    this.ShowLandingPage(1, this.getroutecartid);
     this.ShowCagetory3();
     this.BUnitMasterForm = new FormGroup({
       textsearch: new FormControl(),
@@ -153,7 +167,7 @@ export class CartdetailsComponent {
       return;
     }
 
-    this.ShowLandingPage(1, param_value);
+   // this.ShowLandingPage(1, param_value);
   }
 
   ChekNull(v: any): any {
@@ -185,16 +199,14 @@ export class CartdetailsComponent {
   async Replace(data:any){
     
     this.SpinnerService.show('spinner');
-      const result = await this.bomService.UpdateCart(this.exceltemppartno,data.partNumber,this.userId,'cart1').toPromise();
-    if(result>1){
+      const result = await this.bomService.UpdateCart(data,this.userId,this.getroutecartname).toPromise();
+    
       this.SpinnerService.hide('spinner');
-      this.toastr.success("Cart Inserted Successfully.");
+      this.toastr.success("Cart Updated Successfully.");
       this.onCloseHandled();
-    }
-    {
-      this.SpinnerService.hide('spinner');
-      this.onCloseHandled();
-    }
+      this.ShowLandingPage(1,this.getroutecartid);
+    
+    
     console.log(data);
   }
   
@@ -205,7 +217,7 @@ export class CartdetailsComponent {
   }
   ReseatFilter(){
     (<HTMLInputElement>document.getElementById("engine")).value="";
-    this.ShowLandingPage(0,'0')
+    this.ShowLandingPage(1,this.getroutecartid)
   }
 
   async ShowLandingPage(flag: number, CategoryID: string) {
@@ -259,12 +271,36 @@ export class CartdetailsComponent {
 
   // Post updated data to the API
   this.SpinnerService.show('spinner');
-  this.bomService.UpdateBomFilter(updatedRow,"cart1",this.userId).subscribe(response => {
+  this.bomService.UpdateBomFilter(updatedRow,this.getroutecartname,this.userId).subscribe(response => {
     console.log('Row updated successfully', response);
     
       this.SpinnerService.hide('spinner');
       this.toastr.success("Row updated successfully.");
-      this.ShowLandingPage(0,'0');
+      this.ShowLandingPage(5,updatedRow.bomId);
+
+    row.editable = false;  // Disable edit mode after successful update
+
+  }, error => {
+    console.error('Error updating row', error);
+  });
+
+   // row.editable = false;
+  }
+
+  saveNewRow(row: any) {
+    this.cdr.detectChanges();
+    
+    const updatedRow = { ...row };  // Create a copy of the row
+  delete updatedRow.editable;  // Remove the editable property
+
+  // Post updated data to the API
+  this.SpinnerService.show('spinner');
+  this.bomService.UpdateBomFilterNew(updatedRow,this.getroutecartid,this.userId).subscribe(response => {
+    console.log('Row updated successfully', response);
+    
+      this.SpinnerService.hide('spinner');
+      this.toastr.success("Row updated successfully.");
+      this.ShowLandingPage(0,this.getroutecartid);
 
     row.editable = false;  // Disable edit mode after successful update
 
@@ -306,7 +342,7 @@ export class CartdetailsComponent {
 
   async getCategoryIdcat3() {
  
-  this.ShowLandingPage(1, this.selectedcatagory);
+ // this.ShowLandingPage(1, this.selectedcatagory);
  }
 
   clearCategory3() {
@@ -609,27 +645,99 @@ export class CartdetailsComponent {
     // Implement your API service method to send the data to the API
     // 
     this.SpinnerService.show('spinner');
-    this.bomService.uploadExcelData(uploadfile,"cart1",this.userId).subscribe(
+
+    this.SpinnerService.show('spinner');
+  this.bomService.DeleteBomAll(this.getroutecartid).subscribe(response => {
+    this.bomService.uploadExcelData(uploadfile,this.getroutecartid,this.userId).subscribe(
       { next: (_res: any) => {
         console.log('Excel data uploaded successfully:', _res);
         this.toastr.success("Data Uploaded Successfully.");
         this.closeUploadModal();
-        this.ShowLandingPage(0, "0");
-        this.SpinnerService.hide('spinner');
+        this.ShowLandingPage(0, this.getroutecartid);
+        //this.SpinnerService.hide('spinner');
       },
       error: (error: any) => {
         console.error('API call error:', error);
       },}
       
     );
-  }
+    //row.editable = false;  // Disable edit mode after successful update
 
+  }, error => {
+    console.error('Error updating row', error);
+  });
+
+
+
+    
+  }
+  formatDate(dateString: string): string {
+    if (!dateString) {
+      return '';
+    }
+    else{
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = this.getMonthName(date.getMonth());
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+    }
+  }
+  getMonthName(monthIndex: number): string {
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    return months[monthIndex];
+  }
   
   exportToExcel(){
+     if (this.SearchProductList && this.SearchProductList.length > 0) {
+          const modifiedData = this.SearchProductList.map((item: any, index: number) => ({
+            'Sr. No.': index + 1,
+            'Excel Part Number':item.excelpartno,
+            'Excel Part Name':item.excelname,
+            'Excel Displacement':item.excelenginedisplacement,
+            'Excel Material':item.excelmeterial,
+            'Excel Weight':item.excelweight,
+            'Excel Parent Part No':item.excelparentpartid,
+            'Name': item.name,
+            'ModelMart Id': item.categoryId,
+            'Part Number': item.partNumber,
+            'Part Name': item.partName,
+            'Program':item.projectName,
+            'Region':item.mfgRegion,
+            'Should Cost':item.scost,
+            'Invoice':item.invoice,
+            'Model.Type':'Original',
+            
+            'Weight':item.weight,
+            'Raw Material':item.rowmaterial,
+            'Mfg Process':item.mfgProcess,
+            'Utilization':item.utilization,
+            'Supplier Name':item.supplierName,
+            'Cost Type':item.costType,
+            'DebriefDate': this.formatDate(item.DebriefDate)//new Date(item.DebriefDate).toLocaleDateString('en-US') ,
+            
+          }));
+    
+          const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(modifiedData);
+          const wb: XLSX.WorkBook = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+          const currentDate = new Date();
+          const formattedDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
+          const fileName = `BomSimulation_${formattedDate}.xlsm`;
+          XLSX.writeFile(wb, fileName, { bookType: 'xlsm' });
+        }
+        else {
+          this.toastr.warning("Data Not Found.");
+    
+    
+        }
     
   }
   UploadModalInputValidation() {
-    debugger
+    
     if ( this.selectedFile ===undefined) {
      this.showError7 = true;
      return true;
@@ -660,6 +768,116 @@ export class CartdetailsComponent {
        window.URL.revokeObjectURL(url);
      });
  }
+
+ addRow() {
+
+  const newRow = {
+    //cartId: '',
+    //bomId: '',
+    excelpartno: '',
+    excelmeterial: '',
+    excelweight: '',
+    excelprice: '',
+    excelcostregion: '',
+    excelparent: '',
+    excelparentpartid: '',
+    excelcosttype: '',
+    excelcurrentprogram: '',
+    excelparentprogram: '',
+    excelutilization: '',
+    excelsuppliername: '',
+    excelitemcount: 0,
+    excelenginedisplacement:'',
+    //name: '',
+    //categoryId: '',
+    //partNumber: '',
+    //projectName: '',
+    //mfgRegion: '',
+    //scost: 0,
+    //ucost: 0,
+    //invoice: '',
+    //mfgProcess: '',
+    //weight: 0,
+    //rowmaterial: '',
+    //utilization: 0,
+    //costType: '',
+    //dbdate: '',
+    editable: true,
+    isNew: true
+  };
+  this.SearchProductList.unshift(newRow);
+  const tableBody = this.tableContainer.nativeElement.querySelector('tbody');
+    const lastRow = tableBody?.lastElementChild;
+
+    if (lastRow) {
+      lastRow.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+ // this.scrollToBottom();
+}
+
+// Function to delete a row
+deleteRow(id: any) {
+  this.SpinnerService.show('spinner');
+  this.bomService.DeleteBom(id).subscribe(response => {
+    console.log('Row updated successfully', response);
+    
+      this.SpinnerService.hide('spinner');
+      this.toastr.success("Bom Deleted Successfully.");
+      this.ShowLandingPage(1,this.getroutecartid);
+
+    //row.editable = false;  // Disable edit mode after successful update
+
+  }, error => {
+    console.error('Error updating row', error);
+  });
+
+}
+
+cancelRow(row: any) {
+  // Remove the row from the list if it's marked as isNew
+  const index = this.SearchProductList.indexOf(row);
+  if (index > -1 && row.isNew) {
+    this.SearchProductList.splice(index, 1);  // Remove the row from the list
+  }
+
+}
+
+
+scroll(el: HTMLElement) {
+  el.scrollIntoView({behavior: 'smooth'});
+}
+
+SaveRow(){
+  const filteredList = this.SearchProductList.filter((row:any) => row.isNew === true) // Filter rows where isNew is true
+  //.map(({ isNew, editable, ...rest }) => rest);
+console.log("filter"+filteredList);
+
+this.SpinnerService.show('spinner');
+  this.bomService.UpdateBomFilterList(filteredList,this.getroutecartid,this.userId).subscribe(response => {
+    console.log('Row updated successfully', response);
+    
+      this.SpinnerService.hide('spinner');
+      this.toastr.success("Row updated successfully.");
+      this.ShowLandingPage(0,this.getroutecartid);
+
+    //row.editable = false;  // Disable edit mode after successful update
+
+  }, error => {
+    console.error('Error updating row', error);
+  });
+
+}
+columnGroupVisibility:any = {
+  group1: true, // always visible
+  group2: false,
+  group3: false,
+  group4: false,
+};
+
+toggleGroup(group: string): void {
+  
+  this.columnGroupVisibility[group] = !this.columnGroupVisibility[group];
+}
 
 }
 

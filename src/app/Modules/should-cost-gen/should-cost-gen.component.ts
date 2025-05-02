@@ -357,7 +357,7 @@ export class ShouldCostGenComponent implements OnInit {
 
       this.imgsilderData = data.imgsilderDatas;
 
-      // debugger;;
+      debugger;;
       if (this.imgsilderData.length <= 0) {
         this.mainimg = localStorage.getItem("imagePath");
       }

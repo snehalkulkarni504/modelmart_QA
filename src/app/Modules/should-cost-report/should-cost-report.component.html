@@ -441,12 +441,12 @@
                                     <td class="HideRow"
                                         [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
                                         class="ShouldCostBreakdowntabletr" style="text-align: right;">
-                                        <!-- {{val.grossWeightKG | number:'1.4-4' }} -->
+                                        {{val.grossWeightKG | number:'1.4-4' }}
 
-                                        <input type="text" class="form-control PopupText RMText" id="PopUpGross{{i}}"
+                                        <!-- <input type="text" class="form-control PopupText RMText" id="PopUpGross{{i}}"
                                             name="PopUpGross{{i}}" (keypress)="keyPressDecimal($event)"
                                             value="{{val.grossWeightKG}}"
-                                            (keyup)="CalculateMaterialRate($event, val, i)" maxlength="8">
+                                            (keyup)="CalculateMaterialRate($event, val, i)" maxlength="8"> -->
                                     
                                     </td>
                                     <td class="HideRow"
@@ -460,12 +460,12 @@
                                     <td class="HideRow"
                                         [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
                                         class="ShouldCostBreakdowntabletr" style="text-align: right; ">
-                                        <!-- {{val.grossNetWeightKG | number:'1.4-4' }} -->
+                                        {{val.grossNetWeightKG | number:'1.4-4' }}
                                     
-                                        <input type="text" class="form-control PopupText RMText" id="PopUpNet{{i}}"
+                                        <!-- <input type="text" class="form-control PopupText RMText" id="PopUpNet{{i}}"
                                         name="PopUpGross{{i}}" (keypress)="keyPressDecimal($event)"
                                         value="{{val.grossNetWeightKG}}"
-                                        (keyup)="CalculateMaterialRate($event, val, i)" maxlength="8">
+                                        (keyup)="CalculateMaterialRate($event, val, i)" maxlength="8"> -->
 
                                     </td>
                                     <td class="HideRow"

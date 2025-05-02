@@ -9,7 +9,9 @@ import { environment } from 'src/environments/environments';
 })
 export class BomService {
 
+ 
   apiUrl = environment.apiUrl_Search;
+  apiUrl1 = environment.apiUrl_Tco
 
   constructor(private httpClient: HttpClient) { }
 
@@ -32,6 +34,35 @@ export class BomService {
     return this.httpClient.post(this.apiUrl + `UpdateBomFilter?cartname=${cartname}&createdby=${createdby}`, updatedRow);
   }
 
+  
+
+  UpdateBomFilterNew(updatedRow: any, cartname: any, createdby: any): Observable<any> {
+
+    return this.httpClient.post(this.apiUrl + `UpdateBomFilterNew?cartname=${cartname}&createdby=${createdby}`, updatedRow);
+  }
+
+  UpdateBomFilterList(updatedRow: any, cartname: any, createdby: any): Observable<any> {
+
+    return this.httpClient.post(this.apiUrl + `UpdateBomFilterList?cartname=${cartname}&createdby=${createdby}`, updatedRow);
+  }
+
+  DeleteBom(bomid:any): Observable<any> {
+
+    return this.httpClient.get(this.apiUrl + `DeleteBom?BomId=${bomid}`);
+  }
+
+  DeleteBomAll(cartid:any): Observable<any> {
+
+    return this.httpClient.get(this.apiUrl + `DeleteBomAll?cartId=${cartid}`);
+  }
+  addprgramname(programname:any,createdby:any): Observable<any>
+  {
+    debugger;
+    const formData = new FormData();
+    formData.append('programname',programname);
+    formData.append('createdby',createdby);
+    return this.httpClient.post(this.apiUrl + "addprogramname", formData);
+  }
   uploadExcelData(file: File, cartname: any, createdby: any): Observable<any> {
     debugger
     const formData = new FormData();
@@ -43,8 +74,9 @@ export class BomService {
     console.log(formData)
     return this.httpClient.post(this.apiUrl + "UploadBomData", formData);
   }
-  UpdateCart(excelPartNo: any, partno: string, userid: any, cartname: string): Observable<any> {
-    return this.httpClient.get<any[]>(this.apiUrl + `UpdateCartDetailsBypartNo?excelPartNo=${excelPartNo}&partno=${partno}&userid=${userid}&cartname=${cartname}`);
+  
+  UpdateCart(updateCartDetails: any, userid: any, cartname: string): Observable<any> {
+    return this.httpClient.post(this.apiUrl + `UpdateCartDetailsBypartNo?userid=${userid}&cartname=${cartname}`,updateCartDetails);
   }
 
   GetLandingPageForCartView(flag: any, ParentCategory: string, userid: any): Observable<any> {
@@ -54,6 +86,28 @@ export class BomService {
   GetCart(userid: any): Observable<any> {
     // const headers = { 'Authorization': token } ,{headers}
     return this.httpClient.get<any[]>(this.apiUrl + `getcart?userid=${userid}`);
+  }
+  fetchprogramname(userid:any):Observable<any>
+  {
+    return this.httpClient.get<any[]>(this.apiUrl + `fetchprogramname?userid=${userid}`);
+  }
+  addcartame(programid:any,cartname:any,createdby:any): Observable<any>
+  {
+    debugger;
+    const formData = new FormData();
+    formData.append('programid',programid);
+    formData.append('cartname',cartname);
+    formData.append('createdby',createdby);
+    return this.httpClient.post(this.apiUrl + "addcartdetails", formData);
+  }
+  getcartlist(programid:any):Observable<any>
+  {
+    return this.httpClient.get<any[]>(this.apiUrl + `getcartlist?programid=${programid}`);
+  }
+  copycart(data:FormData)
+  {
+    debugger;
+    return this.httpClient.post(this.apiUrl + "copycart", data);
   }
 
 

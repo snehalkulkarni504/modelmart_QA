@@ -9,8 +9,6 @@ import { Subject } from 'rxjs';
 import { AdminService } from 'src/app/SharedServices/admin.service';
 import { environment } from 'src/environments/environments';
 
-
-
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -1360,10 +1358,10 @@ export class SearchComponent implements OnInit {
   }
 
   getShouldeCost(e: any) {
-    //debugger;
+    debugger;
 
     localStorage.setItem("ComapredId", e.csHeaderId);
-    if (e.imagePath == null) {
+    if (e.imagePath == null || e.imagePath == "") {
       localStorage.setItem("imagePath", "../../../assets/No-Image.png");
     }
     else {

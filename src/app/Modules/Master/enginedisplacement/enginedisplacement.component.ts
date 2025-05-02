@@ -268,4 +268,50 @@ export class EnginedisplacementComponent implements OnInit {
     this.location.back();
   }
 
+  Ishide1 = false;
+  colspanhide1 = 2;
+
+  Ishide2 = false;
+  colspanhide2 = 2;
+
+  Ishide3 = false;
+  colspanhide3 = 3;
+
+  hide1() {
+    debugger;
+    if (!this.Ishide1) {
+      this.Ishide1 = true;
+      this.colspanhide1 = 1;
+    }
+    else {
+      this.Ishide1 = false;
+      this.colspanhide1 = 2;
+    }
+
+  }
+  hide2() {
+    debugger;
+    if (!this.Ishide2) {
+      this.Ishide2 = true;
+      this.colspanhide2 = 1;
+    }
+    else {
+      this.Ishide2 = false;
+      this.colspanhide2 = 2;
+    }
+
+  }
+  hide3() {
+    debugger;
+    if (!this.Ishide3) {
+      this.Ishide3 = true;
+      this.colspanhide3 = 1;
+    }
+    else {
+      this.Ishide3 = false;
+      this.colspanhide3 = 3;
+    }
+
+  }
+
 }

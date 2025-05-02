@@ -14,9 +14,22 @@
     margin-bottom: 20px;
     /* box-shadow: 0 6px 2px -6px #da291c; */
 }
-
+th, td {
+    transition: max-width 0.3s ease, opacity 0.3s ease;
+    overflow: hidden;
+  }
+  
+  .collapsed {
+    max-width: 0;
+    opacity: 0;
+    padding: 0 !important;
+    border: none;
+  }
 .exportToExcel{
     width: 30px;height: 30px;
+}
+.btn-group{
+    size: 10px;
 }
 
 
@@ -252,7 +265,7 @@ tr.group-header {
 
 .table thead {
     text-align: center;
-
+    position: sticky;
 }
 .table thead th{
     text-align: center;
@@ -261,7 +274,7 @@ tr.group-header {
 .table thead tr th {
     background-color:  #da291c;
     color: #fff;
-    padding: 1px;
+    padding: 3px;
     width: 200px;
 }
 
@@ -306,11 +319,13 @@ input {
 
 th,td{
     /*use this property to disbale soft wrap*/
-    white-space: nowrap;
+   white-space: nowrap;
     /*To make extra certain,add this css property*/
-    word-break: keep-all;
+   word-break: keep-all;
 
 }
+
+
 
 .itemdata{
     width: 100%; height: 84px; 
@@ -371,3 +386,16 @@ th,td{
     background-color: rgb(200, 225, 239);
     
 }
+.tableFixHead          { overflow: auto; height: 300px; }
+.tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
+
+
+  /* Ensure the table layout is consistent */
+ 
+
+  /* Style for table header */
+ 
+
+  /* Optional: Style for table rows */
+
+  
