@@ -1,8 +1,8 @@
 * {
     font-family: Helvetica, Arial !important;
 }
- 
-.fixsubheader{
+
+.fixsubheader {
     position: fixed;
     width: 100%;
     display: inline-flex;
@@ -14,18 +14,28 @@
 
 .MasterHeader {
     position: fixed;
-    width: 80%;
+    width: 100%;
     display: inline-flex;
     height: 70px;
-    margin-left: 10%;
     margin-bottom: 20px;
     background-color: #fff;
     border-bottom: 1px solid #da291c;
 }
 
 .MasterHeader h2 {
-    margin: 20px 0px;
-    font-size: 20px;
+    /* margin: 20px 0px; */
+    font-size: 35px;
+    font-family: Helvetica, Arial !important;
+    color: #808080;
+    margin-left: 50px;
+    font-weight: 600;
+    text-size-adjust: 100%;
+    height: 70px;
+    line-height: 70px;
+    background: linear-gradient(to right, #7b4397, #dc2430);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
 }
 
 /* ------------ steps design start ------------ */
@@ -35,7 +45,7 @@
     height: 50px;
     margin-left: 10%;
     margin-top: 10px;
-    
+
 }
 
 .DTO_step1,
@@ -48,9 +58,14 @@
     border-bottom-right-radius: 20px;
     text-align: center;
     vertical-align: middle;
-    color: #fff;
-    background-color: #267eb8;
+    color: #000;
     line-height: 50px;
+}
+
+.DTO_step1 {
+    background-color: #267eb8;
+    color: #fff;
+    font-weight: 600;
 }
 
 .DTO_step2 {
@@ -71,39 +86,78 @@
 
 .gradient-icon {
     /* background: linear-gradient(to right, #267eb8, #1b9a85);  */
-    background: linear-gradient(to right, #267eb8, #1b9a85); 
-    -webkit-background-clip: text; 
-    -webkit-text-fill-color: transparent; 
-  }
-  
+    background: linear-gradient(to right, #267eb8, #1b9a85);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 .gradient-icon2 {
     /* background: linear-gradient(to right, #1b9a85, #9ebe5b);  */
-    background: linear-gradient(to right, #1b9a85, #9ebe5b); 
-    -webkit-background-clip: text; 
-    -webkit-text-fill-color: transparent; 
-  }
-  
+    background: linear-gradient(to right, #1b9a85, #9ebe5b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 .gradient-icon3 {
     /* background: linear-gradient(to right, #9ebe5b, #f19c0c);  */
-    background: linear-gradient(to right, #9ebe5b, #f19c0c); 
-    -webkit-background-clip: text; 
-    -webkit-text-fill-color: transparent; 
-  }
+    background: linear-gradient(to right, #9ebe5b, #f19c0c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
 .DTO_connect1_2 {
     margin-top: -10px;
     font-size: 50px;
     vertical-align: top;
 
-} 
+}
 
 /* ------------- steps design end ---------------- */
+.step1_00{
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 80px;
+}
 
 .step1 {
     width: 80%;
     margin-left: 10%;
     margin-top: 80px;
+    animation: step1_animation 0.3s normal;
 }
+
+.step1_0 {
+    width: 70%;
+    margin-left: 28%;
+    margin-top: 80px;
+    animation: step1_0animation 0.3s normal;
+}
+
+
+@keyframes step1_0animation {
+    from {
+        width: 80%;
+        margin-left: 10%;
+    }
+
+    to {
+        width: 70%;
+        margin-left: 28%;
+    }
+}
+@keyframes step1_animation {
+    from {
+        width: 70%;
+        margin-left: 28%;
+    }
+
+    to {
+        width: 80%;
+        margin-left: 10%;
+    }
+}
+
+
 
 .userfullname {
     font-weight: bold;
@@ -120,17 +174,16 @@
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px #00000050;
+    height: 150px ;
 }
 
-
 .additionalconstraint_remove {
-    border: 1px solid #00000050;
-    padding: 20px;
+    padding: 5px;
     border-radius: 5px;
-    box-shadow: 0px 0px 10px #00000050;
-    margin-top: 90px;
+    margin-top: 5px;
     opacity: 0;
-    animation: additionalconstraint_rev 1s normal;
+    transition: all 0.1s ease-in-out;
+    font-size: 12px !important;
 }
 
 .additionalconstraint_none {
@@ -138,24 +191,25 @@
 }
 
 .additionalconstraint {
-    border: 1px solid #00000050;
-    padding: 20px;
+    padding: 5px;
     border-radius: 5px;
-    box-shadow: 0px 0px 10px #00000050;
-    margin-top: 20px;
+    margin-top: 5px;
     opacity: 1;
-    animation: additionalconstraint_animation 1s normal;
+    transition: all 0.1s ease-in-out;
+    font-size: 12px !important;
+    height: 100px;
 }
 
 .additionalconstraint h6 {
-    font-size: 20px;
+    font-size: 15px;
+    font-weight: 700;
 }
 
 .btnview {
-    margin-top: 30px;
+    margin-top: 10px;
     background-color: #da291c;
     color: #fff;
-    padding: 8px 15px;
+    padding: 5px 10px;
     border-radius: 5px;
     border: 1px solid #da291c;
     transition: all 0.3s ease-in-out;
@@ -169,14 +223,14 @@
 
 
 .btnback {
+    margin-top: 20px;
+    font-size: 15px !important;
     background-color: #da291c;
     color: #fff;
-    padding: 2px 15px;
-    border-radius: 5px;
+    padding: 4px 15px;
     border: 1px solid #da291c;
-    transition: all 0.3s ease-in-out;
-    margin-top: 5px;
-    font-size: 13px;
+    font-family: Helvetica, Arial !important;
+    border-radius: 5px;
 }
 
 .btnback:hover {
@@ -187,12 +241,12 @@
 
 @keyframes additionalconstraint_animation {
     from {
-        margin-top: 90px;
+        /* margin-top: 90px; */
         opacity: 0;
     }
 
     to {
-        margin-top: 20px;
+        /* margin-top: 20px; */
         opacity: 1;
     }
 }
@@ -200,12 +254,12 @@
 
 @keyframes additionalconstraint_rev {
     from {
-        margin-top: 20px;
+        /* margin-top: 20px; */
         opacity: 1;
     }
 
     to {
-        margin-top: 90px;
+        /* margin-top: 90px; */
         opacity: 0;
     }
 }
@@ -227,18 +281,69 @@
     cursor: pointer;
 }
 
-#Id_Filters {
+.Id_Filters_hide0 {
     max-height: 100vh;
     overflow-y: scroll;
-    width: 25%;
+    width: 0%;
+    opacity: 0;
     padding-bottom: 100px;
     margin-top: 75px;
     scrollbar-width: thin;
     margin-bottom: 50px;
     scrollbar-color: #da291c #da291c0c;
-    /* scrollbar-color: #da291c transparent; */
-
 }
+
+
+.Id_Filters {
+    max-height: 100vh;
+    overflow-y: scroll;
+    width: 25%;
+    opacity: 1;
+    padding-bottom: 100px;
+    margin-top: 75px;
+    scrollbar-width: thin;
+    margin-bottom: 50px;
+    scrollbar-color: #da291c #da291c0c;
+    animation: Id_Filters_animation 0.3s normal ;
+}
+
+
+.Id_Filters_hide {
+    max-height: 100vh;
+    overflow-y: scroll;
+    width: 0%;
+    opacity: 0;
+    padding-bottom: 100px;
+    margin-top: 75px;
+    scrollbar-width: thin;
+    margin-bottom: 50px;
+    scrollbar-color: #da291c #da291c0c;
+    animation: Id_Filters_hide_animation 0.3s normal ;
+}
+
+
+@keyframes Id_Filters_animation {
+    from{
+        width: 0%;
+        opacity: 0;
+    }
+    to{
+        width: 25%;
+        opacity: 1;
+    }
+}
+
+@keyframes Id_Filters_hide_animation {
+    from{
+        width: 25%;
+        opacity: 1;
+    }
+    to{
+        width: 0%;
+        opacity: 0;
+    }
+}
+
 
 #Id_Filtersform {
     /* padding: 0px; */
@@ -252,7 +357,7 @@
 #SearchFiltersdiv {
     width: 75%;
     margin-left: 25%;
-    margin-top: 60px;
+    margin-top: 10px;
     background-image: url("/assets/seachbackground.jpg");
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -466,7 +571,7 @@
 
 .prdDescription_div4,
 .prdDescription_div5,
-.prdDescription_div6{
+.prdDescription_div6 {
     height: 25px;
     width: 33%;
     float: left;
@@ -477,7 +582,7 @@
     border-left: 1px solid #da291c70;
 }
 
- 
+
 
 .SearchCheckbox {
     width: 15px;
@@ -994,7 +1099,19 @@ input[type=checkbox] {
     font-size: 12px;
     height: 40px;
     border-bottom: 1px solid #80808070;
+    visibility: hidden;
+
 }
+
+/* 
+.ModelFoundshow {
+    width: 100%;
+    margin-top: 20px;
+    font-size: 12px;
+    height: 40px;
+    border-bottom: 1px solid #80808070;
+    display: block;
+} */
 
 
 input[type="text"]:focus {

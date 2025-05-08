@@ -9,7 +9,6 @@ import { environment } from 'src/environments/environments';
 })
 export class BomService {
 
- 
   apiUrl = environment.apiUrl_Search;
   apiUrl1 = environment.apiUrl_Tco
 
@@ -74,7 +73,6 @@ export class BomService {
     console.log(formData)
     return this.httpClient.post(this.apiUrl + "UploadBomData", formData);
   }
-  
   UpdateCart(updateCartDetails: any, userid: any, cartname: string): Observable<any> {
     return this.httpClient.post(this.apiUrl + `UpdateCartDetailsBypartNo?userid=${userid}&cartname=${cartname}`,updateCartDetails);
   }
@@ -108,6 +106,11 @@ export class BomService {
   {
     debugger;
     return this.httpClient.post(this.apiUrl + "copycart", data);
+  }
+
+  DeleteBomCart(cartid:any): Observable<any> {
+ 
+    return this.httpClient.delete(this.apiUrl + `deletebomcart?cartId=${cartid}`);
   }
 
 

@@ -19,7 +19,7 @@ export class DesigntocostStep2Component implements OnInit {
   imgName: any;
   activeTab: string = 'tab1'; // Default active tab
   //private datePipe: DatePipe
-  constructor(public searchservice: SearchService, public router: Router, private route: ActivatedRoute, 
+  constructor(public searchservice: SearchService, public router: Router, private route: ActivatedRoute,
     private location: Location, private SpinnerService: NgxSpinnerService, public toastr: ToastrService) {
   }
 
@@ -142,7 +142,7 @@ export class DesigntocostStep2Component implements OnInit {
   hasDataT2(): boolean {
     return this.MaterialGradeT2.length > 0;
   }
- 
+
 
   async getShouldeCost(id: number) {
     try {
@@ -463,7 +463,7 @@ export class DesigntocostStep2Component implements OnInit {
     this.router.navigate(['/home/shouldcostrequest', this.UniqueId]);
   }
 
- 
+
   @ViewChild('printsection') printsection!: ElementRef;
   async DownloadReport() {
     debugger;
@@ -486,8 +486,8 @@ export class DesigntocostStep2Component implements OnInit {
     else {
       PartNm = this.PartName;
     }
- 
-   // this.toastr.success("Report downloading has started.");
+
+    // this.toastr.success("Report downloading has started.");
 
     var xhr = new XMLHttpRequest();
     xhr.open('GET', staticUrl, true);
@@ -526,7 +526,7 @@ export class DesigntocostStep2Component implements OnInit {
     xhr.send();
 
   }
- 
+
 
   setImg(e: any) {
     this.mainimg = e
@@ -564,7 +564,7 @@ export class DesigntocostStep2Component implements OnInit {
     this.location.back();
   }
 
- 
+
 
   Graphdata: any = [];
   PiachartOptionsData: any = [];
@@ -597,7 +597,7 @@ export class DesigntocostStep2Component implements OnInit {
         );
       }
     }
-  
+
 
     this.TotalMaterailDetails.push(
       { label: "Total Manu. Cost", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "inside", color: "#a5ae9e" },
@@ -674,7 +674,7 @@ export class DesigntocostStep2Component implements OnInit {
 
   }
 
-  
+
 
   PiachartOptions: any = [];
 
@@ -721,10 +721,26 @@ export class DesigntocostStep2Component implements OnInit {
 
   }
 
+  GotoNext() {
+    localStorage.setItem("DTCPartNumber", this.PartNumber);
+    localStorage.setItem("DTCProgramName", this.ProjectName);
+    localStorage.setItem("DTCNounName", this.PartName);
+
+    localStorage.setItem("DTCForexRegion", this.ForexRegion);
+    localStorage.setItem("DTCComapredId", this.ComapredId);  //--- CSHeader
+    localStorage.setItem("DTCProjectName", this.ProjectName);
+    localStorage.setItem("DTCDebriefDateFormated", this.DebriefDateFormated);
+    localStorage.setItem("DTCimagePath", this.mainimg);
+    localStorage.setItem("DTCUniqueId",this.UniqueId);
+
+    // this.SCReportId = localStorage.getItem("DTCSCReportId");
+
+    this.router.navigate(['/home/designtocost/step3']);
+  }
+
 }
 
 
 function reject() {
   alert("File Not Found");
 }
- 

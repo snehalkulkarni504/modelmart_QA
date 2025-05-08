@@ -38,13 +38,30 @@
     align-items: center;
 }
 .card{
-    width:calc(34% -20px);
+    /* width:calc(34% -20px);
     background-color: rgb(236, 225, 225);
     padding: 40px 15px;
     text-align: center;
     margin: 0 50px;
     position: relative;
-    transition: all 0.5s ease-in;
+    transition: all 0.5s ease-in; */
+    background-color: rgb(236, 225, 225);
+    /* padding: 40px 15px;
+    text-align: center;
+    margin: 20px;
+    position: relative;
+    transition: all 0.5s ease-in; */
+    
+    width: 350px;
+    height: 270px;
+    text-align: center;
+    transition: all 0.5s ease-in-out;
+     
+}
+
+.card:hover{
+    box-shadow: 0px 0px 5px rgb(255, 145, 2);
+    border: 1px solid rgb(255, 145, 2);
 }
 
 .card:hover .box i{
@@ -59,6 +76,7 @@
     color: #da291c;
     transition: all 0.5s ease;
 }
+
  /* .card::after{
     content: '';
     position: absolute;

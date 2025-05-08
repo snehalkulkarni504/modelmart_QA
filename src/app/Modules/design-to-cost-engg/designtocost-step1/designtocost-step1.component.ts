@@ -7,6 +7,7 @@ import { AdminService } from 'src/app/SharedServices/admin.service';
 import { DesigntocostService } from 'src/app/SharedServices/designtocost.service';
 import { SearchService } from 'src/app/SharedServices/search.service';
 import { environment } from 'src/environments/environments';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-designtocost-step1',
@@ -47,7 +48,8 @@ export class DesigntocostStep1Component implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     private SpinnerService: NgxSpinnerService,
-    public toastr: ToastrService) {
+    public toastr: ToastrService,
+    private backpagelocation: Location,) {
 
     this.IsLogin = false;
 
@@ -61,6 +63,8 @@ export class DesigntocostStep1Component implements OnInit {
     };
 
   }
+
+  IsDatahidden = true;
 
   NA: any = "NA*";
   Catlist2: any;
@@ -171,13 +175,14 @@ export class DesigntocostStep1Component implements OnInit {
   MaterialGradeList: any;
   HighLevelProcessList: any;
   selectedPartName: any;
-  IsDatahidden = true;
-  
+
+
   ModelFound = true;
   ModelCount = 0;
   radiobtn: any;
 
   async ngOnInit(): Promise<void> {
+    debugger;
 
     this.router.events.subscribe((event) => {
       window.scrollTo(0, 0)
@@ -235,6 +240,13 @@ export class DesigntocostStep1Component implements OnInit {
 
     this.GetPartName();
 
+    await this.GetEngine();
+    await this.SupplierLocation();
+    await this.ShowCagetory3("");
+    await this.GetBusinessUnit();
+    await this.GetProgramName();
+
+
   }
 
   // ----------- setp1 selection start --------------------
@@ -264,17 +276,68 @@ export class DesigntocostStep1Component implements OnInit {
     this.selectedMaterialGrade = null;
     this.selectedHighProcess = null;
 
+    if (this.selectedPartName == null) {
+      this.IsDatahidden = true;
+    }
+    
+    const hi = document.getElementById("hellouser") as HTMLElement;
+
     const myElement = document.getElementById("additionalconstraint");
     if (this.selectedPartName == null) {
-      myElement?.classList.add("additionalconstraint_remove");
       myElement?.classList.remove("additionalconstraint");
+      myElement?.classList.remove("additionalconstraint_none");
+      myElement?.classList.add("additionalconstraint_remove");
+      hi.style.height = '150px';
     }
     else {
-      myElement?.classList.add("additionalconstraint");
       myElement?.classList.remove("additionalconstraint_remove");
+      myElement?.classList.add("additionalconstraint");
+      hi.style.height = '270px';
 
       this.GetAdditionfilters(this.selectedPartName.trim());
     }
+
+
+    const elfiltter = document.getElementById("Id_Filters");
+    if (this.selectedPartName == null) {
+      elfiltter?.classList.remove("Id_Filters");
+      elfiltter?.classList.remove("Id_Filters_hide");
+      elfiltter?.classList.add("Id_Filters_hide0");
+    }
+    // else {
+    //   elfiltter?.classList.add("Id_Filters");
+    //   elfiltter?.classList.remove("Id_Filters_hide");
+    // }
+
+
+    const el = document.getElementById("step1");
+    if (this.selectedPartName == null) {
+      el?.classList.remove("step1_0");
+      el?.classList.remove("step1");
+      el?.classList.add("step1_00");
+
+    }
+
+
+    // ------ show fillers start ----------
+
+    //  const el = document.getElementById("step1");
+    //  if (this.selectedPartName == null) {
+    //    el?.classList.remove("step1_00");
+    //    el?.classList.remove("step1_0");
+    //    el?.classList.add("step1");
+    //  }
+
+    //  const elfiltter = document.getElementById("Id_Filters");
+    //  if (this.selectedPartName == null) {
+    //    elfiltter?.classList.remove("Id_Filters");
+    //    elfiltter?.classList.add("Id_Filters_hide");
+
+    //  }
+
+    // ------ show fillers end ----------
+
+
   }
 
   selectedPlatform: any;
@@ -283,47 +346,69 @@ export class DesigntocostStep1Component implements OnInit {
   selectedHighProcess: any;
 
   async ViewDataOnSelection() {
-    if (this.IsDatahidden) {
-      this.IsDatahidden = false
-      this.SearchList= [];
-      this.ModelCount = 0;
-      this.ModelFound = true;
+    debugger;
 
-      await this.GetEngine();
-      await this.SupplierLocation();
-      await this.ShowCagetory3("");
-      await this.GetBusinessUnit();
-      await this.GetProgramName();
+    // if (this.IsDatahidden) {
 
+    this.IsDatahidden = false
+    this.SearchList = [];
+    this.ModelCount = 0;
+    this.ModelFound = true;
 
-      this.filters.PartName = this.selectedPartName.trim();
-      this.filters.engine = this.selectedEngineDisplacement;
-      this.filters.Platform = this.selectedPlatform.trim();
-      this.filters.MaterialGrade = this.selectedMaterialGrade.trim();
-      this.filters.HighProcess = this.selectedHighProcess.trim();
+    this.filters.PartName = this.selectedPartName.trim();
+    this.filters.engine = this.selectedEngineDisplacement;
+    this.filters.Platform = this.selectedPlatform.trim();
+    this.filters.MaterialGrade = this.selectedMaterialGrade.trim();
+    this.filters.HighProcess = this.selectedHighProcess.trim();
 
 
-
-      // const userJson = localStorage.getItem('DTOHistorysearch');
-
-      // if (userJson !== null) {
-      //   this.filters = JSON.parse(userJson)
-      // }
-
-      // if (localStorage.getItem("DTOHistorysearch") != null) {
-      //   this.GetSearchdata(this.filters);
-      // }
-      // else {
-      //   this.GetSearchdata(this.filters);
-      // }
-
-      this.GetSearchdata(this.filters);
+    // ------ show fillers start ----------
+    const si = document.getElementById("ModelFound") as HTMLElement;
+    si.style.visibility = 'visible';
 
 
+    const el = document.getElementById("step1");
+    if (this.selectedPartName == null) {
+      el?.classList.remove("step1_0");
+      el?.classList.add("step1");
     }
     else {
-      this.IsDatahidden = true
+      el?.classList.add("step1_0");
+      el?.classList.remove("step1");
     }
+
+    const elfiltter = document.getElementById("Id_Filters");
+    if (this.selectedPartName == null) {
+      elfiltter?.classList.remove("Id_Filters");
+      elfiltter?.classList.add("Id_Filters_hide");
+    }
+    else {
+      elfiltter?.classList.add("Id_Filters");
+      elfiltter?.classList.remove("Id_Filters_hide");
+    }
+    // ------ show fillers end ----------
+
+
+    // const userJson = localStorage.getItem('DTCHistorysearch');
+
+    // if (userJson !== null) {
+    //   this.filters = JSON.parse(userJson)
+    // }
+
+    // if (localStorage.getItem("DTCHistorysearch") != null) {
+    //   this.GetSearchdata(this.filters);
+    // }
+    // else {
+    //   this.GetSearchdata(this.filters);
+    // }
+
+    this.GetSearchdata(this.filters);
+
+
+    // }
+    // else {
+    //   this.IsDatahidden = true
+    // }
   }
 
   // ----------- setp1 selection end --------------------
@@ -384,7 +469,7 @@ export class DesigntocostStep1Component implements OnInit {
 
     this.clearFilter(2);
     this.filters.like = this.searchProduct2.nativeElement.value.trim();
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
     this.GetSearchdata(this.filters);
 
     setTimeout(() => {
@@ -442,7 +527,7 @@ export class DesigntocostStep1Component implements OnInit {
   //    this.searchProduct2.nativeElement.value = v.name;
   //    this.autoseachhide = true;
 
-  //    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+  //    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
   //    this.GetSearchdata(this.filters);
 
   //  }
@@ -466,7 +551,7 @@ export class DesigntocostStep1Component implements OnInit {
       this.GetSearchdata(this.filters);
     }
 
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
 
   }
 
@@ -489,7 +574,7 @@ export class DesigntocostStep1Component implements OnInit {
     if (flag) {
       this.GetSearchdata(this.filters);
     }
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
   }
 
   clearCategory4() {
@@ -511,7 +596,7 @@ export class DesigntocostStep1Component implements OnInit {
     if (flag) {
       this.GetSearchdata(this.filters);
     }
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
   }
 
   clearCategory5() {
@@ -544,7 +629,7 @@ export class DesigntocostStep1Component implements OnInit {
       this.GetSearchdata(this.filters);
     }
 
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
   }
 
   clearLocation() {
@@ -566,7 +651,7 @@ export class DesigntocostStep1Component implements OnInit {
     if (flag) {
       this.GetSearchdata(this.filters);
     }
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
 
   }
 
@@ -589,7 +674,7 @@ export class DesigntocostStep1Component implements OnInit {
     if (flag) {
       this.GetSearchdata(this.filters);
     }
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
   }
 
   clearProgramName() {
@@ -610,7 +695,7 @@ export class DesigntocostStep1Component implements OnInit {
     if (flag) {
       this.GetSearchdata(this.filters);
     }
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
   }
 
   clearFilter(f: any) {
@@ -622,10 +707,10 @@ export class DesigntocostStep1Component implements OnInit {
     try {
 
       if (f == 1) {
-        localStorage.removeItem("DTOHistorysearch");
+        localStorage.removeItem("DTCHistorysearch");
         //localStorage.removeItem("Historywildcardsearch");
-        localStorage.removeItem("DTOSortSearchData");
-        localStorage.removeItem("DTOchildCategory");
+        localStorage.removeItem("DTCSortSearchData");
+        localStorage.removeItem("DTCchildCategory");
       }
 
 
@@ -757,7 +842,7 @@ export class DesigntocostStep1Component implements OnInit {
     this.Catlist4 = data.filter((d: { groupCategory: any; }) => d.groupCategory == "Cat4");
 
     setTimeout(() => {
-      if (localStorage.getItem("DTOHistorysearch") != null) {
+      if (localStorage.getItem("DTCHistorysearch") != null) {
         var ul = document.getElementById("Cat2UL");
         var li = ul!.getElementsByTagName("li") as any;
         for (var i = 0; i < this.filters.cat2.split(',').length; i++) {
@@ -803,7 +888,7 @@ export class DesigntocostStep1Component implements OnInit {
     this.EngineList = data;
 
     setTimeout(() => {
-      if (localStorage.getItem("DTOHistorysearch") != null) {
+      if (localStorage.getItem("DTCHistorysearch") != null) {
         var ul = document.getElementById("EngineUL");
         var li = ul!.getElementsByTagName("li") as any;
         for (var i = 0; i < this.filters.engine.split(',').length; i++) {
@@ -826,7 +911,7 @@ export class DesigntocostStep1Component implements OnInit {
     this.ProgramNameList = data;
 
     setTimeout(() => {
-      if (localStorage.getItem("DTOHistorysearch") != null) {
+      if (localStorage.getItem("DTCHistorysearch") != null) {
         // debugger;
         var ul = document.getElementById("ProgramnameUL");
         var li = ul!.getElementsByTagName("li") as any;
@@ -849,7 +934,7 @@ export class DesigntocostStep1Component implements OnInit {
     this.Location = data;
 
     setTimeout(() => {
-      if (localStorage.getItem("DTOHistorysearch") != null) {
+      if (localStorage.getItem("DTCHistorysearch") != null) {
         var ul = document.getElementById("LocationUL");
         var li = ul!.getElementsByTagName("li") as any;
         for (var i = 0; i < this.filters.location.split(',').length; i++) {
@@ -893,7 +978,7 @@ export class DesigntocostStep1Component implements OnInit {
     }, 200);
 
     setTimeout(() => {
-      if (localStorage.getItem("DTOHistorysearch") != null) {
+      if (localStorage.getItem("DTCHistorysearch") != null) {
         var ul = document.getElementById("BusinessUnitUL");
         var li = ul!.getElementsByTagName("li") as any;
         for (var i = 0; i < this.filters.unit.split(',').length; i++) {
@@ -976,7 +1061,7 @@ export class DesigntocostStep1Component implements OnInit {
 
 
   getCategoryIdcat2() {
-    localStorage.removeItem("DTOchildCategory");
+    localStorage.removeItem("DTCchildCategory");
     var param_value = "";
 
     var ul = document.getElementById("Cat2UL");
@@ -998,12 +1083,12 @@ export class DesigntocostStep1Component implements OnInit {
     this.filters.cat2 = param_value;
     this.GetSearchdata(this.filters);
 
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
   }
 
   //// click on cat3 checkbox
   async getCategoryIdcat3() {
-    localStorage.removeItem("DTOchildCategory");
+    localStorage.removeItem("DTCchildCategory");
 
     var param_value = "";
 
@@ -1023,12 +1108,12 @@ export class DesigntocostStep1Component implements OnInit {
 
     this.filters.cat3 = param_value;
     this.GetSearchdata(this.filters);
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
   }
 
   //// click on cat4 checkbox
   async getCategoryIdcat4() {
-    localStorage.removeItem("DTOchildCategory");
+    localStorage.removeItem("DTCchildCategory");
 
     var param_value = "";
 
@@ -1048,13 +1133,13 @@ export class DesigntocostStep1Component implements OnInit {
 
     this.filters.cat4 = param_value;
     this.GetSearchdata(this.filters);
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
 
 
   }
 
   async getLocationName() {
-    localStorage.removeItem("DTOchildCategory");
+    localStorage.removeItem("DTCchildCategory");
 
     var param_value = "";
 
@@ -1075,12 +1160,12 @@ export class DesigntocostStep1Component implements OnInit {
     this.filters.location = param_value;
     this.GetSearchdata(this.filters);
 
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
 
   }
 
   async getEnginelist() {
-    localStorage.removeItem("DTOchildCategory");
+    localStorage.removeItem("DTCchildCategory");
 
     var param_value = "";
 
@@ -1101,13 +1186,13 @@ export class DesigntocostStep1Component implements OnInit {
     this.filters.engine = param_value;
     this.GetSearchdata(this.filters);
 
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
 
   }
 
   getProgramNamelist() {
     //debugger;
-    localStorage.removeItem("DTOchildCategory");
+    localStorage.removeItem("DTCchildCategory");
     var param_value = "";
 
     var ul = document.getElementById("ProgramnameUL");
@@ -1127,12 +1212,12 @@ export class DesigntocostStep1Component implements OnInit {
     this.filters.ProgramName = param_value;
     this.GetSearchdata(this.filters);
 
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
   }
 
 
   getBusinessUnitValues() {
-    localStorage.removeItem("DTOchildCategory");
+    localStorage.removeItem("DTCchildCategory");
 
     var param_value = "";
 
@@ -1153,12 +1238,12 @@ export class DesigntocostStep1Component implements OnInit {
     this.filters.unit = param_value;
     this.GetSearchdata(this.filters);
 
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
 
   }
 
   getFifnishWeightKG(e: any) {
-    localStorage.removeItem("DTOchildCategory");
+    localStorage.removeItem("DTCchildCategory");
 
     if (this.FromFinishWeight != undefined && this.ToFinishWeight != undefined) {
       if (this.FromFinishWeight != "" && this.ToFinishWeight != "") {
@@ -1175,7 +1260,7 @@ export class DesigntocostStep1Component implements OnInit {
 
         this.GetSearchdata(this.filters);
 
-        localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+        localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
       }
     }
   }
@@ -1210,7 +1295,7 @@ export class DesigntocostStep1Component implements OnInit {
       }
 
 
-      if (localStorage.getItem("DTOHistorysearch") != null) {
+      if (localStorage.getItem("DTCHistorysearch") != null) {
         //console.log(this.filters);
 
         this.searchProduct2.nativeElement.value = this.filters.like.trim();
@@ -1250,8 +1335,8 @@ export class DesigntocostStep1Component implements OnInit {
 
       //debugger;
       if (this.SearchList.length > 0) {
-        if (localStorage.getItem("DTOSortSearchData") != null || localStorage.getItem("DTOSortSearchData") != undefined) {
-          this.SortSearchData = localStorage.getItem("DTOSortSearchData");
+        if (localStorage.getItem("DTCSortSearchData") != null || localStorage.getItem("DTCSortSearchData") != undefined) {
+          this.SortSearchData = localStorage.getItem("DTCSortSearchData");
           this.FilterSearchData();
         }
       }
@@ -1282,11 +1367,11 @@ export class DesigntocostStep1Component implements OnInit {
     if (flag) {
       this.GetSearchdata(this.filters);
     }
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
   }
 
   DebriefFilter() {
-    localStorage.removeItem("DTOchildCategory");
+    localStorage.removeItem("DTCchildCategory");
     if (this.DebriefFrom_Date != undefined && this.DebriefTo_Date != undefined) {
       if (this.DebriefFrom_Date != "" && this.DebriefTo_Date != "") {
         if (Date.parse(this.DebriefFrom_Date) > Date.parse(this.DebriefTo_Date)) {
@@ -1298,7 +1383,7 @@ export class DesigntocostStep1Component implements OnInit {
         this.filters.F_debriefDate = this.DebriefFrom_Date;
         this.filters.T_debriefDate = this.DebriefTo_Date;
         this.GetSearchdata(this.filters);
-        localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+        localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
       }
     }
   }
@@ -1321,12 +1406,12 @@ export class DesigntocostStep1Component implements OnInit {
     if (flag) {
       this.GetSearchdata(this.filters);
     }
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
 
   }
 
   ShouldCostFilter() {
-    localStorage.removeItem("DTOchildCategory");
+    localStorage.removeItem("DTCchildCategory");
 
     if (this.FromShouldCost != undefined && this.ToShouldCost != undefined) {
       if (this.FromShouldCost != "" && this.ToShouldCost != "") {
@@ -1340,7 +1425,7 @@ export class DesigntocostStep1Component implements OnInit {
         this.filters.T_TotalCost = this.ToShouldCost;
         this.GetSearchdata(this.filters);
 
-        localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+        localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
       }
     }
   }
@@ -1364,7 +1449,7 @@ export class DesigntocostStep1Component implements OnInit {
     this.filters.T_FinishWeight = "";
     this.filters.F_FinishWeight = "";
     this.filters.FinishWeight_KG = 1;
-    localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+    localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
     if (flag) {
       this.GetSearchdata(this.filters);
     }
@@ -1372,7 +1457,7 @@ export class DesigntocostStep1Component implements OnInit {
   }
 
   WeightFilter() {
-    localStorage.removeItem("DTOchildCategory");
+    localStorage.removeItem("DTCchildCategory");
 
     if (this.FromFinishWeight != undefined && this.ToFinishWeight != undefined) {
       if (this.FromFinishWeight != "" && this.ToFinishWeight != "") {
@@ -1387,7 +1472,7 @@ export class DesigntocostStep1Component implements OnInit {
         this.filters.F_FinishWeight = this.FromFinishWeight;
         this.GetSearchdata(this.filters);
 
-        localStorage.setItem("DTOHistorysearch", JSON.stringify(this.filters));
+        localStorage.setItem("DTCHistorysearch", JSON.stringify(this.filters));
       }
     }
   }
@@ -1406,7 +1491,7 @@ export class DesigntocostStep1Component implements OnInit {
     else {
       localStorage.setItem("imagePath", e.imagePath);
     }
-    
+
     this.router.navigate(['/home/designtocost/step2']);
 
   }
@@ -1827,7 +1912,7 @@ export class DesigntocostStep1Component implements OnInit {
       return
     }
 
-    localStorage.setItem("DTOSortSearchData", this.SortSearchData);
+    localStorage.setItem("DTCSortSearchData", this.SortSearchData);
 
     switch (this.SortSearchData) {
       case '1': // Debrief Date Sort by Ascending to Descending
@@ -1866,6 +1951,12 @@ export class DesigntocostStep1Component implements OnInit {
     };
 
     this.router.navigate(['/home/shouldcostuserhistory/:data'], { queryParams: Params });
+  }
+
+
+
+  backToPreviousPage() {
+    this.backpagelocation.back();
   }
 
 

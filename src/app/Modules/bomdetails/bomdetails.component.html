@@ -14,8 +14,10 @@
     </div>
 
     <div class="text-end addbutton">
+        <button class="btnCreateCart" (click)="Downloadtemplate()">Download Template</button>
         <button class="btnCreateCart" (click)="openModal1()" >Add Program</button>
         <button class="btnCreateCart" (click)="openModal2()" >Add Cart</button>
+
     </div>
 
     <div class="row CartDetails">
@@ -87,11 +89,12 @@
         <div class="col-md-9" style="padding: 0;">
             <div class="carttitle"
             style="border-bottom: 1px solid black;padding-bottom: 10px;background-color: #da291c;text-align: center;color: white;">
-            <label style="margin-top: 7px;font-size: medium;">Cart Details &nbsp;{{cartdetailshead}}</label>
+            <label style="margin-top: 7px;font-size: medium;">Cart Details - {{cartdetailshead}}</label>
         </div>
           
             <div class="cartdata">
-              <div class="cartlist-card" *ngFor="let data of cartlist">
+              <div class="cartlist-card" style="padding-left: 4px;" *ngFor="let data of cartlist">
+                <i style="font-size: 33px; color: #df473d;" class="bi bi-cart-fill"></i>
                 <div class="cart-info">
                   <p class="cart-name">{{ data.cartName }}</p>
                   <div class="cart-meta">
@@ -114,6 +117,7 @@
                     View
                   </button>
                 </div>
+                <i class="bi-trash-fill" style="color: #da291c; font-size: 20px; cursor: pointer; " ngbTooltip="Delete Cart" (click)="deletecart(data.cartId)"></i>
               </div>
             </div>
           </div>

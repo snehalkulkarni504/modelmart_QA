@@ -11,7 +11,7 @@
     /*margin-right: 10%;*/
     font-family: Helvetica, Arial;
     border-bottom: 1px solid #da291c;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     /* box-shadow: 0 6px 2px -6px #da291c; */
 }
 th, td {
@@ -19,12 +19,13 @@ th, td {
     overflow: hidden;
   }
   
-  .collapsed {
+.collapsed {
     max-width: 0;
     opacity: 0;
     padding: 0 !important;
     border: none;
   }
+
 .exportToExcel{
     width: 30px;height: 30px;
 }
@@ -62,7 +63,7 @@ th, td {
 
 .btnCreateCart {
     margin-top: 25px;
-    font-size: 15px !important;
+    font-size: 12px !important;
     color: #da291c;
     background-color: #fff;
     padding: 4px 15px;
@@ -254,8 +255,7 @@ tr.group-header {
 }
 
 .table {
-    width: 99% !important;
-    margin-top: 10px; 
+    width: 90% !important;
     font-family: Helvetica, Arial !important ;
 }
 
@@ -315,15 +315,26 @@ input {
 }
 
 
-
-
 th,td{
-    /*use this property to disbale soft wrap*/
    white-space: nowrap;
-    /*To make extra certain,add this css property*/
    word-break: keep-all;
 
 }
+
+.trgroupsticky
+{
+    position: sticky;
+    height: 30px;
+    background-color: #000;
+}
+.trgroupstickyheader
+{
+    position: sticky;
+    top: 30px;
+    height: 30px;
+    background-color: #000;
+}
+
 
 
 
@@ -386,16 +397,202 @@ th,td{
     background-color: rgb(200, 225, 239);
     
 }
-.tableFixHead          { overflow: auto; height: 300px; }
-.tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
+.tableFixHead         
+ {
+    margin-top: 15px;
+    overflow: auto; 
+    height: 365px;
+ }
+.tableFixHead thead th 
+{ position: sticky;
+  top: 0;
+  z-index: 1; 
+}
 
 
-  /* Ensure the table layout is consistent */
- 
-
-  /* Style for table header */
- 
-
-  /* Optional: Style for table rows */
-
+.group-toggle-header {
+    background-color: #f4f4f4;
+    text-align: center;
+    padding: 6px;
+  }
   
+  .group-toggle-btn {
+    font-size: 10px;
+    background-color: #da291c;
+    /* color: #fff; */
+    border: none;
+    padding: 4px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .group-toggle-btn:hover {
+    background-color: #b51f17;
+  }
+
+
+  .collapsed1
+  {
+    /* background: linear-gradient(to right, #da291c, #da291c7c); */
+    /* background-color: #80c2ce !important; */
+    background-color: #ed6258 !important;
+
+  }
+
+  .collapsed2
+  {
+    background-color: #e08b85 !important;
+  }
+  
+  .collapsed3
+  {
+    /* background-color: #71a3c1 !important; */
+    background-color: #f38981 !important;
+
+  }
+  .collapsed4
+  {
+    background-color: #04444f !important;
+    z-index: 100 !important;
+  }
+
+  .modal-close-icn {
+    width: 30px;
+    height: 30px;
+    color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .2s ease-in-out;
+}
+
+.modal-close-icn:hover {
+    rotate: 90deg;
+    cursor: pointer;
+}
+
+.modal {
+    background: rgba(0, 0, 0, .5);
+}
+
+.default-btn_popup {
+    background-color: #da291c;
+    color: #fff;
+}
+  
+td:last-child {
+    overflow: visible !important;
+    position: relative;
+  }
+
+
+
+
+  /* -------------------------------- */
+
+  .table-container {
+    height: 400px;
+    overflow: auto;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    text-align: center;
+    margin-top: 7px;
+    
+   }
+   .styled-table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: Helvetica, Arial !important;
+    table-layout: fixed;
+   }
+   /* Header rows */
+   .header-top {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: linear-gradient(to right, #4e54c8, #8f94fb);
+    color: white;
+   }
+   .header-sub {
+    position: sticky;
+    top: 35.5px; /* Height of the first header row */
+    z-index: 9;
+    background-color: #f0f4ff;
+    color: #333;
+   }
+   /* Shared cell styling */
+   /* .styled-table th, */
+   .styled-table td {
+    width: 120px;
+    max-width: 120px;
+    padding: 0;
+    border: 1px solid #ddd;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 20px;
+   }
+
+   .styled-table thead th
+   {
+    font-size: 12px;
+    height: 16px;
+    text-align: center;
+   }
+   /* Sticky Action Column */
+   .sticky-col {
+    position: sticky;
+    right: 0;
+    background: white;
+    z-index: 8;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+   }
+   /* Sticky Header Cell inside the sticky column */
+   .sticky-top {
+    top: 0;
+    z-index: 11;
+   }
+   /* Body row styles */
+   .styled-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+   }
+   .styled-table tbody tr:hover {
+    background-color: #eef3ff;
+   }
+   /* Action Button Styling */
+   .action-btn {
+    background: linear-gradient(to right, #36d1dc, #5b86e5);
+    border: none;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+   }
+   .action-btn:hover {
+    background: linear-gradient(to right, #2b8de4, #3f51b5);
+    transform: scale(1.05);
+   }
+
+   .btndemo
+   {
+    font-size: smaller;
+    color: white;
+    background-color: #da291c;
+    border: 1px solid #da291c;
+    border-radius: 5px;
+    padding: 5px
+   }
+
+   .btndemo:hover
+   {
+    color: #da291c;
+    background-color: white;
+    transform: scale(1.05);
+   }

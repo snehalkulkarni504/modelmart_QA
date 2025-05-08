@@ -6,6 +6,7 @@ import { BUnitMaster } from 'src/app/Model/BUnitMaster';
 import { Authclass } from '../Model/authclass';
 import { Form } from '@angular/forms';
 import { CommericalArbitrage } from '../Model/CommericalArbitrage';
+import { RegionalArbitrage } from '../Model/RegionalArbitrage';
 
 
 @Injectable({
@@ -222,12 +223,10 @@ export class AdminService {
 
 
   GetCommericalArtibage(CategoryID: number[]) {
-    debugger
     return this.httpClient.get(this.apiUrl + `GetCommericalArtibage?CategoryID=${CategoryID}`);
   }
 
   SaveCommericalArtibage(opportunity: CommericalArbitrage): Observable<any> {
-    debugger
     return this.httpClient.post(this.apiUrl + `AddCommericalArtibage`, opportunity);
   }
 
@@ -236,7 +235,6 @@ export class AdminService {
   }
 
   Uploadfiles(commercialId: string, selectedFiles: File[]): Observable<any> {
-    debugger
     const formData = new FormData();
 
     formData.append('commercialId', commercialId);
@@ -246,6 +244,29 @@ export class AdminService {
     return this.httpClient.post(this.apiUrl + "CommericalUpload", formData);
   }
 
+  GetRegionalArbitrage(CategoryID: number[]) {
+    return this.httpClient.get(this.apiUrl + `GetRegionalArbitarge?CategoryID=${CategoryID}`);
+  }
+
+
+  SaveRegionalArtibage(Region: RegionalArbitrage): Observable<any> {
+    return this.httpClient.post(this.apiUrl + `AddRegionalArbitrage`, Region);
+  }
+
+
+  downloadReginalFileAsZip(Regional_ArtibageID: any): Observable<Blob> {
+    return this.httpClient.get(`${this.apiUrl}RegionalDownload?folderName=${Regional_ArtibageID}`, { responseType: 'blob' });
+  }
+
+
+  RegionalUpload(Regional_ArtibageID: string, selectedFiles: File[]): Observable<any> {
+    const formData = new FormData();
+    formData.append('Regional_ArbitrageID', Regional_ArtibageID);
+    for (const dfile of selectedFiles) {
+      formData.append('files', dfile, dfile.name);
+    }
+    return this.httpClient.post(this.apiUrl + "RegionalUpload", formData);
+  }
 
 
 }

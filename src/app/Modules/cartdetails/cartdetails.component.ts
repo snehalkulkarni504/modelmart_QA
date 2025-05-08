@@ -14,6 +14,8 @@ import { DatePipe, Location } from '@angular/common';
 
 
 
+
+
 @Component({
   selector: 'app-cartdetails',
   templateUrl: './cartdetails.component.html',
@@ -107,9 +109,21 @@ export class CartdetailsComponent {
   selectedEngine:any;
   selectedplatform:any;
   exceltemppartno:any=0;
+  
+  matchraw:any;
+  uniqeqty:any;
+  bomqty:any;
+  lastsumulate:any;
+  fcost:any;
+
+
+  getrouteprogname:any;
   getroutecartid:any;
   getroutecartname:any;
- 
+  getrouteuniqty:any;
+  getroutebomqty:any;
+  getroutebomcost : any;
+  getroutelastsim :any;
   
   ngOnInit(): void {
     if (localStorage.getItem("userName") == null) {
@@ -123,8 +137,13 @@ export class CartdetailsComponent {
 
    this.actrouter.queryParams.subscribe((params) =>
     {
+      this.getrouteprogname=params['progname'],
       this.getroutecartid=params['cartid'] || null,
-      this.getroutecartname=params['cartname'] || null
+      this.getroutecartname=params['cartname'] || null,
+      this.getrouteuniqty=params['uniqty'] || null,
+      this.getroutebomqty=params['bomqty'] || null,
+      this.getroutebomcost=params['bomcost'] || null,
+      this.getroutelastsim=params['lastsim'] || null
     });
    
     console.log("demo:-",this.getroutecartid,this.getroutecartname);
@@ -267,7 +286,35 @@ export class CartdetailsComponent {
     this.cdr.detectChanges();
     
     const updatedRow = { ...row };  // Create a copy of the row
+    if(updatedRow.excelpartno=="" ||updatedRow.excelcurrentprogram==""||updatedRow.excelenginedisplacement==""||updatedRow.excelname=="")
+      {
+        this.toastr.warning("Please fill out all required fields.");
+        return;
+      }
   delete updatedRow.editable;  // Remove the editable property
+  delete updatedRow.businessUnit;
+  delete updatedRow.cartId;
+  delete updatedRow.categoryId;
+  delete updatedRow.childCategory;
+  delete updatedRow.costType;
+  delete updatedRow.dbdate;
+  delete updatedRow.height;
+  delete updatedRow.invoice;
+  delete updatedRow.length;
+  delete updatedRow.mfgProcess;
+  delete updatedRow.mfgRegion;
+  delete updatedRow.name;
+  delete updatedRow.parentCategory;
+  delete updatedRow.partName
+  delete updatedRow.partNumber
+  delete updatedRow.projectName
+  delete updatedRow.rowmaterial
+  delete updatedRow.scost
+  delete updatedRow.supplierName
+  delete updatedRow.ucost
+  delete updatedRow.utilization
+  delete updatedRow.weight
+  delete updatedRow.width
 
   // Post updated data to the API
   this.SpinnerService.show('spinner');
@@ -291,8 +338,36 @@ export class CartdetailsComponent {
     this.cdr.detectChanges();
     
     const updatedRow = { ...row };  // Create a copy of the row
+    if(updatedRow.excelpartno=="" ||updatedRow.excelcurrentprogram==""||updatedRow.excelenginedisplacement==""||updatedRow.excelname=="")
+    {
+      this.toastr.warning("Please fill out all required fields.");
+      return;
+    }
   delete updatedRow.editable;  // Remove the editable property
-
+  delete updatedRow.businessUnit;
+  delete updatedRow.cartId;
+  delete updatedRow.categoryId;
+  delete updatedRow.childCategory;
+  delete updatedRow.costType;
+  delete updatedRow.dbdate;
+  delete updatedRow.height;
+  delete updatedRow.invoice;
+  delete updatedRow.length;
+  delete updatedRow.mfgProcess;
+  delete updatedRow.mfgRegion;
+  delete updatedRow.name;
+  delete updatedRow.parentCategory;
+  delete updatedRow.partName
+  delete updatedRow.partNumber
+  delete updatedRow.projectName
+  delete updatedRow.rowmaterial
+  delete updatedRow.scost
+  delete updatedRow.supplierName
+  delete updatedRow.ucost
+  delete updatedRow.utilization
+  delete updatedRow.weight
+  delete updatedRow.width
+  
   // Post updated data to the API
   this.SpinnerService.show('spinner');
   this.bomService.UpdateBomFilterNew(updatedRow,this.getroutecartid,this.userId).subscribe(response => {
@@ -316,17 +391,30 @@ export class CartdetailsComponent {
   }
 
   private calculateTotals(): void {
+    this.matchraw=0;
+    this.bomqty=0;
+    this.fcost=0;
+    this.uniqeqty=this.SearchProductList.length;
     this.SearchProductList.forEach((item:any) => {
-      if (!this.totalScostByParentCategory[item.parentCategory]) {
-        this.totalScostByParentCategory[item.parentCategory] = 0;
+     // if (!this.totalScostByParentCategory[item.parentCategory]) {
+      //  this.totalScostByParentCategory[item.parentCategory] = 0;
+      //}
+      //if(item.ucost>0){
+        //this.totalScostByParentCategory[item.parentCategory] += item.ucost;
+      //}
+      //else{
+      //this.totalScostByParentCategory[item.parentCategory] += item.scost;
+    //}
+      if(item.categoryId>0){
+        this.matchraw=this.matchraw+1;
       }
-      if(item.ucost>0){
-        this.totalScostByParentCategory[item.parentCategory] += item.ucost;
-      }
-      else{
-      this.totalScostByParentCategory[item.parentCategory] += item.scost;
-    }
+      this.bomqty=this.bomqty+item.excelitemcount;
+      this.fcost=this.fcost+item.ucost;
+      if(item.modyfyDate!=null)
+      this.lastsumulate=item.modyfyDate
     });
+    
+    //alert(this.SearchProductList[0].lastsumulate);
   }
 
  async ShowCagetory4() {
@@ -607,13 +695,19 @@ export class CartdetailsComponent {
   closeUploadModal(): void {
    this.display = 'none';
   }
+  selectedfilename:string='';
   onFileSelected(event: any): void
   {
-    debugger
+    debugger;
     this.selectedFile = event.target.files[0];
-    if(this.selectedFile !==undefined)
+    const file=event.target.files[0];
+    if(this.selectedFile)
     {
+      this.selectedfilename = file.name;
       this.showError7=false
+    }
+    else {
+      this.selectedfilename = '';
     }
   }
 
@@ -650,11 +744,17 @@ export class CartdetailsComponent {
   this.bomService.DeleteBomAll(this.getroutecartid).subscribe(response => {
     this.bomService.uploadExcelData(uploadfile,this.getroutecartid,this.userId).subscribe(
       { next: (_res: any) => {
+        if(_res==true){
         console.log('Excel data uploaded successfully:', _res);
         this.toastr.success("Data Uploaded Successfully.");
         this.closeUploadModal();
         this.ShowLandingPage(0, this.getroutecartid);
         //this.SpinnerService.hide('spinner');
+        }
+        else{
+          this.SpinnerService.hide('spinner')
+          this.toastr.warning("Upload is failing. Please check all required fields.");
+        }
       },
       error: (error: any) => {
         console.error('API call error:', error);
@@ -788,6 +888,7 @@ export class CartdetailsComponent {
     excelsuppliername: '',
     excelitemcount: 0,
     excelenginedisplacement:'',
+    excelname:'',
     //name: '',
     //categoryId: '',
     //partNumber: '',
@@ -858,7 +959,7 @@ this.SpinnerService.show('spinner');
     
       this.SpinnerService.hide('spinner');
       this.toastr.success("Row updated successfully.");
-      this.ShowLandingPage(0,this.getroutecartid);
+      this.ShowLandingPage(1, this.getroutecartid);
 
     //row.editable = false;  // Disable edit mode after successful update
 
@@ -878,6 +979,56 @@ toggleGroup(group: string): void {
   
   this.columnGroupVisibility[group] = !this.columnGroupVisibility[group];
 }
+
+Ishide1 = true;
+colspanhide1 = 3;
+
+Ishide2 = true;
+colspanhide2 = 3;
+
+Ishide3 = true;
+colspanhide3 = 2;
+
+  hide1() {
+    debugger;
+    if (!this.Ishide1) {
+      this.Ishide1 = true;
+      this.colspanhide1 = 3;
+    }
+    else {
+      this.Ishide1 = false;
+      this.colspanhide1 = 11;
+    }
+
+  }
+  hide2() {
+    debugger;
+    if (!this.Ishide2) {
+      this.Ishide2 = true;
+      this.colspanhide2 = 3;
+    }
+    else {
+      this.Ishide2 = false;
+      this.colspanhide2 = 10;
+    }
+
+  }
+
+  hide3() {
+    debugger;
+    if (!this.Ishide3) {
+      this.Ishide3 = true;
+      this.colspanhide3 = 2;
+    }
+    else {
+      this.Ishide3 = false;
+      this.colspanhide3 = 11;
+    }
+
+  }
+
+
+
 
 }
 

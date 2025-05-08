@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environments';
@@ -122,6 +122,20 @@ export class ReportServiceService {
         responseType: 'blob', // Important to specify blob as the response type
       }
     );
+  }
+
+  insertDPVavedetails(Vavelist: any): Observable<any> {
+    const formdata = new FormData();
+    formdata.append('vavelist',JSON.stringify( Vavelist));
+    return this.http.post<FormData>(this.apiUrl + `InsertDPVavedetails`, formdata);
+  }
+ 
+  GetDTCVavedata(Ids:any):Observable<any> {
+    let params = new HttpParams();
+      Ids.forEach((id: { toString: () => string | number | boolean; }) => {
+    params = params.append('ids', id.toString());
+  });
+    return this.http.get<any[]>(this.apiUrl+`GetDesignToCostVavedetails`,{ params });
   }
   
 }

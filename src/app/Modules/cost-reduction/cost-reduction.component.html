@@ -27,12 +27,13 @@
       </div>
 
       <div class="col-md-9" id="SearchFiltersdiv">
-        <div class="row border-bottom text-center CategoryWelcome">
-          <div class="text-end">
+        <div class="row border-bottom  CategoryWelcome">
+          <div class="col-md-12 text-end ">
             <button class="costbtn" (click)="selectAll()" style="margin-right: 10px;"> {{ selectAllText }}</button>
             <button class="costbtn" (click)="toggleView()"> Cost Insight</button>
           </div>
         </div>
+
 
         <div class="row setOpacity" id="SearchFilters">
           <div *ngFor="let c of SearchProductList | groupBy : 'parentCategory'">
@@ -62,8 +63,7 @@
 </div>
 
 
-<!-- ---------------  Arbitrage --------------- -->
- 
+
 <div *ngIf="showcostinsights" style="text-align: center; padding: 20px;">
   <h1>Welcome to Category Management Page - Exhaust Manifolds</h1>
 
@@ -92,15 +92,9 @@
   </div>
 
 </div>
-<!-- 
-<div *ngIf="showContent" class="container-fluid">
-  <div class="container">
-      <app-commercial-arbitrage [Cat4Ids]="test"></app-commercial-arbitrage>
-  </div>
 
-</div> -->
+<!------------------------------------------------start of Commerical Arbitrage --------------------------->
 
- 
 <div *ngIf="showContent" class="container-fluid"
   style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
   <div class="row" style="width: 100%; display: flex; justify-content: center;">
@@ -109,13 +103,33 @@
 
     <div class="graph">
       <div class="chart-box">
-        <canvasjs-chart class="canvas-chart" s [options]="chartOptions" [styles]="{width: 'auto', height:'375px'}"
+        <canvasjs-chart class="canvas-chart" [options]="chartOptions" [styles]="getGraphstyle()"
           id="chartOptionsId"></canvasjs-chart>
       </div>
     </div>
 
+    <!-- <div class="graph">
+      <div class="chart-box">
+        <canvasjs-chart class="canvas-chart"  [options]="RegionchartOptions" [styles]="getChartStyles()" id="chartOptionsId"></canvasjs-chart>
+      </div>
+    </div> -->
+
     <div class="filterlabel">
       <label for="date-range">Select:</label>
+      <!-- <select
+         [styles]="{height:'375px'}"
+        id="date-range"
+        [(ngModel)]="selectedRange"
+        (change)="onDateRangeChange()"
+        class="custom-input"
+        style="padding: 5px;"
+      >
+        <option value="">Select Range</option>
+        <option value="3">Last 3 Months</option>
+        <option value="6">Last 6 Months</option>
+        <option value="12">Last 1 Year</option>
+      </select> -->
+
       <select id="date-range" [(ngModel)]="selectedRange" (change)="onDateRangeChange()" class="custom-input"
         style="padding: 5px;">
         <option *ngFor="let range of dateRanges" [value]="range.value">
@@ -142,6 +156,8 @@
             <tr>
               <th style="position: sticky; left:-1px; top:-1px; z-index: 4;">Sr<br>no</th>
               <th style="position: sticky; left: 29px; top: -1px;  z-index: 4;">Part Number</th>
+              <!-- <th style="position: sticky; left: 145px; top:-2px;  z-index: 4">Part Number</th>
+              <th style="position: sticky; left: 240px; top:-2px;  z-index: 4">MMID</th> -->
               <th>Part Name</th>
               <th>MMID</th>
               <th>Supplier Name</th>
@@ -169,6 +185,8 @@
             <tr *ngFor="let opportunity of opportunities;  let i=index">
 
               <td style="position: sticky; left: -1px; ">{{i + 1}}</td>
+              <!-- <td style="position: sticky; left: 29px; ">{{opportunity.PartName}}</td>
+              <td style="position: sticky; left: 233px;">{{opportunity.PartNumber}}</td> -->
               <td style="position: sticky; left: 29px;">
                 <span title="{{opportunity.PartNumber}}">
                   {{opportunity.PartNumber.length > 10 ? opportunity.PartNumber.slice(0, 10) + '...' :
@@ -224,7 +242,7 @@
               <td>{{opportunity.ModifiedBy}}</td>
               <td>
                 <select [(ngModel)]="opportunity.ProjectStatus" class="form-select"
-                  style="width: 100%; height: 25px; font-size: 9px; font-weight: bold;">
+                  style="width: 100%; height: 25px; font-size: 9px; font-weight: bold;" [disabled]="editingIndex !== i">
                   <option class="ttt" value="Open" selected>Open</option>
                   <option value="WIP">WIP</option>
                   <option value="Close">Close</option>
@@ -234,7 +252,9 @@
               <td hidden>{{opportunity.DebriefDate}}</td>
 
               <td>
-                <span (click)="openCommentsPopup(opportunity.Comments, i)" style="cursor: pointer; color: #ef7659;">
+                <span (click)="openCommentsPopup(opportunity.Comments, i)"
+                  [style.pointer-events]="editingIndex !== i ? 'none' : 'auto'"
+                  style="cursor: pointer; color: #ef7659;">
                   {{ opportunity.Comments && opportunity.Comments.length > 12
                   ? (opportunity.Comments | slice:0:12) + '...'
                   : opportunity.Comments || 'Add Comment' }}
@@ -247,7 +267,9 @@
                   style="color: #185ca4; font-size: 17px; cursor: pointer;" ngbTooltip="Upload Document"></i>
                 <i class="bi bi-download" (click)="downloadFolderAsZip(opportunity.CommericalArtibageID)"
                   style="color: #2fa365; font-size: 17px; cursor: pointer; margin-left: 10px;"
-                  ngbTooltip="Download Document"></i>
+                  ngbTooltip="Download Document">
+                </i>
+
                 <i class="bi bi-box-arrow-in-up-right"
                   (click)="uploadTCO(opportunity.CommericalArtibageID,opportunity.MMID,opportunity.RequestHeaderId)"
                   style="color: #f0ad4e; font-size: 17px; cursor: pointer; margin-left: 10px;"
@@ -324,7 +346,6 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" (click)="savedoc()">Save</button>
                 <button type="button" class="btn btn-sm  btn-default default-btn_popup"
                   (click)="closeUploadPopup()">Close</button>
               </div>
@@ -334,33 +355,49 @@
       </div>
     </div>
   </div>
-</div>  
+</div>
 <!------------------------------------------------End of Commerical Arbitrage --------------------------->
 
+<!------------------------------------------------start of Regional Arbitrage --------------------------->
 
 <div *ngIf="showRegionalContent" class="container-fluid"
   style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
   <div class="col-12" style="margin-bottom: 20px; display: flex; justify-content: center;">
-
-    <!-- <div style="width: 90%; border: 1px solid #808080; text-align: center;">
-      <img src="../../../assets/RegionArbitrage_10.png" style="width: 100%; height: 400px" alt="Commercial Image" />
-    </div> -->
     <div class="graph">
       <div class="chart-box">
-        <canvasjs-chart class="canvas-chart" s [options]="RegionchartOptions" [styles]="{width: 'auto', height:'375px'}"
+        <canvasjs-chart class="canvas-chart" [options]="RegionchartOptions" [styles]="getChartStyles()"
           id="chartOptionsId"></canvasjs-chart>
       </div>
     </div>
 
+  </div>
 
+  <div class="filterlabel">
+    <label for="date-range">Select:</label>
+
+    <select id="date-range" [(ngModel)]="selectedRange" (change)="onDateRangeChange()" class="custom-input"
+      style="padding: 5px;">
+      <option *ngFor="let range of dateRanges" [value]="range.value">
+        {{ range.label }}
+      </option>
+    </select>
+
+    <label for="from-date" style="margin-left: 10px;">From Date:</label>
+    <input type="date" id="from-date" [(ngModel)]="fromDate" [attr.min]="minDate" [attr.max]="maxDate"
+      class="custom-input" style="padding: 5px;" />
+
+    <label for="to-date" style="margin-left: 10px;">To Date:</label>
+    <input type="date" id="to-date" [(ngModel)]="toDate" [attr.min]="minDate" [attr.max]="maxDate" class="custom-input"
+      style="padding: 5px;" />
+
+    <button class="btn view-btn" style="margin-right: 10px;" (click)="RegionalDateFilter()">View</button>
+    <button class="btn view-btn" (click)="ClearDateFilter()">clear</button>
   </div>
   <div class="col-md-6" style="max-width: 100%;width: 90%; overflow-x: auto; margin-bottom: 60px; ">
     <div class="table-responsive" style="border: 1px solid #808080;">
       <table class="table  table-hover table-striped" style="width: 100%; table-layout: 100%;">
         <thead>
           <tr>
-            <!-- <th>SrNo</th>
-            <th>Part Name</th> -->
             <th style="position: sticky; left:-1px; top:-1px; z-index: 4;">Sr<br>no</th>
             <th style="position: sticky; left: 29px; top: -1px;  z-index: 4;">Part Number</th>
             <th>Part<br>Name</th>
@@ -371,7 +408,6 @@
             <th>Best<br>Region</th>
             <th>Best<br>Region Cost</th>
             <th>Region<br>Arbitrage (USD)</th>
-            <!-- <th>Region<br>Arbitrage<br>Value</th> -->
             <th>RegionRelation</th>
             <th>Project Status</th>
             <th hidden>Debreif Date</th>
@@ -392,10 +428,9 @@
             <td>{{Region.BestRegion}}</td>
             <td>$ {{Region.BestRegionCost}}</td>
             <td>$ {{Region.RegionalArbitrage}}</td>
-            <!-- <td>$ {{Region.regionArbitrageValue}}</td> -->
             <td>{{Region.RegionRelation}}</td>
             <td>
-              <select [(ngModel)]="Region.ProjectStatus" class="form-select"
+              <select [(ngModel)]="Region.ProjectStatus" class="form-select" [disabled]="editingIndex !== i"
                 style="width: 100%; height: 25px; font-size: 9px; font-weight: bold;">
                 <option value="Open" selected>Open</option>
                 <option value="WIP">WIP</option>
@@ -406,25 +441,27 @@
             <td hidden>{{Region.DebriefDate}}</td>
 
             <td>
-              <span (click)="openregioncomment(Region.Comments, i)" style="cursor: pointer; color: #ef7659;">
+              <span (click)=" editingIndex === i && openregioncomment(Region.Comments, i)"
+                [style.pointer-events]="editingIndex !== i ? 'none' : 'auto'" style="cursor: pointer; color: #ef7659;">
                 {{ Region.Comments && Region.Comments.length > 12
                 ? (Region.Comments | slice:0:12) + '...'
                 : Region.Comments || 'Add Comment' }}
               </span>
             </td>
             <td style="text-align: center;">
-              <i class="bi bi-cloud-upload-fill" (click)="openRegionUploadPopup()"
+              <i class="bi bi-cloud-upload-fill"
+                (click)="editingIndex !== i && RegionUploadTCO(Region.Regional_ArtibageID)"
                 style="color: #185ca4; font-size: 17px; cursor: pointer;" ngbTooltip="Upload Document"></i>
-              <i class="bi bi-download" (click)="RegionFileDownloadAsZip()"
+              <i class="bi bi-download" (click)="RegionFileDownloadAsZip(Region.Regional_ArtibageID)"
                 style="color: #2fa365; font-size: 17px; cursor: pointer; margin-left: 10px;"
                 ngbTooltip="Download Document"></i>
-              <i class="bi bi-box-arrow-in-up-right" (click)="RegionUploadTCO()"
+              <i class="bi bi-box-arrow-in-up-right" (click)="RouteToTco(Region.MMID,Region.RequestHeaderId)"
                 style="color: #f0ad4e; font-size: 17px; cursor: pointer; margin-left: 10px;"
                 ngbTooltip="Go to TCO Upload"></i>
             </td>
             <td style="position: sticky; right: -1px; text-align: center;">
               <ng-container *ngIf="editingIndex === i; else editIcon">
-                <i class="bi bi-check-circle-fill" (click)="SaveRegional(Region)"
+                <i class="bi bi-check-circle-fill" (click)="SaveRegionChanges(Region)"
                   style="color: #2fa365;  font-size: 17px ; cursor: pointer;" ngbTooltip="Save"></i>
                 <i class="bi bi-x-circle-fill" (click)="cancelEditing()"
                   style="color: #da291c; font-size: 17px; cursor: pointer; margin-left: 10px;" ngbTooltip="Cancel"></i>
@@ -455,20 +492,55 @@
               <textarea [(ngModel)]="selectedComment" rows="4" style="width: 100%;"></textarea>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-sm btn-secondary" (click)="saveComment()">Save</button>
+              <button type="button" class="btn btn-sm btn-secondary" (click)="saveRegionalComment()">Save</button>
               <button type="button" class="btn btn-sm  btn-default default-btn_popup"
                 (click)="closeregioncomment()">Close</button>
             </div>
           </div>
         </div>
       </div>
+      <div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': ShowRegionalUpload}" style="display: block;"
+        *ngIf="ShowRegionalUpload">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Upload Documents</h5>
+              <label class="close modal-close-icn" (click)="closeRegionalupload()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                </svg>
+              </label>
+            </div>
+            <div class="modal-body">
+              <button type="button" class="btn btn-sm default-btn" (click)="showFileUpload = true">Document
+                Upload</button>
+              <div class="input-group custom-file-button" *ngIf="showFileUpload"
+                style="margin-top: 10px; text-align: center; width: 300px !important ;">
+                <label for="fileInput" class="input-group-text"> Select File</label>
+                <input type="file" class="form-control" style="margin-right: 10px;"
+                  (change)="handleFileSelection($event)" multiple />
+                <button type="button" class="btn btn-sm default-btn"
+                  (click)="UploadReginalFiles(selectedRegional_ArtibageID)">Upload</button>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <!-- <button type="button" class="btn btn-sm btn-secondary" (click)="savedoc()">Save</button> -->
+              <button type="button" class="btn btn-sm  btn-default default-btn_popup"
+                (click)="closeRegionalupload()">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <!-- <div class="col-md-6" style="max-width: 100%;width: 100%; text-align: center; margin-bottom: 20px;">
-      <img src="../../../assets/RegionArbitrage_10.png"
-        style="width: 70%; max-width: 91%; height: 300px; border: 1px solid #808080;" />
-    </div> -->
 </div>
+
+<!------------------------------------------------end of Regional Arbitrage --------------------------->
+
+
+<!------------------------------------------------start of mfg process Arbitrage --------------------------->
 
 <div *ngIf="showmgfprocess" class="container-fluid"
   style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
@@ -508,6 +580,10 @@
     </div> -->
   </div>
 </div>
+<!------------------------------------------------end of mfg process Arbitrage --------------------------->
+
+
+<!------------------------------------------------start of design Arbitrage --------------------------->
 
 <div *ngIf="showdesign" class="container-fluid"
   style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
@@ -566,3 +642,4 @@
     </div> -->
   </div>
 </div>
+<!------------------------------------------------end of design Arbitrage --------------------------->

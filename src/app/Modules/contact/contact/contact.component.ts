@@ -31,4 +31,8 @@ export class ContactComponent {
     this.location.back();
   }
 
+  GotoFeedbackSurvey(){
+    this.router.navigate(['/home/feedback']);
+  }
+
 }

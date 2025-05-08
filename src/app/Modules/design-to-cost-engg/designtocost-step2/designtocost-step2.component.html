@@ -6,10 +6,10 @@
 
     <div class="fixsubheader">
         <div class="MasterHeader">
-            <div style="width: 15%;">
+            <div style="width: 25%;">
                 <h2>Design to Cost</h2>
             </div>
-            <div style="width: 85%;">
+            <div style="width: 50%;">
                 <div class="DTO_steps">
                     <p class="DTO_step1" [routerLink]="['/home/designtocost/step1']">Step 1</p>
                     <span class="DTO_connect1_2">
@@ -26,6 +26,9 @@
                     <p class="DTO_step4" [routerLink]="['/home/designtocost/step4']">Step 4</p>
                 </div>
             </div>
+            <div style="width: 25%; text-align: center; align-items: center;">
+                <input type="button" class="btnback" value="back" Name="back" (click)="backToPreviousPage()">
+            </div>
         </div>
     </div>
 
@@ -34,11 +37,6 @@
         <div class="col-md-10" style="line-height: 50px; font-size: 16px; font-weight: 600;">
             {{ChekNull(Projecttype)}}-{{ChekNull(BusinessUnit)}}-{{ChekNull(ProjectName)}}-{{Location}}-{{PartName}}-{{PartNumber}}
         </div>
-
-        <div class="col-md-2">
-            <input type="button" class="btnback" value="back" Name="back" (click)="backToPreviousPage()">
-        </div>
-
     </div>
 
 
@@ -682,6 +680,8 @@
                             Name="Download Model" (click)="DownloadReport()">
                         <input [hidden]="IsYellowModel" type="button" class="btn btn-primary btnDownload"
                             value="Update Model³" Name="Update Model³" (click)="UpdateReport()">
+                        <input [hidden]="IsYellowModel" type="button" class="btn btn-primary btnDownload"
+                            value="Go to Next" Name="Go to Next" (click)="GotoNext()">
                     </div>
                 </div>
                 <br>

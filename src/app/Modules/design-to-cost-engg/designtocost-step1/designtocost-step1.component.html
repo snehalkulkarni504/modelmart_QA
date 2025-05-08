@@ -7,12 +7,12 @@
 
         <div class="fixsubheader">
             <div class="MasterHeader">
-                <div style="width: 15%;">
+                <div style="width: 25%;">
                     <h2>Design to Cost</h2>
                 </div>
-                <div style="width: 85%;">
+                <div style="width: 50%; ">
                     <div class="DTO_steps">
-                        <p class="DTO_step1" [routerLink]="['/home/designtocost/step1']">Step 1</p>
+                        <p class="DTO_step1" [routerLink]="['/home/designtocost/step1']"> Step 1 </p>
                         <span class="DTO_connect1_2">
                             <i class="bi bi-arrow-right gradient-icon"></i>
                         </span>
@@ -27,11 +27,17 @@
                         <p class="DTO_step4" [routerLink]="['/home/designtocost/step4']">Step 4</p>
                     </div>
                 </div>
+                <div style="width: 25%; text-align: center; align-items: center;">
+                        <input type="button" class="btnback" value="back" Name="back" (click)="backToPreviousPage()">
+                </div>
             </div>
         </div>
 
-        <div [hidden]="!IsDatahidden" class="step1">
-            <div class="row hellouser text-center">
+
+
+        <div class="step1_00" id="step1">
+
+            <div class="row hellouser text-center" id="hellouser">
                 <h4>Hello <span class="userfullname">{{userfullname}}</span>, what would you like to design today?</h4>
                 <div class="col-md-3"></div>
                 <div class="col-md-6 text-start">
@@ -44,9 +50,48 @@
                     </ng-select>
                 </div>
                 <div class="col-md-3"></div>
+                <div class="row  text-start additionalconstraint_none" id="additionalconstraint">
+                    <h6>Please specify additional constraints</h6>
+                    <div class="col-md-3">
+                        <label for="dropdown5" class="default-lbl">Platform</label>
+                        <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
+                            [(ngModel)]='selectedPlatform' placeholder="Please select">
+                            <ng-option *ngFor="let item of PlatformList" style="font-size: 12px;"
+                                [value]="item.plat_form">{{item.plat_form}}</ng-option>
+                        </ng-select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="dropdown5" class="default-lbl">Engine Displacement</label>
+                        <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
+                            [(ngModel)]='selectedEngineDisplacement' placeholder="Please select">
+                            <ng-option *ngFor="let item of EngineDisplacementList"
+                                [value]="item.edId">{{item.engineDisplacement}}</ng-option>
+                        </ng-select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="dropdown5" class="default-lbl">Material Name</label>
+                        <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
+                            [(ngModel)]='selectedMaterialGrade' placeholder="Please select">
+                            <ng-option *ngFor="let item of MaterialGradeList"
+                                [value]="item.materialGrade">{{item.materialGrade}}</ng-option>
+                        </ng-select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="dropdown5" class="default-lbl">Process Name</label>
+                        <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
+                            [(ngModel)]='selectedHighProcess' placeholder="Please select">
+                            <ng-option *ngFor="let item of HighLevelProcessList"
+                                [value]="item.highLevelProcess">{{item.highLevelProcess}}</ng-option>
+                        </ng-select>
+                    </div>
+
+                    <div class="text-center">
+                        <input type="button" class="btnview" value="View" Name="View" (click)="ViewDataOnSelection()">
+                    </div>
+                </div>
             </div>
 
-            <div class="row additionalconstraint_none" id="additionalconstraint">
+            <!-- <div class="row additionalconstraint_none" id="additionalconstraint">
                 <h6>Please specify additional constraints</h6>
                 <div class="col-md-3">
                     <label for="dropdown5" class="default-lbl">Platform</label>
@@ -84,14 +129,14 @@
                 <div class="text-center">
                     <input type="button" class="btnview" value="View" Name="View" (click)="ViewDataOnSelection()">
                 </div>
-            </div>
+            </div> -->
 
         </div>
 
-
         <!-- Filters Start -->
+        <!-- [hidden]="IsDatahidden" -->
 
-        <div [hidden]="IsDatahidden" class="col-md-3 border-bottom position-fixed" id="Id_Filters">
+        <div class="col-md-3 border-bottom position-fixed Id_Filters_hide0" id="Id_Filters">
             <form [formGroup]="SearchboxForm" id="Id_Filtersform">
                 <div class="col-md-12 ">
                     <div class="filtername">
@@ -408,34 +453,34 @@
 
         <div [hidden]="IsDatahidden" class="col-md-9" id="SearchFiltersdiv">
 
-            <div class="row ModelFound">
-                <div class="col-md-6 text-center ">
-                    <label>We found "<b>{{ModelCount}}</b>" models for your search. <br>
-                        <span style="font-style: italic;" [hidden]="ModelCount<100">"You can apply filters on left side or
-                            enter specific
-                            part numbers" </span>
+            <div class="row ModelFound" id="ModelFound">
+                <div class="col-md-3 text-end"></div>
+                <div class="col-md-6 text-center" >
+                    <label style="font-size: 14px;">We found "<b>{{ModelCount}}</b>" models for your search. <br>
+                        <span style="font-style: italic;" [hidden]="ModelCount<100">"You can apply filters on left side
+                            or enter specific part numbers" </span>
                     </label>
                 </div>
-                <div class="col-md-4 text-end">
+                <div class="col-md-3 text-end">
                     <select [hidden]="ModelFound" name="sortingmodels" id="sortingmodels" (change)="FilterSearchData()"
                         [(ngModel)]='SortSearchData'>
                         <option value='0' class="sortingoption">Select Sorting... </option>
-                        <option value='1' class="sortingoption">Debrief Date Ascending to Descending </option>
-                        <option value='2' class="sortingoption">Debrief Date Descending to Ascending </option>
+                        <option value='1' class="sortingoption">Debrief Date : Oldest to Newest </option>
+                        <option value='2' class="sortingoption">Debrief Date : Newest to Oldest </option>
 
-                        <option value='3' class="sortingoption">Location Sort by A-Z</option>
-                        <option value='4' class="sortingoption">Location Sort by Z-A</option>
+                        <option value='3' class="sortingoption">Manufacturing Location : by A-Z</option>
+                        <option value='4' class="sortingoption">Manufacturing Location : by Z-A</option>
 
-                        <option value='5' class="sortingoption">Tooling Cost Smallest to Largest</option>
-                        <option value='6' class="sortingoption">Tooling Cost Largest to Smallest</option>
+                        <option value='5' class="sortingoption">Tooling Cost : Low to High</option>
+                        <option value='6' class="sortingoption">Tooling Cost : High to Low</option>
 
-                        <option value='7' class="sortingoption">Should Cost Smallest to Largest</option>
-                        <option value='8' class="sortingoption">Should Cost Largest to Smallest</option>
+                        <option value='7' class="sortingoption">Should Cost : Low to High</option>
+                        <option value='8' class="sortingoption">Should Cost : High to Low</option>
                     </select>
                 </div>
-                <div class="col-md-2 text-end">
+                <!-- <div class="col-md-2 text-end">
                     <input type="button" class="btnback" value="back" Name="back" (click)="ViewDataOnSelection()">
-                </div>
+                </div> -->
 
             </div>
 
@@ -477,7 +522,7 @@
                                 Cost ($)</label>
                         </div>
                         <div class="prdDescription_div4">
-                            <label id="AnnualVolume"> <b>{{ChekNull('B-10L')}} </b>  </label>
+                            <label id="AnnualVolume"> <b>{{ChekNull('B-10L')}} </b> </label>
                         </div>
                         <div class="prdDescription_div5">
                             <label id="AnnualVolume"> <b>{{ChekNull('AL')}} </b> </label>

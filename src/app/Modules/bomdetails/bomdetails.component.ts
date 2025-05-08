@@ -115,7 +115,10 @@ async fetchprogramnames()
   debugger;
   const data=await this.bomservice.fetchprogramname(parseInt(this.userId)).toPromise();
   this.allprogramdata=data;
+  this.toggleviewchild(this.allprogramdata[0]);
 }
+
+
 
 addcartprogram:any;
 onaddcartprogram()
@@ -162,9 +165,12 @@ cartlists: { [key: string]: any[] } = {};
 visiblecartlist: { [key: string]: boolean } = {}; 
 selectedcheckbox:string | null = null
 cartdetailshead:any
+selectedprogramname:any;
+
 toggleviewchild(event:any)
 {
-  this.cartdetailshead='( '+event.programname+' )';
+  this.selectedprogramname=event.programname
+  this.cartdetailshead=event.programname;
   if(this.selectedcheckbox===event.programid)
   {
     this.selectedcheckbox=null;
@@ -248,16 +254,61 @@ closecopycart()
 
 onroute(cart:any) {
   const Params = {
+    progname: this.selectedprogramname,
     cartid: cart.cartId,
-    cartname: cart.cartName
+    cartname: cart.cartName,
+    uniqty : cart.uniqueQty || 0,
+    bomqty : cart.bomQty || 0,
+    bomcost : cart.bomCost || 0,
+    lastsim : cart.lastSim || 0
+
   };
 
   this.router.navigate(['/home/cartdetails'], { queryParams: Params });
 }
 
+async deletecart(cartid:any)
+{
+  debugger;
+  const data =await this.bomservice.DeleteBomCart(cartid).toPromise();
+  if(data)
+  {
+    this.toastr.success("cart deleted successfully");
+    this.getcartname(this.selectedprogramid);
+  }
+  else
+  {
+    this.toastr.error("unable to delete cart")
+  }
+
+}
+
+Downloadtemplate()
+{
+  const excelFilePath = 'assets/BomExcel.xlsx';
+  this.downloadExcelFile(excelFilePath,'BomExcelTemplate.xlsx');
+}
+ 
+downloadExcelFile(filePath : string,filename : string): void {
+  // Path to your Excel file in the assets folder
+ fetch(filePath)
+   .then(response => response.blob())
+   .then(blob => {
+     const url = window.URL.createObjectURL(blob);
+     const a = document.createElement('a');
+     a.href = url;
+     a.download = filename; // Set your desired file name
+     document.body.appendChild(a);
+     a.click();
+     window.URL.revokeObjectURL(url);
+   });
+}
+
 backToPreviousPage() {
   this.location.back();
 }
+
+
 
 }
 

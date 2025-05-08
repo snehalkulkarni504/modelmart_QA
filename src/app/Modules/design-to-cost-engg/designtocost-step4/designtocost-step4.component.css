@@ -15,18 +15,28 @@
 
 .MasterHeader {
     position: fixed;
-    width: 80%;
+    width: 100%;
     display: inline-flex;
     height: 70px;
-    margin-left: 10%;
     margin-bottom: 20px;
     background-color: #fff;
     border-bottom: 1px solid #da291c;
 }
 
 .MasterHeader h2 {
-    margin: 20px 0px;
-    font-size: 20px;
+    /* margin: 20px 0px; */
+    font-size: 35px;
+    font-family: Helvetica, Arial !important;
+    color: #808080;
+    margin-left: 50px;
+    font-weight: 600;
+    text-size-adjust: 100%;
+    height: 70px;
+    line-height: 70px;
+    background: linear-gradient(to right, #7b4397, #dc2430);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
 }
 
 /* ------------ steps design start ------------ */
@@ -49,7 +59,7 @@
     border-bottom-right-radius: 20px;
     text-align: center;
     vertical-align: middle;
-    color: #fff;
+    color: #000;
     background-color: #267eb8;
     line-height: 50px;
     cursor: pointer !important;
@@ -69,6 +79,8 @@
 
 .DTO_step4 {
     background-color: #f19c0c;
+    color: #fff;
+    font-weight: 600;
 }
 
 span {
@@ -100,5 +112,301 @@ span {
 
 }
 
+
+.btnback {
+    margin-top: 20px;
+    font-size: 15px !important;
+    background-color: #da291c;
+    color: #fff;
+    padding: 4px 15px;
+    border: 1px solid #da291c;
+    font-family: Helvetica, Arial !important;
+    border-radius: 5px;
+}
+
+.btnback:hover {
+    background-color: #fff;
+    color: #da291c;
+    border: 1px solid #da291c;
+}
+
 /* ------------- steps design end ---------------- */
 
+
+
+.headerName {
+    width: 100%;
+    background-color: rgb(253, 244, 243);
+    height: 50px;
+    text-align: center;
+    font-weight: 400;
+    border: 1px solid #80808048;
+}
+
+.headerName p {
+    font-size: 20px !important;
+}
+
+.headerinfo {
+    border: 1px solid #808080;
+}
+
+.row .table-bordered {
+    border: 2px solid;
+    border-color: #a8a7a7;
+}
+
+.PDFReport {
+    text-align: end;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.PDFReport button {
+    font-size: 15px !important;
+}
+
+.datapanal {
+    margin-top: 20px;
+    width: 98%;
+    margin-left: 1%;
+}
+
+.tableHead thead th {
+    font-size: 12px !important;
+    background-color: #ccc;
+}
+
+.tabledata {
+    width: 60%;
+    margin-left: 20%;
+}
+
+.tabledata thead th {
+    font-size: 17px;
+    background-color: #ccc;
+}
+
+.Tier2tabledata {
+    width: 59%;
+    margin-left: 2%;
+}
+
+.Tier2tabledata thead th {
+    font-size: 13px;
+    background-color: #ccc;
+}
+
+.vavetabledata {
+    width: 90%;
+    border-bottom: 1px solid #da291c;
+    margin-bottom: 20px;
+    margin-left: 5%;
+}
+
+.tabledataManager {
+    width: 35%;
+    margin-left: 3%;
+    position: relative;
+}
+
+.tabledataManager thead th {
+    font-size: 13px;
+    background-color: #ccc;
+}
+
+
+.Tiercostdata {
+    display: inline-flex;
+    margin-top: 20px;
+    width: 90%;
+    margin-left: 5%;
+
+}
+
+
+.TotalInPer {
+    position: absolute;
+    height: 30px;
+    z-index: 0;
+}
+
+.ShouldCostBreakdowntableth {
+    background-color: #da291c0d;
+
+}
+
+.ShouldCostBreakdowntabletr {
+    font-size: 24px !important;
+    font-weight: 600 !important;
+}
+
+.footer-color {
+    background-color: #80808024;
+    font-size: 15px !important;
+}
+
+.tfoot {
+    background-color: #da291c0d;
+    margin-top: 10px;
+}
+
+.footer-color-tfoot {
+    background-color: #80808024;
+    font-size: 15px !important;
+    background-color: #da291c0d;
+    margin-top: 10px;
+}
+
+.watermark {
+    opacity: 1;
+    color: #000000;
+    position: absolute;
+    z-index: 1;
+    top: 40%;
+    left: -20%;
+}
+
+.watermark h1 {
+    opacity: 0.2;
+    color: #000000;
+    position: absolute;
+    z-index: 1;
+    width: 600px;
+    font-size: 33px !important;
+    transform: rotate(-60deg);
+}
+
+.watermark2 {
+    opacity: 0.1;
+    color: rgb(218, 41, 28);
+    position: absolute;
+    top: 130%;
+    left: 63%;
+    z-index: 1;
+    font-size: 35px !important;
+    transform: rotate(-30deg);
+}
+
+.maxheight {
+    min-height: 100dvh;
+}
+
+#printsection {
+    height: 1500px;
+    margin-top: 80px;
+    font-size: 12px !important;
+}
+
+.UpdateValueGreaterThan {
+    background-color: rgba(216, 8, 8, 0.208);
+}
+
+.UpdateValueLessThan {
+    background-color: rgba(37, 173, 40, 0.28);
+}
+
+.marksColor1 {
+    background-color: rgba(216, 8, 8, 0.208);
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.marksColor2 {
+    background-color: rgba(37, 173, 40, 0.28);
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.default-lbl {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+}
+
+.default-lblvalue {
+    font-weight: 600;
+    margin-left: 0px;
+}
+
+.Marks {
+    width: 86%;
+    margin-left: 7%;
+}
+
+.back-indicator {
+    font-size: 20px !important;
+    color: #da291c;
+    z-index: 100 !important;
+}
+
+.back-indicator:hover {
+    cursor: pointer !important;
+}
+
+
+.btnback {
+    background-color: #da291c;
+    color: #fff;
+    border: 1px solid #da291c;
+    padding: 5px 15px;
+    font-family: Helvetica, Arial !important;
+    border-radius: 5px;
+}
+
+.btnback:hover {
+    background-color: #fff;
+    color: #da291c;
+}
+
+.SetFontSizeONPrint {
+    font-size: 20px !important;
+}
+
+.totalcost {
+    width: 80%;
+    margin-left: 10%;
+    font-weight: 700 !important;
+}
+
+.btnview {
+    background-color: #fff;
+    color: #da291c;
+    border: 1px solid #da291c;
+    padding: 5px 15px;
+    font-family: Helvetica, Arial !important;
+    font-size: 14px !important;
+    border-radius: 5px;
+}
+
+.btnview:hover {
+    background-color: #da291c;
+    color: #fff;
+}
+
+.vavePercentText {
+    width: 80%;
+    margin-left: 10%;
+    height: 30px;
+    font-size: 13px !important;
+    text-align: center;
+}
+
+.TotalTextlbl {
+    height: 30px;
+    font-size: 20px !important;
+    width: 100%;
+    line-height: 30px;
+    margin-top: 4px;
+}
+
+.TotalText {
+    height: 30px;
+    font-size: 20px !important;
+    width: 100%;
+    margin-top: 4px;
+    background-color: #ccc;
+    border: none;
+    outline: none;
+}

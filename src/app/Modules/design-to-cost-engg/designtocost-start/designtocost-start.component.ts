@@ -19,11 +19,7 @@ export class DesigntocostStartComponent implements OnInit {
   }
 
   Step1(){
-    debugger;
     this.router.navigate(['/home/designtocost/step1']);
   }
-
-  Step2(){
-    this.router.navigate(['/home/designtocost/step2']);
-  }
+ 
 }
