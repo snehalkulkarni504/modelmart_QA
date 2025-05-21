@@ -455,9 +455,6 @@ export class DesigntocostStep2Component implements OnInit {
     this.TotalInPerT2 = Number(this.Manu_TotalInPerT2) + Number(this.Non_TotalInPerT2);
   }
 
-  UpdateReport() {
-    this.router.navigate(['/home/tiercost']);
-  }
 
   SendNewRequest() {
     this.router.navigate(['/home/shouldcostrequest', this.UniqueId]);
@@ -720,22 +717,30 @@ export class DesigntocostStep2Component implements OnInit {
     si.getElementsByClassName('canvasjs-chart-credit')[0].innerHTML = '';
 
   }
+  
+  // UpdateReport() {
+  //   this.router.navigate(['/home/tiercost']);
+  // }
 
-  GotoNext() {
+  UpdateReport() {
     localStorage.setItem("DTCPartNumber", this.PartNumber);
     localStorage.setItem("DTCProgramName", this.ProjectName);
     localStorage.setItem("DTCNounName", this.PartName);
 
     localStorage.setItem("DTCForexRegion", this.ForexRegion);
-    localStorage.setItem("DTCComapredId", this.ComapredId);  //--- CSHeader
+    localStorage.setItem("DTCComapredId", this.ComapredId);  //--- CSHeaderId
     localStorage.setItem("DTCProjectName", this.ProjectName);
     localStorage.setItem("DTCDebriefDateFormated", this.DebriefDateFormated);
     localStorage.setItem("DTCimagePath", this.mainimg);
     localStorage.setItem("DTCUniqueId",this.UniqueId);
+    localStorage.setItem("DTCProjecttitle",this.ChekNull(this.Projecttype)+ '-'+ this.ChekNull(this.BusinessUnit) +'-' +this.ChekNull(this.ProjectName) +'-' +this.Location+'-' +this.PartName+'-' +this.PartNumber );
+   
+   
+   // {{ChekNull(Projecttype)}}-{{ChekNull(BusinessUnit)}}-{{ChekNull(ProjectName)}}-{{Location}}-{{PartName}}-{{PartNumber}}
 
     // this.SCReportId = localStorage.getItem("DTCSCReportId");
 
-    this.router.navigate(['/home/designtocost/step3']);
+    this.router.navigate(['/home/designtocost/step2/simulation']);
   }
 
 }

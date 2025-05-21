@@ -445,7 +445,7 @@
                         </div>
                     </div>
                     <div>
-                        <input #Comparecheckbox class="form-check-input" type="checkbox" class="SearchCheckbox"
+                        <input #Comparecheckbox class="form-check-input" type="checkbox" class="SearchCheckbox SearchCheckboxselection"
                             id="{{t.csHeaderId}}" (click)="getPartId(t,'M')" title="Select for Compate">
                     </div>
                     <div>
@@ -648,8 +648,8 @@
                                             <td class="text-end">{{i + 1}}</td>
                                             <td class="text-center">
                                                 <input class="form-check-input" type="checkbox" id="{{t.scReportId}}"
-                                                    [value]="t.scReportId" class="SimulatedCheckbox"
-                                                    (click)="getPartId(t,'S')" [checked]="t.isActive" ngbTooltip="Select Part to Compare">
+                                                    [value]="t.scReportId" class="SimulatedCheckbox SearchCheckboxselection"
+                                                    (click)="getPartId(t,'S')" [checked]="t.isActive">
 
                                                 <span (click)='viewReport(t)' class="viewReport"
                                                     ngbTooltip="View Simulated Report">

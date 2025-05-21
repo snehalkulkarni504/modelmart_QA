@@ -56,13 +56,13 @@
       <div class="col-md-10">
         <br>
         <label for="floatingTextarea" class="default-lbl"><b style="color: #ff0000;">*</b>Input Request Form¹</label>
-        <input #myFile type="file" id="myFile" (change)="onChange($event)" class="form-control">
-        <span class="remark">1. Please fill the attached template of input request form and click
-          "Choose File"</span>
+        <input #myFile type="file" id="myFile" (change)="onChange($event)" class="form-control"
+        accept=".xlsx, .xls, .xlsm"> 
+        <span class="remark">{{UploadSheetcomments}}</span>
       </div>
       <div class="col-md-2">
         <br>
-        <div class="RequestFormIcon">
+        <div [hidden]="IsDTCRequest" class="RequestFormIcon">
           <img alt="Loading Please Wait..." class="RequestExelFormat" src="../../../assets/excelicon.png"
             (click)="downloadInputRequestForm()" /><br>
           Click here for Input Request Form

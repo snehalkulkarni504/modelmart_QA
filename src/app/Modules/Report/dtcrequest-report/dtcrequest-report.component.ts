@@ -1,47 +1,47 @@
-import { DatePipe } from '@angular/common';
-import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import autoTable from 'jspdf-autotable';
+import { SearchService } from 'src/app/SharedServices/search.service';
+import "jspdf-autotable";
+import html2canvas from 'html2canvas';
+import { DatePipe, Location } from '@angular/common';
+import jspdf, { jsPDF } from 'jspdf';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import autoTable from 'jspdf-autotable'
+import { color } from 'html2canvas/dist/types/css/types/color';
+import { opacity } from 'html2canvas/dist/types/css/property-descriptors/opacity';
 import { ReportServiceService } from 'src/app/SharedServices/report-service.service';
-import { SearchService } from 'src/app/SharedServices/search.service';
-import { Location } from '@angular/common';
-import jsPDF from 'jspdf';
-import { UpdateRequest } from 'src/app/Model/update-request';
-import { AdminService } from 'src/app/SharedServices/admin.service';
 
 @Component({
-  selector: 'app-designtocost-step4',
+  selector: 'app-dtcrequest-report',
   standalone: false,
   // imports: [],
-  templateUrl: './designtocost-step4.component.html',
-  styleUrl: './designtocost-step4.component.css'
+  templateUrl: './dtcrequest-report.component.html',
+  styleUrl: './dtcrequest-report.component.css'
 })
-export class DesigntocostStep4Component {
+export class DtcrequestReportComponent {
 
   varr: any;
   DebriefDateFormated: any;
   ForexRegion: any;
-  locale: any;
 
   constructor(private route: ActivatedRoute,
     public searchservice: SearchService,
     public reportservice: ReportServiceService,
     public router: Router,
-    public adminservice: AdminService,
-    private renderer: Renderer2,
     private datePipe: DatePipe, private location: Location, private SpinnerService: NgxSpinnerService, public toastr: ToastrService) {
-    this.route.params.subscribe(param => {
-      this.IsUserLog = param['data']
-    })
+      this.route.queryParams.subscribe(params => {
+        this.CSHeaderId = params['csHeaderID'];
+        this.SCReportId= params['screportID'];
+      });
+
   }
 
   ProductDetail: any;
   MaterailGrade: any;
   MaterailGradeT2: any;
   NonManufacturingCost: any;
-  Vavedetails: any;
+  Vavedetails:any;
   TierData: any; Tier2Data: any;
   CSHeaderId: any;
   SM_Id: number = 0;
@@ -60,25 +60,19 @@ export class DesigntocostStep4Component {
   CurruntDate: any;
   UserName: any;
   userId: any;
-  totalcost: number = 0;
-  totalvavecost: number = 0;
+  totalcost:number=0;
+  totalvavecost:number=0;
   //IsCastingSheet: any;
   SCReportId: any;
   IsUserLog: any;
   ProjectName: any;
   userFullName: any;
-  VaveIdea: number[] = [];
-  VaveIdeaSession: any;
+  //UniqueId:any;
+  VaveIdea:number[]=[];
 
   T2NotPresent = true;
-  ProjectTitle: any;
-  UniqueId: any;
-  NA: any = "NA";
-  shouldcostrequets = true;
 
   ngOnInit(): void {
-
-    debugger;
 
     this.router.events.subscribe((event) => {
       window.scrollTo(0, 0)
@@ -88,29 +82,33 @@ export class DesigntocostStep4Component {
       this.router.navigate(['/welcome']);
       return;
     }
+    this.VaveIdea=[137,191,272]
 
-    this.VaveIdeaSession = localStorage.getItem("DTCVaveIdea");
-    // var result = yourString.substring(1, yourString.length-1);
-    this.VaveIdea = JSON.parse(this.VaveIdeaSession); // [137, 191, 272]
+    //this.IsCastingSheet = localStorage.getItem('IsCastingSheet');
 
-    this.userId = localStorage.getItem("userId");
-    this.ForexRegion = localStorage.getItem("DTCForexRegion");
+     //this.userId = localStorage.getItem("userId");
+    //this.ForexRegion = localStorage.getItem("DTCForexRegion");
 
-    this.UserName = localStorage.getItem("userName");
-    this.userFullName = localStorage.getItem("userFullName");
+    //this.UserName = localStorage.getItem("userName");
+    //this.userFullName = localStorage.getItem("userFullName");
 
-    this.CSHeaderId = localStorage.getItem("DTCComapredId"); // ---  CSHeaderId 
-    this.SCReportId = localStorage.getItem("DTCSCReportId");
-    this.ProjectName = localStorage.getItem("DTCProjectName");
-    this.ProjectTitle = localStorage.getItem("DTCProjecttitle");
-    this.UniqueId = localStorage.getItem("DTCUniqueId");
+    //this.CSHeaderId = localStorage.getItem("DTCComapredId");
+    //this.CSHeaderId ='4483'
+    //this.UniqueId=localStorage.getItem("DTCUniqueId");
+    //this.SCReportId = localStorage.getItem("DTCSCReportId");
+    //this.ProjectName = localStorage.getItem("DTCProjectName");
 
     // if (this.IsUserLog == 1) {
     this.GetReportData();
+      
+    // }
+    // else {
+    //   this.GetReportData_UserLog();
+    // }
 
     this.CurruntDate = this.datePipe.transform(new Date(), 'MMM dd yyyy');
 
-    this.DebriefDateFormated = localStorage.getItem("DTCDebriefDateFormated");
+    //this.DebriefDateFormated = localStorage.getItem("DTCDebriefDateFormated");
 
     setTimeout(() => {
       const myElement = document.getElementById("printsection");
@@ -118,38 +116,42 @@ export class DesigntocostStep4Component {
     }, 2000);
   }
 
-
   async GetReportData() {
     try {
-      debugger
+
       this.SpinnerService.show('spinner');
-      const data = await this.searchservice.GetSourcingManagerReport(this.CSHeaderId, this.userId, '1').toPromise();
+      const data = await this.reportservice.GetDTCRequestReport(this.CSHeaderId,this.SCReportId).toPromise();
 
-      this.ProductDetail = data.productDetail;
-      this.MaterailGrade = data.materailGrade;
+      this.ProductDetail = data.ProductDetail;
+      this.ProjectName=data.ProductDetail[0].ProjectName;
+      this.DebriefDateFormated=data.ProductDetail[0].DebriefDate;
+      this.ForexRegion =data.ProductDetail[0].ForexRegion;
+      this.hh =data.ImagePath;
+      this.MaterailGrade = data.MaterailGrade;
       this.NonManufacturingCost = data.nonManufacturingCost;
-      this.TierData = data.tierData;
-      this.Tier2Data = data.tierDataT2;
-
-
-      try {
-        debugger;
-        const data2 = await this.reportservice.GetDTCVavedata(this.VaveIdea).toPromise();
-        this.Vavedetails = data2;
-
-
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-
-      this.totalcost = this.TierData[this.TierData.length - 1].smUSDValue;
-
-      setTimeout(() => {
-        this.onvaveChange();
-      }, 500);
-
-
-      this.ContributionInTotal(data.tierData);
+      this.TierData = data.TierData;
+      this.Tier2Data = data.TierDataT2;
+      this.userId=data.UserInfo[0].UserId;
+      this.UserName=data.UserInfo[0].UserName;
+      this.userFullName=data.UserInfo[0].FullName;
+      this.Vavedetails=data.Vavedetails;
+      // this.Vavedetails = [
+      //   { Id:'267',Idea: 'Value 1A', Potsav: '3' },
+      //   { Id:'546',Idea: 'Value 2A', Potsav: '2' },
+      //   { Id:'167',Idea: 'Value 3A', Potsav: '0.5' },
+      // ];
+      // try {
+      //   const data = await this.reportservice.GetDTCVavedata(this.VaveIdea).toPromise();
+      //   this.Vavedetails=data;
+      // } catch (error) {
+      //   console.error('Error fetching data:', error);
+      // }
+    
+      this.totalcost=this.TierData[this.TierData.length-1].smUSDValue
+     
+      this.onvaveChange();
+      //console.log("this.totalvavecost",this.TierData[this.TierData.length-1].smUSDValue)
+      this.ContributionInTotal(data.TierData);
 
       setTimeout(() => {
         this.GetSGA_InPer();
@@ -174,11 +176,37 @@ export class DesigntocostStep4Component {
 
   }
 
+  // async GetReportData_UserLog() {
+
+  //   try {
+
+  //     this.SpinnerService.show('spinner');
+  //     const data = await this.searchservice.GetSourcingManagerReport_UserLog(this.CSHeaderId, this.SCReportId, this.IsCastingSheet).toPromise();
+
+  //     this.ProductDetail = data.productDetail;
+  //     this.MaterailGrade = data.materailGrade;
+  //     this.MaterailGradeT2 = data.materailGradeT2;
+  //     this.TierData = data.tierData;
+  //     this.Tier2Data = data.tierDataT2;
+
+  //     this.ContributionInTotal(data.tierData);
+
+  //     setTimeout(() => {
+  //       this.GetSGA_InPer();
+  //     }, 500);
+
+  //     this.SpinnerService.hide('spinner');
+  //   }
+  //   catch (e) {
+  //     this.SpinnerService.hide('spinner');
+  //   }
+
+  // }
 
   ContributionInTotal(data: any) {
 
     for (let i = 0; i < data.length; i++) {
-      this.Manu_TotalInUSD += data[i].usdValue;
+      this.Manu_TotalInUSD += data[i].USDValue;
       this.Manu_TotalInLocal += data[i].localValue;
 
       this.Manu_TotalInUSDSM += data[i].smUSDValue;
@@ -186,14 +214,14 @@ export class DesigntocostStep4Component {
     }
 
 
-    this.TotalInUSD = data[data.length - 1].usdValue;
+    this.TotalInUSD = data[data.length - 1].USDValue;
     this.TotalInLocal = data[data.length - 1].localValue;
 
     this.TotalInUSDSM = data[data.length - 1].smUSDValue;
     this.TotalInLocalSM = data[data.length - 1].smlocalValue;
 
     for (let i = 0; i < data.length; i++) {
-      this.TierData[i].totalCostPer = data[i].usdValue / this.TotalInUSD * 100;
+      this.TierData[i].totalCostPer = data[i].USDValue / this.TotalInUSD * 100;
       this.TierData[i].totalCostPerSM = data[i].smUSDValue / this.TotalInUSDSM * 100;
     }
 
@@ -219,36 +247,36 @@ export class DesigntocostStep4Component {
   GetSGA_InPer() {
 
     for (let i = 0; i < this.TierData.length; i++) {
-      if (this.TierData[i].particular.toLowerCase().includes('sg&a')) {
+      if (this.TierData[i].Particular.toLowerCase().includes('sg&a')) {
         if (this.TierData[i].percent_updated == 0) {
-          this.SGA_per = this.ProductDetail[0].sgA_T1;
+          this.SGA_per = this.ProductDetail[0].SGA_T1;
         }
         else {
           this.SGA_per = this.TierData[i].percent_updated;
         }
       }
 
-      if (this.TierData[i].particular.toLowerCase().includes('profit')) {
+      if (this.TierData[i].Particular.toLowerCase().includes('profit')) {
         if (this.TierData[i].percent_updated == 0) {
-          this.Profit_per = this.ProductDetail[0].profit_T1;
+          this.Profit_per = this.ProductDetail[0].Profit_T1;
         }
         else {
           this.Profit_per = this.TierData[i].percent_updated;
         }
       }
 
-      if (this.TierData[i].particular.toLowerCase().includes('packaging')) {
+      if (this.TierData[i].Particular.toLowerCase().includes('packaging')) {
         if (this.TierData[i].percent_updated == 0) {
-          this.Packaging_per = this.ProductDetail[0].packaging_T1;
+          this.Packaging_per = this.ProductDetail[0].Packaging_T1;
         }
         else {
           this.Packaging_per = this.TierData[i].percent_updated;
         }
       }
 
-      if (this.TierData[i].particular.toLowerCase().includes('logistics')) {
+      if (this.TierData[i].Particular.toLowerCase().includes('logistics')) {
         if (this.TierData[i].percent_updated == 0) {
-          this.FreightLogistics_per = this.ProductDetail[0].freight_T1;
+          this.FreightLogistics_per = this.ProductDetail[0].Freight_T1;
         }
         else {
           this.FreightLogistics_per = this.TierData[i].percent_updated;
@@ -268,36 +296,36 @@ export class DesigntocostStep4Component {
     if (this.Tier2Data.length > 0) {
 
       for (let i = 0; i < this.Tier2Data.length; i++) {
-        if (this.Tier2Data[i].particular.toLowerCase().includes('sg&a')) {
+        if (this.Tier2Data[i].Particular.toLowerCase().includes('sg&a')) {
           if (this.Tier2Data[i].percent_updated == 0) {
-            this.SGA_per_T2 = this.ProductDetail[0].sgA_T2;
+            this.SGA_per_T2 = this.ProductDetail[0].SGA_T2;
           }
           else {
             this.SGA_per_T2 = this.Tier2Data[i].percent_updated;
           }
         }
 
-        if (this.Tier2Data[i].particular.toLowerCase().includes('profit')) {
+        if (this.Tier2Data[i].Particular.toLowerCase().includes('profit')) {
           if (this.Tier2Data[i].percent_updated == 0) {
-            this.Profit_per_T2 = this.ProductDetail[0].profit_T2;
+            this.Profit_per_T2 = this.ProductDetail[0].Profit_T2;
           }
           else {
-            this.Profit_per_T2 = this.Tier2Data[i].percent_updated;
+            this.Profit_per_T2 = this.Tier2Data[i].Percent_updated;
           }
         }
 
-        if (this.Tier2Data[i].particular.toLowerCase().includes('packaging')) {
+        if (this.Tier2Data[i].Particular.toLowerCase().includes('packaging')) {
           if (this.Tier2Data[i].percent_updated == 0) {
-            this.Packaging_per_T2 = this.ProductDetail[0].packaging_T2;
+            this.Packaging_per_T2 = this.ProductDetail[0].Packaging_T2;
           }
           else {
             this.Packaging_per_T2 = this.Tier2Data[i].percent_updated;
           }
         }
 
-        if (this.Tier2Data[i].particular.toLowerCase().includes('logistics')) {
+        if (this.Tier2Data[i].Particular.toLowerCase().includes('logistics')) {
           if (this.Tier2Data[i].percent_updated == 0) {
-            this.FreightLogistics_per_T2 = this.ProductDetail[0].freight_T2;
+            this.FreightLogistics_per_T2 = this.ProductDetail[0].Freight_T2;
           }
           else {
             this.FreightLogistics_per_T2 = this.Tier2Data[i].percent_updated;
@@ -334,17 +362,8 @@ export class DesigntocostStep4Component {
     }
   }
 
-  ChekNull(v: any): any {
-    if (v == null || v == undefined || v <= 0) {
-      return this.NA;
-    }
-    else {
-      return v;
-    }
-  }
 
   newPDF() {
-    debugger;
 
     let totalPages = 2;
     var doc = new jsPDF('p', 'mm', 'a4');
@@ -358,9 +377,9 @@ export class DesigntocostStep4Component {
       doc.setPage(i);
       // var currentPage = doc.getCurrentPageInfo().pageNumber;
       /// header
-      const headerlogo1 = '../../../../assets/welcome/Model Mart_Final Logo_130325.png';
+      const headerlogo1 = '../../../assets/welcome/Model Mart_Final Logo_130325.png';
       doc.addImage(headerlogo1, 4, 3, 34, 20);
-      const headerlogo2 = '../../../../assets/newCumminslogo.jpg';
+      const headerlogo2 = '../../../assets/newCumminslogo.jpg';
       doc.addImage(headerlogo2, 185, 2, 24, 22);
 
       if (i == 1) {
@@ -369,23 +388,22 @@ export class DesigntocostStep4Component {
 
         doc.setFontSize(15);
         var line = 10;
-        var splitText = doc.splitTextToSize(this.ProjectTitle, fileWidth)
+        var splitText = doc.splitTextToSize(this.ProjectName, fileWidth)
         for (var j = 0, length = splitText.length; j < length; j++) {
           doc.text(splitText[j], fileWidth / 2, 80 + line, { align: 'center' });
           line = line + 10;
         }
-        // debugger;
+       // debugger;
         this.hh = localStorage.getItem("DTCimagePath")?.toString();
         //'../../../assets/CRANKSHAFT,ENGINE-5714721/ISO.JPG' ;
 
         if (this.hh == undefined || this.hh == '') {
-          const partImg = '../../../../assets/No-Image.png';
+          const partImg = '../../../assets/No-Image.png';
           doc.addImage(partImg, 70, 120, 70, 70);
         }
         else {
-          //const partImgNew = '../.../../../assets/2021000001/ISO.jpg';
-          const partImg = '../../../../assets/No-Image.png';
-          // const partImg = this.hh;
+          //const partImgNew = '.../../../assets/2021000001/ISO.jpg';
+          const partImg = this.hh;
           doc.addImage(partImg, 70, 120, 70, 70);
         }
 
@@ -406,7 +424,7 @@ export class DesigntocostStep4Component {
     }
 
     ////  Project  Details
-    let Projectcolumns = [['Updated Cost Model Report for ' + this.ProjectTitle]];
+    let Projectcolumns = [['Updated Cost Model Report for ' + this.ProjectName]];
     autoTable(doc, {
       head: Projectcolumns,
       body: [],
@@ -420,8 +438,6 @@ export class DesigntocostStep4Component {
 
     let finalYDetails = (doc as any).lastAutoTable.finalY;
 
-    debugger;
-
     const projectRows = [
       [
         ['Model Edited By : ' + this.userFullName],
@@ -429,18 +445,18 @@ export class DesigntocostStep4Component {
         ['Model Created Date : ' + this.DebriefDateFormated]
       ],
       [
-        ['Part Name : ' + this.ProductDetail[0].partName],
-        ['Part Number : ' + this.ProductDetail[0].partNumber],
-        ['Location : ' + this.ProductDetail[0].mfgRegion]
+        ['Part Name : ' + this.ProductDetail[0].PartName],
+        ['Part Number : ' + this.ProductDetail[0].PartNumber],
+        ['Location : ' + this.ProductDetail[0].MfgRegion]
       ],
       [
-        ['Annual Volume : ' + new Intl.NumberFormat('en-US').format(Number(this.ProductDetail[0].annualVolume))],
-        ['Old Forex : ' + this.ProductDetail[0].forex.toFixed(2)],
-        ['Current Year Forex : ' + this.ProductDetail[0].currentYearForex.toFixed(2)]
+        ['Annual Volume : ' + this.ProductDetail[0].AnnualVolume],
+        ['Old Forex : ' + this.ProductDetail[0].Forex],
+        ['Current Year Forex : ' + this.ProductDetail[0].SurrentYearForex]
       ],
       [
-        ['Batch Size : ' + new Intl.NumberFormat('en-US').format(Number(this.ProductDetail[0].batchSize))],
-        ['Supplier Quote / Invoice Price : ' + this.ChekNull(this.ProductDetail[0].supplier)],
+        ['Batch Size : ' + this.ProductDetail[0].batchSize],
+        ['Supplier Quote / Invoice Price : ' + this.ProductDetail[0].Supplier],
       ]
     ];
 
@@ -466,7 +482,8 @@ export class DesigntocostStep4Component {
     let Lessthan = [193, 232, 194]
 
     const Tier1rows = [
-      [this.ProductDetail[0].sgA_T1, this.SGA_per, this.ProductDetail[0].profit_T1, this.Profit_per, this.ProductDetail[0].packaging_T1, this.Packaging_per, this.ProductDetail[0].freight_T1, this.FreightLogistics_per]
+      [this.ProductDetail[0].SGA_T1, this.SGA_per, this.ProductDetail[0].Profit_T1, this.Profit_per, 
+      this.ProductDetail[0].Packaging_T1, this.Packaging_per, this.ProductDetail[0].Freight_T1, this.FreightLogistics_per]
     ];
 
     autoTable(doc, {
@@ -519,7 +536,8 @@ export class DesigntocostStep4Component {
       let finalY0 = (doc as any).lastAutoTable.finalY;
 
       const Tier2rows = [
-        [this.ProductDetail[0].sgA_T2, this.SGA_per_T2, this.ProductDetail[0].profit_T2, this.Profit_per_T2, this.ProductDetail[0].packaging_T2, this.Packaging_per_T2, this.ProductDetail[0].freight_T2, this.FreightLogistics_per_T2]
+        [this.ProductDetail[0].SGA_T2, this.SGA_per_T2, this.ProductDetail[0].Profit_T2, this.Profit_per_T2, 
+        this.ProductDetail[0].Packaging_T2, this.Packaging_per_T2, this.ProductDetail[0].Freight_T2, this.FreightLogistics_per_T2]
       ];
 
       autoTable(doc, {
@@ -601,13 +619,13 @@ export class DesigntocostStep4Component {
 
     debugger;
     let finalY = (doc as any).lastAutoTable.finalY;
-
-    let pageadded = false
-
+    
+    let pageadded=false
+    
     // this.MaterailGrade.length
     if (this.MaterailGrade.length >= 8) {
 
-      pageadded = true
+      pageadded=true
       doc.addPage();
       /// header
       const headerlogo1 = '../../../assets/welcome/Model Mart_Final Logo_130325.png';
@@ -665,12 +683,12 @@ export class DesigntocostStep4Component {
               // if (data.row.index == 6 || data.row.index === rows.length - 1) {
               //   data.cell.styles.fillColor = [217, 217, 217];
               // }
-
+              
               if (data.row.index == 7 || data.row.index === rows.length - 1) {
                 data.cell.styles.fillColor = [217, 217, 217];
               }
 
-
+              
               data.table.head[0].cells[0].styles.fillColor = [217, 217, 217];
             },
             willDrawCell: function (data: any) {
@@ -767,7 +785,8 @@ export class DesigntocostStep4Component {
     doc.setGState(doc.GState({ opacity: 0.5 }));
     doc.text('User simulation, not a Cost Model', 132, finalY + 90, { angle: 46 });
 
-    if (pageadded == false) {
+    if(pageadded==false)
+    {
       doc.addPage();
       /// header
       const headerlogo1 = '../../../assets/welcome/Model Mart_Final Logo_130325.png';
@@ -785,14 +804,11 @@ export class DesigntocostStep4Component {
       doc.setTextColor("#000000");
       doc.text('Page ' + 3 + ' of ' + 3, doc.internal.pageSize.getWidth() - 30, doc.internal.pageSize.getHeight() - 5);
     }
-
-    let finalYSimulation = (doc as any).lastAutoTable.finalY;
-
     let Vavecolumns = [['VAVE Changes']];
     autoTable(doc, {
       head: Vavecolumns,
       body: [],
-      startY: finalYSimulation + 10,
+      startY: 30,
       theme: 'grid',
       headStyles: { fontSize: 9, fillColor: [217, 217, 217], textColor: [0, 0, 0], halign: 'center' },
       bodyStyles: { fillColor: [255, 255, 255] },
@@ -803,13 +819,12 @@ export class DesigntocostStep4Component {
     const headers = [['ID', 'Idea', 'Potential Savings PP ($)']];
 
     // Map your data to match the headers
-    const data = this.Vavedetails.map((val: { ID: any; Idea: any; PotentialSavingsPerPieceMDO: any; }) =>
-      [val.ID, val.Idea, val.PotentialSavingsPerPieceMDO]);
+    const data = this.Vavedetails.map((val: { IdeaId: any; Idea: any; PSavings: any; }) => [val.IdeaId, val.Idea, val.PSavings]);
     ////  Vave Greade
     autoTable(doc, {
       head: headers,
       body: data,
-      startY: 30 + 7,
+      startY: 30+7,
       theme: 'grid',
       headStyles: { fontSize: 7, fillColor: [179, 179, 179], textColor: [0, 0, 0] },
       bodyStyles: { fontSize: 7, fontStyle: 'bold', textColor: [0, 0, 0] },
@@ -822,310 +837,58 @@ export class DesigntocostStep4Component {
       margin: 35
     });
 
-    let finalYVAVE = (doc as any).lastAutoTable.finalY;
 
-    let TotalCost = [['Total Cost : ' + this.totalvavecost]];
-    autoTable(doc, {
-      head: TotalCost,
-      body: [],
-      startY: finalYVAVE + 10,
-      theme: 'grid',
-      headStyles: { fontSize: 9, fillColor: [217, 217, 217], textColor: [0, 0, 0], halign: 'center' },
-      bodyStyles: { fillColor: [255, 255, 255] },
-      margin: 35,
-      tableWidth: 140,
-    });
-
-
-    var filename = this.ProjectTitle + " .pdf";
+    var filename = this.ProjectName + " .pdf";
     doc.save(filename);
   }
 
+
   hh: any;
 
+  async openPDF() {
+
+    const data = await this.searchservice.downloadUpdatedShouldeCost(this.CSHeaderId, this.userId).toPromise();
+
+    this.newPDF();
+    return;
+  }
+
+
   backToPreviousPage() {
-    debugger;
-    if (this.shouldcostrequets) {
-      this.location.back();
-    }
-    else {
-      this.shouldcostrequets = true;
-    }
+    this.location.back();
   }
 
-  onvaveChange() {
-    debugger;
-    this.totalvavecost = 0;
-
-    const vavePercentText = document.getElementsByClassName("form-control vavePercentText") as any;
-
-    for (let i = 0; i < vavePercentText.length; i++) {
-      if (vavePercentText[i].value == "") {
-        vavePercentText[i].value = 0;
-      }
-      this.totalvavecost = this.totalvavecost + parseFloat(vavePercentText[i].value.replace(/,/g, ""));
-    }
-
-    this.totalvavecost = Math.round((this.totalcost - this.totalvavecost + Number.EPSILON) * 100) / 100;
-  }
-
-  IsVAVEDataInsert = false;
-
-  SaveVavedetails() {
-    debugger;
-    console.log('this.Vavedetails', this.Vavedetails)
-    let vavelist: any[] = [];
-
-    const vavePercentText = document.getElementsByClassName("form-control vavePercentText") as any;
-
+  onvaveChange()
+  {
+    this.totalvavecost=0;
     for (let i = 0; i < this.Vavedetails.length; i++) {
-      vavelist.push({ CSHeaderId: this.CSHeaderId, IdeaId: this.Vavedetails[i].ID, PSavings: vavePercentText[i].value, CreatedBy: this.userId })
+      this.totalvavecost=this.totalvavecost+Number(this.Vavedetails[i].PSavings)
+      console.log("this.totalvavecost",this.totalvavecost)
     }
-    
-    if(this.Vavedetails.length <= 0){
-      vavelist.push({ CSHeaderId: this.CSHeaderId, IdeaId: 0, PSavings: 0, CreatedBy: this.userId })
-    }
+    this.totalvavecost= Math.round((this.totalcost-this.totalvavecost+ Number.EPSILON) * 100) / 100
+  }
 
+  SaveVavedetails()
+  {
+    console.log('this.Vavedetails',this.Vavedetails)
+    let vavelist: any[]=[];
+    for (let i = 0; i < this.Vavedetails.length; i++) {
+      vavelist.push({CSHeaderId:this.CSHeaderId,SCReportId:this.SCReportId,IdeaId:this.Vavedetails[i].ID,PSavings:this.Vavedetails[i].PotentialSavingsPerPieceMDO,CreatedBy:this.userId})
+    }
     this.reportservice.insertDPVavedetails(vavelist).subscribe({
-      next: async (_res: any) => {
-        debugger
-        this.IsVAVEDataInsert = true;
+      next: (_res: any) => {
         this.toastr.success("Vave Data Inserted Successfully.");
-        const data = await this.searchservice.downloadUpdatedShouldeCost(this.CSHeaderId, this.userId).toPromise();
-
         this.newPDF();
-        localStorage.setItem("DTCSCReportId", _res.Result);
       },
       error: (error: any) => {
-        this.IsVAVEDataInsert = false;
         console.error('Inserting API call error:', error);
       },
     });
-
+   
   }
 
-  GoToRefreshRequest() {
-    debugger;
-    if (!this.IsVAVEDataInsert) {
-      this.SaveVavedetails();
-    }
-
-    setTimeout(() => {
-      //this.router.navigate(['/home/shouldcostrequest', 'DTC' + this.UniqueId]);
-      this.shouldcostrequets = false;
-      this.ShowRequesterData();
-    }, 500);
-
-  }
-
-
-  keyPressDecimal(event: any) {
-    const reg = /^-?\d*(\.\d{0,2})?$/;
-    let input = event.target.value + String.fromCharCode(event.charCode);
-    if (!reg.test(input)) {
-      event.preventDefault();
-      return false;
-    }
-    else {
-      return true;
-    }
-  }
-
-
-
-
-  //  ----------------- should cost request send  start ---------  
-
-  fileName: string = "Attach File";
-  filesdsdd: File[] = [];
-  selectedFiles: File[] = [];
-  Comments: any = '';
-  RefresModelComments: any = '';
-  IsRefresModelComments = false;
-  FolderLink: any = '';
-  RequesteDate: any = new Date();
-  userName: any;
-  // userId: any;
-  Btn_Text: any;
-  // UniqueId: any;
-  // SCReportId: any;
-  RequestUsername: any;
-  RequestId: any;
-  Status: any;
-  CreatedDate: any;
-  updateRequest: UpdateRequest[] = [];
-  EmailForRequestUpdate: any;
-  ResubmitRequest = true;
-  Origin: any;
-  ResubmitRequesterData: any;
-
-  UploadSheetcomments: any;
-
-  @ViewChild('myFile') myInputFile!: ElementRef;
-
-  async ShowRequesterData() {
-
-    debugger;
-    this.Btn_Text = 'Submit';
-    this.RequesteDate = new Date();
-    this.RequesteDate = this.datePipe.transform(this.RequesteDate, 'MMM dd yyyy');
-
-    this.IsRefresModelComments = true;
-    this.RefresModelComments = 'Design To Cost for ' + this.ProjectTitle;
-    this.UploadSheetcomments = '1. Please upload CAD, prints of all parts & subcomponents (if any) for the New Design. Also add any design review documents, standards and other artefacts. ';
-
-  }
-
-
-  @ViewChild('myFile') fileUploader: ElementRef | undefined;
-
-
-  async onChange(event: any) {
-    this.selectedFiles = [];
-
-    const files = event.target.files;
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      if (file.name.includes('.') || file.name.endsWith('.')) {
-        var ex = file.name.slice(file.name.lastIndexOf('.') + 1);
-        if (this.UniqueId == ':request' || this.Origin == 'RFM') {
-          if (ex == 'xlsx' || ex == 'xls' || ex == 'xlsm') {
-            this.selectedFiles.push(file);
-          }
-          else {
-            this.toastr.warning("Please select only excel file");
-            this.fileUploader!.nativeElement.value = null;
-          }
-        }
-        else {
-          const blockedExtensions = ["exe", "dll", "msi", "bat", "cmd", "com", "scr", "cpl", "ocx",
-            "sys", "pif", "gadget", "jar", "vbs", "js", "jse", "vbe", "wsf",
-            "wsh", "ps1", "lnk", "msp", "inf", "hta"];
-          if (!blockedExtensions.includes(ex)) {
-            this.selectedFiles.push(file);
-          }
-          else {
-            this.toastr.warning("Files with selected extension are not allowed");
-            this.fileUploader!.nativeElement.value = null;
-          }
-
-        }
-      }
-    }
-  }
-
-  cmd: any;
-  async upload() {
-    debugger;
-    console.log("Select File " + this.selectedFiles.length);
-    if (this.Status != 'Rejected') {
-      if (this.selectedFiles.length <= 0) {
-        this.toastr.warning("Please Select File");
-        this.renderer.selectRootElement('#myFile').focus();
-        return
-      }
-    }
-    if (this.Comments == '' || this.Comments == undefined) {
-      this.toastr.warning("Please Enter Comments");
-      this.renderer.selectRootElement('#floatingTextarea').focus();
-      return
-    }
-
-    this.SpinnerService.show('spinner');
-    this.cmd = this.RefresModelComments + ' ' + this.Comments;
-    let MMID: any = 0
-    if (this.Btn_Text == 'Submit') {
-
-      MMID = this.UniqueId
-      this.Origin = 2
-
-      this.SpinnerService.show('spinner');
-      const data = await this.adminservice.SendShouldCostRequest(this.selectedFiles, this.userId, this.cmd, this.FolderLink,
-        MMID, localStorage.getItem('DTCSCReportId'), this.Origin).toPromise();
-
-      if (data == true) {
-        this.toastr.success("Should Cost Request Sent successfully");
-        this.SpinnerService.hide('spinner');
-      }
-      else {
-        this.toastr.error("Should Cost Request not Sent");
-        this.SpinnerService.hide('spinner');
-      }
-
-      console.log(this.FolderLink);
-
-      if (data == true) {
-        const da = await this.adminservice.SendMail(this.userId, this.cmd, this.FolderLink,'DTC').toPromise();
-        if (da) {
-          this.toastr.success("Mail Sent successfully");
-        }
-        else {
-          this.toastr.error("Mail not Sent");
-        }
-      }
-
-      this.clear();
-      this.SpinnerService.hide('spinner');
-    }
-    else {
-      this.SpinnerService.show('spinner');
-      this.updateRequest = [];
-      console.log(this.updateRequest)
-      const data2 = await this.searchservice.UpdateShouldCostRequest(this.selectedFiles, this.userId, this.cmd, this.FolderLink, this.RequestId, this.Status).toPromise();
-      if (data2) {
-        this.toastr.success("Request Status Sent successfully");
-      }
-      else {
-        this.toastr.error("Request Can not Sent");
-      }
-
-      this.SpinnerService.hide('spinner');
-
-      if (data2) {
-
-        const da = await this.adminservice.ReSubmittedSendEmail(this.userId, this.cmd, this.FolderLink, this.RequestId).toPromise();
-
-        if (da) {
-          this.toastr.success("Mail Sent successfully");
-        }
-        else {
-          this.toastr.error("Mail not Sent");
-        }
-      }
-
-      this.clear();
-      this.SpinnerService.hide('spinner');
-
-
-    }
-
-  }
-
-
-  clear() {
-    this.selectedFiles = [];
-    this.Comments = '';
-    this.FolderLink = '';
-    this.myInputFile.nativeElement.value = "";
-  }
-
-  downloadInputRequestForm() {
-    this.toastr.success("Request Form donwloadling start");
-    var filename = "Should_Cost_Request_Form.xlsm";
-    this.adminservice.DownloadInputRequestForm(filename).subscribe(blob => {
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = filename;
-      link.click();
-    });
-
-  }
-
-
-  //  ----------------- should cost request send  end ---------  
-
+  // SendNewRequest() {
+  //   this.router.navigate(['/home/shouldcostrequest', 'DTC'+this.UniqueId]);
+  // }
 
 }
-
-
-

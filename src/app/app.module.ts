@@ -79,6 +79,8 @@ import { DesigntocostStep1Component } from './Modules/design-to-cost-engg/design
 import { DesigntocostStep2Component } from './Modules/design-to-cost-engg/designtocost-step2/designtocost-step2.component';
 import { DesigntocostStep3Component } from './Modules/design-to-cost-engg/designtocost-step3/designtocost-step3.component';
 import { DesigntocostStep4Component } from './Modules/design-to-cost-engg/designtocost-step4/designtocost-step4.component';
+import { DesigntocostStep2SimulationComponent } from './Modules/design-to-cost-engg/designtocost-step2-simulation/designtocost-step2-simulation.component';
+import { DtcrequestReportComponent } from './Modules/Report/dtcrequest-report/dtcrequest-report.component';
  
 @NgModule({
   declarations: [
@@ -137,8 +139,10 @@ import { DesigntocostStep4Component } from './Modules/design-to-cost-engg/design
     DesigntocostStartComponent,
     DesigntocostStep1Component,
     DesigntocostStep2Component,
+    DesigntocostStep2SimulationComponent,
     DesigntocostStep3Component,
-    DesigntocostStep4Component
+    DesigntocostStep4Component,
+    DtcrequestReportComponent
   ],
   imports: [
     TreeModule,

@@ -307,21 +307,4 @@ input[type="text"]:focus {
     bottom: 0px;
 }
 
-  /* ///////////////////////////////////////////////////////////////////////////// */
-/*    
-  #excelFile{
-    color: transparent;
-  }
-  #excelFile::after{
-    content: 'Select Excel';
-    color: black;
-    margin-left: -10%;
-  } */
   
-/* 
-  #excelFile_lbl{
-    font-size: 1.3em;
-    padding: 10px 15px;
-    border: 1px solid black;
-    border-radius: 4%;
-  } */

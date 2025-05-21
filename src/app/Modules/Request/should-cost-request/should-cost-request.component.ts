@@ -31,7 +31,7 @@ export class ShouldCostRequestComponent implements OnInit {
   userId: any;
   Btn_Text: any;
   UniqueId: any;
-  // ProjectName :any;
+  SCReportId: any;
   RequestUsername: any;
   RequestId: any;
   Status: any;
@@ -39,6 +39,7 @@ export class ShouldCostRequestComponent implements OnInit {
   updateRequest: UpdateRequest[] = [];
   EmailForRequestUpdate: any;
   ResubmitRequest = true;
+  Origin: any;
 
   @ViewChild('myFile') myInputFile!: ElementRef;
 
@@ -52,7 +53,14 @@ export class ShouldCostRequestComponent implements OnInit {
     private SpinnerService: NgxSpinnerService,
     private renderer: Renderer2,) {
     this.route.params.subscribe(param => {
-      this.UniqueId = param['request'];
+      if (param['request'] != ':request') {
+        this.Origin = param['request'].substring(0, 3)
+        this.UniqueId = param['request'].substring(3, param['request'].length);
+      }
+      else {
+        this.UniqueId = param['request'];
+      }
+
     });
     this.route.queryParams.subscribe(params => {
       this.RequestId = params['RequestId'];
@@ -61,17 +69,33 @@ export class ShouldCostRequestComponent implements OnInit {
     console.log(this.RequestId);
   }
 
+  UploadSheetcomments :any;
+  IsDTCRequest = false;
+
   ngOnInit() {
-    
+
+
 
     if (localStorage.getItem("userName") == null) {
       this.router.navigate(['/welcome']);
       return;
     }
+
+
+    var uname = String(localStorage.getItem("userName"));
+
+    if (environment.IsMaintenance && uname.toUpperCase() != environment.IsMaintenance_userName.toUpperCase()) {
+
+      this.router.navigate(['/maintenance']);
+
+      return;
+
+    }
+
+
     if (this.RequestId === undefined) {
       this.Btn_Text = 'Submit';
       this.ResubmitRequest = true;
-
     }
     else {
       this.Btn_Text = 'Update';
@@ -85,24 +109,32 @@ export class ShouldCostRequestComponent implements OnInit {
     this.RequesterName = localStorage.getItem("userFullName");
     this.RequesteDate = new Date();
     this.RequesteDate = this.datePipe.transform(this.RequesteDate, 'MMM dd yyyy');
-    
+
     console.log(this.UniqueId);
     if (this.UniqueId == ':request') {
       this.RefresModelComments = "";
       this.IsRefresModelComments = false;
-      //this.Comments = "";
+      this.UploadSheetcomments = '1. Please fill the attached template of input request form and click "Choose File" ';
+      this.IsDTCRequest = false;
     }
-    else {
+    else if (this.Origin == 'RFM') {
       this.IsRefresModelComments = true;
       this.RefresModelComments = 'Model refresh for ' + localStorage.getItem("ProjectName");
-      //this.Comments = 'Model refresh for ' + localStorage.getItem("ProjectName");
+      this.UploadSheetcomments = '1. Please fill the attached template of input request form and click "Choose File" ';
+      this.IsDTCRequest = false;
+    }
+    else if (this.Origin == 'DTC') {
+      this.IsRefresModelComments = true;
+      this.RefresModelComments = 'Design To Cost for ' + localStorage.getItem("DTCProjecttitle");
+      this.UploadSheetcomments = '1. Please upload CAD, prints of all parts & subcomponents (if any) for the New Design. Also add any design review documents, standards and other artefacts. ';
+      this.IsDTCRequest = true;
     }
   }
 
   ResubmitRequesterData: any;
 
   async GetResubmitRequesterData() {
-    
+
     const data = await this.adminservice.GetResubmitRequesterData(this.RequestId).toPromise();
     this.ResubmitRequesterData = data;
     this.RequestUsername = this.ResubmitRequesterData[0].UserName;
@@ -111,20 +143,46 @@ export class ShouldCostRequestComponent implements OnInit {
 
   }
 
+  @ViewChild('myFile') fileUploader: ElementRef | undefined;
+
 
   async onChange(event: any) {
     this.selectedFiles = [];
+
     const files = event.target.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      ///if (fileType === 'pdf' || fileType === 'excel' || fileType === 'image') {
-      this.selectedFiles.push(file);
-      //}
+      if (file.name.includes('.') || file.name.endsWith('.')) {
+        var ex = file.name.slice(file.name.lastIndexOf('.') + 1);
+        if (this.UniqueId == ':request' || this.Origin == 'RFM') {
+          if (ex == 'xlsx' || ex == 'xls' || ex == 'xlsm') {
+            this.selectedFiles.push(file);
+          }
+          else {
+            this.toastr.warning("Please select only excel file");
+            this.fileUploader!.nativeElement.value = null;
+          }
+        }
+        else {
+          const blockedExtensions = ["exe", "dll", "msi", "bat", "cmd", "com", "scr", "cpl", "ocx",
+            "sys", "pif", "gadget", "jar", "vbs", "js", "jse", "vbe", "wsf",
+            "wsh", "ps1", "lnk", "msp", "inf", "hta"];
+          if (!blockedExtensions.includes(ex)) {
+            this.selectedFiles.push(file);
+          }
+          else {
+            this.toastr.warning("Files with selected extension are not allowed");
+            this.fileUploader!.nativeElement.value = null;
+          }
+
+        }
+      }
     }
   }
 
   cmd: any;
   async upload() {
+    debugger;
     console.log("Select File " + this.selectedFiles.length);
     if (this.Status != 'Rejected') {
       if (this.selectedFiles.length <= 0) {
@@ -141,9 +199,24 @@ export class ShouldCostRequestComponent implements OnInit {
 
     this.SpinnerService.show('spinner');
     this.cmd = this.RefresModelComments + ' ' + this.Comments;
+    let MMID: any = 0
     if (this.Btn_Text == 'Submit') {
+      if (this.UniqueId == ':request') {
+        MMID = null
+        this.Origin = 0
+      }
+      else if (this.Origin == 'RFM') {
+        MMID = this.UniqueId
+        this.Origin = 1
+      }
+      else if (this.Origin == 'DTC') {
+        MMID = this.UniqueId
+        this.Origin = 2
+      }
       this.SpinnerService.show('spinner');
-      const data = await this.adminservice.SendShouldCostRequest(this.selectedFiles, this.userId, this.cmd, this.FolderLink).toPromise();
+      const data = await this.adminservice.SendShouldCostRequest(this.selectedFiles, this.userId, this.cmd, this.FolderLink,
+        MMID, localStorage.getItem('DTCSCReportId'), this.Origin).toPromise();
+        
       if (data == true) {
         this.toastr.success("Should Cost Request Sent successfully");
         this.SpinnerService.hide('spinner');
@@ -155,12 +228,14 @@ export class ShouldCostRequestComponent implements OnInit {
 
       console.log(this.FolderLink);
 
-      const da = await this.adminservice.SendMail(this.userId, this.cmd, this.FolderLink).toPromise();
-      if (da) {
-        this.toastr.success("Mail Sent successfully");
-      }
-      else {
-        this.toastr.error("Mail not Sent");
+      if (data == true) {
+        const da = await this.adminservice.SendMail(this.userId, this.cmd, this.FolderLink,'SC').toPromise();
+        if (da) {
+          this.toastr.success("Mail Sent successfully");
+        }
+        else {
+          this.toastr.error("Mail not Sent");
+        }
       }
 
       this.clear();
@@ -180,12 +255,16 @@ export class ShouldCostRequestComponent implements OnInit {
 
       this.SpinnerService.hide('spinner');
 
-      const da = await this.adminservice.ReSubmittedSendEmail(this.userId, this.cmd, this.FolderLink, this.RequestId).toPromise();
-      if (da) {
-        this.toastr.success("Mail Sent successfully");
-      }
-      else {
-        this.toastr.error("Mail not Sent");
+      if (data2) {
+
+        const da = await this.adminservice.ReSubmittedSendEmail(this.userId, this.cmd, this.FolderLink, this.RequestId).toPromise();
+
+        if (da) {
+          this.toastr.success("Mail Sent successfully");
+        }
+        else {
+          this.toastr.error("Mail not Sent");
+        }
       }
 
       this.clear();
@@ -223,3 +302,4 @@ export class ShouldCostRequestComponent implements OnInit {
 
 
 }
+

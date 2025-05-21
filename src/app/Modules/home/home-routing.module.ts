@@ -51,6 +51,8 @@ import { DesigntocostStep1Component } from '../design-to-cost-engg/designtocost-
 import { DesigntocostStep2Component } from '../design-to-cost-engg/designtocost-step2/designtocost-step2.component';
 import { DesigntocostStep3Component } from '../design-to-cost-engg/designtocost-step3/designtocost-step3.component';
 import { DesigntocostStep4Component } from '../design-to-cost-engg/designtocost-step4/designtocost-step4.component';
+import { DesigntocostStep2SimulationComponent } from '../design-to-cost-engg/designtocost-step2-simulation/designtocost-step2-simulation.component';
+import { DtcrequestReportComponent } from '../Report/dtcrequest-report/dtcrequest-report.component';
  
  
 
@@ -106,9 +108,13 @@ const routes: Routes = [
       { path : 'designtocost', component: DesigntocostStartComponent},
       { path : 'designtocost/step1', component: DesigntocostStep1Component },
       { path : 'designtocost/step2', component: DesigntocostStep2Component },
+      { path : 'designtocost/step2/simulation', component: DesigntocostStep2SimulationComponent },
       { path : 'designtocost/step3', component: DesigntocostStep3Component },
       { path : 'designtocost/step4', component: DesigntocostStep4Component },
+      { path : 'DTCRequestReport', component: DtcrequestReportComponent },
 
+
+      
     ]
   },
 

@@ -125,5 +125,24 @@ export class RequestFileUploadService {
     return this.http.get<any[]>(this.apiUrl + `yellowmodelbulkupload?userid=${userid}&modeltypeid=${modeltypeid}`);
   }
 
+  chinasheetupload(data: any) {
+    return this.http.post<any>(this.apiUrl + 'chinamodelupload', data);
+  }
+
+  chinamodelfileupload(file: File[], id: any, selectedUniqueID: string, userId: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('id', id);
+    formData.append('uniqueID', selectedUniqueID);
+    formData.append('userId', userId);
+    for (const Dfile of file) {
+      formData.append('files', Dfile, Dfile.name);
+    }
+    return this.http.post<FormData>(`${this.apiUrl}chinamodelfileupload`, formData);
+  }
+
+  chinabulkupload(userid: any, modeltypeid: any): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl + `chinamodelbulkupload?userid=${userid}&modeltypeid=${modeltypeid}`);
+  }
+
 
 }

@@ -30,6 +30,10 @@ export class ShouldCostViewComponent implements OnInit {
   comments: any;
   ShouldCostView!: FormGroup;
   Status: any = "Open";
+  Origin:any;
+  CSHeaderId:any;
+  SCReportId:any;
+  //VaveIdeaId:any;
 
   @ViewChild('selectStatus') searchElement!: ElementRef;
 
@@ -41,7 +45,6 @@ export class ShouldCostViewComponent implements OnInit {
     private location: Location, private renderer: Renderer2) {
     this.route.params.subscribe(param => {
       this.requestHeaderId = param['data']
-
     })
   }
   ngOnInit(): void {
@@ -83,7 +86,9 @@ export class ShouldCostViewComponent implements OnInit {
   async getStatusDetails() {
     const data = await this.searchservice.GetRequestGenDataById(this.requestHeaderId).toPromise();
     this.data = data;
-
+    this.Origin=data[0].requestOrigin;
+    this.CSHeaderId=data[0].csHeaderId;
+    this.SCReportId=data[0].scReportId;
     console.log('data :', this.data)
     //   this.status.nativeElement.value = this.statusData[0].status;
   }

@@ -45,10 +45,10 @@
                         </div>
 
                         <div class="col-md-3">
-                            <label for="dropdown0" class="default-lbl">Model Types <span
+                            <label for="dropdown0" class="default-lbl">Model Types<span
                                     style="color: red;">*</span></label>
                             <ng-select class="ngModelTypeID" [ngModelOptions]="{standalone: true}" [searchable]="true"
-                                placeholder="Please select" [(ngModel)]='modelTypesID'>
+                                placeholder="Please select" [(ngModel)]='modelTypesID' [disabled]="modelexist">
                                 <ng-option *ngFor="let item of ModelTypes"
                                     [value]="item.id">{{item.modelTypes_Desc}}</ng-option>
                             </ng-select>
@@ -69,7 +69,7 @@
 
                 </div>
 
-                <div *ngIf="modelTypesID!=2" class="row" id="panleborder"> 
+                <div *ngIf="modelTypesID!=2 && modelTypesID!=5" class="row" id="panleborder"> 
                     <div class="row">
                         <div class="col-md-2">
                             <label for="dropdown6" class="default-lbl">Length (mm)<span
@@ -222,7 +222,7 @@
                     </div>
                     <div class="col-md-3 text-end">
                         <button type="button" class="btn btn-lg btn-upload" (click)="onUpload();" data-bs-dismis="modal"
-                            [disabled]="!addSuccess">Upload</button>
+                            [disabled]="!enableupload || !addSuccess">Upload</button>
 
                             <button type="button" id="testbtn" (click)="ngSelectRequestID.clearModel(); ngSelectUniqueID.clearModel(); " style="visibility: hidden;">
                             </button>

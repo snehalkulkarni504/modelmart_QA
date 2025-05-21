@@ -441,13 +441,13 @@ th,td{
 
   .collapsed2
   {
-    background-color: #e08b85 !important;
+    background-color: #67729a !important;
   }
   
   .collapsed3
   {
     /* background-color: #71a3c1 !important; */
-    background-color: #f38981 !important;
+    background-color: #67729a  !important;
 
   }
   .collapsed4
@@ -502,7 +502,7 @@ td:last-child {
     
    }
    .styled-table {
-    width: max-content;
+    /* width: max-content; */
     min-width: 100%;
     border-collapse: separate;
     border-spacing: 0;

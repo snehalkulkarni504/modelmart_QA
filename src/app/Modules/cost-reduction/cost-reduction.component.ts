@@ -17,6 +17,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { GroupByPipe } from "../group-by.pipe";
 import { CommericalArbitrage } from 'src/app/Model/CommericalArbitrage';
 import { RegionalArbitrage } from 'src/app/Model/RegionalArbitrage';
+import { GetMgfProcessArtibage } from 'src/app/Model/GetMgfProcessArtibage';
 
 @Component({
   // standalone : true,
@@ -36,7 +37,7 @@ export class CostReductionComponent implements OnInit {
   showDocumentUploadModal: boolean = false;
   showcostinsights: boolean = false;
   showFileUpload: boolean = false;
-  showregioncomment: boolean = false;
+
   selectedCommercialID: any;
   selectedUniqueId: any;
   selectedRequestId: any;
@@ -51,13 +52,14 @@ export class CostReductionComponent implements OnInit {
   minDate: string = '';
   maxDate: string = '';
   filteredData: any[] = [];
-  RegionData: any = [];
+
   fromDate: any;
   toDate: any;
   selectedRange: string = "";
+  selectedRange_regional: string = "";
   datefilter!: FormGroup
   isEditing = false;
-  ShowRegionalUpload: boolean = false;
+
 
 
 
@@ -80,7 +82,7 @@ export class CostReductionComponent implements OnInit {
   availableYears: number[] = [];
   selectedYear: string = '';
   chart: any;
-  selectedRegional_ArtibageID: any;
+
 
 
   constructor(public router: Router,
@@ -110,7 +112,7 @@ export class CostReductionComponent implements OnInit {
 
 
   ngOnInit(): void {
-    debugger
+    //debugger
     this.SearchboxForm = new FormGroup({
       Cat2List: new FormControl(),
       EngineList: new FormControl(),
@@ -181,11 +183,11 @@ export class CostReductionComponent implements OnInit {
 
 
   async GetCommericalArtibage() {
-    debugger
+    ////debugger
     const categoryID = this.test;
     this.AdminService.GetCommericalArtibage(categoryID).subscribe(
       (response) => {
-        debugger
+        //debugger
         this.data = response;
         this.opportunities = this.data;
 
@@ -202,9 +204,9 @@ export class CostReductionComponent implements OnInit {
           y: opportunity.CommercialArbitrage,
         }));
         this.chartOptions.data[1].dataPoints = this.opportunities.map(opportunity => ({
-            label: opportunity.PartNumber,
-            y: opportunity.UserSimulatedArbitrage,
-          }));
+          label: opportunity.PartNumber,
+          y: opportunity.UserSimulatedArbitrage,
+        }));
         this.gettotaloppurtunity();
         this.getGraphstyle();
 
@@ -219,16 +221,17 @@ export class CostReductionComponent implements OnInit {
 
     const baseBarWidth = 50; // pixels per bar
     const minWidth = '100%';
-    
+
     if (!this.data || this.data.length <= 20) {
       return { height: '375px', width: minWidth };
     }
-    
-    return { 
+
+    return {
       height: '375px',
       width: `${this.data.length * baseBarWidth}px`
     };
   }
+
 
   onViewClick() {
     debugger;
@@ -237,10 +240,10 @@ export class CostReductionComponent implements OnInit {
       this.opportunities = this.data;
       for (let i = 0; i < this.opportunities.length; i++) {
         const opportunity = this.opportunities[i];
-
+ 
         try {
           const debriefDate = opportunity.DebriefDate;
-
+ 
           if (
             debriefDate >= this.fromDate &&
             debriefDate <= this.toDate
@@ -253,28 +256,27 @@ export class CostReductionComponent implements OnInit {
       }
       this.filteredData = filteredData;
       this.opportunities = this.filteredData;
-
+ 
       // Update chart data points based on filtered data
       this.chartOptions = { ...this.chartOptions };
-
+ 
       this.chartOptions.data[0].dataPoints = this.filteredData.map(opportunity => ({
         label: opportunity.PartNumber,
         y: opportunity.CommercialArbitrage,
       }));
-
+ 
       this.chartOptions.data[1].dataPoints = this.filteredData.map(opportunity => ({
         label: opportunity.PartNumber,
         y: opportunity.UserSimulatedArbitrage,
       }));
-
+ 
       console.log('Updated Chart Data:', this.chartOptions);
     } else {
       console.error('Invalid Date Range');
-
+ 
     }
-
+ 
   }
-
 
   onDateRangeChange(): void {
     const today = new Date();
@@ -290,6 +292,9 @@ export class CostReductionComponent implements OnInit {
       case "12":
         fromDate = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
         break;
+        // case "24":
+        //   fromDate = new Date(today.getFullYear() - 2, today.getMonth(), today.getDate());
+        //   break;
       default:
         fromDate = null;
         break;
@@ -304,6 +309,8 @@ export class CostReductionComponent implements OnInit {
       this.toDate = null;
     }
   }
+ 
+
 
 
 
@@ -337,7 +344,7 @@ export class CostReductionComponent implements OnInit {
 
 
   hidename() {
-    debugger
+    //debugger
     const r = document.getElementById("chartOptionsId") as any;
     r.getElementsByClassName('canvasjs-chart-credit')[0].style.display = "none";
   }
@@ -357,13 +364,14 @@ export class CostReductionComponent implements OnInit {
       // this.RegionalDateFilter();
     }, 200);
   }
+
   editRow(index: number) {
     this.isEditing = !this.isEditing;
     this.editingIndex = index; // Enable edit mode for the selected row
   }
 
   saveChanges(opportunity: CommericalArbitrage) {
-    debugger;
+    //debugger;
     // Default values for nullable columns
     if (!opportunity.UserSimulatedCostAttainment) {
       opportunity.UserSimulatedCostAttainment = "0"; // Default simulated cost attainment value
@@ -398,6 +406,7 @@ export class CostReductionComponent implements OnInit {
   cancelEditing() {
     this.editingIndex = null; // Cancel edit mode without saving
   }
+
   openCommentsPopup(comment: string, index: number): void {
     this.showModal = true;
     this.selectedComment = comment || '';
@@ -409,18 +418,18 @@ export class CostReductionComponent implements OnInit {
 
   }
 
-  saveComment(): void {
-    if (this.editingIndex !== null && this.editingIndex >= 0) {
-      this.opportunities[this.editingIndex].Comments = this.selectedComment;
-    }
-    this.closeCommentsPopup();
-  }
+  // saveComment(): void {
+  //   if (this.editingIndex !== null && this.editingIndex >= 0) {
+  //     this.opportunities[this.editingIndex].Comments = this.selectedComment;
+  //   }
+  //   this.closeCommentsPopup();
+  // }
 
 
   gettotaloppurtunity(): string {
     let total = 0;
     // Iterate over the opportunities array and sum up the UserCalculatedCost values
-    this.opportunities.forEach(opportunity => {
+    this.opportunitiesMfg.forEach((opportunity: { CommercialArbitrage: any; }) => {
       total += opportunity.CommercialArbitrage || 0;
     });
     return `$${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -457,7 +466,7 @@ export class CostReductionComponent implements OnInit {
     this.selectedRequestId = RequestHeaderId;
 
 
-    debugger
+    //debugger
     const result = await Swal.fire({
       title: 'TCO Upload is opening. Do you want to proceed?',
       showCancelButton: true,
@@ -494,7 +503,7 @@ export class CostReductionComponent implements OnInit {
 
   openUploadPopup(CommericalArtibageID: any, MMID: any, RequestHeaderId: any): void {
 
-    debugger
+    //debugger
     this.selectedCommercialID = CommericalArtibageID;
     this.selectedUniqueId = MMID;
     this.selectedRequestId = RequestHeaderId;
@@ -509,7 +518,7 @@ export class CostReductionComponent implements OnInit {
 
 
   handleFileSelection(event: any): void {
-    debugger
+    //debugger
     const files: FileList = event.target.files; // Get selected files
     this.selectedFiles = []; // Clear previous selections
 
@@ -525,7 +534,7 @@ export class CostReductionComponent implements OnInit {
   }
 
   uploadFiles(commercialId: string): void {
-    debugger
+    //debugger
     if (this.selectedFiles && this.selectedFiles.length > 0) {
       this.AdminService.Uploadfiles(commercialId, this.selectedFiles).subscribe({
         next: (response) => {
@@ -545,7 +554,7 @@ export class CostReductionComponent implements OnInit {
 
 
   downloadFolderAsZip(CommericalArtibageID: string): void {
-    debugger
+    //debugger
     this.AdminService.downloadZipFile(CommericalArtibageID).subscribe(
       (response: Blob) => {
         const url = window.URL.createObjectURL(response); // Create a blob URL
@@ -583,7 +592,7 @@ export class CostReductionComponent implements OnInit {
 
 
   selectAll(): void {
-    debugger
+    //debugger
     const allSelected = this.SearchProductList.every((group: { selected: boolean; }) => group.selected);
     this.SearchProductList.forEach((group: { selected: boolean; }) => group.selected = !allSelected);
 
@@ -597,7 +606,7 @@ export class CostReductionComponent implements OnInit {
 
 
   onCheckboxChange(item: any) {
-    debugger;
+    //debugger;
 
     if (item.selected) {
       if (!this.selectedCategoryIds.includes(item.categoryId)) {
@@ -611,13 +620,13 @@ export class CostReductionComponent implements OnInit {
 
 
   navigateToCostInsight(CategoryID: number) {
-    debugger;
+    //debugger;
     this.router.navigate(['/home/costinsights1', CategoryID]);
   }
 
 
   getCategoryId(e: any) {
-    debugger
+    //debugger
     const cat3 = document.getElementsByClassName("Cat3Checkbox") as any;
     var param_value = "";
 
@@ -644,7 +653,7 @@ export class CostReductionComponent implements OnInit {
     this.ShowLandingPage(0, "0");
   }
 
-  
+
   toggleView() {
     debugger;
     this.showcostinsights = true;
@@ -655,8 +664,10 @@ export class CostReductionComponent implements OnInit {
     if (this.showArbitrage === false) {
       this.GetCommericalArtibage();
       this.GetRegionalArbitrage();
+      this.GetMgfProcessArtibage();
+
     }
-    
+
     this.showArbitrage = !this.showArbitrage;
     this.showCat3Management = !this.showCat3Management;
     this.showContent = false;
@@ -675,12 +686,19 @@ export class CostReductionComponent implements OnInit {
 
   }
 
- 
- 
-//--------------------------------------------End of commerical Arbitrage----------------------------------------------------------------------------//
 
+
+  //--------------------------------------------End of commerical Arbitrage----------------------------------------------------------------------------//
+  RegionalfromDate:any;
+  RegionaltoDate:any;
+  RegionData: any = [];
+  showregioncomment: boolean = false;
+  ShowRegionalUpload: boolean = false;
+  selectedRange_Regional:string=""
+  selectedRegional_ArtibageID: any;
+ 
   async GetRegionalArbitrage(): Promise<void> {
-    debugger
+    ////debugger
 
     const categoryID = this.test;
     try {
@@ -701,7 +719,7 @@ export class CostReductionComponent implements OnInit {
         }
       });
 
-      
+
 
     } catch (err) {
       console.error('Error fetching regional arbitrage:', err);
@@ -709,15 +727,15 @@ export class CostReductionComponent implements OnInit {
   }
 
   getChartStyles() {
-    debugger
-    const baseBarWidth = 30; 
+    //debugger
+    const baseBarWidth = 30;
     const minWidth = '100%';
-    
+
     if (!this.Regional || this.Regional.length <= 30) {
       return { height: '375px', width: minWidth };
     }
-    
-    return { 
+
+    return {
       height: '375px',
       width: `${this.Regional.length * baseBarWidth}px`
     };
@@ -764,6 +782,65 @@ export class CostReductionComponent implements OnInit {
 
 
   }
+  // onDateRangeChange_regional(): void {
+  //   const today = new Date();
+  //   let fromDate: Date | null = null;;
+  //   // Calculate the 'From Date' based on the selected range
+  //   switch (this.selectedRange_regional) {
+  //     case "3":
+  //       fromDate = new Date(today.getFullYear(), today.getMonth() - 3, today.getDate());
+  //       break;
+  //     case "6":
+  //       fromDate = new Date(today.getFullYear(), today.getMonth() - 6, today.getDate());
+  //       break;
+  //     case "12":
+  //       fromDate = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
+  //       break;
+  //       // case "24":
+  //       //   fromDate = new Date(today.getFullYear() - 2, today.getMonth(), today.getDate());
+  //       //   break;
+  //     default:
+  //       fromDate = null;
+  //       break;
+  //   }
+
+  //   // Update the bound variables
+  //   if (fromDate) {
+  //     this.fromDate = fromDate.toISOString().split('T')[0]; // Format 'From Date' as 'YYYY-MM-DD'
+  //     this.toDate = today.toISOString().split('T')[0];      // Format 'To Date' as 'YYYY-MM-DD'
+  //   } else {
+  //     this.fromDate = null;
+  //     this.toDate = null;
+  //   }
+  // }
+  onDateRangeChange_regional(): void {
+    const today = new Date();
+    let RegionalfromDate: Date | null = null;;
+    // Calculate the 'From Date' based on the selected range
+    switch (this.selectedRange_regional) {
+      case "3":
+        RegionalfromDate = new Date(today.getFullYear(), today.getMonth() - 3, today.getDate());
+        break;
+      case "6":
+        RegionalfromDate = new Date(today.getFullYear(), today.getMonth() - 6, today.getDate());
+        break;
+      case "12":
+        RegionalfromDate = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
+        break;
+      default:
+        RegionalfromDate = null;
+        break;
+    }
+ 
+    // Update the bound variables
+    if (RegionalfromDate) {
+      this.RegionalfromDate = RegionalfromDate.toISOString().split('T')[0]; // Format 'From Date' as 'YYYY-MM-DD'
+      this.RegionaltoDate = today.toISOString().split('T')[0];      // Format 'To Date' as 'YYYY-MM-DD'
+    } else {
+      this.fromDate = null;
+      this.RegionaltoDate = null;
+    }
+  }
 
   openregioncomment(comment: string, index: number): void {
     this.showregioncomment = true;
@@ -777,6 +854,7 @@ export class CostReductionComponent implements OnInit {
   }
 
   saveRegionalComment(): void {
+    debugger;
     if (this.editingIndex !== null && this.editingIndex >= 0) {
       this.Regional[this.editingIndex].Comments = this.selectedComment;
     }
@@ -797,7 +875,7 @@ export class CostReductionComponent implements OnInit {
   }
 
   UploadReginalFiles(Regional_ArtibageID: string): void {
-    debugger
+    //debugger
     if (this.selectedFiles && this.selectedFiles.length > 0) {
       this.AdminService.RegionalUpload(Regional_ArtibageID, this.selectedFiles).subscribe({
         next: (response) => {
@@ -822,7 +900,7 @@ export class CostReductionComponent implements OnInit {
 
 
   RegionFileDownloadAsZip(Regional_ArtibageID: string): void {
-    debugger
+    //debugger
     this.AdminService.downloadReginalFileAsZip(Regional_ArtibageID).subscribe(
       (response: Blob) => {
         const url = window.URL.createObjectURL(response); // Create a blob URL
@@ -839,7 +917,7 @@ export class CostReductionComponent implements OnInit {
   }
 
   SaveRegionChanges(Region: RegionalArbitrage) {
-    debugger;
+    //debugger;
     Region.ModifiedBy = (localStorage.getItem("userFullName"))
 
     // Default CommercialArtibageID to 0 if null or undefined
@@ -862,18 +940,18 @@ export class CostReductionComponent implements OnInit {
 
   RegionalDateFilter() {
     debugger;
-    if (this.fromDate && this.toDate) {
+    if (this.RegionalfromDate && this.RegionaltoDate) {
       const filteredData: any[] = [];
       this.Regional = this.RegionData;
       for (let i = 0; i < this.Regional.length; i++) {
         const Region = this.Regional[i];
-
+ 
         try {
           const debriefDate = Region.DebriefDate;
-
+ 
           if (
-            debriefDate >= this.fromDate &&
-            debriefDate <= this.toDate
+            debriefDate >= this.RegionalfromDate &&
+            debriefDate <= this.RegionaltoDate
           ) {
             filteredData.push(Region);
           }
@@ -884,26 +962,28 @@ export class CostReductionComponent implements OnInit {
       this.filteredData = filteredData;
       this.Regional = this.filteredData;
       this.RegionchartOptions = { ...this.RegionchartOptions };
-
+ 
       this.RegionchartOptions.data[0].dataPoints = this.Regional.map(region => ({
         label: region.PartNumber,
         y: Math.abs(Number(region.RegionalArbitrage)) || 0,
         // y: Number(region.bestRegionCost)
       }));
-
+ 
       console.log('Updated Chart Data:', this.RegionchartOptions);
     } else {
       console.error('Invalid Date Range');
-
+ 
     }
-
+ 
   }
 
 
   ClearDateFilter(): void {
     this.selectedRange = ""; // Reset dropdown
-    this.fromDate = null;    // Clear 'From Date'
-    this.toDate = null;      // Clear 'To Date'
+    // this.fromDate = null;    // Clear 'From Date'
+    this.RegionalfromDate = null;  
+    // this.toDate = null;      // Clear 'To Date'
+    this.RegionaltoDate = null;    
     this.filteredData = [];
     this.Regional = this.RegionData;
 
@@ -914,282 +994,522 @@ export class CostReductionComponent implements OnInit {
     }));
 
   }
-RouteToTco(MMID:any,RequestHeaderId:any){
-  
-}
+  RouteToTco(MMID: any, RequestHeaderId: any) {
+
+  }
   //-------------------------------------End of Regional --------------------------------------------//
 
 
+  //-------------------------------------start mfg process Arbitrage --------------------------------------------//
 
-  mgfprocess = [
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 5374631,
-      "suppmanilocation": "BELGIUM",
-      "supplierQuotedInvoicePrice": 747.73,
-      "highlevelprocess": "Sand Casting & Machining"
+  selectedFilesMfg: File[] = [];
+  mgfprocess: any[] = [];
+  selectedRangeMfg: string = "";
+  fromDateMfg: any;
+  toDateMfg: any;
+  datefilterMfg!: FormGroup
+  isEditingMfg = false;
+  ShowRegionalUploadMfg: boolean = false;
+   selectedUniqueIdMfg: any;
+  selectedRequestIdMfg: any;
+  
+
+  minDateMfg: string = '';
+  maxDateMfg: string = '';
+
+  filteredDataMfg: any[] = [];
+  RegionDataMfg: any = [];
+  opportunitiesMfg: any = [];
+  showModalMfg: any;
+  selectedCommentMfg: any;
+  editingIndexMfg: number | null = null;
+  showTcoUploadModalMfg: boolean = false;
+  showFileUploadMfg: boolean = false;
+
+  //chart optons
+  chartOptionsMfg = {
+
+    animationEnabled: true,
+
+    title: {
+      text: "Part Number vs Manufacturing Artibage ($)",
+      fontFamily: "Trebuchet MS, Helvetica, sans-serif",
+
     },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 3640750,
-      "suppmanilocation": "BELGIUM",
-      "supplierQuotedInvoicePrice": 396.11,
-      "highlevelprocess": "Sand Casting & Machining"
+    axisX: {
+      title: "Part Number",
+      interval: 1,
+      labelFontSize: 9,
+      showInLegend: true,
+      indexLabelFontColor: "#000",
+
+      labelAngle: -240,
+
     },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 3641592,
-      "suppmanilocation": "BELGIUM",
-      "supplierQuotedInvoicePrice": 336.86,
-      "highlevelprocess": "Sand Casting & Machining"
+    axisY: {
+
+      title: "Manufacturing Artibage",
+      labelFontSize: 10,
+      showInLegend: true,
+      indexLabelFontColor: "#000",
+      interval: 100,
     },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 3641593,
-      "suppmanilocation": "BELGIUM",
-      "supplierQuotedInvoicePrice": 335.42,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 5374639,
-      "suppmanilocation": "BELGIUM",
-      "supplierQuotedInvoicePrice": 892.24,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 5374635,
-      "suppmanilocation": "BELGIUM",
-      "supplierQuotedInvoicePrice": 885.50,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 3641635,
-      "suppmanilocation": "BELGIUM",
-      "supplierQuotedInvoicePrice": 125.92,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 3642647,
-      "suppmanilocation": "GERMANY",
-      "supplierQuotedInvoicePrice": 502.10,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 3642661,
-      "suppmanilocation": "GERMANY",
-      "supplierQuotedInvoicePrice": 411.53,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 3640464,
-      "suppmanilocation": "BELGIUM",
-      "supplierQuotedInvoicePrice": 2315.56,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 4100732,
-      "suppmanilocation": "BELGIUM",
-      "supplierQuotedInvoicePrice": 1675.00,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 4100728,
-      "suppmanilocation": "BELGIUM",
-      "supplierQuotedInvoicePrice": 2560.45,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 5450589,
-      "suppmanilocation": "CHINA",
-      "supplierQuotedInvoicePrice": 53.12,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 5672644,
-      "suppmanilocation": "UK",
-      "supplierQuotedInvoicePrice": 1046.65,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 5672644,
-      "suppmanilocation": "CHINA",
-      "supplierQuotedInvoicePrice": 950.98,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 5674972,
-      "suppmanilocation": "CHINA",
-      "supplierQuotedInvoicePrice": 65.69,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 5674974,
-      "suppmanilocation": "CHINA",
-      "supplierQuotedInvoicePrice": 44.09,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 5675361,
-      "suppmanilocation": "CHINA",
-      "supplierQuotedInvoicePrice": 42.98,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 5674977,
-      "suppmanilocation": "CHINA",
-      "supplierQuotedInvoicePrice": 222.14,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 3642655,
-      "suppmanilocation": "GERMANY",
-      "supplierQuotedInvoicePrice": 170.18,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 3642655,
-      "suppmanilocation": "CHINA",
-      "supplierQuotedInvoicePrice": 81.37,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 3642655,
-      "suppmanilocation": "INDIA",
-      "supplierQuotedInvoicePrice": 57.12,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 6382128,
-      "suppmanilocation": "CHINA",
-      "supplierQuotedInvoicePrice": 19.20,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 6382132,
-      "suppmanilocation": "CHINA",
-      "supplierQuotedInvoicePrice": 26.69,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 6382128,
-      "suppmanilocation": "INDIA",
-      "supplierQuotedInvoicePrice": 20.11,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 6382132,
-      "suppmanilocation": "INDIA",
-      "supplierQuotedInvoicePrice": 30.90,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 6409902,
-      "suppmanilocation": "INDIA",
-      "supplierQuotedInvoicePrice": 53.68,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 6409902,
-      "suppmanilocation": "CHINA",
-      "supplierQuotedInvoicePrice": 38.59,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 5374631,
-      "suppmanilocation": "UK",
-      "supplierQuotedInvoicePrice": 881.32,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 5374631,
-      "suppmanilocation": "WESTERN EUROPE",
-      "supplierQuotedInvoicePrice": 896.69,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 3642647,
-      "suppmanilocation": "WESTERN EUROPE",
-      "supplierQuotedInvoicePrice": 482.42,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 5374631,
-      "suppmanilocation": "EASTERN EUROPE",
-      "supplierQuotedInvoicePrice": 641.55,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 3642647,
-      "suppmanilocation": "EASTERN EUROPE",
-      "supplierQuotedInvoicePrice": 456.98,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 5714523,
-      "suppmanilocation": "INDIA",
-      "supplierQuotedInvoicePrice": 26.48,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 5714523,
-      "suppmanilocation": "CHINA",
-      "supplierQuotedInvoicePrice": 25.53,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 5714523,
-      "suppmanilocation": "UK",
-      "supplierQuotedInvoicePrice": 42.31,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 5717637,
-      "suppmanilocation": "INDIA",
-      "supplierQuotedInvoicePrice": 26.18,
-      "highlevelprocess": "Sand Casting & Machining"
-    },
-    {
-      "partname": "MANIFOLD, EXHAUST",
-      "partno": 6377526,
-      "suppmanilocation": "INDIA",
-      "supplierQuotedInvoicePrice": 18.05,
-      "highlevelprocess": "Sand Casting & Machining"
+    dataPointWidth: 20,
+    data: [
+      {
+        type: "column",
+        color: "#da291c",
+        indexLabelFontColor: "#000",
+        toolTipContent: "{label} : {y}$",
+        name: "HighLevel Process1",
+        showInLegend: true,
+        dataPoints: [] as { label: string; y: any }[],
+      },
+      {
+        type: "column",
+        color: "#2fa365",
+        indexLabelFontColor: "#000",
+        toolTipContent: "{label} : {y}$",
+        name: "HighLevel Process2",
+        showInLegend: true,
+        dataPoints: [] as { label: string; y: any }[],
+      },
+    ],
+  }
+
+
+  getAbsoluteDifference(col2First: number, col2Second: number): number {
+    return Math.abs(col2First - col2Second);
+  }
+
+
+  openUploadPopupMfg(UniqueId: any): void {
+    debugger;
+    this.selectedUniqueIdMfg = UniqueId;
+
+    this.showTcoUploadModalMfg = true;
+
+  }
+//Total Variation 
+
+get totalVariation(): number {
+  return this.mgfprocess.reduce((sum, data) => {
+    const diff = Math.abs(data.Col2_First - data.Col2_Second);
+    return sum + diff;
+  }, 0);
+}
+
+  async GetMgfProcessArtibage() {
+    debugger;
+    //  Refer This
+    this.mgfprocess = [];
+    this.AdminService.GetMgfProcess(this.test).subscribe(
+      (response: any) => {
+        this.data1 = response;
+        this.mgfprocess =  this.data1;
+
+        this.mgfprocess.forEach((data) => {
+          if (!data.ProjectStatus) {
+            data.ProjectStatus = 'Open'; // Default to "Open" if no value exists
+          }
+        });
+        // Process the data for chart
+        this.MfgchartOptions.data[0].dataPoints = this.mgfprocess.map(data => ({
+          label: data.PartNumber,
+          y: Number(data.Col2_First)
+        }));
+        this.MfgchartOptions.data[1].dataPoints = this.mgfprocess
+          .map(data => ({
+            label: data.PartNumber,
+            y: Number(data.Col2_Second)
+          }));
+        this.getGraphstyleMfg();
+        // this.calculateTop80Variation();
+
+      },
+
+      (error: any) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+
+  }
+
+  saveComment(): void {
+    debugger;
+    if (this.editingIndex !== null && this.editingIndex >= 0) {
+      this.mgfprocess[this.editingIndex].Comments = this.selectedComment;
     }
-  ]
+    this.closeCommentsPopup();
+  }
 
+   getGraphstyleMfg() {
+
+    const baseBarWidth = 50; // pixels per bar
+    const minWidth = '100%';
+
+    if (!this.data1 || this.data1.length <= 20) {
+      return { height: '375px', width: minWidth };
+    }
+
+    return {
+      height: '375px',
+      width: `${this.data1.length * baseBarWidth}px`
+    };
+  }
+
+  calculateTop80Variation() {
+    const variationData = this.mgfprocess
+      .map((item) => ({
+        ...item,
+        variation: Math.abs(item.Col2_First - item.Col2_Second)
+      }))
+      .sort((a, b) => b.variation - a.variation);
+
+    const totalVariation = variationData.reduce((sum, item) => sum + item.variation, 0);
+    let cumulative = 0;
+    const top80 = [];
+
+    for (const item of variationData) {
+      cumulative += item.variation;
+      top80.push(item);
+      if (cumulative / totalVariation >= 0.8) break;
+    }
+
+
+    this.mgfprocess = top80;
+  }
+
+
+  saveChangesMfg(data: GetMgfProcessArtibage) {
+    //debugger;
+    data.ModifiedBy = localStorage.getItem('userFullName');
+    if (!data.Mfg_ArtibageID) {
+      data.Mfg_ArtibageID = 0;
+    }
+
+    if (!data.TargetQuote) {
+      data.TargetQuote = "0";
+
+    }
+
+    console.log('Updated data:', data);
+    this.AdminService.SaveMfgArtibage(data).subscribe({
+      next: (response) => {
+        //debugger
+        console.log('Opportunity saved successfully:', response);
+        this.editingIndexMfg = null; // Exit edit mode
+        this.GetMgfProcessArtibage();
+        //this.chartOptions;
+      },
+      error: (error) => {
+        console.error('Error saving opportunity:', error);
+        alert('Error: ' + error.message);
+      },
+    });
+  }
+
+  cancelEditingMfg() {
+    this.editingIndexMfg = null; // Cancel edit mode without saving
+  }
+
+
+  onDateRangeChangeMfg(): void {
+    debugger;
+    const today = new Date();
+    let fromDate: Date | null = null;;
+    switch (this.selectedRangeMfg) {
+      case "3":
+        fromDate = new Date(today.getFullYear(), today.getMonth() - 3, today.getDate());
+        break;
+      case "6":
+        fromDate = new Date(today.getFullYear(), today.getMonth() - 6, today.getDate());
+        break;
+      case "12":
+        fromDate = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
+        break;
+        case "24":
+          fromDate = new Date(today.getFullYear() - 2, today.getMonth(), today.getDate());
+          break;
+      default:
+        fromDate = null;
+        break;
+    }
+     // Update the bound variables
+    if (fromDate) {
+      this.fromDateMfg = fromDate.toISOString().split('T')[0]; // Format 'From Date' as 'YYYY-MM-DD'
+      this.toDateMfg = today.toISOString().split('T')[0];      // Format 'To Date' as 'YYYY-MM-DD'
+    } else {
+      this.fromDateMfg = null;
+      this.toDateMfg = null;
+    }
+
+  }
+  MfgchartOptions = {
+ 
+    animationEnabled: true,
+ 
+    title: {
+      text: "Part Number vs Manufacturing Artibage ($)",
+      fontFamily: "Trebuchet MS, Helvetica, sans-serif",
+ 
+    },
+    axisX: {
+      title: "Part Number",
+      interval: 1,
+      labelFontSize: 9,
+      showInLegend: true,
+      indexLabelFontColor: "#000",
+ 
+      labelAngle: -240,
+ 
+    },
+    axisY: {
+ 
+      title: "Manufacturing Artibage",
+      labelFontSize: 10,
+      showInLegend: true,
+      indexLabelFontColor: "#000",
+      interval: 100,
+    },
+    dataPointWidth: 20,
+    data: [
+      {
+        type: "column",
+        color: "#da291c",
+        indexLabelFontColor: "#000",
+        toolTipContent: "{label} : {y}$",
+        name: "HighLevel Process1",
+        showInLegend: true,
+        dataPoints: [] as { label: string; y: any }[],
+      },
+      {
+        type: "column",
+        color: "#2fa365",
+        indexLabelFontColor: "#000",
+        toolTipContent: "{label} : {y}$",
+        name: "HighLevel Process2",
+        showInLegend: true,
+        dataPoints: [] as { label: string; y: any }[],
+      },
+    ],
+   
+ 
+  }
+
+  onViewClickMfg() {
+    debugger;
+    // if (this.fromDate && this.toDate) {
+    //   const filteredData: any[] = [];
+    //   this.mgfprocess = this.data1;
+    //   for (let i = 0; i < this.mgfprocess.length; i++) {
+    //     const opportunity = this.mgfprocess[i];
+  
+    //     try {
+    //       // const debriefDate = opportunity.DebriefDate;
+    //       const debriefDate = opportunity.DebriefDate.split('T')[0];
+  
+    //       if (
+    //         debriefDate >= this.fromDate &&
+    //         debriefDate <= this.toDate
+    //       ) {
+    //         filteredData.push(opportunity);
+    //       }
+    //     } catch (error) {
+    //       console.error('Error parsing DebriefDate:', opportunity.DebriefDate, error);
+    //     }
+    //   }
+    //   this.filteredData = filteredData;
+    //   this.mgfprocess = this.filteredData;
+     
+    //   // Update chart data points based on filtered data
+    //   this.chartOptions = { ...this.chartOptions };
+    //   this.chartOptions.data[0].dataPoints = this.filteredData.map(data => ({
+    //     label: data.PartNumber,
+    //     y:Number(data.Col2_First)
+    //   }));
+    //   this.chartOptions.data[1].dataPoints = this.filteredData
+    //     .map(data => ({
+    //       label: data.PartNumber,
+    //       y: data.Col2_Second
+    //     }));
+  
+    //   console.log('Updated Chart Data:', this.chartOptions);
+    // } else {
+    //   console.error('Invalid Date Range');
+  
+    // }
+  
+    if (this.fromDateMfg && this.toDateMfg) {
+      const filteredData: any[] = [];
+      this.mgfprocess = this.data1;
+      for (let i = 0; i < this.mgfprocess.length; i++) {
+        const opportunity = this.mgfprocess[i];
+
+        try {
+          const debriefDate = opportunity.DebriefDate;
+          if (
+            debriefDate >= this.fromDateMfg &&
+            debriefDate <= this.toDateMfg
+          ) {
+            filteredData.push(opportunity);
+          }
+        } catch (error) {
+          console.error('Error parsing DebriefDate:', opportunity.DebriefDate, error);
+        }
+      }
+      this.filteredDataMfg = filteredData;
+      this.mgfprocess = this.filteredDataMfg;
+
+      // Update chart data points based on filtered data
+      this.MfgchartOptions = { ...this.MfgchartOptions };
+
+      this.MfgchartOptions.data[0].dataPoints = this.filteredDataMfg.map(data => ({
+        label: data.PartNumber,
+      y:Number(data.Col2_First)
+      }));
+
+      this.MfgchartOptions.data[1].dataPoints = this.filteredDataMfg.map(data => ({
+        label: data.PartNumber,
+        y: data.Col2_Second
+      }));
+
+      console.log('Updated Chart Data:', this.MfgchartOptions);
+    } else {
+      console.error('Invalid Date Range');
+
+    }
+
+  }
+
+
+  ClearAllMfg(): void {
+    this.selectedRangeMfg = ""; // Reset dropdown
+    this.fromDateMfg = null;    // Clear 'From Date'
+    this.toDateMfg = null;      // Clear 'To Date'
+    this.filteredDataMfg = [];
+    //this.opportunitiesMfg = this.data;
+    this.mgfprocess = this.data1;
+    // Process the data for chart
+    this.MfgchartOptions = { ...this.MfgchartOptions };
+
+    this.MfgchartOptions.data[0].dataPoints = this.mgfprocess.map(data => ({
+      label: data.PartNumber,
+      y: Number(data.Col2_First),
+
+    }));
+
+    this.MfgchartOptions.data[1].dataPoints = this.mgfprocess
+    .map(data => ({
+      label: data.PartNumber,
+      y: data.Col2_Second
+    }));
+   // this.gettotaloppurtunity();
+  }
+
+  getAbsoluteDifferenceMfg(col2First: number, col2Second: number): number {
+    return Math.abs(col2First - col2Second);
+  }
+
+  downloadFolderAsZipMfg(UniqueId: string): void {
+    //debugger
+    this.AdminService.downloadZipFile_mfg(UniqueId).subscribe(
+      (response: Blob) => {
+        const url = window.URL.createObjectURL(response); // Create a blob URL
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = `${UniqueId}.zip`; // Name the ZIP file with the commercial ID
+        anchor.click();
+        window.URL.revokeObjectURL(url); // Clean up the URL
+      },
+      (error:any) => {
+        console.error('Error downloading ZIP file:', error);
+      }
+    );
+  }
+
+
+  openCommentsPopupMfg(comment: string, index: number): void {
+    debugger;
+    this.showModalMfg = true;
+    this.selectedCommentMfg = comment || '';
+  }
+
+
+  editRowMfg(index: number) {
+    debugger;
+    this.isEditingMfg = !this.isEditingMfg;
+    this.editingIndexMfg = index; // Enable edit mode for the selected row
+  }
+
+  closeCommentsPopupMfg(): void {
+    this.selectedCommentMfg = '';
+    this.showModalMfg = false;
+  
+
+  }
+
+  saveCommentMfg(): void {
+    debugger;
+    if (this.editingIndexMfg !== null && this.editingIndexMfg >= 0) {
+      // this.opportunitiesMfg[this.editingIndexMfg].Comments = this.selectedCommentMfg;
+      this.mgfprocess[this.editingIndexMfg].Comments = this.selectedCommentMfg;
+    }
+    this.closeCommentsPopupMfg();
+  }
+
+  closeUploadPopupMfg(): void {
+    this.showFileUploadMfg = false;
+    this.showTcoUploadModalMfg = false;
+  }
+
+  saveComment_mfg(): void {
+    if (this.editingIndex !== null && this.editingIndex >= 0) {
+      this.mgfprocess[this.editingIndex].Comments = this.selectedComment;
+    }
+    this.closeCommentsPopup();
+  }
+  closeComment(): void {
+    this.saveComment(); 
+  }
+
+  handleFileSelectionMfg(event: any): void {
+    debugger
+    const files: FileList = event.target.files; // Get selected files
+    this.selectedFilesMfg = []; // Clear previous selections
+
+    if (files && files.length > 0) {
+      console.log(`Number of files selected: ${files.length}`);
+      for (let i = 0; i < files.length; i++) {
+        console.log(`File ${i + 1}: ${files[i].name}`);
+        this.selectedFilesMfg.push(files[i]); // Store files in an array
+      }
+    } else {
+      console.log('No files selected.');
+    }
+  }
+
+  uploadFilesMfg(UniqueId: any): void {
+    debugger
+    if (this.selectedFilesMfg && this.selectedFilesMfg.length > 0) {
+      this.AdminService.Uploadfiles_mfg(UniqueId, this.selectedFilesMfg).subscribe({
+        next: (response:any) => {
+          console.log('Files uploaded successfully:', response);
+          alert('Files uploaded successfully!');
+          this.selectedFilesMfg = []; // Clear selected files after upload
+        },
+        error: (error:any) => {
+          console.error('File upload failed:', error);
+          alert('File upload failed!');
+        },
+      });
+    } else {
+      alert('Please select files to upload.');
+    }
+  }
+
+
+  //-------------------------------------end mfg process Arbitrage --------------------------------------------//
 
   design = [
     {
@@ -1423,5 +1743,19 @@ RouteToTco(MMID:any,RequestHeaderId:any){
   highlightRow(index: number) {
     this.highlightedRow = index;
   }
+
+  
+
+  backToCat3() {
+    this.showCat3Management = true;
+
+      this.showcostinsights = false;
+      this.showContent = false;
+      this.showRegionalContent = false;
+      this.showmgfprocess = false;
+      this.showdesign = false;
+      
+  }
+
 
 }

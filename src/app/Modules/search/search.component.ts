@@ -1446,7 +1446,7 @@ export class SearchComponent implements OnInit {
 
   compareIds: any = [];
   displaySimulatedPopup = "none";
-  compareIdArray: any = [0];
+  compareIdArray: any = [];
   compareIdArraylength = 0;
 
   getPartId(e: any, model: any) {
@@ -1454,7 +1454,7 @@ export class SearchComponent implements OnInit {
 
 
     // -- new compare code ----
-    this.compareIdArray = [];
+
     this.compareIdArraylength = 0;
 
     const myElement = document.getElementById("compareBottomPanel");
@@ -1462,102 +1462,169 @@ export class SearchComponent implements OnInit {
     myElement?.classList.add("compareBottomPanel");
 
     this.checkcount = 0;
-    const Comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
+    // const Comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
+    const Comparecheckbox = document.getElementsByClassName("SearchCheckboxselection") as any;
+    const SimulatedCheckbox = document.getElementsByClassName("SimulatedCheckbox") as any;
+
+    if (this.compareIdArray.length < 4) {
+      if (model == "S") {
+        for (let i = 0; i < this.SearchListSimulated.length; i++) {
+          const checkbox = document.getElementById(this.SearchListSimulated[i].scReportId) as any;
+          if (checkbox != null) {
+            if (checkbox.checked) {
+              this.SearchListSimulated[i].isActive = 1;
+              this.compareIdArray.push(
+                {
+                  "scReportId": this.SearchListSimulated[i].scReportId,
+                  "csHeaderId": '0',
+                  "partNumber": this.SearchListSimulated[i].partNumber,
+                  "partName": this.SearchListSimulated[i].partName,
+                  "uniqueId": this.SearchListSimulated[i].uniqueId,
+                  "imagePath": this.SearchListSimulated[i].imagePath
+                }
+              );
+            }
+            else {
+              this.SearchListSimulated[i].isActive = 0;
+            }
+          }
+        }
+
+      }
+
+      if (model == "M") {
+        for (let i = 0; i < this.SearchList.length; i++) {
+          const checkbox = document.getElementById(this.SearchList[i].csHeaderId) as any;
+
+          if (checkbox.checked) {
+            this.SearchList[i].isActive = 1;
+            this.compareIdArray.push(
+              {
+                "scReportId": '0',
+                "csHeaderId": this.SearchList[i].csHeaderId,
+                "partNumber": this.SearchList[i].partNumber,
+                "partName": this.SearchList[i].partName,
+                "uniqueId": this.SearchList[i].uniqueId,
+                "imagePath": this.SearchList[i].imagePath
+              }
+            );
+          }
+
+        }
+
+      }
+
+      if(this.compareIdArray.length > 0){
+        this.compareIdArraylength = this.compareIdArray.length ;
+      }
+
+    }
+
+
+  //  if (this.checkcount <= 0) {
+  //     myElement?.classList.remove("compareBottomPanel");
+  //     myElement?.classList.add("compareBottomPanelhide");
+  //     this.compareIdArray = [];
+  //   }
+
 
     // --- main models---------
-    for (let i = 0; i < Comparecheckbox.length; i++) {
-      if (Comparecheckbox[i].checked) {
-        this.checkcount = this.checkcount + 1;
-        const dd = this.SearchList.find((p: { csHeaderId: any; }) => p.csHeaderId == Comparecheckbox[i].id)
-        if (this.compareIdArray.length < 4) {
-          this.compareIdArray.push(
-            {
-              "scReportId": '0',
-              "csHeaderId": dd.csHeaderId,
-              "partNumber": dd.partNumber,
-              "partName": dd.partName,
-              "uniqueId": dd.uniqueId,
-              "imagePath": dd.imagePath
-            }
-          );
-        }
-        else {
-          this.toastr.warning("You can select only 4 Parts");
-          Comparecheckbox[i].checked = false;
-        }
-        this.compareIdArraylength = this.compareIdArray.length;
-      }
-    }
+    // for (let i = 0; i < Comparecheckbox.length; i++) {
+    //   if (Comparecheckbox[i].checked) {
+    //     this.checkcount = this.checkcount + 1;
+    //     const dd1 = this.SearchList.find((p: { csHeaderId: any; }) => p.csHeaderId == Comparecheckbox[i].id)
+    //     const dd2 = this.SearchListSimulated.find((p: { scReportId: any; }) => p.scReportId == SimulatedCheckbox[i].id)
+    //     if (model == 'S') {
+    //       if (this.compareIdArray.length < 4) {
+    //         this.compareIdArray.push(
+    //           {
+    //             "scReportId": '0',
+    //             "csHeaderId": dd.csHeaderId,
+    //             "partNumber": dd.partNumber,
+    //             "partName": dd.partName,
+    //             "uniqueId": dd.uniqueId,
+    //             "imagePath": dd.imagePath
+    //           }
+    //         );
+    //       }
+    //     }
+    //     else {
+    //       this.toastr.warning("You can select only 4 Parts");
+    //       Comparecheckbox[i].checked = false;
+    //     }
+    //     this.compareIdArraylength = this.compareIdArray.length;
+    //   }
+    // }
 
 
     // -- simulated models ---------
-    console.log(this.SearchListSimulated);
-    if (model == 'S') {
-      const SimulatedCheckbox = document.getElementsByClassName("SimulatedCheckbox") as any;
-      for (let i = 0; i < this.SearchListSimulated.length; i++) {
-        if (this.SearchListSimulated[i].isActive == 1) {
-          this.checkcount = this.checkcount + 1;
-          //const dd = this.SearchListSimulated.find((p: { scReportId: any; }) => p.scReportId == SimulatedCheckbox[i].id)
-          if (this.compareIdArray.length < 4) {
-            this.compareIdArray.push(
-              {
-                "scReportId": this.SearchListSimulated[i].scReportId,
-                "csHeaderId": '0',
-                "partNumber": this.SearchListSimulated[i].partNumber,
-                "partName": this.SearchListSimulated[i].partName,
-                "uniqueId": this.SearchListSimulated[i].uniqueId,
-                "imagePath": this.SearchListSimulated[i].imagePath
-              }
-            );
+    // console.log(this.SearchListSimulated);
+    // if (model == 'S') {
+    //const SimulatedCheckbox = document.getElementsByClassName("SimulatedCheckbox") as any;
+    // for (let i = 0; i < this.SearchListSimulated.length; i++) {
+    //   if (this.SearchListSimulated[i].isActive == 1) {
+    //     this.checkcount = this.checkcount + 1;
+    //     //const dd = this.SearchListSimulated.find((p: { scReportId: any; }) => p.scReportId == SimulatedCheckbox[i].id)
+    //     if (this.compareIdArray.length < 4) {
+    //       this.compareIdArray.push(
+    //         {
+    //           "scReportId": this.SearchListSimulated[i].scReportId,
+    //           "csHeaderId": '0',
+    //           "partNumber": this.SearchListSimulated[i].partNumber,
+    //           "partName": this.SearchListSimulated[i].partName,
+    //           "uniqueId": this.SearchListSimulated[i].uniqueId,
+    //           "imagePath": this.SearchListSimulated[i].imagePath
+    //         }
+    //       );
 
-            this.SearchListSimulated[i].isActive = 1;
-            console.log(this.SearchListSimulated);
+    //       this.SearchListSimulated[i].isActive = 1;
+    //       console.log(this.SearchListSimulated);
 
-          }
-          else {
-            this.toastr.warning("You can select only 4 Parts");
-            SimulatedCheckbox[i].checked = false;
-            this.SearchListSimulated[i].isActive = 0;
-          }
-          this.compareIdArraylength = this.compareIdArray.length;
-        }
-      }
+    //     }
+    //     else {
+    //       this.toastr.warning("You can select only 4 Parts");
+    //       SimulatedCheckbox[i].checked = false;
+    //       this.SearchListSimulated[i].isActive = 0;
+    //     }
+    //     this.compareIdArraylength = this.compareIdArray.length;
+    //   }
+    // }
 
-      for (let i = 0; i < SimulatedCheckbox.length; i++) {
-        if (SimulatedCheckbox[i].checked) {
-          this.checkcount = this.checkcount + 1;
-          const dd = this.SearchListSimulated.find((p: { scReportId: any; }) => p.scReportId == SimulatedCheckbox[i].id)
-          if (this.compareIdArray.length < 4) {
-            this.compareIdArray.push(
-              {
-                "scReportId": dd.scReportId,
-                "csHeaderId": '0',
-                "partNumber": dd.partNumber,
-                "partName": dd.partName,
-                "uniqueId": dd.uniqueId,
-                "imagePath": dd.imagePath
-              }
-            );
+    // const SimulatedCheckbox = document.getElementsByClassName("SimulatedCheckbox") as any;
+    // for (let i = 0; i < SimulatedCheckbox.length; i++) {
+    //   if (SimulatedCheckbox[i].checked) {
+    //     this.checkcount = this.checkcount + 1;
+    //     const dd = this.SearchListSimulated.find((p: { scReportId: any; }) => p.scReportId == SimulatedCheckbox[i].id)
+    //     if (this.compareIdArray.length < 4) {
+    //       this.compareIdArray.push(
+    //         {
+    //           "scReportId": dd.scReportId,
+    //           "csHeaderId": '0',
+    //           "partNumber": dd.partNumber,
+    //           "partName": dd.partName,
+    //           "uniqueId": dd.uniqueId,
+    //           "imagePath": dd.imagePath
+    //         }
+    //       );
 
-            dd.isActive = 1;
-          }
-          else {
-            this.toastr.warning("You can select only 4 Parts");
-            SimulatedCheckbox[i].checked = false;
-            this.SearchListSimulated[i].isActive = 0;
-          }
-          this.compareIdArraylength = this.compareIdArray.length;
-        }
-      }
-    }
+    //       dd.isActive = 1;
+    //     }
+    //     else {
+    //       this.toastr.warning("You can select only 4 Parts");
+    //       SimulatedCheckbox[i].checked = false;
+    //       this.SearchListSimulated[i].isActive = 0;
+    //     }
+    //     this.compareIdArraylength = this.compareIdArray.length;
+    //   }
+    // }
+    // }
 
 
-    if (this.checkcount <= 0) {
-      myElement?.classList.remove("compareBottomPanel");
-      myElement?.classList.add("compareBottomPanelhide");
-      this.compareIdArray = [];
-    }
-
+    // if (this.checkcount <= 0) {
+    //   myElement?.classList.remove("compareBottomPanel");
+    //   myElement?.classList.add("compareBottomPanelhide");
+    //   this.compareIdArray = [];
+    // }
 
 
     // // -- new compare code end ----

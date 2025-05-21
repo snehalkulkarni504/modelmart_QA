@@ -443,7 +443,9 @@ p {
   color: white;
   border: 2px solid #da291c;
 }
-
+.modal{
+  background: rgba(0, 0, 0, .5);
+}
 
 .table {
   font-size: 12px !important;
@@ -1014,6 +1016,18 @@ input[type=checkbox][_ngcontent-ng-c1223772666] {
   font-family: Helvetica, Arial !important;
   border-radius: 5px;
   margin-left: 1300px;
+}
+
+
+
+.btnback {
+  font-size: 15px !important;
+  background-color: #da291c;
+  color: #fff;
+  padding: 4px 15px;
+  border: 1px solid #da291c;
+  font-family: Helvetica, Arial !important;
+  border-radius: 5px;
 }
 
 .image-container {

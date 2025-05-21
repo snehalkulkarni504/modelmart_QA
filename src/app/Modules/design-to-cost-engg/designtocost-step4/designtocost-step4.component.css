@@ -6,7 +6,7 @@
     position: fixed;
     width: 100%;
     display: inline-flex;
-    height: 70px;
+    height: 80px;
     background-color: #fff;
     z-index: 20;
     border-bottom: 1px solid #da291c;
@@ -17,7 +17,7 @@
     position: fixed;
     width: 100%;
     display: inline-flex;
-    height: 70px;
+    height: 80px;
     margin-bottom: 20px;
     background-color: #fff;
     border-bottom: 1px solid #da291c;
@@ -25,14 +25,14 @@
 
 .MasterHeader h2 {
     /* margin: 20px 0px; */
-    font-size: 35px;
+    font-size: 30px;
     font-family: Helvetica, Arial !important;
     color: #808080;
-    margin-left: 50px;
+    margin-left: 20px;
     font-weight: 600;
     text-size-adjust: 100%;
-    height: 70px;
-    line-height: 70px;
+    height: 80px;
+    line-height: 80px;
     background: linear-gradient(to right, #7b4397, #dc2430);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -42,9 +42,9 @@
 /* ------------ steps design start ------------ */
 .DTO_steps {
     display: flex;
-    width: 90%;
-    height: 50px;
-    margin-left: 10%;
+    width: 97%;
+    height: 65px;
+    margin-left: 3%;
     margin-top: 10px;
 
 }
@@ -53,53 +53,67 @@
 .DTO_step2,
 .DTO_step3,
 .DTO_step4 {
-    width: 100px;
-    height: 50px;
+    width: 150px;
+    height: 65px;
     border-top-left-radius: 20px;
     border-bottom-right-radius: 20px;
     text-align: center;
     vertical-align: middle;
     color: #000;
-    background-color: #267eb8;
-    line-height: 50px;
-    cursor: pointer !important;
+    /* line-height: 50px; */
+    font-family: Helvetica, Arial !important;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px;
 }
 
-.DTO_step1:hover {
-    cursor: pointer !important;
+.DTO_step1 span,
+.DTO_step2 span,
+.DTO_step3 span,
+.DTO_step4 span {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.DTO_step1 {
+    background-color: #1b9a85;
+    opacity: 0.5;
 }
 
 .DTO_step2 {
-    background-color: #1b9a85;
+    background-color: #f19c0c;
+    opacity: 0.5;
 }
 
 .DTO_step3 {
     background-color: #9ebe5b;
+    opacity: 0.5;
 }
 
 .DTO_step4 {
-    background-color: #f19c0c;
+    background-color: #267eb8;
     color: #fff;
-    font-weight: 600;
+    font-size: 11px;
+    font-weight: 500;
 }
 
-span {
-    content: "\2192";
-}
 
 .gradient-icon {
+    /* background: linear-gradient(to right, #267eb8, #1b9a85);  */
     background: linear-gradient(to right, #267eb8, #1b9a85);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .gradient-icon2 {
+    /* background: linear-gradient(to right, #1b9a85, #9ebe5b);  */
     background: linear-gradient(to right, #1b9a85, #9ebe5b);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .gradient-icon3 {
+    /* background: linear-gradient(to right, #9ebe5b, #f19c0c);  */
     background: linear-gradient(to right, #9ebe5b, #f19c0c);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -107,10 +121,10 @@ span {
 
 .DTO_connect1_2 {
     margin-top: -10px;
-    font-size: 50px;
+    font-size: 60px;
     vertical-align: top;
-
 }
+
 
 
 .btnback {
@@ -144,7 +158,7 @@ span {
 }
 
 .headerName p {
-    font-size: 20px !important;
+    font-size: 17px !important;
 }
 
 .headerinfo {
@@ -403,10 +417,143 @@ span {
 
 .TotalText {
     height: 30px;
-    font-size: 20px !important;
+    font-size: 30px !important;
     width: 100%;
     margin-top: 4px;
     background-color: #ccc;
     border: none;
     outline: none;
+    font-weight: bold;
 }
+
+.TotalText:focus {
+    border: none;
+    outline: none;
+}
+
+/* ----------------- should cost request send  start --------- */
+* {
+    font-family: Helvetica, Arial !important;
+}
+
+.setHeight {
+
+    min-height: 100dvh;
+}
+
+.col-md-6 {
+    margin-top: 1%;
+}
+
+.header {
+    height: 25px;
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+
+.container {
+    /* border: 2px solid #8080808a; */
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+
+.MasterHeaderRequest {
+    width: 80%;
+    display: inline-flex;
+    height: 80px;
+    margin-left: 10%;
+    margin-right: 10%;
+    font-family: Helvetica, Arial;
+}
+
+.MasterHeaderRequest h2 {
+    margin: 20px 0px;
+}
+
+.MasterDetails {
+    width: 80%;
+    margin-left: 10%;
+    height: auto;
+    font-family: Helvetica, Arial !important;
+    padding-top: 0px;
+}
+
+.MasterHeaderRequestlable {
+    width: 80%;
+    display: inline-flex;
+    margin-left: 10%;
+    margin-right: 10%;
+    font-family: Helvetica, Arial;
+}
+
+input[type="file"]:focus {
+    box-shadow: none;
+    outline: none;
+    border: 1px solid #da291c;
+}
+
+input[type="text"]:focus {
+    box-shadow: none;
+    outline: none;
+    border: 1px solid #da291c;
+}
+
+textarea:focus {
+    box-shadow: none;
+    outline: none;
+    border: 1px solid #da291c;
+}
+
+select:focus {
+    box-shadow: none;
+    outline: none;
+    border: 1px solid #da291c;
+}
+
+
+textarea,
+input[type="text"],
+input[type="file"] {
+    font-size: 13px !important;
+}
+
+
+.labelDetails {
+    text-decoration: underline 1px solid;
+    text-decoration-color: #da291c;
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+
+.border {
+
+    margin-top: 20px;
+    padding: 15px 10px 25px 15px;
+    border: 2px solid rgb(107, 101, 101);
+    border-radius: 5px;
+
+}
+
+.RequestExelFormat {
+    width: 40px;
+    height: 40px;
+}
+
+.RequestExelFormat:hover {
+    cursor: pointer !important;
+}
+
+.RequestFormIcon {
+    font-size: 14px;
+    text-align: center;
+}
+
+.remark {
+    font-size: 12px;
+    color: #da291c;
+}
+
+/* ----------------- should cost request send  end --------- */

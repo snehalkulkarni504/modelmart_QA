@@ -1,0 +1,601 @@
+* {
+    font-family: Helvetica, Arial !important;
+}
+
+.fixsubheader {
+    position: fixed;
+    width: 100%;
+    display: inline-flex;
+    height: 80px;
+    background-color: #fff;
+    z-index: 20;
+    border-bottom: 1px solid #da291c;
+     top: 50px;
+}
+
+.MasterHeader {
+    position: fixed;
+    width: 100%;
+    display: inline-flex;
+    height: 80px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #da291c;
+}
+
+.MasterHeader h2 {
+    /* margin: 20px 0px; */
+    font-size: 30px;
+    font-family: Helvetica, Arial !important;
+    color: #808080;
+    margin-left: 20px;
+    font-weight: 600;
+    text-size-adjust: 100%;
+    height: 80px;
+    line-height: 80px;
+    background: linear-gradient(to right, #7b4397, #dc2430);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+}
+
+/* ------------ steps design start ------------ */
+.DTO_steps {
+    display: flex;
+    width: 97%;
+    height: 65px;
+    margin-left: 3%;
+    margin-top: 10px;
+
+}
+
+.DTO_step1,
+.DTO_step2,
+.DTO_step3,
+.DTO_step4 {
+    width: 150px;
+    height: 65px;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    text-align: center;
+    vertical-align: middle;
+    color: #000;
+    /* line-height: 50px; */
+    font-family: Helvetica, Arial !important;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px;
+}
+
+.DTO_step1 span,
+.DTO_step2 span,
+.DTO_step3 span,
+.DTO_step4 span {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.DTO_step1 {
+    background-color: #1b9a85;
+    opacity: 0.5;
+}
+
+.DTO_step2 {
+    background-color: #267eb8;
+    color: #fff;
+    font-size: 12px;
+}
+
+.DTO_step3 {
+    background-color: #9ebe5b;
+    opacity: 0.5;
+}
+
+.DTO_step4 {
+    background-color: #f19c0c;
+    opacity: 0.5;
+}
+
+
+.gradient-icon {
+    /* background: linear-gradient(to right, #267eb8, #1b9a85);  */
+    background: linear-gradient(to right, #267eb8, #1b9a85);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gradient-icon2 {
+    /* background: linear-gradient(to right, #1b9a85, #9ebe5b);  */
+    background: linear-gradient(to right, #1b9a85, #9ebe5b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gradient-icon3 {
+    /* background: linear-gradient(to right, #9ebe5b, #f19c0c);  */
+    background: linear-gradient(to right, #9ebe5b, #f19c0c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.DTO_connect1_2 {
+    margin-top: -10px;
+    font-size: 60px;
+    vertical-align: top;
+}
+
+
+
+.btnback {
+    margin-top: 20px;
+    font-size: 15px !important;
+    background-color: #da291c;
+    color: #fff;
+    padding: 4px 15px;
+    border: 1px solid #da291c;
+    font-family: Helvetica, Arial !important;
+    border-radius: 5px;
+}
+
+.btnback:hover {
+    background-color: #fff;
+    color: #da291c;
+    border: 1px solid #da291c;
+}
+
+/* ------------- steps design end ---------------- */
+
+
+.datapanal {
+    margin-left: 5%;
+    width: 90%;
+    border: 1px solid #80808056;
+    border-radius: 5px;
+    margin-top: 20px;
+    padding: 20px 20px;
+    margin-bottom: 50px;
+    padding-top: 0px;
+    font-size: 12px !important;
+}
+
+.labelDetails {
+    text-decoration: underline;
+    text-decoration-color: #da291c;
+    font-size: 16px;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.default-lbl {
+    margin: 0px 0px 3px 2px;
+    font-size: 14px;
+}
+
+input[type=text] {
+    font-size: 15px;
+    padding: 10px 10px;
+}
+
+input[type=text]:focus {
+    box-shadow: none;
+}
+
+.ShouldCostBreakdown {
+    min-height: 100vh;
+    animation: showpanal alternate 1s;
+}
+ 
+
+@keyframes showpanal {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.table {
+    font-family: Helvetica, Arial !important;
+}
+
+.ShouldCostBreakdowntableth {
+    background-color: #da291c0d;
+    font-size: 12px !important;
+}
+
+.ShouldCostBreakdowntabletr {
+    font-size: 12px !important;
+}
+
+.footer-color {
+    background-color: #80808024;
+}
+
+.tfoot {
+    background-color: #da291c0d;
+    margin-top: 10px;
+}
+
+.MaterialGradeDetails table {
+    font-family: Helvetica, Arial !important;
+}
+
+.btnDownload {
+    background-color: #ffffff;
+    color: #da291c;
+    font-weight: 500;
+    border-radius: 5px;
+    border: 1px solid #da291c;
+    padding: 2px 30px 5px 30px;
+    margin-left: 50%;
+}
+
+.btnDownload:hover {
+    background-color: #da291c;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    cursor: pointer;
+}
+
+.hideblock {
+    display: none;
+}
+
+.showblock {
+    display: block;
+}
+
+.disabled {
+    /* background-color: #8080801a; */
+    font-family: Helvetica, Arial;
+}
+
+.TotalInPer {
+    position: absolute;
+    height: 30px;
+    z-index: 0;
+    background-image: linear-gradient(to right, #da291c, #da291c0d);
+}
+ 
+.UpdateText, .percentText, .UpdateTarif{
+    width: 100%;
+    height: 30px;
+    font-size: 13px !important;
+    text-align: center;
+}
+
+.percentText{
+    width: 80%;
+    margin-left: 10%;
+}
+
+.disabled {
+    background-color: #8080801a;
+}
+
+.hideTextBox {
+    visibility: hidden;
+    background-color: #da291c0d;
+ }
+
+ .hideTier2Box{
+    visibility: hidden;
+ }
+ .HideRow{
+    display: none;
+ }
+
+ .btn-outline-danger{
+    margin: 5px;
+    padding: 0px 7px;
+    font-size: 12px;
+    font-family: Helvetica, Arial !important;
+ }
+
+ 
+.modal-close-icn {
+    position: absolute;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .2s ease-in-out;
+   
+}
+
+.modal-close-icn:hover {
+    rotate: 90deg;
+    cursor: pointer;
+}
+
+.modal {
+    background: rgba(0, 0, 0, .5);
+}
+
+.modelsize{
+    margin-top: 50px;
+    width:  96% !important;
+    margin-left: 2%;
+    max-height: 400px !important ;
+   
+}
+ 
+.modal-body{
+    overflow-y: auto;
+    max-height: 300px !important ;
+}
+
+
+.modal-content{
+    height: 450px !important;
+}
+
+.modal-header{
+    border-bottom:1px solid #da291c;
+}
+
+.modal-footer {
+    border-top:1px solid #da291c;
+}
+ 
+
+.modelsize_DirectCost{
+    margin-top: 50px;
+    width:  80% !important;
+    margin-left: 10%;  
+}
+
+.modelsize_DirectCost > .modal-content{
+    height: 390px !important;
+}
+  
+.tableFixHead_DirectCost{
+    overflow-y: auto;  
+    height: 150px !important ;  
+    width: 90%;
+    margin-left: 5%;
+}
+
+.PopupText{
+    width: 90%;
+    margin-left: 5%;
+     height: 22px; 
+    font-size: 12px !important;
+    text-align: center;
+    border-radius: none;
+}
+
+.btn-save{
+    font-size: 17px !important;
+    padding: 0px 20px;
+}
+
+.btn-GetReport{
+    font-size: 15px !important;
+    padding: 5px 10px;
+}
+
+
+.tableFixHead {
+    overflow-y: auto;  
+    height: 400px !important ;  
+  }
+  .tableFixHead thead th {
+    position: sticky;  
+    top: 0px;  
+    font-size: 13px;
+  }
+  .tableFixHead table {
+    border-collapse: collapse; /* make the table borders collapse to each other */
+    width: 98%;
+    margin-left: 1%;
+  }
+  .tableFixHead th,
+  .tableFixHead td {
+    border: 1px solid #ccc;
+  }
+  .tableFixHead th {
+    background-color: rgb(253,244,243);
+  }
+
+  
+.default-lblvalue {
+    font-weight: 600;
+    margin-left: 0px;
+}
+
+.CostHeading{
+    font-family: Helvetica ,  Arial !important;
+    color: #da291c;
+    font-size: 12px !important;
+    font-weight: 600;
+    padding-bottom: 5px;
+}
+
+.modal-title{
+    font-size: 17px !important;
+}
+
+.NotesModelPopup{
+    color: #da291c;
+}
+.NotesModelPopup p{
+    color: #000;
+}
+
+.Remark_nopadding{
+    padding: 0 !important;
+    margin: 0;
+    font-size: 11px;
+}
+
+
+.back-indicator {
+    font-size: 30px !important;
+    color: #da291c;
+    z-index: 100 !important;
+}
+
+.back-indicator:hover {
+    cursor: pointer !important;
+}
+
+
+.btnback {
+    margin-top: 10px;
+    font-size: 15px !important;
+    background-color: #da291c;
+    color: #fff;
+    border: 1px solid #da291c;
+    padding: 5px 15px;
+    font-family: Helvetica, Arial !important;
+    border-radius: 5px;
+}
+
+.btnback:hover{
+    background-color: #fff;
+    color: #da291c;
+}
+ 
+
+
+.MasterHeader2{
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    font-family: Helvetica, Arial  ;
+}
+ 
+.MasterHeader2 h2{
+    margin: 10px 0px;
+    font-size: 20px !important; 
+}
+
+.toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  
+.tableFixHead_Process{
+    overflow-y: auto;  
+    height: 380px !important ;  
+    width: 80%;
+    margin-left: 10%;
+}
+
+.modelsize_DirectCostProcess{
+    margin-top: 50px;
+    width:  80% !important;
+    margin-left: 10%;  
+}
+
+.modelsize_DirectCostProcess > .modal-content{
+    height: 520px !important;
+}
+
+.processtr{
+    margin: 0px; padding: 0px;
+    padding-left: 5px;padding-top: 2px;
+}
+
+.processtrnumber{
+    margin: 0px; padding: 0px;
+    padding-right: 5px;padding-top: 2px;
+}
+
+.PopupTextProcess{
+    width: 98%;
+    /* margin-left: 5%; */
+    height: 22px; 
+    font-size: 12px !important;
+    text-align: center;
+    border-radius: none;
+}
+ 
+.tableFixHead_Process table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+
+.tableFixHead_Process table thead {
+    position: sticky;
+    top: -1px;
+    z-index: 1;
+    background-color: #fff;
+} 
+ 
+
+.tableFixHead_Process table tfoot {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    background-color: #fff;
+} 
+
+.ProcessCostDifference{
+    width: 80%; margin-left: 10%; 
+    height: 20px;
+    border-top: 1px solid #80808056;
+}
+.ProcessCostDifference p{
+    height: 20px;
+    float: right;
+    padding-left: 50px;
+    width: 300px;
+}
+
+.removeAddedProcess:hover{
+    cursor: pointer;
+}
+ 
+.ProcessPopup {
+    display: none;
+    background-color: #80808056;
+    width: 60%;
+    margin-left: 20%;
+    padding: 3px 10px;
+    gap: 3px;
+    height: 36px;
+}
+ 
+.addnewprocessbtn:hover{
+    cursor: pointer;
+}
+
+.Processtablefooterth {
+    background-color: #da291c0d;
+    padding: 0px;
+}
+
+.process-close-icn {
+    width: 30px;
+    height: 30px;
+    color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .2s ease-in-out;
+   
+}
+
+.process-close-icn:hover {
+    rotate: 90deg;
+    cursor: pointer;
+}
+
+.CSModelRemark{
+    font-size: 12px;
+    padding-bottom: 5px;
+    color: #da291c;
+    margin-bottom: 0px;
+    margin-left: 50px;
+}

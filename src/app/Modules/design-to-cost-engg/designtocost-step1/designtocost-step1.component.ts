@@ -279,7 +279,7 @@ export class DesigntocostStep1Component implements OnInit {
     if (this.selectedPartName == null) {
       this.IsDatahidden = true;
     }
-    
+
     const hi = document.getElementById("hellouser") as HTMLElement;
 
     const myElement = document.getElementById("additionalconstraint");
@@ -355,11 +355,48 @@ export class DesigntocostStep1Component implements OnInit {
     this.ModelCount = 0;
     this.ModelFound = true;
 
+    console.log(this.selectedEngineDisplacement);
+    console.log(this.selectedMaterialGrade);
+
     this.filters.PartName = this.selectedPartName.trim();
-    this.filters.engine = this.selectedEngineDisplacement;
-    this.filters.Platform = this.selectedPlatform.trim();
-    this.filters.MaterialGrade = this.selectedMaterialGrade.trim();
-    this.filters.HighProcess = this.selectedHighProcess.trim();
+
+    if (this.selectedEngineDisplacement != null) {
+      let param_value = "";
+      for (var i = 0; i < this.selectedEngineDisplacement.length; i++) {
+        param_value += this.selectedEngineDisplacement[i] + ",";
+      }
+      param_value = param_value.substring(0, param_value.length - 1);
+      this.filters.engine = param_value;
+    }
+
+    if (this.selectedPlatform != null) {
+      let param_value = "";
+      for (var i = 0; i < this.selectedPlatform.length; i++) {
+        param_value += this.selectedPlatform[i] + ",";
+      }
+      param_value = param_value.substring(0, param_value.length - 1);
+      this.filters.Platform = param_value;
+    }
+
+    if (this.selectedMaterialGrade != null) {
+      // let param_value = "";
+      // for (var i = 0; i < this.selectedMaterialGrade.length; i++) {
+      //   param_value += this.selectedMaterialGrade[i] + ",";
+      // }
+      // param_value = param_value.substring(0, param_value.length - 1);
+      // this.filters.MaterialGrade = param_value;
+      this.filters.MaterialGrade = this.selectedMaterialGrade.trim();
+    }
+
+    if (this.selectedHighProcess != null) {
+      this.filters.HighProcess = this.selectedHighProcess.trim();
+    }
+
+    // this.filters.PartName = 'MANIFOLD,EXHAUST';
+    // this.filters.engine = '23';
+    // this.filters.Platform = 'B';
+    // this.filters.MaterialGrade = '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)';
+    // this.filters.HighProcess = 'Polishing';
 
 
     // ------ show fillers start ----------
@@ -1573,8 +1610,26 @@ export class DesigntocostStep1Component implements OnInit {
   compareIdArray: any = [0];
   compareIdArraylength = 0;
 
+
   getPartId(e: any, model: any) {
     debugger;
+    var IsChecked = false;
+
+    const Comparecheckboxs = document.getElementsByClassName("SearchCheckbox") as any;
+    for (let i = 0; i < Comparecheckboxs.length; i++) {
+      if (Comparecheckboxs[i].checked) {
+        IsChecked = true;
+        break;
+      }
+    }
+
+    const cmpbtn = document.getElementById('comparerightPanel') as HTMLElement;
+    if (IsChecked) {
+      cmpbtn.style.display = "block";
+    }
+    else {
+      cmpbtn.style.display = "none";
+    }
 
 
     // // -- new compare code ----
@@ -1688,11 +1743,10 @@ export class DesigntocostStep1Component implements OnInit {
 
     this.checkcount = 0;
 
-    const compareBottomPanel = document.getElementsByClassName("compareBottomPanel") as any;
-    compareBottomPanel.display = "block";
+    // const compareBottomPanel = document.getElementsByClassName("compareBottomPanel") as any;
+    // compareBottomPanel.display = "block";
 
     const Comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
-
     const SearchCheckboxSimulated = document.getElementsByClassName("SearchCheckboxSimulated") as any;
     //SearchCheckboxSimulated
     if (model == 'M') {
@@ -1803,16 +1857,20 @@ export class DesigntocostStep1Component implements OnInit {
 
   async ShowSimulatedPopup() {
     debugger;
-    this.SpinnerService.show('spinner');
-    if (this.SearchListSimulated == undefined) {
-      const data = await this.searchservice.SearchSimulated(this.userId).toPromise();
-      this.SearchListSimulated = data;
-      console.log(this.SearchListSimulated);
-    }
 
-    console.log(this.SearchListSimulated);
-    this.displaySimulatedPopup = "block";
-    this.SpinnerService.hide('spinner');
+    this.getComparison();
+
+    // this.SpinnerService.show('spinner');
+    // if (this.SearchListSimulated == undefined) {
+    //   const data = await this.searchservice.SearchSimulated(this.userId).toPromise();
+    //   this.SearchListSimulated = data;
+    //   console.log(this.SearchListSimulated);
+    // }
+
+    // console.log(this.SearchListSimulated);
+    // this.displaySimulatedPopup = "block";
+    // this.SpinnerService.hide('spinner');
+
   }
 
 

@@ -551,7 +551,8 @@ export class ShouldCostGenComponent implements OnInit {
   }
 
   SendNewRequest() {
-    this.router.navigate(['/home/shouldcostrequest', this.UniqueId]);
+    this.router.navigate(['/home/shouldcostrequest', 'RFM'+this.UniqueId]);
+    // this.router.navigate(['/home/shouldcostrequest', this.UniqueId]);
   }
 
 

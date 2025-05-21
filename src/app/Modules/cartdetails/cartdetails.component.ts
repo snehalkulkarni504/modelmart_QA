@@ -315,7 +315,7 @@ export class CartdetailsComponent {
   delete updatedRow.utilization
   delete updatedRow.weight
   delete updatedRow.width
-
+  delete updatedRow.totalCost
   // Post updated data to the API
   this.SpinnerService.show('spinner');
   this.bomService.UpdateBomFilter(updatedRow,this.getroutecartname,this.userId).subscribe(response => {
@@ -367,7 +367,7 @@ export class CartdetailsComponent {
   delete updatedRow.utilization
   delete updatedRow.weight
   delete updatedRow.width
-  
+  delete updatedRow.totalCost
   // Post updated data to the API
   this.SpinnerService.show('spinner');
   this.bomService.UpdateBomFilterNew(updatedRow,this.getroutecartid,this.userId).subscribe(response => {
@@ -409,7 +409,7 @@ export class CartdetailsComponent {
         this.matchraw=this.matchraw+1;
       }
       this.bomqty=this.bomqty+item.excelitemcount;
-      this.fcost=this.fcost+item.ucost;
+      this.fcost=this.fcost+item.totalCost;
       if(item.modyfyDate!=null)
       this.lastsumulate=item.modyfyDate
     });
@@ -1022,7 +1022,7 @@ colspanhide3 = 2;
     }
     else {
       this.Ishide3 = false;
-      this.colspanhide3 = 11;
+      this.colspanhide3 = 10;
     }
 
   }

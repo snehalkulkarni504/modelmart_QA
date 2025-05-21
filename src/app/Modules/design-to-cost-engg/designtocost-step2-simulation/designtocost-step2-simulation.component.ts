@@ -1,21 +1,26 @@
-import { Component, } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { SaveMatetialCost, SaveMatetialCostDetails, SaveMatetialCostHeader, SaveProcessDetails } from 'src/app/Model/save-matetial-cost';
-import { SearchService } from 'src/app/SharedServices/search.service';
 import { Location } from '@angular/common';
+import { SearchService } from 'src/app/SharedServices/search.service';
+import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FormGroup } from '@angular/forms';
+import { SaveMatetialCost, SaveMatetialCostDetails, SaveMatetialCostHeader, SaveProcessDetails } from 'src/app/Model/save-matetial-cost';
+
 
 @Component({
-  selector: 'app-should-cost-report',
-  templateUrl: './should-cost-report.component.html',
-  styleUrls: ['./should-cost-report.component.css']
+  selector: 'app-designtocost-step2-simulation',
+  // standalone: true,
+  // imports: [],
+  templateUrl: './designtocost-step2-simulation.component.html',
+  styleUrl: './designtocost-step2-simulation.component.css'
 })
-export class ShouldCostReportComponent {
+export class DesigntocostStep2SimulationComponent implements OnInit {
+
 
   constructor(public searchservice: SearchService, public router: Router, public toastr: ToastrService, private location: Location,
-    private SpinnerService: NgxSpinnerService) { }
+    private SpinnerService: NgxSpinnerService) {
+  }
 
   ShouldCostReoprt!: FormGroup;
   TierCostReportList: any;
@@ -75,6 +80,7 @@ export class ShouldCostReportComponent {
   ModelwiseNote: any;
 
 
+
   ngOnInit(): void {
 
     this.router.events.subscribe((event) => {
@@ -88,7 +94,7 @@ export class ShouldCostReportComponent {
 
     this.userId = localStorage.getItem("userId");
 
-    this.CSHeaderId = localStorage.getItem("ComapredId");
+    this.CSHeaderId = localStorage.getItem("DTCComapredId"); //--- CSHeaderId
     this.GetTierCostData();
 
   }
@@ -1971,9 +1977,8 @@ export class ShouldCostReportComponent {
       alert("Should Cost Updated !!!");
     }
 
-    //this.router.navigate(['/home/shouldcostreportview']);
     this.SpinnerService.hide('spinner');
-    this.router.navigate(['/home/shouldcostreportview/', 1]);
+    this.router.navigate(['/home/designtocost/step3']);
   }
 
 
@@ -2094,7 +2099,7 @@ export class ShouldCostReportComponent {
       this.existingNonusdValue = document.getElementsByClassName('NonusdValueT2') as any;
       this.percent_updated = document.getElementsByClassName('form-control percentText Non T2') as any;
 
-      var TarifT2;
+       var TarifT2;
       const TarifUpdatedT2 = document.getElementById('TarifUpdatedT2') as any;
       if (TarifUpdatedT2.value != "") {
         TarifT2 = TarifUpdatedT2.value;
@@ -2102,6 +2107,7 @@ export class ShouldCostReportComponent {
       else {
         TarifT2 = 0;
       }
+
       for (var i = 0; i < this.TierCostReportTextT1.length; i++) {
         for (var j = i; j < this.UpdateRate.length; j++) {
           this.MatetialTierUpdate.push(
@@ -2563,7 +2569,6 @@ export class ShouldCostReportComponent {
     }
 
   }
-
 
 
 }

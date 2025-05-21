@@ -76,6 +76,13 @@
                             <td><label for="ProjectName" class="default-lblvalue" >{{data[0].smComments}}</label></td>
                         </tr>
                     </table>
+                    <table style="width: 100%;" *ngIf="Origin==2">
+                        <tr>
+                            <td style="width: 18%;" class="align-baseline"><label for="ProjectName" class="default-lbl" >Design to Cost Report URL
+                                    :</label></td>
+                            <td><a [routerLink]="['/home/DTCRequestReport']" [queryParams]="{csHeaderID:CSHeaderId,screportID:SCReportId}" routerLinkActive="active">URL</a></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
 

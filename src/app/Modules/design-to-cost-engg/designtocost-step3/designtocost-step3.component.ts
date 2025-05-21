@@ -6,6 +6,7 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 
 interface TableRow {
+  id: string;
   sharepoint_ID: string;
   idea: string;
   nounName: string;
@@ -59,7 +60,7 @@ export class DesigntocostStep3Component {
   FilterData: any[] = [];
   selectedFilteredData: [] = [];
 
-  constructor(private searchService: SearchService,private location: Location,public router: Router) {
+  constructor(private searchService: SearchService, private location: Location, public router: Router) {
     this.config = {
       currentPage: 1,
       itemsPerPage: 10
@@ -183,6 +184,7 @@ export class DesigntocostStep3Component {
       });
   }
 
+  checkall = "Select All";
   onIdeaSelectedChange(row: any): void {
     debugger;
     const id = row.id; // or row.Sharepoint_ID if needed
@@ -193,12 +195,41 @@ export class DesigntocostStep3Component {
     } else {
       this.selectedIdeaIds = this.selectedIdeaIds.filter(selectedId => selectedId !== id);
     }
+
+    const allch = document.getElementsByClassName('select-checkboxAll') as any;
+    if (this.selectedIdeaIds.length == this.filteredPartNumberTableData_original.length) {
+      allch[0].checked = true;
+      this.checkall = "Unselect All";
+
+    }
+    else {
+      allch[0].checked = false;
+      this.checkall = "Select All";
+    }
+
+  }
+
+  SelectedAll(event: any) {
+    debugger;
+    this.selectedIdeaIds = [];
+    const checkall = document.getElementsByClassName('select-checkbox') as any;
+    for (var value of checkall) {
+      if (event.target.checked) {
+        value.checked = true
+        this.selectedIdeaIds.push(parseInt(value.id));
+        this.checkall = "Unselect All";
+      } else {
+        value.checked = false;
+        this.selectedIdeaIds = this.selectedIdeaIds.filter(selectedId => selectedId !== parseInt(value.id));
+        this.checkall = "Select All";
+      }
+    }
   }
 
   onNext(): void {
     debugger;
     console.log('Selected IDs:', this.selectedIdeaIds);
-    localStorage.setItem("DTCVaveIdea",JSON.stringify(this.selectedIdeaIds));
+    localStorage.setItem("DTCVaveIdea", JSON.stringify(this.selectedIdeaIds));
     this.router.navigate(['/home/designtocost/step4']);
   }
 
@@ -341,7 +372,7 @@ export class DesigntocostStep3Component {
     this.page = 1;
   }
 
-  backToPreviousPage(){
+  backToPreviousPage() {
     this.location.back();
   }
 

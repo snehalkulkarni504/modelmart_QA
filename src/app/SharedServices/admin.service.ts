@@ -7,6 +7,7 @@ import { Authclass } from '../Model/authclass';
 import { Form } from '@angular/forms';
 import { CommericalArbitrage } from '../Model/CommericalArbitrage';
 import { RegionalArbitrage } from '../Model/RegionalArbitrage';
+import { GetMgfProcessArtibage } from '../Model/GetMgfProcessArtibage';
 
 
 @Injectable({
@@ -89,12 +90,13 @@ export class AdminService {
   //   return this.httpClient.get<any[]>(this.apiUrl + `SendEmail?RequesterId=${RequesterId}&Comments=${Comments}&FolderLink=${FolderLink}`);
   // }
 
-  SendMail(RequesterId: any, Comments: any, FolderLink: any): Observable<any> {
+  SendMail(RequesterId: any, Comments: any, FolderLink: any, ReqFrom: any): Observable<any> {
     // return this.httpClient.get<any[]>(this.apiUrl + `SendEmail?RequesterId=${RequesterId}&Comments=${Comments}&FolderLink=${FolderLink}`);
     const formData = new FormData();
     formData.append('RequesterId', RequesterId);
     formData.append('Comments', Comments);
     formData.append('FolderLink', FolderLink);
+    formData.append('ReqFrom', ReqFrom);
     return this.httpClient.post<FormData>(this.apiUrl + `SendEmail`, formData);
   }
 
@@ -113,9 +115,8 @@ export class AdminService {
     return this.httpClient.post<FormData>(this.apiUrl + `ReSubmittedSendEmail?RequesterId`, formData);
   }
 
-
-
-  SendShouldCostRequest(file: File[], RequesterId: any, Comments: Blob, FolderLink: any): Observable<any> {
+  SendShouldCostRequest(file: File[], RequesterId: any, Comments: Blob, FolderLink: any, MMId: any,
+    SCReportId: any, Origin: any): Observable<any> {
     const formData = new FormData();
     formData.append('RequesterId', RequesterId);
     formData.append('Comments', Comments);
@@ -123,9 +124,25 @@ export class AdminService {
     for (const Dfile of file) {
       formData.append('files', Dfile, Dfile.name);
     }
+    formData.append('MMId', MMId);
+    formData.append('SCReportId', SCReportId);
+    formData.append('Origin', Origin);
 
     return this.httpClient.post<FormData>(this.apiUrl + `SendShouldCostRequest`, formData);
   }
+
+
+  // SendShouldCostRequest(file: File[], RequesterId: any, Comments: Blob, FolderLink: any): Observable<any> {
+  //   const formData = new FormData();
+  //   formData.append('RequesterId', RequesterId);
+  //   formData.append('Comments', Comments);
+  //   formData.append('FolderLink', FolderLink);
+  //   for (const Dfile of file) {
+  //     formData.append('files', Dfile, Dfile.name);
+  //   }
+
+  //   return this.httpClient.post<FormData>(this.apiUrl + `SendShouldCostRequest`, formData);
+  // }
 
 
   // GetRequestGenStatus(From_Date:any, To_Date:any, Status:any) : Observable<any> {
@@ -267,6 +284,47 @@ export class AdminService {
     }
     return this.httpClient.post(this.apiUrl + "RegionalUpload", formData);
   }
+
+  GetMgfProcess(CategoryID: any) {
+    return this.httpClient.get(this.apiUrl + `GetMgfProcessArtibage?CategoryID=${CategoryID}`);
+  }
+
+  // Uploadfiles(UniqueId: string, selectedFiles: File[]): Observable<any> {
+  //   debugger
+  //   const formData = new FormData();
+  //   formData.append('UniqueId', UniqueId);
+  //   for (const dfile of selectedFiles) {
+  //     formData.append('files', dfile, dfile.name);
+  //   }
+
+  //   return this.httpClient.post(this.apiUrl + "MfgUpload", formData);
+  // }
+
+  // downloadZipFile(UniqueId: any): Observable<Blob> {
+  //   debugger;
+  //   return this.httpClient.get(`${this.apiUrl}downloadfolder_mfg?folderName=${UniqueId}`, { responseType: 'blob' });
+  // }
+
+  SaveMfgArtibage(data: GetMgfProcessArtibage): Observable<any> {
+    debugger
+    return this.httpClient.post(this.apiUrl + `AddMfgArtibage`, data);
+
+  }
+
+  Uploadfiles_mfg(UniqueId: string, selectedFiles: File[]): Observable<any> {
+    debugger
+    const formData = new FormData();
+    formData.append('UniqueId', UniqueId);
+    for (const dfile of selectedFiles) {
+      formData.append('files', dfile, dfile.name);
+    }
+    return this.httpClient.post(this.apiUrl + "MfgUpload", formData);
+  }
+
+  downloadZipFile_mfg(UniqueId: any): Observable<Blob> {
+    return this.httpClient.get(`${this.apiUrl}downloadfolder_mfg?folderName=${UniqueId}`, { responseType: 'blob' });
+  }
+
 
 
 }

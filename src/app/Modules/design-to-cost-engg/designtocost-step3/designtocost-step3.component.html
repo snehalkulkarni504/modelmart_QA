@@ -6,27 +6,35 @@
 
     <div class="fixsubheader">
         <div class="MasterHeader">
-            <div style="width: 25%;">
+             <div style="width: 20%;">
                 <h2>Design to Cost</h2>
             </div>
-            <div style="width: 50%;">
+            <div style="width: 60%;">
                 <div class="DTO_steps">
-                    <p class="DTO_step1" [routerLink]="['/home/designtocost/step1']">Step 1</p>
+                    <p class="DTO_step1" [routerLink]="['/home/designtocost/step1']"> <span> Step 1 </span> <br>
+                        Pick up a Base Model
+                    </p>
                     <span class="DTO_connect1_2">
                         <i class="bi bi-arrow-right gradient-icon"></i>
                     </span>
-                    <p class="DTO_step2" [routerLink]="['/home/designtocost/step2']">Step 2</p>
+                    <p class="DTO_step2" [routerLink]="['/home/designtocost/step2']"><span> Step 2 </span> <br>
+                        Optimize Material and Process
+                    </p>
                     <span class="DTO_connect1_2">
                         <i class="bi bi-arrow-right gradient-icon2"></i>
                     </span>
-                    <p class="DTO_step3" [routerLink]="['/home/designtocost/step3']">Step 3</p>
+                    <p class="DTO_step3"><span> Step 3 </span> <br>
+                        Pickup or Add VAVE Ideas to Optimize the cost
+                    </p>
                     <span class="DTO_connect1_2">
                         <i class="bi bi-arrow-right gradient-icon3"></i>
                     </span>
-                    <p class="DTO_step4" [routerLink]="['/home/designtocost/step4']">Step 4</p>
+                    <p class="DTO_step4"><span> Step 4 </span> <br>
+                        Review outcome & share CAD/Print if required
+                    </p>
                 </div>
             </div>
-            <div style="width: 25%; text-align: center; align-items: center;">
+            <div style="width: 20%; text-align: center; align-items: center;">
                 <input type="button" class="btnback" value="back" Name="back" (click)="backToPreviousPage()">
             </div>
         </div>
@@ -120,7 +128,8 @@
                                 <input type="text" class="column-search" placeholder="Owner..." title="Search Owner..."
                                     [(ngModel)]="searchFilters.ideaOwner" (input)="applyFilter()">
                             </td>
-                            <td>
+                            <td class="text-center">
+                                <input type="checkbox" class="select-checkboxAll" (change)="SelectedAll($event)" ngbTooltip="{{checkall}}">
                             </td>
                         </tr>
 
@@ -140,7 +149,7 @@
                             <td style="text-align: center;" title="{{row.ideaOwner}}">{{row.ideaOwner}}</td>
 
                             <td style="text-align: center;" class="idSelection">
-                                <input type="checkbox" class="select-checkbox" [(ngModel)]="row.ideaSelected"
+                                <input type="checkbox" class="select-checkbox" id="{{row.id}}" [(ngModel)]="row.ideaSelected"
                                     (change)="onIdeaSelectedChange(row)">
                             </td>
 
