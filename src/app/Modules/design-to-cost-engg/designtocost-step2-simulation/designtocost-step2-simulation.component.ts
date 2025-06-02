@@ -78,7 +78,8 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
   ModelTypes_Id: any;
   IsCESmodel: boolean = false;
   ModelwiseNote: any;
-
+  // Istier_1_CostReportBreakdown = false;
+  // Istier_2_CostReportBreakdown = false;
 
 
   ngOnInit(): void {
@@ -108,7 +109,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
 
       const myElement1 = document.getElementById("hideTier2Box");
       const myElement2 = document.getElementById("Tier1Box");
-      //debugger;;
+      debugger;;
 
       const data = await this.searchservice.GetTierCostData(this.CSHeaderId).toPromise();
       this.ForexDetails = data.forexDetails[0];
@@ -117,6 +118,16 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
       this.TierCostReportNonList = data.tier_1_CostReportBreakdownNon;
       this.AluminiumCastingGrade = data.aluminiumCastingGrade;
       console.log(this.AluminiumCastingGrade);
+
+      // if (data.tier_2_CostReportBreakdown.length <= 0) {
+      //   this.Istier_1_CostReportBreakdown = true;
+      //   this.Istier_2_CostReportBreakdown = false;
+      // }
+      // else {
+      //   this.Istier_1_CostReportBreakdown = false;
+      //   this.Istier_2_CostReportBreakdown = true;
+      // }
+
 
       this.PartName = this.TierCostDetails.partName;
       this.PartNumber = this.TierCostDetails.partNumber;
@@ -2099,7 +2110,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
       this.existingNonusdValue = document.getElementsByClassName('NonusdValueT2') as any;
       this.percent_updated = document.getElementsByClassName('form-control percentText Non T2') as any;
 
-       var TarifT2;
+      var TarifT2;
       const TarifUpdatedT2 = document.getElementById('TarifUpdatedT2') as any;
       if (TarifUpdatedT2.value != "") {
         TarifT2 = TarifUpdatedT2.value;

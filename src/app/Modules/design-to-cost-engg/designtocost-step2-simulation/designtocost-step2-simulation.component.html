@@ -52,7 +52,7 @@
 
                 <div class="ShouldCostBreakdown" id="ShouldCostBreakdown">
                     <div class="row">
-                       
+
                         <div class="col-md-12 " style="border-bottom: 1px solid #da291c; margin-bottom: 10px; ">
                             <div class="row">
                                 <div class="col-md-1"></div>
@@ -242,6 +242,12 @@
                                 </tbody>
                             </table>
                         </div>
+                        <!-- <div class="row" [hidden]="Istier_1_CostReportBreakdown">
+                            <div class="col-md-12 text-end">
+                                <input type="button" class="btn btn-outline-danger btn-GetReport" name="GetReport"
+                                    value="Save & Go to Next 1" (click)="GetReport()">
+                            </div>
+                        </div> -->
 
                         <!-- -----------  Tier 2 ----------------------------------------------- -->
                         <div class="col-md-6 " id="hideTier2Box">
@@ -384,14 +390,13 @@
                                 </tbody>
                             </table>
                         </div>
-
                     </div>
-                    <!-- <div class="row">
-                    <div class="col-md-12 text-center">
-                        <input type="button" class="btn btn-outline-danger btn-GetReport" name="GetReport"
-                            value="Get Report" (click)="GetReport()">
-                    </div>
-                </div> -->
+                    <!-- <div class="row" [hidden]="Istier_2_CostReportBreakdown">
+                        <div class="col-md-12 text-end">
+                            <input type="button" class="btn btn-outline-danger btn-GetReport" name="GetReport"
+                                value="Save & Go to Next  2" (click)="GetReport()">
+                        </div>
+                    </div> -->
                 </div>
             </form>
         </div>

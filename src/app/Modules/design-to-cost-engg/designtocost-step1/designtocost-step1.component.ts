@@ -240,21 +240,23 @@ export class DesigntocostStep1Component implements OnInit {
 
     this.GetPartName();
 
-    await this.GetEngine();
-    await this.SupplierLocation();
-    await this.ShowCagetory3("");
-    await this.GetBusinessUnit();
-    await this.GetProgramName();
+    // await this.GetEngine();
+    // await this.SupplierLocation();
+    // await this.ShowCagetory3("");
+    // await this.GetBusinessUnit();
+    // await this.GetProgramName();
 
 
   }
 
   // ----------- setp1 selection start --------------------
   async GetPartName() {
+    this.SpinnerService.show('spinner');
     this.PartName = [];
     const data = await this.designtocost.GetPartName().toPromise();
     this.PartName = data;
 
+    this.SpinnerService.hide('spinner');
   }
 
 

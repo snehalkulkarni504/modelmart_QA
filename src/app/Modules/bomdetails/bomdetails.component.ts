@@ -50,8 +50,8 @@ export class BomdetailsComponent {
   programdata:any;
   cartname:any
   modalcart = false;
-
-
+  programdelete=false;
+  programid:any;
 async addnewprogram()
 {
   debugger;
@@ -103,6 +103,18 @@ openModal2() {
   this.onaddcartprogram()
   
 }
+openprogram(programid:any){
+  this.programdelete=true;
+  this.programid=programid;
+  //this.deleteprogram(programid);
+}
+
+confirm(){
+  this.deleteprogram(this.programid);
+}
+
+
+
 closeModal2() 
 {
   this.modalcart = false;
@@ -250,6 +262,9 @@ closecopycart()
   this.tocopycartid=null;
 }
 
+closeprogrammodel(){
+  this.programdelete=false;
+}
 
 
 onroute(cart:any) {
@@ -279,6 +294,27 @@ async deletecart(cartid:any)
   else
   {
     this.toastr.error("unable to delete cart")
+  }
+
+}
+
+
+
+async deleteprogram(programid:any)
+{
+  debugger;
+  const data =await this.bomservice.DeleteBomProgram(programid).toPromise();
+  if(data)
+  {
+    this.programdelete=false;
+    this.toastr.success("Program deleted successfully");
+
+    this.fetchprogramnames();
+    //this.getcartname(this.selectedprogramid);
+  }
+  else
+  {
+    //this.toastr.error("unable to delete cart")
   }
 
 }

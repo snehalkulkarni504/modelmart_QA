@@ -18,6 +18,7 @@ import { GroupByPipe } from "../group-by.pipe";
 import { CommericalArbitrage } from 'src/app/Model/CommericalArbitrage';
 import { RegionalArbitrage } from 'src/app/Model/RegionalArbitrage';
 import { GetMgfProcessArtibage } from 'src/app/Model/GetMgfProcessArtibage';
+import { TcoUploadComponent } from '../Request/tco-upload/tco-upload.component';
 
 @Component({
   // standalone : true,
@@ -30,6 +31,8 @@ import { GetMgfProcessArtibage } from 'src/app/Model/GetMgfProcessArtibage';
 export class CostReductionComponent implements OnInit {
 
   editingIndex: number | null = null;
+
+  editingIndexRegional: number | null = null;
   showModal: any;
   selectedComment: any;
   selectedFiles: File[] = [];
@@ -62,7 +65,7 @@ export class CostReductionComponent implements OnInit {
 
 
 
-
+  totalVariation: any;
   data1: any = [];
   selectedCategoryIds: number[] = [];
   cat4: any = [116];
@@ -90,7 +93,8 @@ export class CostReductionComponent implements OnInit {
     private AdminService: AdminService,
     private toastr: ToastrService,
     private actroute: ActivatedRoute,
-    private SpinnerService: NgxSpinnerService, private Searchservice: SearchService) {
+    private SpinnerService: NgxSpinnerService, 
+    private Searchservice: SearchService) {
 
   }
 
@@ -135,7 +139,7 @@ export class CostReductionComponent implements OnInit {
     animationEnabled: true,
 
     title: {
-      text: "Part Number vs Commerical Artibage ($)",
+      text: "Part Number vs Commerical Arbitrage ($)",
       fontFamily: "Trebuchet MS, Helvetica, sans-serif",
 
     },
@@ -151,7 +155,7 @@ export class CostReductionComponent implements OnInit {
     },
     axisY: {
 
-      title: "Commerical Artibage",
+      title: "Commerical Arbitrage",
       labelFontSize: 10,
       showInLegend: true,
       indexLabelFontColor: "#000",
@@ -183,11 +187,13 @@ export class CostReductionComponent implements OnInit {
 
 
   async GetCommericalArtibage() {
-    ////debugger
+    debugger
+
     const categoryID = this.test;
+    this.opportunities=[];
     this.AdminService.GetCommericalArtibage(categoryID).subscribe(
       (response) => {
-        //debugger
+        debugger
         this.data = response;
         this.opportunities = this.data;
 
@@ -209,6 +215,7 @@ export class CostReductionComponent implements OnInit {
         }));
         this.gettotaloppurtunity();
         this.getGraphstyle();
+
 
       },
       (error) => {
@@ -350,19 +357,43 @@ export class CostReductionComponent implements OnInit {
   }
 
 
-  setActiveButton(buttonName: string) {
+  async setActiveButton(buttonName: string) {
+
+    debugger
     this.activeButton = buttonName;
+   
     // Reset visibility for all sections
     this.showContent = buttonName === 'commercial';
     this.showRegionalContent = buttonName === 'regional';
     this.showmgfprocess = buttonName === 'manufacturing';
     this.showdesign = buttonName === 'design';
 
+    switch (this.activeButton) {
+
+      // case 'commercial':
+      //   this.totalVariation = this.gettotaloppurtunity();
+      case 'regional':
+        this.totalVariation = this.getTotalRegionalOppurtunity();
+        break;
+      case 'manufacturing':
+        this.totalVariation = this.getTotalMfgOppurtunity();
+        break;
+      case 'design':
+        this.totalVariation = this.gettotaloppurtunity();
+        break;
+      // case 'commercial':
+      //        this.totalVariation = this.gettotaloppurtunity();
+      default:
+          this.totalVariation = this.gettotaloppurtunity();
+    }
+
     setTimeout(() => {
+      debugger
 
       this.hidename();
-      // this.RegionalDateFilter();
     }, 200);
+   
+
   }
 
   editRow(index: number) {
@@ -406,6 +437,7 @@ export class CostReductionComponent implements OnInit {
   cancelEditing() {
     this.editingIndex = null; // Cancel edit mode without saving
   }
+ 
 
   openCommentsPopup(comment: string, index: number): void {
     this.showModal = true;
@@ -425,11 +457,38 @@ export class CostReductionComponent implements OnInit {
   //   this.closeCommentsPopup();
   // }
 
+  // getRoundedAttainment(opportunity: any): string {
+  //   if (!this.opportunity.SCAttainment){
+  //     return '';
+
+  //   } 
+  //   const roundedValue = Math.round(Number(this.opportunity.SCAttainment));
+  //   return `${roundedValue}%`;
+  // }
+
+  RoundSCAttainment(opportunity: any): string {
+    if (opportunity.SCAttainment) {
+      const roundedValue = (Math.round(Number(opportunity.SCAttainment)));
+    return `${roundedValue}%`;
+    }
+    return ''; // Return an empty string if conditions are not met
+  }
+
+  validateDecimal(event: any) {
+    let value = event.target.value;
+    if (!/^\d+(\.\d{0,2})?$/.test(value)) {
+      event.target.value = value.slice(0, -1);
+    }
+  }
+  
+
 
   gettotaloppurtunity(): string {
+    debugger
+    
     let total = 0;
     // Iterate over the opportunities array and sum up the UserCalculatedCost values
-    this.opportunitiesMfg.forEach((opportunity: { CommercialArbitrage: any; }) => {
+    this.opportunities.forEach((opportunity: { CommercialArbitrage: any; }) => {
       total += opportunity.CommercialArbitrage || 0;
     });
     return `$${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -439,9 +498,9 @@ export class CostReductionComponent implements OnInit {
   calculatePercentage(opportunity: any): string {
     if (opportunity.SupplierQuoted && opportunity.UserCalculatedCost > 0 && opportunity.SupplierQuoted > 0) {
       const percentage = ((opportunity.UserCalculatedCost / (opportunity.SupplierQuoted) * 100))
-      return percentage.toFixed(2) + '%'; // Format to 2 decimal places and append '%'
+      return Math.round(percentage) + '%'; 
     }
-    return ''; // Return an empty string if conditions are not met
+    return ''; 
   }
 
 
@@ -456,7 +515,7 @@ export class CostReductionComponent implements OnInit {
 
   formatToMillions(value: any): string {
     if (value > 0) {
-      return (value / 1000000).toFixed(2) + 'm';
+      return (value / 1000000).toFixed(2) + 'M';
     }
     return value.toString();
   }
@@ -481,10 +540,11 @@ export class CostReductionComponent implements OnInit {
 
 
     if (result.isConfirmed) {
+      debugger
       // const UniqueId = this.selectedUniqueId;
       // const RequestId = this.selectedRequestId;
-      const encryptedUniqueId = btoa(this.selectedUniqueId); // Base64 encoding
-      const encryptedRequestId = btoa(this.selectedRequestId); // Base64 encoding
+      const encryptedUniqueId = btoa(this.selectedUniqueId); 
+      const encryptedRequestId = btoa(this.selectedRequestId); 
       this.router.navigate(['/home/tcoupload'], {
         queryParams: {
           UniqueId: encryptedUniqueId,
@@ -499,6 +559,15 @@ export class CostReductionComponent implements OnInit {
     this.showFileUpload = false;
     this.showTcoUploadModal = false;
   }
+ 
+
+getSelectedPartsString(): string {
+  return this.SearchProductList
+    .filter((p: { selected: any; }) => p.selected)
+    .map((item: { childCategory: any; }) => item.childCategory)
+    .join(', ');
+}
+
 
 
   openUploadPopup(CommericalArtibageID: any, MMID: any, RequestHeaderId: any): void {
@@ -512,9 +581,6 @@ export class CostReductionComponent implements OnInit {
 
   }
 
-  savedoc(): void {
-
-  }
 
 
   handleFileSelection(event: any): void {
@@ -661,14 +727,14 @@ export class CostReductionComponent implements OnInit {
       this.selectAll();
     }
 
-    if (this.showArbitrage === false) {
+    // if (this.showArbitrage === false) {
       this.GetCommericalArtibage();
       this.GetRegionalArbitrage();
       this.GetMgfProcessArtibage();
 
-    }
+    // }
 
-    this.showArbitrage = !this.showArbitrage;
+    this.showArbitrage = true;
     this.showCat3Management = !this.showCat3Management;
     this.showContent = false;
 
@@ -689,6 +755,9 @@ export class CostReductionComponent implements OnInit {
 
 
   //--------------------------------------------End of commerical Arbitrage----------------------------------------------------------------------------//
+
+  selectedRegionalUniqueId: any;
+  selectedRegionalRequestId: any;
   RegionalfromDate:any;
   RegionaltoDate:any;
   RegionData: any = [];
@@ -698,8 +767,8 @@ export class CostReductionComponent implements OnInit {
   selectedRegional_ArtibageID: any;
  
   async GetRegionalArbitrage(): Promise<void> {
-    ////debugger
-
+    debugger
+    this.RegionData=[];
     const categoryID = this.test;
     try {
       const response = await this.AdminService.GetRegionalArbitrage(categoryID).toPromise();
@@ -726,6 +795,17 @@ export class CostReductionComponent implements OnInit {
     }
   }
 
+  getTotalRegionalOppurtunity(): string {
+    debugger
+    let total = 0;
+    // Iterate over the opportunities array and sum up the UserCalculatedCost values
+    this.Regional.forEach((Region: { RegionalArbitrage: any; }) => {
+      total += parseFloat(Region.RegionalArbitrage) || 0;
+    });
+    return `$${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+  }
+
   getChartStyles() {
     //debugger
     const baseBarWidth = 30;
@@ -746,7 +826,7 @@ export class CostReductionComponent implements OnInit {
     animationEnabled: true,
 
     title: {
-      text: "Part Number vs Regional Artibage ($)",
+      text: "Part Number vs Regional Arbitrage ($)",
       fontFamily: "Trebuchet MS, Helvetica, sans-serif",
 
     },
@@ -763,11 +843,11 @@ export class CostReductionComponent implements OnInit {
     },
     axisY: {
 
-      title: "Regional Artibage",
+      title: "Regional Arbitrage",
       labelFontSize: 10,
       showInLegend: true,
       indexLabelFontColor: "#000",
-      interval: 1000,
+      interval: 100,
     },
     dataPointWidth: 20,
     data: [{
@@ -845,7 +925,7 @@ export class CostReductionComponent implements OnInit {
   openregioncomment(comment: string, index: number): void {
     this.showregioncomment = true;
     this.selectedComment = comment || '';
-    this.editingIndex = index;
+    this.editingIndexRegional = index;
   }
 
   closeregioncomment(): void {
@@ -855,10 +935,13 @@ export class CostReductionComponent implements OnInit {
 
   saveRegionalComment(): void {
     debugger;
-    if (this.editingIndex !== null && this.editingIndex >= 0) {
-      this.Regional[this.editingIndex].Comments = this.selectedComment;
+    if (this.editingIndexRegional !== null && this.editingIndexRegional >= 0) {
+      this.Regional[this.editingIndexRegional].Comments = this.selectedComment;
     }
     this.closeregioncomment();
+  }
+  cancelEditingRegional(){
+    this.editingIndexRegional=null;
   }
 
   RegionUploadTCO(Regional_ArtibageID: string) {
@@ -892,6 +975,12 @@ export class CostReductionComponent implements OnInit {
       alert('Please select files to upload.');
     }
   }
+  RegionaleditRow(index: number) {
+    this.isEditing = !this.isEditing;
+    // this.editingIndex = index; 
+    this.editingIndexRegional= index;
+  }
+
 
   closeRegionalupload(): void {
     this.showFileUpload = false;
@@ -917,7 +1006,7 @@ export class CostReductionComponent implements OnInit {
   }
 
   SaveRegionChanges(Region: RegionalArbitrage) {
-    //debugger;
+    debugger;
     Region.ModifiedBy = (localStorage.getItem("userFullName"))
 
     // Default CommercialArtibageID to 0 if null or undefined
@@ -928,7 +1017,7 @@ export class CostReductionComponent implements OnInit {
     this.AdminService.SaveRegionalArtibage(Region).subscribe({
       next: (response) => {
         console.log('Opportunity saved successfully:', response);
-        this.editingIndex = null; // Exit edit mode
+        this.editingIndexRegional = null; // Exit edit mode
         this.GetRegionalArbitrage
         this.chartOptions;
       },
@@ -994,8 +1083,42 @@ export class CostReductionComponent implements OnInit {
     }));
 
   }
-  RouteToTco(MMID: any, RequestHeaderId: any) {
+  // RouteToTco(MMID: any, RequestHeaderId: any) {
 
+  // }
+
+  async RouteToTco( MMID: any, RequestHeaderId: any): Promise<void> {
+    debugger
+    this.selectedRegionalUniqueId = MMID;
+    this.selectedRegionalRequestId = RequestHeaderId;
+
+
+    //debugger
+    const result = await Swal.fire({
+      title: 'TCO Upload is opening. Do you want to proceed?',
+      showCancelButton: true,
+      confirmButtonColor: '#28a745', // Green color for OK button
+      cancelButtonColor: '#d33', // Red color for Cancel button
+      confirmButtonText: 'Yes, proceed!',
+      cancelButtonText: 'Cancel',
+      customClass: {
+        popup: 'custom-swal-popup', // Class for customizing the popup
+      },
+    });
+
+
+    if (result.isConfirmed) {
+      // const UniqueId = this.selectedUniqueId;
+      // const RequestId = this.selectedRequestId;
+      const encryptedUniqueId = btoa(this.selectedRegionalUniqueId); // Base64 encoding
+      const encryptedRequestId = btoa(this.selectedRegionalRequestId); // Base64 encoding
+      this.router.navigate(['/home/tcoupload'], {
+        queryParams: {
+          UniqueId: encryptedUniqueId,
+          RequestId: encryptedRequestId
+        }
+      });
+    }
   }
   //-------------------------------------End of Regional --------------------------------------------//
 
@@ -1092,12 +1215,23 @@ export class CostReductionComponent implements OnInit {
   }
 //Total Variation 
 
-get totalVariation(): number {
-  return this.mgfprocess.reduce((sum, data) => {
+//  getTotalMfgOppurtunity(): number {
+//   return this.mgfprocess.reduce((sum, data) => {
+//     const diff = Math.abs(data.Col2_First - data.Col2_Second);
+//     return sum + diff;
+    
+//   }, 0);
+// }
+
+getTotalMfgOppurtunity(): string {
+  const total = this.mgfprocess.reduce((sum, data) => {
     const diff = Math.abs(data.Col2_First - data.Col2_Second);
     return sum + diff;
   }, 0);
+
+  return `$${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
+
 
   async GetMgfProcessArtibage() {
     debugger;
@@ -1138,7 +1272,7 @@ get totalVariation(): number {
   saveComment(): void {
     debugger;
     if (this.editingIndex !== null && this.editingIndex >= 0) {
-      this.mgfprocess[this.editingIndex].Comments = this.selectedComment;
+      this.opportunities[this.editingIndex].Comments = this.selectedComment;
     }
     this.closeCommentsPopup();
   }
@@ -1250,7 +1384,7 @@ get totalVariation(): number {
     animationEnabled: true,
  
     title: {
-      text: "Part Number vs Manufacturing Artibage ($)",
+      text: "Part Number vs Manufacturing Arbitrage ($)",
       fontFamily: "Trebuchet MS, Helvetica, sans-serif",
  
     },
@@ -1266,7 +1400,7 @@ get totalVariation(): number {
     },
     axisY: {
  
-      title: "Manufacturing Artibage",
+      title: "Manufacturing Arbitrage",
       labelFontSize: 10,
       showInLegend: true,
       indexLabelFontColor: "#000",
@@ -1747,6 +1881,7 @@ get totalVariation(): number {
   
 
   backToCat3() {
+    
     this.showCat3Management = true;
 
       this.showcostinsights = false;
@@ -1754,6 +1889,15 @@ get totalVariation(): number {
       this.showRegionalContent = false;
       this.showmgfprocess = false;
       this.showdesign = false;
+      this.selectedCategoryIds = [];
+      this.test=[];
+      this.CategoryID=null
+      this.activeButton = '';
+
+    //  window.location.reload();
+    
+      
+     
       
   }
 

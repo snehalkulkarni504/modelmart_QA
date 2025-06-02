@@ -177,20 +177,21 @@ export class SearchService {
     return this.httpClient.get<any[]>(this.apiUrl + `GetDesignToCostNounProgram/${NounName}/${Program}`);
   }
 
-  
+
   Gettcosuppliercost(modelmartid: string): Observable<any> {
     return this.httpClient.get<any[]>(this.apiUrl + `GetSupplierCost?id=${modelmartid}`);
   }
-  
+
   GetDesignToCostAvailableDetail(nounName: string, program: string, partNumber: string): Observable<any> {
     const encodedPartNumber = encodeURIComponent(partNumber);
     const encodedNounName = encodeURIComponent(nounName);
     const encodedProgram = encodeURIComponent(program);
- 
+
     return this.httpClient.get<any[]>(
       `${this.apiUrl}GetDesignToCostAvailableDetail/${encodedPartNumber}/${encodedNounName}/${encodedProgram}`
     );
   }
+
 
 
 }

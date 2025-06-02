@@ -152,6 +152,19 @@ export class SuppcomparisonComponent {
 
       this.suppcomparedata = [];
       this.suppcomparedata.push(
+        { label: lbl, y: Number(this.CommericalDetailsSupplierCost[i].pbPerPiece_OutsourcedpartParts) },
+      );
+      this.suppmappedcomparedata.push(
+        {
+          type: "stackedColumn",
+          name: 'Tier 2 Cost ($)',
+          indexLabelTextAlign: "left",
+          dataPoints: this.suppcomparedata
+        },
+      );
+
+      this.suppcomparedata = [];
+      this.suppcomparedata.push(
         { label: lbl, y: Number(this.CommericalDetailsSupplierCost[i].pbPerPiece_LabourCostPerPiece) },
       );
       this.suppmappedcomparedata.push(

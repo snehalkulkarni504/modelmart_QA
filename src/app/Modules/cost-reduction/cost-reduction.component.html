@@ -1,7 +1,6 @@
 <div *ngIf="showCat3Management">
   <div class="container-fluid maxheight">
-    <ngx-spinner name="spinner" bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="square-jelly-box"
-      [fullScreen]="true">
+    <ngx-spinner name="spinner" bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="square-jelly-box"  [fullScreen]="true">
       <img alt="Loading Please Wait..." style="width: 100px; height: 100px" src="../../../assets/Spin-2.gif" />
     </ngx-spinner>
 
@@ -17,8 +16,7 @@
 
               <div class="row border-bottom"></div>
               <div class="scrollbarsearch">
-                <ngx-treeview #cat3 [config]="config" [items]="Cat3"
-                  (selectedChange)="getCategoryId($event)"></ngx-treeview>
+                <ngx-treeview #cat3 [config]="config" [items]="Cat3" (selectedChange)="getCategoryId($event)"></ngx-treeview>
               </div>
             </div>
           </div>
@@ -34,9 +32,6 @@
           </div>
         </div>
 
-
-
-
         <div class="row setOpacity" id="SearchFilters">
           <div *ngFor="let c of SearchProductList | groupBy : 'parentCategory'">
             <h4 class="col-md-12 Categoryheader">
@@ -44,9 +39,7 @@
             </h4>
             <div *ngFor="let item of c.value" id="prodDetailsId" class="prodDetails">
               <div class="image-container">
-                <input class="input1" type="checkbox" [value]="item.value" [(ngModel)]="item.selected"
-                  (change)="onCheckboxChange(item)" />
-
+                <input class="input1" type="checkbox" [value]="item.value" [(ngModel)]="item.selected" (change)="onCheckboxChange(item)" />
                 <img *ngIf="item.imagePath == ''; else multi" src="assets/No-Image.png" class="prdIcon" />
                 <ng-template #multi>
                   <img src="{{ item.imagePath }}" class="prdIcon" />
@@ -64,32 +57,35 @@
   </div>
 </div>
 
-
-
 <div *ngIf="showcostinsights" style="text-align: center; padding: 20px;">
   <div class="row">
     <div class="col-12">
-      <h1>Welcome to Category Management Page - Exhaust Manifolds</h1>
+        <h1>Welcome to Category Management <button class="btnback" (click)="backToCat3()"style="float: right; margin-right: 20px;">Back</button></h1>
     </div>
+ 
+      <div class="col-12">
+      <marquee behavior="scroll" direction="left" scrollamount="5" style="font-size: 16px; background: #f3f3f3; padding: 10px; border-radius: 5px;width: 90%;">
+     CAT4 -  {{ getSelectedPartsString() }}
+      </marquee>
+    </div>
+
     <div class="col-12">
       <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
           <p>Your current SC Attainment is <strong>80%</strong></p>
         </div>
-        <div class="col-md-3">
+        <!-- <div class="col-md-3">
           <button class="btnback" (click)="backToCat3()">Back</button>
-        </div>
+        </div> -->
       </div>
     </div>
+
     <div class="col-12">
-      <p>You have current opportunities worth <strong>${{ totalVariation | number : "1.0-0" }}</strong></p>
+      <p>You have current opportunities worth <strong>{{ totalVariation }}</strong></p>
     </div>
 
   </div>
-
-
-
 
 
   <div style="margin-top: 10px;">
@@ -117,36 +113,26 @@
 
 <!------------------------------------------------start of Commerical Arbitrage --------------------------->
 
-<div *ngIf="showContent" class="container-fluid"
-  style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
+<div *ngIf="showContent" class="container-fluid" style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
   <div class="row" style="width: 100%; display: flex; justify-content: center;">
-
-
-
     <div class="graph">
       <div class="chart-box">
-        <canvasjs-chart class="canvas-chart" [options]="chartOptions" [styles]="getGraphstyle()"
-          id="chartOptionsId"></canvasjs-chart>
+        <canvasjs-chart class="canvas-chart" [options]="chartOptions" [styles]="getGraphstyle()" id="chartOptionsId"></canvasjs-chart>
       </div>
     </div>
 
     <div class="filterlabel">
       <label for="date-range">Select:</label>
 
-      <select id="date-range" [(ngModel)]="selectedRange" (change)="onDateRangeChange()" class="custom-input"
-        style="padding: 5px;">
-        <option *ngFor="let range of dateRanges" [value]="range.value">
-          {{ range.label }}
-        </option>
+      <select id="date-range" [(ngModel)]="selectedRange" (change)="onDateRangeChange()" class="custom-input" style="padding: 5px;">
+        <option *ngFor="let range of dateRanges" [value]="range.value"> {{ range.label }} </option>
       </select>
 
       <label for="from-date" style="margin-left: 10px;">From Date:</label>
-      <input type="date" id="from-date" [(ngModel)]="fromDate" [attr.min]="minDate" [attr.max]="maxDate"
-        class="custom-input" style="padding: 5px;" />
+      <input type="date" id="from-date" [(ngModel)]="fromDate" [attr.min]="minDate" [attr.max]="maxDate" class="custom-input" style="padding: 5px;" />
 
       <label for="to-date" style="margin-left: 10px;">To Date:</label>
-      <input type="date" id="to-date" [(ngModel)]="toDate" [attr.min]="minDate" [attr.max]="maxDate"
-        class="custom-input" style="padding: 5px;" />
+      <input type="date" id="to-date" [(ngModel)]="toDate" [attr.min]="minDate" [attr.max]="maxDate" class="custom-input" style="padding: 5px;" />
 
       <button class="btn view-btn" style="margin-right: 10px;" (click)="onViewClick()">View</button>
       <button class="btn view-btn" (click)="ClearAll()">clear</button>
@@ -157,10 +143,8 @@
         <table class="table table-hover table-striped " style="width: 100%; table-layout: 100%; overflow: auto;">
           <thead>
             <tr>
-              <th style="position: sticky; left:-1px; top:-1px; z-index: 4;">Sr<br>no</th>
-              <th style="position: sticky; left: 29px; top: -1px;  z-index: 4;">Part Number</th>
-              <!-- <th style="position: sticky; left: 145px; top:-2px;  z-index: 4">Part Number</th>
-              <th style="position: sticky; left: 240px; top:-2px;  z-index: 4">MMID</th> -->
+              <th style="position: sticky; left: 0px; top:-1px; z-index: 4;">Sr<br>no</th>
+              <th style="position: sticky; left: 32px; top: -1px;  z-index: 4;">Part Number</th>
               <th>Part Name</th>
               <th>MMID</th>
               <th>Supplier Name</th>
@@ -180,72 +164,56 @@
               <th hidden>Debreif Date</th>
               <th>Comments</th>
               <th>Documents <br>Upload</th>
-              <th style="position: sticky; right: -1px; z-index: 3;">Action</th>
-
+              <th style="position: sticky; right: 0px; z-index: 3;">Action</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let opportunity of opportunities;  let i=index">
 
-              <td style="position: sticky; left: -1px; ">{{i + 1}}</td>
-              <!-- <td style="position: sticky; left: 29px; ">{{opportunity.PartName}}</td>
-              <td style="position: sticky; left: 233px;">{{opportunity.PartNumber}}</td> -->
-              <td style="position: sticky; left: 29px;">
-                <span title="{{opportunity.PartNumber}}">
-                  {{opportunity.PartNumber.length > 10 ? opportunity.PartNumber.slice(0, 10) + '...' :
-                  opportunity.PartNumber}}
-                </span>
+              <td style="position: sticky; left: 0px; ">{{i + 1}}</td>
+              <td style="position: sticky; left: 32px;">
+                <span title="{{opportunity.PartNumber}}">{{opportunity.PartNumber.length > 10 ? opportunity.PartNumber.slice(0, 10) + '...' : opportunity.PartNumber}}</span>
               </td>
               <td>
-                <span title="{{opportunity.PartName}}">
-                  {{opportunity.PartName.length > 12 ? opportunity.PartName.slice(0, 12) + '...' :
-                  opportunity.PartName}}
-                </span>
+                <span title="{{opportunity.PartName}}"> {{opportunity.PartName.length > 12 ? opportunity.PartName.slice(0, 12) + '...' : opportunity.PartName}} </span>
               </td>
               <td class="align-center">{{opportunity.MMID}}</td>
               <td>
-                <span class="hover-text" title="{{opportunity.SupplierName}}">
-                  {{ opportunity.SupplierName ? (opportunity.SupplierName.length > 12 ?
-                  opportunity.SupplierName.slice(0, 12) + '...' : opportunity.SupplierName) : '' }}
-
-                </span>
+                <span class="hover-text" title="{{opportunity.SupplierName}}"> 
+                  {{ opportunity.SupplierName ? (opportunity.SupplierName.length > 12 ? opportunity.SupplierName.slice(0, 12) + '...' : opportunity.SupplierName) : '' }} </span>
               </td>
-
               <td>{{opportunity.SupplierMfgRegion}}</td>
               <td class="align-center">{{opportunity.AnnualVolume | number:'1.0-0'}}</td>
+<!------------------------------Editble coloumn -------------------------------------->
               <td class="align-center">
-
                 <ng-container *ngIf="editingIndex === i; else displayUpdatedAnnualVolume">
                   <input type="text-box" [(ngModel)]="opportunity.UpdatedAnnualVolume" />
                 </ng-container>
                 <ng-template #displayUpdatedAnnualVolume>
-                  {{opportunity.UpdatedAnnualVolume | number:'1.0-0'}}
+                  <input type="text-box" [ngModel]="opportunity.UpdatedAnnualVolume ? (opportunity.UpdatedAnnualVolume | number:'1.0-0') : ''" disabled />
                 </ng-template>
-
               </td>
               <td class="align-center">{{opportunity.ShouldCost? ('$ '+ opportunity.ShouldCost.toFixed(2)) : ''}}</td>
+<!------------------------------Editble coloumn -------------------------------------->
               <td>
-
                 <ng-container *ngIf="editingIndex === i; else displayUserCalculatedCost">
-                  <input type="text-box" [(ngModel)]="opportunity.UserCalculatedCost" />
+                  <input type="text-box" [(ngModel)]="opportunity.UserCalculatedCost" step="0.01" (input)="validateDecimal($event)" />
                 </ng-container>
                 <ng-template #displayUserCalculatedCost>
-                  <span *ngIf="opportunity.UserCalculatedCost">{{ '$ ' + opportunity.UserCalculatedCost }}</span>
+                  <input type="text-box" [ngModel]="opportunity.UserCalculatedCost ? '$ ' + (opportunity.UserCalculatedCost | number:'1.2-2') : ''"   disabled />
                 </ng-template>
-
               </td>
-              <td class="align-center"> {{opportunity.SupplierQuoted ? ('$ '+ opportunity.SupplierQuoted): ''}}</td>
-              <td class="align-center"> {{ opportunity.InvoicePriceShouldCost ? ('$ ' +
-                opportunity.InvoicePriceShouldCost.toFixed(2)): '' }}</td>
-              <td>{{opportunity.SCAttainment? (opportunity.SCAttainment+'%'):''}}</td>
+              <td class="align-center"> {{opportunity.SupplierQuoted ? ('$ '+ (opportunity.SupplierQuoted | number:'1.2-2')): ''}}</td>
+              <td class="align-center"> {{ opportunity.InvoicePriceShouldCost ? ('$ ' + opportunity.InvoicePriceShouldCost.toFixed(2)): '' }}</td>
+              <!-- <td>{{opportunity.SCAttainment? (opportunity.SCAttainment+'%'):''}}</td> -->
+              <td>{{ RoundSCAttainment(opportunity) }}</td>
+
               <td class="align-center">{{ calculatePercentage(opportunity) }}</td>
               <td class="align-center">{{formatToMillions(opportunity.CommercialArbitrage)}}</td>
               <td class="align-center">{{ formatToMillions(calculateOpportunityValue(opportunity)) }}</td>
-
               <td>{{opportunity.ModifiedBy}}</td>
               <td>
-                <select [(ngModel)]="opportunity.ProjectStatus" class="form-select"
-                  style="width: 100%; height: 25px; font-size: 9px; font-weight: bold;" [disabled]="editingIndex !== i">
+                <select [(ngModel)]="opportunity.ProjectStatus" class="form-select" style="width: 100%; height: 25px; font-size: 9px; font-weight: bold;" [disabled]="editingIndex !== i">
                   <option class="ttt" value="Open" selected>Open</option>
                   <option value="WIP">WIP</option>
                   <option value="Close">Close</option>
@@ -253,39 +221,32 @@
                 </select>
               </td>
               <td hidden>{{opportunity.DebriefDate}}</td>
-
               <td>
                 <span (click)="openCommentsPopup(opportunity.Comments, i)"
-                  [style.pointer-events]="editingIndex !== i ? 'none' : 'auto'"
-                  style="cursor: pointer; color: #ef7659;">
-                  {{ opportunity.Comments && opportunity.Comments.length > 12
-                  ? (opportunity.Comments | slice:0:12) + '...'
-                  : opportunity.Comments || 'Add Comment' }}
+                  [style.pointer-events]="editingIndex !== i ? 'none' : 'auto'"  style="cursor: pointer; color: #ef7659;">
+                  {{ opportunity.Comments && opportunity.Comments.length > 12 ? (opportunity.Comments | slice:0:12) + '...' : opportunity.Comments || 'Add Comment' }}
                 </span>
               </td>
-
+<!-------------------------------------upload and download of doc --------------------------->
               <td style="text-align: center;">
                 <i class="bi bi-cloud-upload-fill"
                   (click)="openUploadPopup(opportunity.CommericalArtibageID,opportunity.MMID,opportunity.RequestHeaderId)"
                   style="color: #185ca4; font-size: 17px; cursor: pointer;" ngbTooltip="Upload Document"></i>
                 <i class="bi bi-download" (click)="downloadFolderAsZip(opportunity.CommericalArtibageID)"
-                  style="color: #2fa365; font-size: 17px; cursor: pointer; margin-left: 10px;"
-                  ngbTooltip="Download Document">
+                  style="color: #2fa365; font-size: 17px; cursor: pointer; margin-left: 10px;" ngbTooltip="Download Document">
                 </i>
 
                 <i class="bi bi-box-arrow-in-up-right"
                   (click)="uploadTCO(opportunity.CommericalArtibageID,opportunity.MMID,opportunity.RequestHeaderId)"
-                  style="color: #f0ad4e; font-size: 17px; cursor: pointer; margin-left: 10px;"
-                  ngbTooltip="Go to TCO Upload"></i>
+                  style="color: #f0ad4e; font-size: 17px; cursor: pointer; margin-left: 10px;" ngbTooltip="Go to TCO Upload"></i>
               </td>
 
-              <td style="position: sticky; right: -1px; text-align: center;">
+              <td style="position: sticky; right: 0px; text-align: center;">
                 <ng-container *ngIf="editingIndex === i; else editIcon">
                   <i class="bi bi-check-circle-fill" (click)="saveChanges(opportunity)"
                     style="color: #2fa365;  font-size: 17px ; cursor: pointer;" ngbTooltip="Save"></i>
                   <i class="bi bi-x-circle-fill" (click)="cancelEditing()"
-                    style="color: #da291c; font-size: 17px; cursor: pointer; margin-left: 10px;"
-                    ngbTooltip="Cancel"></i>
+                    style="color: #da291c; font-size: 17px; cursor: pointer; margin-left: 10px;" ngbTooltip="Cancel"></i>
                 </ng-container>
                 <ng-template #editIcon>
                   <i class="bi bi-pencil-fill" style="color: #da291c; font-size:larger; cursor: pointer; "
@@ -295,7 +256,7 @@
             </tr>
           </tbody>
         </table>
-
+<!-------------------------------Modals------------------------------------------>
         <div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': showModal}" style="display: block;"
           *ngIf="showModal">
           <div class="modal-dialog" role="document">
@@ -303,8 +264,7 @@
               <div class="modal-header">
                 <h5 class="modal-title">Edit Comment</h5>
                 <label class="close modal-close-icn" (click)="closeCommentsPopup()">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
-                    viewBox="0 0 16 16">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x" viewBox="0 0 16 16">
                     <path
                       d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                   </svg>
@@ -315,8 +275,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-secondary" (click)="saveComment()">Save</button>
-                <button type="button" class="btn btn-sm  btn-default default-btn_popup"
-                  (click)="closeCommentsPopup()">Close</button>
+                <button type="button" class="btn btn-sm  btn-default default-btn_popup" (click)="closeCommentsPopup()">Close</button>
               </div>
             </div>
           </div>
@@ -329,28 +288,23 @@
               <div class="modal-header">
                 <h5 class="modal-title">Upload Documents</h5>
                 <label class="close modal-close-icn" (click)="closeUploadPopup()">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
-                    viewBox="0 0 16 16">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x" viewBox="0 0 16 16">
                     <path
                       d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                   </svg>
                 </label>
               </div>
               <div class="modal-body">
-                <button type="button" class="btn btn-sm default-btn" (click)="showFileUpload = true">Document
-                  Upload</button>
+                <button type="button" class="btn btn-sm default-btn" (click)="showFileUpload = true">Document Upload</button>
                 <div class="input-group custom-file-button" *ngIf="showFileUpload"
                   style="margin-top: 10px; text-align: center; width: 300px !important ;">
                   <label for="fileInput" class="input-group-text"> Select File</label>
-                  <input type="file" class="form-control" style="margin-right: 10px;"
-                    (change)="handleFileSelection($event)" multiple />
-                  <button type="button" class="btn btn-sm default-btn"
-                    (click)="uploadFiles(selectedCommercialID)">Upload</button>
+                  <input type="file" class="form-control" style="margin-right: 10px;" (change)="handleFileSelection($event)" multiple />
+                  <button type="button" class="btn btn-sm default-btn" (click)="uploadFiles(selectedCommercialID)">Upload</button>
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-sm  btn-default default-btn_popup"
-                  (click)="closeUploadPopup()">Close</button>
+                <button type="button" class="btn btn-sm  btn-default default-btn_popup" (click)="closeUploadPopup()">Close</button>
               </div>
             </div>
           </div>
@@ -378,20 +332,15 @@
   <div class="filterlabel">
     <label for="date-range">Select:</label>
 
-    <select id="date-range" [(ngModel)]="selectedRange_regional" (change)="onDateRangeChange_regional()"
-      class="custom-input" style="padding: 5px;">
-      <option *ngFor="let range of dateRanges" [value]="range.value">
-        {{ range.label }}
-      </option>
+    <select id="date-range" [(ngModel)]="selectedRange_regional" (change)="onDateRangeChange_regional()" class="custom-input" style="padding: 5px;">
+      <option *ngFor="let range of dateRanges" [value]="range.value"> {{ range.label }} </option>
     </select>
 
     <label for="from-date" style="margin-left: 10px;">From Date:</label>
-    <input type="date" id="from-date" [(ngModel)]="RegionalfromDate" [attr.min]="minDate" [attr.max]="maxDate"
-      class="custom-input" style="padding: 5px;" />
+    <input type="date" id="from-date" [(ngModel)]="RegionalfromDate" [attr.min]="minDate" [attr.max]="maxDate" class="custom-input" style="padding: 5px;" />
 
     <label for="to-date" style="margin-left: 10px;">To Date:</label>
-    <input type="date" id="to-date" [(ngModel)]="RegionaltoDate" [attr.min]="minDate" [attr.max]="maxDate"
-      class="custom-input" style="padding: 5px;" />
+    <input type="date" id="to-date" [(ngModel)]="RegionaltoDate" [attr.min]="minDate" [attr.max]="maxDate" class="custom-input" style="padding: 5px;" />
 
     <button class="btn view-btn" style="margin-right: 10px;" (click)="RegionalDateFilter()">View</button>
     <button class="btn view-btn" (click)="ClearDateFilter()">clear</button>
@@ -401,12 +350,12 @@
       <table class="table  table-hover table-striped" style="width: 100%; table-layout: 100%;">
         <thead>
           <tr>
-            <th style="position: sticky; left:-1px; top:-1px; z-index: 4;">Sr<br>no</th>
-            <th style="position: sticky; left: 29px; top: -1px;  z-index: 4;">Part Number</th>
+            <th style="position: sticky; left:0px; top:-1px; z-index: 4;">Sr<br>no</th>
+            <th style="position: sticky; left: 32px; top: -1px;  z-index: 4;" container="body">Part Number</th>
             <th>Part<br>Name</th>
             <th>Supplier Mfg Location</th>
             <th>Annual<br>volume</th>
-            <th>TotalCost</th>
+            <th>Supplier quoted/<br>Invoice Price</th>
             <th>Supplier Name</th>
             <th>Best<br>Region</th>
             <th>Best<br>Region Cost</th>
@@ -416,13 +365,15 @@
             <th hidden>Debreif Date</th>
             <th>Comments</th>
             <th>Documents Upload</th>
-            <th style="position: sticky; right: -1px; z-index: 3;">Action</th>
+            <th style="position: sticky; right: 0px; z-index: 3;" container="body">Action</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let Region of Regional ; let i=index">
-            <td style="position: sticky; left: -1px; ">{{i + 1}}</td>
-            <td style="position: sticky; left: 29px;">{{Region.PartNumber}}</td>
+            <td style="position: sticky; left: 0px; ">{{i + 1}}</td>
+            <td style="position: sticky; left: 32px;">
+              <span title="{{Region.PartNumber}}"> {{Region.PartNumber.length > 10 ? Region.PartNumber.slice(0, 10) + '...' : Region.PartNumber}} </span>
+            </td>
             <td>{{Region.PartName}}</td>
             <td>{{Region.MainRegion}}</td>
             <td>{{Region.AnnualVolume | number:'1.0-0'}}</td>
@@ -433,8 +384,7 @@
             <td>$ {{Region.RegionalArbitrage}}</td>
             <td>{{Region.RegionRelation}}</td>
             <td>
-              <select [(ngModel)]="Region.ProjectStatus" class="form-select" [disabled]="editingIndex !== i"
-                style="width: 100%; height: 25px; font-size: 9px; font-weight: bold;">
+              <select [(ngModel)]="Region.ProjectStatus" class="form-select" [disabled]="editingIndexRegional !== i"  style="width: 100%; height: 25px; font-size: 9px; font-weight: bold;">
                 <option value="Open" selected>Open</option>
                 <option value="WIP">WIP</option>
                 <option value="Close">Close</option>
@@ -444,34 +394,29 @@
             <td hidden>{{Region.DebriefDate}}</td>
 
             <td>
-              <span (click)=" editingIndex === i && openregioncomment(Region.Comments, i)"
-                [style.pointer-events]="editingIndex !== i ? 'none' : 'auto'" style="cursor: pointer; color: #ef7659;">
-                {{ Region.Comments && Region.Comments.length > 12
-                ? (Region.Comments | slice:0:12) + '...'
-                : Region.Comments || 'Add Comment' }}
+              <span (click)=" editingIndexRegional === i && openregioncomment(Region.Comments, i)"
+                [style.pointer-events]="editingIndexRegional !== i ? 'none' : 'auto'" style="cursor: pointer; color: #ef7659;">
+                {{ Region.Comments && Region.Comments.length > 12? (Region.Comments | slice:0:12) + '...': Region.Comments || 'Add Comment' }}
               </span>
             </td>
             <td style="text-align: center;">
-              <i class="bi bi-cloud-upload-fill"
-                (click)="editingIndex !== i && RegionUploadTCO(Region.Regional_ArtibageID)"
+              <i class="bi bi-cloud-upload-fill" (click)="editingIndexRegional !== i && RegionUploadTCO(Region.Regional_ArtibageID)" 
                 style="color: #185ca4; font-size: 17px; cursor: pointer;" ngbTooltip="Upload Document"></i>
               <i class="bi bi-download" (click)="RegionFileDownloadAsZip(Region.Regional_ArtibageID)"
-                style="color: #2fa365; font-size: 17px; cursor: pointer; margin-left: 10px;"
-                ngbTooltip="Download Document"></i>
+                style="color: #2fa365; font-size: 17px; cursor: pointer; margin-left: 10px;" ngbTooltip="Download Document"></i>
               <i class="bi bi-box-arrow-in-up-right" (click)="RouteToTco(Region.MMID,Region.RequestHeaderId)"
-                style="color: #f0ad4e; font-size: 17px; cursor: pointer; margin-left: 10px;"
-                ngbTooltip="Go to TCO Upload"></i>
+                style="color: #f0ad4e; font-size: 17px; cursor: pointer; margin-left: 10px;" ngbTooltip="Go to TCO Upload"></i>
             </td>
-            <td style="position: sticky; right: -1px; text-align: center;">
-              <ng-container *ngIf="editingIndex === i; else editIcon">
+            <td style="position: sticky; right: 0px; text-align: center;">
+              <ng-container *ngIf="editingIndexRegional === i; else editIcon">
                 <i class="bi bi-check-circle-fill" (click)="SaveRegionChanges(Region)"
                   style="color: #2fa365;  font-size: 17px ; cursor: pointer;" ngbTooltip="Save"></i>
-                <i class="bi bi-x-circle-fill" (click)="cancelEditing()"
+                <i class="bi bi-x-circle-fill" (click)="cancelEditingRegional()"
                   style="color: #da291c; font-size: 17px; cursor: pointer; margin-left: 10px;" ngbTooltip="Cancel"></i>
               </ng-container>
               <ng-template #editIcon>
                 <i class="bi bi-pencil-fill" style="color: #da291c; font-size:larger; cursor: pointer; "
-                  (click)="editRow(i)" ngbTooltip="Edit" placement="top"></i>
+                  (click)="RegionaleditRow(i)" ngbTooltip="Edit" placement="top"></i>
               </ng-template>
             </td>
           </tr>
@@ -484,8 +429,7 @@
             <div class="modal-header">
               <h5 class="modal-title">Edit Comment</h5>
               <label class="close modal-close-icn" (click)="closeregioncomment()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
-                  viewBox="0 0 16 16">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x" viewBox="0 0 16 16">
                   <path
                     d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                 </svg>
@@ -496,42 +440,33 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-sm btn-secondary" (click)="saveRegionalComment()">Save</button>
-              <button type="button" class="btn btn-sm  btn-default default-btn_popup"
-                (click)="closeregioncomment()">Close</button>
+              <button type="button" class="btn btn-sm  btn-default default-btn_popup" (click)="closeregioncomment()">Close</button>
             </div>
           </div>
         </div>
       </div>
-      <div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': ShowRegionalUpload}" style="display: block;"
-        *ngIf="ShowRegionalUpload">
+      <div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': ShowRegionalUpload}" style="display: block;" *ngIf="ShowRegionalUpload">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title">Upload Documents</h5>
               <label class="close modal-close-icn" (click)="closeRegionalupload()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
-                  viewBox="0 0 16 16">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x" viewBox="0 0 16 16">
                   <path
                     d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                 </svg>
               </label>
             </div>
             <div class="modal-body">
-              <button type="button" class="btn btn-sm default-btn" (click)="showFileUpload = true">Document
-                Upload</button>
-              <div class="input-group custom-file-button" *ngIf="showFileUpload"
-                style="margin-top: 10px; text-align: center; width: 300px !important ;">
+              <button type="button" class="btn btn-sm default-btn" (click)="showFileUpload = true">Document Upload</button>
+              <div class="input-group custom-file-button" *ngIf="showFileUpload" style="margin-top: 10px; text-align: center; width: 300px !important ;">
                 <label for="fileInput" class="input-group-text"> Select File</label>
-                <input type="file" class="form-control" style="margin-right: 10px;"
-                  (change)="handleFileSelection($event)" multiple />
-                <button type="button" class="btn btn-sm default-btn"
-                  (click)="UploadReginalFiles(selectedRegional_ArtibageID)">Upload</button>
+                <input type="file" class="form-control" style="margin-right: 10px;" (change)="handleFileSelection($event)" multiple />
+                <button type="button" class="btn btn-sm default-btn" (click)="UploadReginalFiles(selectedRegional_ArtibageID)">Upload</button>
               </div>
             </div>
             <div class="modal-footer">
-              <!-- <button type="button" class="btn btn-sm btn-secondary" (click)="savedoc()">Save</button> -->
-              <button type="button" class="btn btn-sm  btn-default default-btn_popup"
-                (click)="closeRegionalupload()">Close</button>
+              <button type="button" class="btn btn-sm  btn-default default-btn_popup" (click)="closeRegionalupload()">Close</button>
             </div>
           </div>
         </div>
@@ -545,20 +480,17 @@
 
 <!------------------------------------------------start of mfg process Arbitrage --------------------------->
 
-<div *ngIf="showmgfprocess" class="container-fluid"
-  style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
+<div *ngIf="showmgfprocess" class="container-fluid" style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
   <div class="row" style="width: 100%; display: flex; justify-content: center">
     <div class="graph">
       <div class="chart-box">
-        <canvasjs-chart class="canvas-chart" [options]="MfgchartOptions" [styles]="getGraphstyle()"
-          id="chartOptionsId"></canvasjs-chart>
+        <canvasjs-chart class="canvas-chart" [options]="MfgchartOptions" [styles]="getGraphstyle()" id="chartOptionsId"></canvasjs-chart>
       </div>
     </div>
 
     <div class="filterlabel">
       <label for="date-range">Select:</label>
-      <select id="date-range" [(ngModel)]="selectedRangeMfg" (change)="onDateRangeChangeMfg()" class="custom-input"
-        style="padding: 5px">
+      <select id="date-range" [(ngModel)]="selectedRangeMfg" (change)="onDateRangeChangeMfg()" class="custom-input" style="padding: 5px">
         <option value="">Select Range</option>
         <option value="3">Last 3 Months</option>
         <option value="6">Last 6 Months</option>
@@ -567,17 +499,10 @@
       </select>
 
       <label for="from-date" style="margin-left: 10px">From Date:</label>
-      <input type="date" id="from-date" [(ngModel)]="fromDateMfg" [attr.min]="minDateMfg" [attr.max]="maxDateMfg"
-        class="custom-input" style="padding: 5px" />
-
+      <input type="date" id="from-date" [(ngModel)]="fromDateMfg" [attr.min]="minDateMfg" [attr.max]="maxDateMfg" class="custom-input" style="padding: 5px" />
       <label for="to-date" style="margin-left: 10px">To Date:</label>
-
-      <input type="date" id="to-date" [(ngModel)]="toDateMfg" [attr.min]="minDateMfg" [attr.max]="maxDateMfg"
-        class="custom-input" style="padding: 5px" />
-
-      <button class="btn view-btn" style="margin-right: 10px" (click)="onViewClickMfg()">
-        View
-      </button>
+      <input type="date" id="to-date" [(ngModel)]="toDateMfg" [attr.min]="minDateMfg" [attr.max]="maxDateMfg" class="custom-input" style="padding: 5px" />
+      <button class="btn view-btn" style="margin-right: 10px" (click)="onViewClickMfg()">View</button>
       <button class="btn view-btn" (click)="ClearAllMfg()">clear</button>
     </div>
     <div class="col-md-6" style="max-width: 90%; width: 100%; overflow-x: auto; margin-bottom: 60px">
@@ -585,9 +510,9 @@
         <table class="table table-bordered table-hover table-striped" style="width: 100%; table-layout: 100%">
           <thead>
             <tr>
-              <th>Sr<br />no</th>
+              <th style="position: sticky; left:0px; top:-1px; z-index: 4;">Sr<br />no</th>
+              <th style="position: sticky; left: 32px; top: -1px;  z-index: 4;">Part Number</th>
               <th>Part Name</th>
-              <th>Part Number</th>
               <th>Supplier Mfg Location</th>
               <th>Supplier Quoted/Invoice<br />Price (USD)</th>
               <th>Process1 Quote/Should Cost</th>
@@ -607,22 +532,22 @@
           <tbody>
             <tr *ngFor="let data of mgfprocess; let i = index">
 
-              <td>{{ i + 1 }}</td>
+              <td style="position: sticky; left:0px;">{{ i + 1 }}</td>
+              <!-- <td style="position: sticky; left: 31px;">{{ data.PartNumber }}</td> -->
+              <td style="position: sticky; left: 32px;">
+                <span title="{{data.PartNumber}}"> {{data.PartNumber.length > 10 ? data.PartNumber.slice(0, 10) + '...' : data.PartNumber}} </span>
+              </td>
               <td>{{ data.PartName }}</td>
-              <td>{{ data.PartNumber }}</td>
               <td>{{ data.MfgRegion }}</td>
               <td>{{ data.TargetQuote }}</td>
               <td>$ {{ data.Col2_First.toFixed(3) }}</td>
               <td>{{ data.HighLevelProcess_First }}</td>
               <td>$ {{ data.Col2_Second.toFixed(3) }}</td>
               <td>{{ data.HighLevelProcess_Second }}</td>
-              <td>
-                ${{getAbsoluteDifferenceMfg(data.Col2_First,data.Col2_Second).toFixed(3)}}
-              </td>
+              <td> ${{getAbsoluteDifferenceMfg(data.Col2_First,data.Col2_Second).toFixed(3)}}</td>
               <td>
                 {{ data.Col2_First > data.Col2_Second ? data.HighLevelProcess_First : data.HighLevelProcess_Second }}
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                  class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
                   <path fill-rule="evenodd"
                     d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
                 </svg>
@@ -630,33 +555,20 @@
               </td>
 
               <td style="text-align: center">
-
-
-                <i class="bi bi-cloud-upload-fill" (click)="openUploadPopupMfg(data.UniqueId)"
-                  style="color: #185ca4; font-size: 17px; cursor: pointer" ngbTooltip="Upload Document">
+                <i class="bi bi-cloud-upload-fill" (click)="openUploadPopupMfg(data.UniqueId)" style="color: #185ca4; font-size: 17px; cursor: pointer" ngbTooltip="Upload Document">
                 </i>
-                <i class="bi bi-download" (click)="downloadFolderAsZipMfg(data.UniqueId)" style="
-                    color: #2fa365;
-                    font-size: 17px;
-                    cursor: pointer;
-                    margin-left: 10px;
-                  " ngbTooltip="Download Document"></i>
+                <i class="bi bi-download" (click)="downloadFolderAsZipMfg(data.UniqueId)" style="color: #2fa365;font-size: 17px;cursor: pointer;margin-left: 10px;" ngbTooltip="Download Document"></i>
               </td>
 
               <td>
                 <span (click)="openCommentsPopupMfg(data.Comments, i)" style="cursor: pointer; color: #ef7659">
-                  {{ data.Comments && data.Comments.length > 12 ? (data.Comments | slice : 0 : 12) + "..." :
-                  data.Comments || "Add Comment"}}
+                  {{ data.Comments && data.Comments.length > 12 ? (data.Comments | slice : 0 : 12) + "..." : data.Comments || "Add Comment"}}
                 </span>
               </td>
 
               <td>{{ data.ModifiedBy }}</td>
               <td>
-                <select [(ngModel)]="data.ProjectStatus" [disabled]="editingIndexMfg !== i" class="form-select" style=" width: 100%;
-                    height: 25px;
-                    font-size: 9px;
-                    font-weight: bold;
-                  ">
+                <select [(ngModel)]="data.ProjectStatus" [disabled]="editingIndexMfg !== i" class="form-select" style=" width: 100%; height: 25px; font-size: 9px; font-weight: bold;">
                   <option class="ttt" value="Open" selected>Open</option>
                   <option value="WIP">WIP</option>
                   <option value="Close">Close</option>
@@ -667,12 +579,7 @@
                 <ng-container *ngIf="editingIndexMfg === i; else editIcon">
                   <i class="bi bi-check-circle-fill" (click)="saveChangesMfg(data)"
                     style="color: #2fa365; font-size: 17px; cursor: pointer" ngbTooltip="Save"></i>
-                  <i class="bi bi-x-circle-fill" (click)="cancelEditingMfg()" style="
-                      color: #da291c;
-                      font-size: 17px;
-                      cursor: pointer;
-                      margin-left: 10px;
-                    " title="Cancel"></i>
+                  <i class="bi bi-x-circle-fill" (click)="cancelEditingMfg()" style=" color: #da291c;font-size: 17px;cursor: pointer;margin-left: 10px; " title="Cancel"></i>
                 </ng-container>
                 <ng-template #editIcon>
                   <i class="bi bi-pencil-fill" style="color: #da291c; font-size: larger; cursor: pointer"
@@ -702,13 +609,8 @@
                 <textarea [(ngModel)]="selectedCommentMfg" rows="4" style="width: 100%"></textarea>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" (click)="saveCommentMfg()">
-                  Save
-                </button>
-                <button type="button" class="btn btn-sm btn-default default-btn_popup"
-                  (click)="closeCommentsPopupMfg()">
-                  Close
-                </button>
+                <button type="button" class="btn btn-sm btn-secondary" (click)="saveCommentMfg()"> Save </button>
+                <button type="button" class="btn btn-sm btn-default default-btn_popup" (click)="closeCommentsPopupMfg()"> Close</button>
               </div>
             </div>
           </div>
@@ -721,113 +623,25 @@
               <div class="modal-header">
                 <h5 class="modal-title">Upload Documents</h5>
                 <label class="close modal-close-icn" (click)="closeUploadPopupMfg()">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
-                    viewBox="0 0 16 16">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x" viewBox="0 0 16 16">
                     <path
                       d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                   </svg>
                 </label>
               </div>
               <div class="modal-body">
-
-                <button type="button" class="btn btn-sm default-btn" (click)="showFileUploadMfg = true">
-                  Document Upload
-                </button>
-
-                <div class="input-group custom-file-button" *ngIf="showFileUploadMfg" style="
-                    margin-top: 10px;
-                    text-align: center;
-                    width: 300px !important ;
-                  ">
-                  <label for="fileInput" class="input-group-text">
-                    Select File
-                  </label>
-
-                  <input type="file" class="form-control" style="margin-right: 10px"
-                    (change)="handleFileSelectionMfg($event)" multiple />
-                  <button type="button" class="btn btn-sm default-btn" (click)="uploadFilesMfg(selectedUniqueIdMfg)">
-                    Upload
-                  </button>
+                <button type="button" class="btn btn-sm default-btn" (click)="showFileUploadMfg = true"> Document Upload</button>
+                <div class="input-group custom-file-button" *ngIf="showFileUploadMfg" style=" margin-top: 10px; text-align: center; width: 300px !important ;">
+                  <label for="fileInput" class="input-group-text">Select File</label>
+                  <input type="file" class="form-control" style="margin-right: 10px" (change)="handleFileSelectionMfg($event)" multiple />
+                  <button type="button" class="btn btn-sm default-btn" (click)="uploadFilesMfg(selectedUniqueIdMfg)"> Upload</button>
                 </div>
               </div>
               <div class="modal-footer">
-
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismis="modal"
-                  (click)="closeUploadPopupMfg()">Close</button>
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismis="modal" (click)="closeUploadPopupMfg()">Close</button>
                 <button type="button" class="btn btn-sm  btn-default default-btn_popup">Save</button>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div *ngIf="showdesign" class="container-fluid" style="
-        margin-top: 30px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-      ">
-      <div class="row" style="width: 100%; display: flex; justify-content: center">
-        <div class="col-md-6" style="
-            max-width: 100%;
-            width: 100%;
-            text-align: center;
-            margin-bottom: 20px;
-          ">
-          <img src="../../../assets/DesignArbitrage_10.png" style="
-              width: 100%;
-              max-width: 90%;
-              height: 400px;
-              border: 1px solid #808080;
-            " />
-        </div>
-        <div class="col-md-6" style="
-            max-width: 100%;
-            width: 90%;
-            overflow-x: auto;
-            margin-bottom: 60px;
-          ">
-          <div class="table-responsive" style="border: 1px solid #808080">
-            <table class="table table-bordered table-hover table-striped"
-              style="width: 100%; table-layout: 100%; font-size: 7px">
-              <thead>
-                <tr>
-                  <th>Sr<br />no</th>
-                  <th>Part Name</th>
-                  <th>Part Number</th>
-                  <th>Supplier Manfacturing Location</th>
-                  <th>Annual Volume</th>
-                  <th>Material (Main)</th>
-                  <th>Material Rate ($/kg)</th>
-                  <th>Average Wall<br />Thickness (mm)</th>
-                  <th>RM Grade</th>
-                  <th hidden>Material Rate ($/kg)</th>
-                  <th>Min Cost Grade</th>
-                  <th>Min Cost RM Rate ($/kg)</th>
-                  <th>Tech Spec<br />Cost Arbitrage/pc</th>
-                  <th>From->To<br />Tech Spec</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let data of design; let i = index">
-                  <td>{{ i + 1 }}</td>
-                  <td>{{ data.partname }}</td>
-                  <td>{{ data.partnumber }}</td>
-                  <td>{{ data.suppmanilocation }}</td>
-                  <td>{{ data.annualvol | number : "1.0-0" }}</td>
-                  <td>{{ data.material }}</td>
-                  <td>$ {{ data.matrate }}</td>
-                  <td>{{ data.avgwall }}</td>
-                  <td>{{ data.rmgrade }}</td>
-                  <td hidden>$ {{ data.matratee }}</td>
-                  <td>{{ data.mincostgrade }}</td>
-                  <td>$ {{ data.mincostrmrate }}</td>
-                  <td>$ {{ data.techcostarbitage }}</td>
-                  <td>{{ data.fromtotechspec }}</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
       </div>

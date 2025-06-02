@@ -1,3 +1,4 @@
+
 import { HousingflywheelComponent } from './../housingflywheel/housingflywheel.component';
 import { FrequentlyusedmaterialgradeComponent } from './../Report/frequentlyusedmaterialgrade/frequentlyusedmaterialgrade.component';
 import { FaqComponent } from './../contact/faq/faq.component';
@@ -53,6 +54,9 @@ import { DesigntocostStep3Component } from '../design-to-cost-engg/designtocost-
 import { DesigntocostStep4Component } from '../design-to-cost-engg/designtocost-step4/designtocost-step4.component';
 import { DesigntocostStep2SimulationComponent } from '../design-to-cost-engg/designtocost-step2-simulation/designtocost-step2-simulation.component';
 import { DtcrequestReportComponent } from '../Report/dtcrequest-report/dtcrequest-report.component';
+import { Tcosheet2Component } from '../Report/tocreport/tcosheet2/tcosheet2.component';
+import { TcosheetComponent } from '../Report/tocreport/tcosheet/tcosheet.component';
+import { TocreportComponent } from '../Report/tocreport/tocreport.component';
  
  
 
@@ -112,9 +116,10 @@ const routes: Routes = [
       { path : 'designtocost/step3', component: DesigntocostStep3Component },
       { path : 'designtocost/step4', component: DesigntocostStep4Component },
       { path : 'DTCRequestReport', component: DtcrequestReportComponent },
+      { path : 'tcoreport', component: TocreportComponent },
+      { path : 'tcosheet', component: TcosheetComponent },
+      { path : 'tcosheet2', component: Tcosheet2Component },
 
-
-      
     ]
   },
 

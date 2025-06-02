@@ -10,6 +10,7 @@ export interface suppliercost {
     cummins_Date:string,
     pbPerPiece_Material: number,
     pbPerPiece_PurchasedParts: number,
+    pbPerPiece_OutsourcedpartParts:number,
     pbPerPiece_LabourCostPerPiece:number,
     pbPerPiece_OHCostPerPiece:number,
     pbPerPiece_SurfaceTreatments:number,

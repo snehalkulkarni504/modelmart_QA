@@ -3,19 +3,19 @@
   font-family: Helvetica, Arial !important;
 }
 .container {
-    width: 90%;
+    width: 80%;
     margin-top: 20px;
     height: 70px;
-    margin-left: 5%;
-    /* margin-right: 5%; */
+    margin-left: 10%;
+    margin-right: 10%;
     /* border-top: 1px solid #da291c; */
 }
 .MasterHeader {
-    width: 90%;
+    width: 80%;
     display: inline-flex;
     height: 70px;
-    margin-left: 5%;
-    /* margin-right: 5%; */
+    margin-left: 10%;
+    margin-right: 10%;
     font-family: Helvetica, Arial;
     border-bottom: 1px solid #da291c;
     /* margin-bottom: 20px; */
@@ -63,6 +63,13 @@
     border-color: #da291c !important;
     color: #da291c;
 }
+.sheet-type-dropdown {
+  font-size: 12px; /* Decrease font size */
+  height: 30px; /* Adjust height */
+  width: 170px; /* Set a smaller width */
+  margin-right: 50px;
+}
+
 .view-btn{
     font-size: 12px; /* Smaller button */
     padding: 7px 10px;
@@ -127,9 +134,10 @@ table tbody td {
 }
 
 .file-input {
-    width: 150px;  /* Adjust width to make it smaller */
+    width: 300px;  /* Adjust width to make it smaller */
     padding: 7px;  /* Reduce padding */
     font-size: 12px; /* Reduce text size */
+    margin-right: 50px;
 }
 .upload-container {
     display: flex;
@@ -358,6 +366,27 @@ body {
   
   }
   
+
+  .custom-input {
+    width: 150px;
+    /* Same width for all inputs */
+    height: 35px;
+    /* Same height for all inputs */
+    border-radius: 8px;
+    font-family: Helvetica, Arial !important;
+    font-size: 12px;
+    padding: 7px 10px;
+    box-sizing: border-box;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+  }
+   
+  .default-btn_popup {
+    background-color: #da291c;
+    color: #fff;
+  }
   
 
 

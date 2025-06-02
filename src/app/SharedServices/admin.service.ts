@@ -325,6 +325,8 @@ export class AdminService {
     return this.httpClient.get(`${this.apiUrl}downloadfolder_mfg?folderName=${UniqueId}`, { responseType: 'blob' });
   }
 
-
+  addDesignToCostEntry(newIdea: any): Observable<any> {
+    return this.httpClient.post(this.apiUrl + 'AddDesignToCostEntry', newIdea);
+  }
 
 }

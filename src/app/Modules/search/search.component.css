@@ -591,7 +591,7 @@ input[type=checkbox] {
 #FromDate:focus,
 #ToDate:focus {
     box-shadow: none;
-    border-color:1px solid #da291c !important;
+    border-color: 1px solid #da291c !important;
 }
 
 .filter_input_Search {
@@ -960,7 +960,7 @@ input[type="text"]:focus {
     max-height: 350px !important;
 }
 
- 
+
 
 .modal-header {
     border-bottom: 1px solid #da291c;
@@ -988,7 +988,10 @@ input[type="text"]:focus {
 }
 
 
-.modal-close-icn1, .modal-close-icn2, .modal-close-icn3, .modal-close-icn4{
+.modal-close-icn1,
+.modal-close-icn2,
+.modal-close-icn3,
+.modal-close-icn4 {
     /* background-color: #da291c; */
     position: absolute;
     top: 0px;
@@ -1016,7 +1019,10 @@ input[type="text"]:focus {
     left: 76.5%;
 }
 
-.modal-close-icn1:hover, .modal-close-icn2:hover, .modal-close-icn3:hover, .modal-close-icn4:hover {
+.modal-close-icn1:hover,
+.modal-close-icn2:hover,
+.modal-close-icn3:hover,
+.modal-close-icn4:hover {
     rotate: 90deg;
     cursor: pointer;
 }
@@ -1058,9 +1064,9 @@ input[type="text"]:focus {
     }
 }
 
-.SimulatedTable{
-    overflow: auto;  
-    height: 300px !important ;  
+.SimulatedTable {
+    overflow: auto;
+    height: 300px !important;
     width: 98%;
     margin-left: 1%;
 }
@@ -1071,30 +1077,30 @@ input[type="text"]:focus {
     top: -1px;
     z-index: 1;
     background-color: #fff;
-} 
-
-.SimulatedTable table{
-  font-size: 12px !important;
-  font-family: Helvetica ,Arial !important;
 }
 
-.simulatedheader{
-    background-color: #da291c0d !important;
-  }
+.SimulatedTable table {
+    font-size: 12px !important;
+    font-family: Helvetica, Arial !important;
+}
 
-  .viewReport{
+.simulatedheader {
+    background-color: #da291c0d !important;
+}
+
+.viewReport {
     margin-left: 10px;
     cursor: pointer !important;
     position: relative;
-    top:-5px;
-  }
+    /* top: -5px; */
+}
 
-  .SimulatedCheckbox{
+.SimulatedCheckbox {
     margin-top: 5px;
     width: 15px;
     height: 15px;
-  }
-   
+}
+
 
 .has-search .form-control {
     padding-left: 2.8rem;
@@ -1118,9 +1124,26 @@ input[type="text"]:focus {
 }
 
 .search-input:hover {
-   border: 1px solid  #da291c;
+    border: 1px solid #da291c;
 }
 
 .search-input:focus {
-    border: 1px solid  #da291c !important;
-} 
+    border: 1px solid #da291c !important;
+}
+
+.btnAdd {
+    background-color: #ffffff;
+    color: #da291c;
+    font-weight: 500;
+    border-radius: 5px;
+    border: 1px solid #da291c;
+    font-size: 11px;
+    padding: 1px 5px;
+}
+
+.btnAdd:hover {
+    background-color: #da291c;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    cursor: pointer;
+}

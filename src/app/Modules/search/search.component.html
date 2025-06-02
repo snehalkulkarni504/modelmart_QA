@@ -45,8 +45,8 @@
             <div class="compare">
                 <input type="button" class="btn btn-primary btnreset" (click)="clearFilter(1)" value="Reset All"
                     Name="Reset">
-                <input type="button" class="btn btn-primary btncompare" (click)="getComparison()" value="Compare"
-                    Name="Compare">
+                <!-- <input type="button" class="btn btn-primary btncompare" (click)="getComparison()" value="Compare"
+                    Name="Compare"> -->
             </div>
         </div>
 
@@ -445,8 +445,9 @@
                         </div>
                     </div>
                     <div>
-                        <input #Comparecheckbox class="form-check-input" type="checkbox" class="SearchCheckbox SearchCheckboxselection"
-                            id="{{t.csHeaderId}}" (click)="getPartId(t,'M')" title="Select for Compate">
+                        <input #Comparecheckbox class="form-check-input" type="checkbox"
+                            class="SearchCheckbox SearchCheckboxselection" id="{{t.csHeaderId}}"
+                            (click)="getPartId(t,'M',$event)" title="Select for Compate">
                     </div>
                     <div>
                         <img src="../../../assets/PDFIcon.png" class="PDFIcon" title="Download PDF"
@@ -647,9 +648,12 @@
                                             *ngFor="let t of SearchListSimulated  | search: textsearch:filterMetadata ; let i=index">
                                             <td class="text-end">{{i + 1}}</td>
                                             <td class="text-center">
-                                                <input class="form-check-input" type="checkbox" id="{{t.scReportId}}"
+                                                <!-- <input class="form-check-input" type="checkbox" id="{{t.scReportId}}"
                                                     [value]="t.scReportId" class="SimulatedCheckbox SearchCheckboxselection"
-                                                    (click)="getPartId(t,'S')" [checked]="t.isActive">
+                                                    (click)="getPartId(t,'S')" [checked]="t.isActive"> -->
+
+                                                <input type="button" class="btn btn-primary btn-sm btnAdd"
+                                                    (click)="getPartId(t,'S',$event)" value="Add" Name="Add">
 
                                                 <span (click)='viewReport(t)' class="viewReport"
                                                     ngbTooltip="View Simulated Report">

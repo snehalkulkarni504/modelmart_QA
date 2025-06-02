@@ -34,7 +34,7 @@ export const environment = {
   //  apiUrl_File: 'http://10.185.31.233:90/File/',
   //  apiUrl_Search: 'http://10.185.31.233:90/Search/'   ,
   //  apiUrl_User: '',
-  //  apiUrl_Tco: '',
+  //  apiUrl_Tco: 'http://10.185.31.233:90/TCO/',
 
   // cummins server  production
   // apiUrl: 'https://modelmart.cummins.com:1443/', // geteway

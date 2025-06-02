@@ -182,11 +182,7 @@ th, td {
     gap: 5px;
 }
 
-.action-buttonsmodel {
-    display: flex;
-    justify-content: center;
-    
-}
+
 th.group-header {
     background-color: rgb(32, 2, 2);
     color: white;
@@ -272,7 +268,8 @@ tr.group-header {
 }
 
 .table thead tr th {
-    background-color:  #da291c;
+    /* background-color:  #da291c; */
+    background-color: #67729a;
     color: #fff;
     padding: 3px;
     width: 200px;
@@ -285,8 +282,11 @@ tr.group-header {
 
 
 
+
+
 .default-btn_popup {
-    background-color: #da291c;
+    /* background-color: #da291c; */
+    background-color: #04444f;
     color: #fff;
 }
 
@@ -475,10 +475,7 @@ th,td{
     background: rgba(0, 0, 0, .5);
 }
 
-.default-btn_popup {
-    background-color: #da291c;
-    color: #fff;
-}
+
   
 td:last-child {
     overflow: visible !important;
@@ -596,3 +593,107 @@ td:last-child {
     background-color: white;
     transform: scale(1.05);
    }
+
+ 
+
+/* Container for vertical scrolling */
+.sticky-part-number {
+  position: sticky;
+  left: 90px; /* Adjust based on actual column width before this */
+  background: white; /* Match your header background */
+  z-index: 2;
+}
+
+.sticky-part-name {
+  position: sticky;
+  left: 0px; /* Adjust this value depending on the width of the Part Number column */
+  background: white;
+  z-index: 2;
+}
+
+/* Optional: Keep sticky headers above content */
+thead th.sticky-part-number,
+thead th.sticky-part-name {
+  z-index: 3;
+}
+
+/* Scrollable wrapper */
+.popup-table-container {
+  max-height: 400px; /* adjust as needed */
+  overflow: auto;
+  position: relative;
+}
+
+/* Sticky header */
+.popup-table-container thead th {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 3;
+}
+
+/* Sticky Action column on the right */
+.action-buttonsmodel {
+  position: sticky;
+  right: 0;
+  background: #fff;
+  z-index: 2;
+}
+
+/* Optional: Make header for the Action column sticky too */
+/* thead th:last-child {
+  position: sticky;
+  right: 0;
+  background: #fff;
+  z-index: 3;
+} */
+
+/* Scoped to popup table only */
+.popup-table-container .popup-table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.popup-table-container .popup-table th,
+.popup-table-container .popup-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 80%; /* Adjust per your design */
+  vertical-align: middle;
+  padding: 8px;
+  text-align: center;
+}
+
+
+
+/* Optional: Tooltip indication */
+.popup-table-container .popup-table th[title],
+.popup-table-container .popup-table td[title] {
+  cursor: help;
+}
+
+/* Sticky header (if not yet applied) */
+.popup-table-container thead th {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 3;
+  font-size: 12px;
+}
+
+.popup-table-container button {
+  font-size: 11px;
+  padding: 6px 10px;
+}
+
+.popup-table-container td.sticky-action,
+.popup-table-container th.sticky-action {
+  position: sticky;
+  right: 0;
+  background: #fff;
+  z-index: 3;
+  /* Optional: add a border or box-shadow for visual separation */
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+}

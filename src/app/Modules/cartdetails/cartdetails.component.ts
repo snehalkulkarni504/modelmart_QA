@@ -12,10 +12,6 @@ import * as XLSX from 'xlsx';
 import { DatePipe, Location } from '@angular/common';
 
 
-
-
-
-
 @Component({
   selector: 'app-cartdetails',
   templateUrl: './cartdetails.component.html',
@@ -42,11 +38,18 @@ export class CartdetailsComponent {
   @ViewChild('tableContainer') tableContainer!: ElementRef;
   @ViewChild('tableRows') tableRows!: ElementRef;
   selectedFile!: File | undefined;
+  matchType: string = 'approximate';
+  deleteType:string='all';
+  matchconfirm:boolean=false;
+  matchconfirmnew:boolean=false;
+  deleteconfirm:boolean=false;
+  deleterowid:any;
   uploadfromdate:any
   Cat2: any;
   Cat2Value: any;
   Cat3: any;
   Cat3Value: any;
+  flag:any;
   Cat4: any;
   Cat4Value: any;
   SearchboxForm!: FormGroup;
@@ -66,7 +69,7 @@ export class CartdetailsComponent {
   EngineDisplsearch: any;
   BusinessUnitsearch: any;
   Locationsearch: any;
-  flag: number = 0;
+  flagmatch: number = 0;
   CategoryID: string = "0";
   userId:any;
   NA: any = "NA*";
@@ -124,7 +127,9 @@ export class CartdetailsComponent {
   getroutebomqty:any;
   getroutebomcost : any;
   getroutelastsim :any;
-  
+  rerunrow:any;
+
+
   ngOnInit(): void {
     if (localStorage.getItem("userName") == null) {
       this.router.navigate(['/welcome']);
@@ -282,9 +287,116 @@ export class CartdetailsComponent {
             }
   }
 
+openMatchModal(row:any): void {
+   // this.selectedFile=undefined;
+    this.excelU=false;
+    this.override=false;
+    this.matchconfirm=true;
+    //this.uploadDisplay = 'block';
+    this.display = "block";
+    this.rerunrow=row;
+  }
+
+  confirmmatch():void{
+
+    this.excelU=false;
+    this.override=false;
+    this.matchconfirm=false;
+    //this.uploadDisplay = 'block';
+    this.display = "none";
+    this.saveRow(this.rerunrow);
+  }
+
+  openMatchModalnew(row:any): void {
+   // this.selectedFile=undefined;
+    this.excelU=false;
+    this.override=false;
+    this.matchconfirm=false;
+    this.matchconfirmnew=true;
+    //this.uploadDisplay = 'block';
+    this.display = "block";
+    this.rerunrow=row;
+  }
+
+  confirmmatchnew():void{
+
+    this.excelU=false;
+    this.override=false;
+    this.matchconfirm=false;
+    this.matchconfirmnew=false;
+    //this.uploadDisplay = 'block';
+    this.display = "none";
+    this.saveNewRow(this.rerunrow);
+  }
+
+  deletepop(bomid:any):void{
+    this.deleterowid=bomid;
+     this.excelU=false;
+    this.override=false;
+    this.matchconfirm=false;
+    this.matchconfirmnew=false;
+    this.deleteconfirm=true;
+    //this.uploadDisplay = 'block';
+    this.display = "block";
+  }
+
+  confirmdelete():void{
+    this.excelU=false;
+    this.override=false;
+    this.matchconfirm=false;
+    this.matchconfirmnew=false;
+    this.deleteconfirm=false;
+    this.display = "none";
+    this.deleteRow(this.deleterowid);
+  }
+  deleteRow(id: any) {
+
+    this.cdr.detectChanges();
+    
+     if (this.deleteType === 'all') {
+        this.SpinnerService.show('spinner');
+        this.bomService.DeleteBom(id).subscribe(response => {
+        console.log('Row updated successfully', response);
+    
+        this.SpinnerService.hide('spinner');
+        this.toastr.success("Bom Deleted Successfully.");
+        this.ShowLandingPage(1,this.getroutecartid);
+
+    //row.editable = false;  // Disable edit mode after successful update
+
+  }, error => {
+    console.error('Error updating row', error);
+  });
+        }
+     if (this.deleteType === 'output'){ 
+        this.bomService.DeleteBomoutput(id).subscribe(response => {
+        console.log('Row updated successfully', response);
+    
+        this.SpinnerService.hide('spinner');
+        this.toastr.success("Bom Deleted Successfully.");
+        this.ShowLandingPage(1,this.getroutecartid);
+
+    //row.editable = false;  // Disable edit mode after successful update
+
+  }, error => {
+    console.error('Error updating row', error);
+  });
+}
+  
+
+}
+
+
   saveRow(row: any) {
     this.cdr.detectChanges();
     
+     if (this.matchType === 'exact') {
+            this.flagmatch=7;
+        }
+        if (this.matchType === 'approximate'){ 
+        this.flagmatch=5;
+        }
+
     const updatedRow = { ...row };  // Create a copy of the row
     if(updatedRow.excelpartno=="" ||updatedRow.excelcurrentprogram==""||updatedRow.excelenginedisplacement==""||updatedRow.excelname=="")
       {
@@ -316,14 +428,15 @@ export class CartdetailsComponent {
   delete updatedRow.weight
   delete updatedRow.width
   delete updatedRow.totalCost
+  delete updatedRow.platform
   // Post updated data to the API
   this.SpinnerService.show('spinner');
-  this.bomService.UpdateBomFilter(updatedRow,this.getroutecartname,this.userId).subscribe(response => {
+  this.bomService.UpdateBomFilter(updatedRow,this.getroutecartname,this.userId,this.flagmatch).subscribe(response => {
     console.log('Row updated successfully', response);
     
       this.SpinnerService.hide('spinner');
       this.toastr.success("Row updated successfully.");
-      this.ShowLandingPage(5,updatedRow.bomId);
+      this.ShowLandingPage(this.flagmatch,updatedRow.bomId);
 
     row.editable = false;  // Disable edit mode after successful update
 
@@ -336,6 +449,14 @@ export class CartdetailsComponent {
 
   saveNewRow(row: any) {
     this.cdr.detectChanges();
+
+    if (this.matchType === 'exact') {
+            this.flagmatch=7;
+        }
+        if (this.matchType === 'approximate'){ 
+        this.flagmatch=5;
+        }
+
     
     const updatedRow = { ...row };  // Create a copy of the row
     if(updatedRow.excelpartno=="" ||updatedRow.excelcurrentprogram==""||updatedRow.excelenginedisplacement==""||updatedRow.excelname=="")
@@ -368,14 +489,15 @@ export class CartdetailsComponent {
   delete updatedRow.weight
   delete updatedRow.width
   delete updatedRow.totalCost
+  delete updatedRow.platform
   // Post updated data to the API
   this.SpinnerService.show('spinner');
-  this.bomService.UpdateBomFilterNew(updatedRow,this.getroutecartid,this.userId).subscribe(response => {
+  this.bomService.UpdateBomFilterNew(updatedRow,this.getroutecartid,this.userId,this.flagmatch).subscribe(response => {
     console.log('Row updated successfully', response);
     
       this.SpinnerService.hide('spinner');
       this.toastr.success("Row updated successfully.");
-      this.ShowLandingPage(0,this.getroutecartid);
+      this.ShowLandingPage(1,this.getroutecartid);
 
     row.editable = false;  // Disable edit mode after successful update
 
@@ -473,7 +595,9 @@ export class CartdetailsComponent {
    this.display = "none";
    this.excelU=false;
    this.override=false;
-
+this.matchconfirm=false;
+this.matchconfirmnew=false;
+this.selectedfilename='';
     
   }
 
@@ -691,45 +815,129 @@ export class CartdetailsComponent {
     this.uploadfromdate='';
   }
 
+
+  
+
   // Function to close the upload modal
   closeUploadModal(): void {
    this.display = 'none';
+   
   }
   selectedfilename:string='';
-  onFileSelected(event: any): void
-  {
-    debugger;
-    this.selectedFile = event.target.files[0];
-    const file=event.target.files[0];
-    if(this.selectedFile)
-    {
-      this.selectedfilename = file.name;
-      this.showError7=false
+ onFileSelected(event: any): void {
+  const file: File = event.target.files[0];
+  this.selectedFile = file;
+  this.selectedfilename = file.name;
+
+  const expectedHeaders: string[] = [
+    'Part Number',
+    'Part Name',
+    'Parent Part Number',
+    'Current Program',
+    'Parent Program',
+    'Platform',
+    'Displacement',
+    'Weight range',
+    'Material Grade',
+    'Manufacturing process',
+    'Manufacturing Region',
+    'BomQty'
+  ];
+
+  const mandatoryFields: string[] = [
+    'Part Name',
+    'Displacement',
+    'Current Program',
+    'BomQty'
+  ];
+
+  const reader: FileReader = new FileReader();
+  reader.onload = (e: any) => {
+    const data = new Uint8Array(e.target.result);
+    const workbook = XLSX.read(data, { type: 'array' });
+    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+    const sheetData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+    const headerRowIndex = 7;
+    const fileHeaders = sheetData[headerRowIndex] as string[];
+    //this.selectedFile = undefined;
+
+    if (!this.validateHeaders(fileHeaders, expectedHeaders)) {
+      this.toastr.error('Excel headers are incorrect or not in the correct order.');
+      this.selectedFile = undefined;
+      return;
     }
-    else {
-      this.selectedfilename = '';
+
+    const dataRows = sheetData.slice(headerRowIndex + 1) as any;
+    if (!this.validateMandatoryFields(dataRows, fileHeaders, mandatoryFields)) {
+      this.toastr.error('Mandatory fields (Part Name, Displacement, Current Program, BomQty) are missing in one or more rows.');
+      this.selectedFile = undefined;
+      return;
     }
-  }
+
+    this.toastr.success('Excel file is valid.');
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+validateHeaders(fileHeaders: string[], expectedHeaders: string[]): boolean {
+  return expectedHeaders.every((header, index) => fileHeaders[index]?.trim() === header);
+}
+
+validateMandatoryFields(rows: any[][], headers: string[], mandatoryFields: string[]): boolean {
+  const headerMap: { [key: string]: number } = headers.reduce((acc, h, i) => {
+    acc[h] = i;
+    return acc;
+  }, {} as { [key: string]: number });
+
+  return rows.every(row => {
+    return mandatoryFields.every(field => {
+      const colIndex = headerMap[field];
+      return row[colIndex] !== undefined && row[colIndex] !== null && String(row[colIndex]).trim() !== '';
+    });
+  });
+}
+
+
+
+
+    
+
+
+
+
+
+ 
 
   uploadExcel(): void {
-    debugger
     
-    if (!this.UploadModalInputValidation()){
-    let exceldata:any;
-    if (this.selectedFile) {
-      
-      this.sendExcelDataToAPI(this.selectedFile);
-      this.closeUploadModal();
-      //alert('File Uploaded Successfully');
-   
-    } else {
-      console.error('No file selected.');
-      // You can show an error message to the user if needed
-    }
-  }
+    if (!this.selectedFile) {
+    this.toastr.error("No file selected or file failed validation.");
+    return;
   }
 
+  this.sendExcelDataToAPI(this.selectedFile);
+    
+  //   if (!this.UploadModalInputValidation()){
+  //   let exceldata:any;
+  //   if (this.selectedFile) {
+      
+  //     this.sendExcelDataToAPI(this.selectedFile);
+  //     this.closeUploadModal();
+  //     //alert('File Uploaded Successfully');
+   
+  //   } else {
+  //     console.error('No file selected.');
+  //     // You can show an error message to the user if needed
+  //   }
+  // }
+  }
+
+  
+
   sendExcelDataToAPI(uploadfile: File): void {
+
+     
     
     
     console.log(this.uploadfromdate)
@@ -748,7 +956,12 @@ export class CartdetailsComponent {
         console.log('Excel data uploaded successfully:', _res);
         this.toastr.success("Data Uploaded Successfully.");
         this.closeUploadModal();
+        if (this.matchType === 'exact') {
+            this.ShowLandingPage(6, this.getroutecartid);
+        }
+        if (this.matchType === 'approximate'){ 
         this.ShowLandingPage(0, this.getroutecartid);
+        }
         //this.SpinnerService.hide('spinner');
         }
         else{
@@ -917,22 +1130,9 @@ export class CartdetailsComponent {
 }
 
 // Function to delete a row
-deleteRow(id: any) {
-  this.SpinnerService.show('spinner');
-  this.bomService.DeleteBom(id).subscribe(response => {
-    console.log('Row updated successfully', response);
-    
-      this.SpinnerService.hide('spinner');
-      this.toastr.success("Bom Deleted Successfully.");
-      this.ShowLandingPage(1,this.getroutecartid);
 
-    //row.editable = false;  // Disable edit mode after successful update
 
-  }, error => {
-    console.error('Error updating row', error);
-  });
 
-}
 
 cancelRow(row: any) {
   // Remove the row from the list if it's marked as isNew
@@ -947,6 +1147,8 @@ cancelRow(row: any) {
 scroll(el: HTMLElement) {
   el.scrollIntoView({behavior: 'smooth'});
 }
+
+
 
 SaveRow(){
   const filteredList = this.SearchProductList.filter((row:any) => row.isNew === true) // Filter rows where isNew is true
@@ -997,7 +1199,7 @@ colspanhide3 = 2;
     }
     else {
       this.Ishide1 = false;
-      this.colspanhide1 = 11;
+      this.colspanhide1 = 12;
     }
 
   }

@@ -52,14 +52,16 @@
     <div class="row">
         <div class="col-md-1"> </div>
         <div class="col-md-5">
-            <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'250px'}" id="chartOptionsId"></canvasjs-chart>
+            <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'250px'}"
+                id="chartOptionsId"></canvasjs-chart>
         </div>
         <div class="col-md-5">
-            <canvasjs-chart [options]="chartOptionssupplier" [styles]="{width: '100%', height:'250px'}" id="chartOptionssupplierId"></canvasjs-chart>
+            <canvasjs-chart [options]="chartOptionssupplier" [styles]="{width: '100%', height:'250px'}"
+                id="chartOptionssupplierId"></canvasjs-chart>
         </div>
     </div>
 
-<!--     
+    <!--     
     <div class="chartOptions">
         <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'300px'}"></canvasjs-chart>
     </div>
@@ -76,7 +78,7 @@
         <table class="table table-bordered tablePartDetails">
             <tr>
                 <th rowspan="10" class="text-center mainpart">Part Details </th>
-                <th hidden >CSHeaderId</th>
+                <th hidden>CSHeaderId</th>
                 <td hidden class="right" *ngFor="let i of this.partDetails">
                     {{i.csHeaderId}}
                     {{i.scReportId}}
@@ -86,11 +88,10 @@
             <tr>
                 <th class="particular">Part Image</th>
                 <td class="right" *ngFor="let i of this.partDetails">
-                    <img *ngIf="i.imagePath == '' else multi" src="assets/No-Image.png"
+                    <img *ngIf="i.imagePath == null else multi" src="../../../assets/No-Image.png"
                         style="width: 150px; height: 150px;">
                     <ng-template #multi>
-                        <img src="../../../assets/Parting Line Pictures/{{i.modelMartID}}.png"
-                            style="width: 150px; height: 150px;">
+                        <img src="{{i.imagePath}}" style="width: 150px; height: 150px;">
                     </ng-template>
                 </td>
             </tr>
@@ -211,7 +212,7 @@
     <div class="d-flex justify-content-center setimage ">
         <table class="table table-bordered tableTechnicalParameters">
             <tr>
-                <th rowspan="12" class="text-center mainpart">Technical Parameters</th>
+                <th rowspan="14" class="text-center mainpart">Technical Parameters</th>
                 <th hidden class="particular">csHeaderId</th>
                 <td hidden class="right" *ngFor="let i of this.technicalParatameters">
                     {{i.csHeaderId}}
@@ -287,6 +288,65 @@
                     {{i.noofCavity}}
                 </td>
             </tr>
+            <tr>
+                <th rowspan="101" class="particular mainpart hideCommericalDetailsShouldCost"
+                    (click)="IsTechnicalParameter = !IsTechnicalParameter">Technical Parameters Detailed
+                    <i *ngIf="IsTechnicalParameter" class="bi-chevron-down showhiderowstier2"></i>
+                    <i *ngIf="!IsTechnicalParameter" class="bi-chevron-right showhiderowstier2"></i>
+                </th>
+            </tr>
+             <ng-container *ngIf="IsTechnicalParameter">
+                <tr>
+                    <td class="particular" style="vertical-align: top; ">
+                        <table class="setimage" style="width: 100%;">
+                             <tr *ngFor="let i of this.TechnicalParameter">
+                                <th style="border: 1px solid #80808041" *ngIf="i.details1 && i.id != 1">
+                                    {{i.details1}}
+                                </th>
+                                <td style="border: 1px solid #80808041" *ngIf="i.details2 && i.id != 1">
+                                    {{i.details2}}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="particular" style="vertical-align: top;">
+                        <table class="setimage" style="width: 100%;">
+                           <tr *ngFor="let i of this.TechnicalParameter">
+                                <th style="border: 1px solid #80808041" *ngIf="i.details3 && i.id != 1">
+                                    {{i.details3}}
+                                </th>
+                                <td style="border: 1px solid #80808041" *ngIf="i.details4 && i.id != 1">
+                                    {{i.details4}}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td [hidden]="Hidematerial_Detailedtable3" class="particular" style="vertical-align: top;">
+                        <table class="setimage" style="width: 100%;">
+                            <tr *ngFor="let i of this.TechnicalParameter">
+                                <th style="border: 1px solid #80808041" *ngIf="i.details5 && i.id != 1">
+                                    {{i.details5}}
+                                </th>
+                                <td style="border: 1px solid #80808041" *ngIf="i.details6 && i.id != 1">
+                                    {{i.details6}}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td [hidden]="Hidematerial_Detailedtable4" class="particular" style="vertical-align: top;">
+                        <table class="setimage" style="width: 100%;">
+                            <tr *ngFor="let i of this.TechnicalParameter">
+                                <th style="border: 1px solid #80808041" *ngIf="i.details7 && i.id != 1">
+                                    {{i.details7}}
+                                </th>
+                                <td style="border: 1px solid #80808041" *ngIf="i.details8 && i.id != 1">
+                                    {{i.details8}}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </ng-container>
         </table>
     </div>
 
@@ -377,7 +437,7 @@
                     <td class="right TotalCostData" *ngFor="let i of this.technicalParatameters">
                         {{i.totalCost}}
                     </td>
-                    
+
                 </ng-container>
             </tr>
             <ng-container *ngIf="IsCommericalDetailsSC">
@@ -487,8 +547,9 @@
                 <th class="particular">Total Cost ($)</th>
                 <td class="right TotalCostData" *ngFor="let i of this.CommericalDetailsSupplierCost">
                     {{i.totalCost | number:'1.2-2'}}
-                    <img class="img1" style="margin-left: 5px; height: 25px;width: 25px; padding: 0px;" src="../../../assets/compare-5.png"
-                    (click)="getsuppComparison(i.csHeaderId)"  ngbTooltip="View all supplier for this part" />
+                    <img class="img1" style="margin-left: 5px; height: 25px;width: 25px; padding: 0px;"
+                        src="../../../assets/compare-5.png" (click)="getsuppComparison(i.csHeaderId)"
+                        ngbTooltip="View all supplier for this part" />
                     <!-- <button type="button" class="btn btn-outline-danger btnview" data-bs-dismis="modal"
                         (click)="getsuppComparison(i.csHeaderId)"></button> -->
                 </td>
@@ -590,8 +651,8 @@
                 <th rowspan="101" class="text-center mainpart ">
                     Manufacturing Process
                 </th>
-                <th  class="particular">High Level Process</th>
-                <td  class="right" *ngFor="let i of this.shouldCostVolume">
+                <th class="particular">High Level Process</th>
+                <td class="right" *ngFor="let i of this.shouldCostVolume">
                     {{i.highLevelProcess}}
                     <!-- {{i.csHeaderId}}
                     {{i.scReportId}} -->
@@ -656,8 +717,8 @@
                 <th rowspan="9" class="text-center mainpart"></th>
                 <th class="particular"></th>
                 <td class="right text-center" *ngFor="let i of this.shouldCostVolume" style="padding: 5px;">
-                    <button [hidden]="i.scReportId > 0" type="button" class="btn btn-sm btn-outline-danger btnview" data-bs-dismis="modal"
-                        (click)="getComparison(i.csHeaderId)">View Details</button>
+                    <button [hidden]="i.scReportId > 0" type="button" class="btn btn-sm btn-outline-danger btnview"
+                        data-bs-dismis="modal" (click)="getComparison(i.csHeaderId)">View Details</button>
                 </td>
             </tr>
 

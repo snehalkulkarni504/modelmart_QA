@@ -115,8 +115,8 @@ export class SendRequestComponent implements OnInit {
 
   ModelTypes: any;
   modelTypesID: any;
-  modelexist: boolean=false;
-  enableupload: boolean=false;
+  modelexist: boolean = false;
+  enableupload: boolean = false;
 
   @ViewChild('excelFile_lbl')
   excelFile_lbl!: ElementRef;
@@ -229,11 +229,11 @@ export class SendRequestComponent implements OnInit {
                 this.height = this.getUArr[0].height
                 this.partWeight = this.getUArr[0].finishWeight
                 this.modelTypesID = this.getUArr[0].modelTypes_Id
-                this.modelexist=true;
+                this.modelexist = true;
               }
               else {
                 this.modelTypesID = 1;
-                this.modelexist=false;
+                this.modelexist = false;
               }
               //console.log("My UpdateArr", this.getUArr)
               if (this.getUArr.length > 0) {
@@ -290,7 +290,7 @@ export class SendRequestComponent implements OnInit {
 
           this.SpinnerService.show('spinner');
           this.fileUploadService.yellowmodelfileupload(this.selectedFiles, this.getAUID, this.selectedUniqueID, this.userId).subscribe({
-            next: (_res) => { 
+            next: (_res) => {
               // debugger;
 
               this.toastr.success("File uploaded Successfully.");
@@ -355,7 +355,7 @@ export class SendRequestComponent implements OnInit {
     }
     else if (this.modelTypesID == 5) {
       this.fileUploadService.chinasheetupload(this.chinamodeldata).subscribe({
-        next: (res:any) => {
+        next: (res: any) => {
           // this.toastr.success("Excel data Inserted Successfully");
           this.SpinnerService.hide('spinner');
           this.addSuccess = false;
@@ -368,7 +368,7 @@ export class SendRequestComponent implements OnInit {
 
           this.SpinnerService.show('spinner');
           this.fileUploadService.chinamodelfileupload(this.selectedFiles, this.getAUID, this.selectedUniqueID, this.userId).subscribe({
-            next: (_res:any) => { 
+            next: (_res: any) => {
               // debugger;
 
               this.toastr.success("File uploaded Successfully.");
@@ -394,7 +394,7 @@ export class SendRequestComponent implements OnInit {
               this.check = true;
 
             },
-            error: (error:any) => {
+            error: (error: any) => {
               console.error('API call error:', error);
               this.SpinnerService.hide('spinner');
               this.toastr.error("File Not uploaded.");
@@ -423,7 +423,7 @@ export class SendRequestComponent implements OnInit {
 
 
         },
-        error: (error:any) => {
+        error: (error: any) => {
           console.error('API call error:', error);
           this.SpinnerService.hide('spinner');
           this.toastr.error("Excel data Not uploaded.");
@@ -812,7 +812,7 @@ export class SendRequestComponent implements OnInit {
 
     if (confirm("Are you sure want to start Bulk Upload")) {
       if (this.modelTypesID == 2) {
-       
+
         try {
           this.SpinnerService.show('spinner');
           const response: any = await this.fileUploadService.yellowbulkupload(this.userId, this.modelTypesID).toPromise();
@@ -836,7 +836,7 @@ export class SendRequestComponent implements OnInit {
         }
       }
       else if (this.modelTypesID == 5) {
-       
+
         try {
           this.SpinnerService.show('spinner');
           const response: any = await this.fileUploadService.chinabulkupload(this.userId, this.modelTypesID).toPromise();
@@ -932,7 +932,7 @@ export class SendRequestComponent implements OnInit {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       if (fileType === 'pdf' || fileType === 'excel' || fileType === 'image') {
-        if (fileType === 'excel' && (this.modelTypesID == 2 || this.modelTypesID == 5 )) {
+        if (fileType === 'excel' && (this.modelTypesID == 2 || this.modelTypesID == 5)) {
           const file = event.target.files[0];
           if (file) {
             const reader = new FileReader();
@@ -952,17 +952,16 @@ export class SendRequestComponent implements OnInit {
             reader.readAsArrayBuffer(file);
           }
         }
-        else
-        {
-          
-            this.enableupload = true;
-          
+        else {
+
+          this.enableupload = true;
+
         }
         this.selectedFiles.push(file);
-        
-        
+        this.enableupload = true;
+
       }
-      
+
     }
   }
 
@@ -991,10 +990,10 @@ export class SendRequestComponent implements OnInit {
     Rejection: 0.00,
     TotalNonManufacturingCosts: 0.00,
     TotalCost: 0.00,
-    Length: 0.00,
-    Width: 0.00,
-    Height: 0.00,
-    Weight: 0.00,
+    Length: 0.00 as number | null,
+    Width: 0.00 as number | null,
+    Height: 0.00 as number | null,
+    Weight: 0.00 as number | null,
     AddInfo: ""
   };
 
@@ -1022,10 +1021,10 @@ export class SendRequestComponent implements OnInit {
     Rejection: 0.00,
     TotalNonManufacturingCosts: 0.00,
     TotalCost: 0.00,
-    Length: 0.00,
-    Width: 0.00,
-    Height: 0.00,
-    Weight: 0.00,
+    Length: 0.00 as number | null,
+    Width: 0.00 as number | null,
+    Height: 0.00 as number | null,
+    Weight: 0.00 as number | null,
     AddInfo: "",
     DirectMatCostT2: 0.00,
     BoughtOutFinishCostT2: 0.00,
@@ -1078,61 +1077,113 @@ export class SendRequestComponent implements OnInit {
           Rejection: Number(exceldata[1][19].toFixed(4)),
           TotalNonManufacturingCosts: Number(exceldata[1][20].toFixed(4)),
           TotalCost: Number(exceldata[1][21].toFixed(4)),
-          Length: Number(exceldata[1][22].toFixed(4)),
-          Width: Number(exceldata[1][23].toFixed(4)),
-          Height: Number(exceldata[1][24].toFixed(4)),
-          Weight: Number(exceldata[1][25].toFixed(4)),
+          Length: (exceldata[1][22] === '' || exceldata[1][22] === null || exceldata[1][22] === undefined) ? null : Number(exceldata[1][22].toFixed(4)),
+          Width: (exceldata[1][23] === '' || exceldata[1][23] === null || exceldata[1][23] === undefined) ? null : Number(exceldata[1][23].toFixed(4)),
+          Height: (exceldata[1][24] === '' || exceldata[1][24] === null || exceldata[1][24] === undefined) ? null : Number(exceldata[1][24].toFixed(4)),
+          Weight: (exceldata[1][25] === '' || exceldata[1][25] === null || exceldata[1][25] === undefined) ? null : Number(exceldata[1][25].toFixed(4)),
           AddInfo: exceldata[1][26] || ""
         };
-        this.chinamodeldata = {
-          MMID: exceldata[1][0],
-          CreatedBy: this.userId,
-          CostType: exceldata[1][1],
-          PartNo: exceldata[1][2],
-          PartName: exceldata[1][3],
-          SuppMgfLoc: exceldata[1][4],
-          DirectMatCost: Number(exceldata[1][5].toFixed(4)),
-          BoughtOutFinishCost: Number(exceldata[1][6].toFixed(4)),
-          RoughtPartCost: Number(exceldata[1][7].toFixed(4)),
-          DirectLabourCost: Number(exceldata[1][8].toFixed(4)),
-          ProcessOverheadCost: Number(exceldata[1][9].toFixed(4)),
-          SurfaceTreatmentCost: Number(exceldata[1][10].toFixed(4)),
-          TotalMgfCost: Number(exceldata[1][11].toFixed(4)),
-          SGA: Number(exceldata[1][12].toFixed(4)),
-          Profit: Number(exceldata[1][13].toFixed(4)),
-          Packaging: Number(exceldata[1][14].toFixed(4)),
-          FreightLogistics: Number(exceldata[1][15].toFixed(4)),
-          DirectedBuyCost: Number(exceldata[1][16].toFixed(4)),
-          HandlingCharges: Number(exceldata[1][17].toFixed(4)),
-          ICC: Number(exceldata[1][18].toFixed(4)),
-          Rejection: Number(exceldata[1][19].toFixed(4)),
-          TotalNonManufacturingCosts: Number(exceldata[1][20].toFixed(4)),
-          TotalCost: Number(exceldata[1][21].toFixed(4)),
-          Length: Number(exceldata[1][22].toFixed(4)),
-          Width: Number(exceldata[1][23].toFixed(4)),
-          Height: Number(exceldata[1][24].toFixed(4)),
-          Weight: Number(exceldata[1][25].toFixed(4)),
-          AddInfo: exceldata[1][26] || "",
-          DirectMatCostT2: Number(exceldata[1][27].toFixed(4)),
-          BoughtOutFinishCostT2: Number(exceldata[1][28].toFixed(4)),
-          RoughtPartCostT2: Number(exceldata[1][29].toFixed(4)),
-          DirectLabourCostT2: Number(exceldata[1][30].toFixed(4)),
-          ProcessOverheadCostT2: Number(exceldata[1][31].toFixed(4)),
-          SurfaceTreatmentCostT2: Number(exceldata[1][32].toFixed(4)),
-          TotalMgfCostT2: Number(exceldata[1][33].toFixed(4)),
-          SGAT2: Number(exceldata[1][34].toFixed(4)),
-          ProfitT2: Number(exceldata[1][35].toFixed(4)),
-          PackagingT2: Number(exceldata[1][36].toFixed(4)),
-          FreightLogisticsT2: Number(exceldata[1][37].toFixed(4)),
-          DirectedBuyCostT2: Number(exceldata[1][38].toFixed(4)),
-          HandlingChargesT2: Number(exceldata[1][39].toFixed(4)),
-          ICCT2: Number(exceldata[1][40].toFixed(4)),
-          RejectionT2: Number(exceldata[1][41].toFixed(4)),
-          TotalNonManufacturingCostsT2: Number(exceldata[1][42].toFixed(4)),
-          TotalCostT2: Number(exceldata[1][43].toFixed(4))
-        };
-          this.enableupload = true;
-          
+        if (Number(exceldata[1][7].toFixed(4)) > 0) {
+          this.chinamodeldata = {
+            MMID: exceldata[1][0],
+            CreatedBy: this.userId,
+            CostType: exceldata[1][1],
+            PartNo: exceldata[1][2],
+            PartName: exceldata[1][3],
+            SuppMgfLoc: exceldata[1][4],
+            DirectMatCost: Number(exceldata[1][5].toFixed(4)),
+            BoughtOutFinishCost: Number(exceldata[1][6].toFixed(4)),
+            RoughtPartCost: Number(exceldata[1][7].toFixed(4)),
+            DirectLabourCost: Number(exceldata[1][8].toFixed(4)),
+            ProcessOverheadCost: Number(exceldata[1][9].toFixed(4)),
+            SurfaceTreatmentCost: Number(exceldata[1][10].toFixed(4)),
+            TotalMgfCost: Number(exceldata[1][11].toFixed(4)),
+            SGA: Number(exceldata[1][12].toFixed(4)),
+            Profit: Number(exceldata[1][13].toFixed(4)),
+            Packaging: Number(exceldata[1][14].toFixed(4)),
+            FreightLogistics: Number(exceldata[1][15].toFixed(4)),
+            DirectedBuyCost: Number(exceldata[1][16].toFixed(4)),
+            HandlingCharges: Number(exceldata[1][17].toFixed(4)),
+            ICC: Number(exceldata[1][18].toFixed(4)),
+            Rejection: Number(exceldata[1][19].toFixed(4)),
+            TotalNonManufacturingCosts: Number(exceldata[1][20].toFixed(4)),
+            TotalCost: Number(exceldata[1][21].toFixed(4)),
+            Length: (exceldata[1][22] === '' || exceldata[1][22] === null || exceldata[1][22] === undefined) ? null : Number(exceldata[1][22].toFixed(4)),
+            Width: (exceldata[1][23] === '' || exceldata[1][23] === null || exceldata[1][23] === undefined) ? null : Number(exceldata[1][23].toFixed(4)),
+            Height: (exceldata[1][24] === '' || exceldata[1][24] === null || exceldata[1][24] === undefined) ? null : Number(exceldata[1][24].toFixed(4)),
+            Weight: (exceldata[1][25] === '' || exceldata[1][25] === null || exceldata[1][25] === undefined) ? null : Number(exceldata[1][25].toFixed(4)),
+            AddInfo: exceldata[1][26] || "",
+            DirectMatCostT2: Number(exceldata[1][27].toFixed(4)),
+            BoughtOutFinishCostT2: Number(exceldata[1][28].toFixed(4)),
+            RoughtPartCostT2: Number(exceldata[1][29].toFixed(4)),
+            DirectLabourCostT2: Number(exceldata[1][30].toFixed(4)),
+            ProcessOverheadCostT2: Number(exceldata[1][31].toFixed(4)),
+            SurfaceTreatmentCostT2: Number(exceldata[1][32].toFixed(4)),
+            TotalMgfCostT2: Number(exceldata[1][33].toFixed(4)),
+            SGAT2: Number(exceldata[1][34].toFixed(4)),
+            ProfitT2: Number(exceldata[1][35].toFixed(4)),
+            PackagingT2: Number(exceldata[1][36].toFixed(4)),
+            FreightLogisticsT2: Number(exceldata[1][37].toFixed(4)),
+            DirectedBuyCostT2: Number(exceldata[1][38].toFixed(4)),
+            HandlingChargesT2: Number(exceldata[1][39].toFixed(4)),
+            ICCT2: Number(exceldata[1][40].toFixed(4)),
+            RejectionT2: Number(exceldata[1][41].toFixed(4)),
+            TotalNonManufacturingCostsT2: Number(exceldata[1][42].toFixed(4)),
+            TotalCostT2: Number(exceldata[1][43].toFixed(4))
+          };
+        }
+        else {
+          this.chinamodeldata = {
+            MMID: exceldata[1][0],
+            CreatedBy: this.userId,
+            CostType: exceldata[1][1],
+            PartNo: exceldata[1][2],
+            PartName: exceldata[1][3],
+            SuppMgfLoc: exceldata[1][4],
+            DirectMatCost: Number(exceldata[1][5].toFixed(4)),
+            BoughtOutFinishCost: Number(exceldata[1][6].toFixed(4)),
+            RoughtPartCost: Number(exceldata[1][7].toFixed(4)),
+            DirectLabourCost: Number(exceldata[1][8].toFixed(4)),
+            ProcessOverheadCost: Number(exceldata[1][9].toFixed(4)),
+            SurfaceTreatmentCost: Number(exceldata[1][10].toFixed(4)),
+            TotalMgfCost: Number(exceldata[1][11].toFixed(4)),
+            SGA: Number(exceldata[1][12].toFixed(4)),
+            Profit: Number(exceldata[1][13].toFixed(4)),
+            Packaging: Number(exceldata[1][14].toFixed(4)),
+            FreightLogistics: Number(exceldata[1][15].toFixed(4)),
+            DirectedBuyCost: Number(exceldata[1][16].toFixed(4)),
+            HandlingCharges: Number(exceldata[1][17].toFixed(4)),
+            ICC: Number(exceldata[1][18].toFixed(4)),
+            Rejection: Number(exceldata[1][19].toFixed(4)),
+            TotalNonManufacturingCosts: Number(exceldata[1][20].toFixed(4)),
+            TotalCost: Number(exceldata[1][21].toFixed(4)),
+            Length: (exceldata[1][22] === '' || exceldata[1][22] === null || exceldata[1][22] === undefined) ? null : Number(exceldata[1][22].toFixed(4)),
+            Width: (exceldata[1][23] === '' || exceldata[1][23] === null || exceldata[1][23] === undefined) ? null : Number(exceldata[1][23].toFixed(4)),
+            Height: (exceldata[1][24] === '' || exceldata[1][24] === null || exceldata[1][24] === undefined) ? null : Number(exceldata[1][24].toFixed(4)),
+            Weight: (exceldata[1][25] === '' || exceldata[1][25] === null || exceldata[1][25] === undefined) ? null : Number(exceldata[1][25].toFixed(4)),
+            AddInfo: exceldata[1][26] || "",
+            DirectMatCostT2: 0,
+            BoughtOutFinishCostT2: 0,
+            RoughtPartCostT2: 0,
+            DirectLabourCostT2: 0,
+            ProcessOverheadCostT2: 0,
+            SurfaceTreatmentCostT2: 0,
+            TotalMgfCostT2: 0,
+            SGAT2: 0,
+            ProfitT2: 0,
+            PackagingT2: 0,
+            FreightLogisticsT2: 0,
+            DirectedBuyCostT2: 0,
+            HandlingChargesT2: 0,
+            ICCT2: 0,
+            RejectionT2: 0,
+            TotalNonManufacturingCostsT2: 0,
+            TotalCostT2: 0
+          };
+        }
+
+        this.enableupload = true;
+
       } else {
         this.validationMessage = 'ModelMart ID Not Matched';
         alert("ModelMart ID Not Matched");

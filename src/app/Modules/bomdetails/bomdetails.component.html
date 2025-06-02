@@ -5,10 +5,10 @@
     </ngx-spinner>
 
     <div class="MasterHeader">
-        <div style="width: 50%;">
-            <h2>BOM Simulation Screen</h2>
+        <div style="width: 65%;">
+            <h2>Bill of Material (BoM) Simulation Module</h2>
         </div>
-        <div class="text-end" style="width: 50%;">
+        <div class="text-end" style="width: 35%;">
             <button class="btnbackLeft" (click)="backToPreviousPage()">Back</button>
         </div>
     </div>
@@ -16,7 +16,7 @@
     <div class="text-end addbutton">
         <button class="btnCreateCart" (click)="Downloadtemplate()">Download Template</button>
         <button class="btnCreateCart" (click)="openModal1()" >Add Program</button>
-        <button class="btnCreateCart" (click)="openModal2()" >Add Cart</button>
+        <button class="btnCreateCart" (click)="openModal2()" >Add Simulation</button>
 
     </div>
 
@@ -38,8 +38,9 @@
 
                                 <div class="program-name">
                                     {{ data.programname }}
+                                    <i class="bi-trash-fill pull-left" style="color: #da291c; font-size: 14px; cursor: pointer;padding-left: 22%;" ngbTooltip="Delete Program" (click)="openprogram(data.programid)"></i>
                                 </div>
-
+                                
                                 <div class="program-owner">
                                     <i class="fa fa-user"></i>
                                     Owner: {{data.owner }}
@@ -140,7 +141,7 @@
 
     <div *ngIf="modalcart" class="modal-overlay">
         <div class="modal-content">
-            <h3 style="background-color: #da291c; color: whitesmoke; margin: 0; padding-bottom: 10px;">Add New Cart</h3>
+            <h3 style="background-color: #da291c; color: whitesmoke; margin: 0; padding-bottom: 10px;">Add New Simulation</h3>
 
             <ng-select style="width: 90%; margin-left: 20px; margin-top: 12px;" placeholder="Select Program"
                 (change)="selectprogram($event)">
@@ -181,6 +182,26 @@
             <div class="modal-buttons">
                 <button (click)="closecopycart()" class="modalbtn">Close</button>
                 <button class="modalbtn" (click)="copycart()">Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="programdelete" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="background-color: #da291c; color: whitesmoke; margin: 0; padding-bottom: 10px;">Delete Program</h3>
+
+            <div class="copycart-label-container">
+                <div style="width: 100%;">
+                    <label class="copycart-label">Are you sure you want to delete program</label>
+                    
+                </div>
+
+                
+            </div>
+
+            <div class="modal-buttons">
+                <button (click)="closeprogrammodel()" class="modalbtn">Close</button>
+                <button class="modalbtn" (click)="confirm()">Confirm</button>
             </div>
         </div>
     </div>

@@ -34,11 +34,11 @@ export class ComparisonnewComponent implements OnInit {
   data: any[] = [];
   userId: any;
   NA: any = "NA*";
-  suppshouldcost:any[]=[];
+  suppshouldcost: any[] = [];
 
   shouldCostBreakdownList: any;
   shouldCostBreakdownNonList: any;
-  showChild = false; 
+  showChild = false;
 
   Manu_TotalInUSD: number = 0;
   TotalInUSD: number = 0;
@@ -56,7 +56,7 @@ export class ComparisonnewComponent implements OnInit {
       this.router.navigate(['/maintenance']);
       return;
     }
-    
+
     this.SpinnerService.show('spinner');
 
     this.userId = localStorage.getItem("userId");
@@ -88,6 +88,7 @@ export class ComparisonnewComponent implements OnInit {
   material_Main: any;
   material_Detailed: any;
   compardataSupplier: any;
+  TechnicalParameter: any;
 
   isExpand = true;
   isExpandTier2 = false;
@@ -99,9 +100,12 @@ export class ComparisonnewComponent implements OnInit {
   ComparePartCount: any;
   Hidematerial_Detailedtable3 = true;
   Hidematerial_Detailedtable4 = true;
+  IsTechnicalParameter =  true;
 
+  
   async GetData() {
     debugger;
+    this.TechnicalParameter = [];
     const data = await this.searchservice.getComparisonDataNew(this.compare_Ids).toPromise();
     this.partDetails = data.partDetails;
     this.ComparePartCount = data.partDetails.length;
@@ -116,6 +120,8 @@ export class ComparisonnewComponent implements OnInit {
     this.CommericalDetailsShouldCostTier2 = data.commericalDetailsShouldCostTier2;
     this.material_Main = data.material_Main;
     this.material_Detailed = data.material_Detailed;
+    debugger
+    this.TechnicalParameter = data.technicalParameter;
 
     if (data.partDetails.length == 3) {
       this.Hidematerial_Detailedtable3 = false;
@@ -636,7 +642,7 @@ export class ComparisonnewComponent implements OnInit {
   getsuppComparison(e: string) {
     debugger;
     var colindex: number;
-    const ShouldCost: any[][] = (this.CommericalDetailsShouldCost as any[]).map(item => [item.id,item.particular, item.details1,
+    const ShouldCost: any[][] = (this.CommericalDetailsShouldCost as any[]).map(item => [item.id, item.particular, item.details1,
     item.details2, item.details3, item.details4]);
     for (let i = 2; i <= 5; i++) {
       if (ShouldCost?.[0]?.[i] != undefined) {
@@ -648,7 +654,7 @@ export class ComparisonnewComponent implements OnInit {
 
     this.suppshouldcost = ShouldCost.map((obj: { [s: string]: unknown; } | ArrayLike<unknown>) => {
       const values = Object.values(obj);
-      return { Id: values[0],particular: values[1], value: values[colindex] };  // Index-based mapping
+      return { Id: values[0], particular: values[1], value: values[colindex] };  // Index-based mapping
     });
     console.log("array", this.suppshouldcost);
     localStorage.setItem("suppcomshouldcost", JSON.stringify(this.suppshouldcost));
