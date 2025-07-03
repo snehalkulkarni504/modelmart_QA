@@ -4,6 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
+// import { writeFileXLSX } from 'xlsx';
 import { SearchService } from 'src/app/SharedServices/search.service';
 import Swal from 'sweetalert2';
 import { AdminService } from 'src/app/SharedServices/admin.service';
@@ -19,18 +20,24 @@ import { CommericalArbitrage } from 'src/app/Model/CommericalArbitrage';
 import { RegionalArbitrage } from 'src/app/Model/RegionalArbitrage';
 import { GetMgfProcessArtibage } from 'src/app/Model/GetMgfProcessArtibage';
 import { TcoUploadComponent } from '../Request/tco-upload/tco-upload.component';
+import { utils, writeFileXLSX } from 'xlsx';
+import { SearchPipe } from "../../pipe/search.pipe";
+
+
 
 @Component({
   // standalone : true,
   selector: 'app-cost-reduction',
   templateUrl: './cost-reduction.component.html',
   styleUrls: ['./cost-reduction.component.css'],
+
   // imports:[CommonModule,NgbModule,],
 })
 
 export class CostReductionComponent implements OnInit {
 
   editingIndex: number | null = null;
+  commericaltp: any;
 
   editingIndexRegional: number | null = null;
   showModal: any;
@@ -62,9 +69,13 @@ export class CostReductionComponent implements OnInit {
   selectedRange_regional: string = "";
   datefilter!: FormGroup
   isEditing = false;
+  textsearch: string = '';
+  filterMetadata = { count: 0 };
+  page: number = 1;
+  pageSize: number = 25;
 
-
-
+  totalAttainment: any;
+  totaluserAttainment: any;
   totalVariation: any;
   data1: any = [];
   selectedCategoryIds: number[] = [];
@@ -82,22 +93,22 @@ export class CostReductionComponent implements OnInit {
     hasCollapseExpand: false,
     decoupleChildFromParent: false,
   });
+
+
   availableYears: number[] = [];
   selectedYear: string = '';
   chart: any;
-
-
+  calculatedPercentages: any[] = [];
 
   constructor(public router: Router,
     private cdr: ChangeDetectorRef,
     private AdminService: AdminService,
     private toastr: ToastrService,
     private actroute: ActivatedRoute,
-    private SpinnerService: NgxSpinnerService, 
+    private SpinnerService: NgxSpinnerService,
     private Searchservice: SearchService) {
 
   }
-
   activeButton: string = '';
   showRegionalContent = false;
   showContent: boolean = false;
@@ -156,10 +167,13 @@ export class CostReductionComponent implements OnInit {
     axisY: {
 
       title: "Commerical Arbitrage",
-      labelFontSize: 10,
-      showInLegend: true,
-      indexLabelFontColor: "#000",
-      interval: 1000000,
+      // labelFontSize: 10,
+      // showInLegend: true,
+      // indexLabelFontColor: "#000",
+      // // interval: 1000000,
+      labelFormatter: function (e: any) {
+        return (e.value / 1000000).toFixed(1) + "M$";
+      }
     },
     dataPointWidth: 20,
     data: [
@@ -171,6 +185,7 @@ export class CostReductionComponent implements OnInit {
         name: "Commercial Arbitrage",
         showInLegend: true,
         dataPoints: [] as { label: string; y: any }[],
+
       },
       {
         type: "column",
@@ -188,55 +203,94 @@ export class CostReductionComponent implements OnInit {
 
   async GetCommericalArtibage() {
     debugger
+    try{
 
     const categoryID = this.test;
-    this.opportunities=[];
-    this.AdminService.GetCommericalArtibage(categoryID).subscribe(
-      (response) => {
-        debugger
-        this.data = response;
-        this.opportunities = this.data;
+    this.opportunities = [];
+    this.orginalopportunities = [];
 
-        this.opportunities.forEach(opportunity => {
-          if (!opportunity.ProjectStatus) {
-            opportunity.ProjectStatus = 'Open'; // Default to "Open" if no value exists
-          }
-          opportunity.UserSimulatedArbitrage = Number(opportunity.UserSimulatedArbitrage) || 0; // Convert to number
-          opportunity.CommercialArbitrage = Number(opportunity.CommercialArbitrage) || 0;
-        });
-        // Process the data for chart
-        this.chartOptions.data[0].dataPoints = this.opportunities.map(opportunity => ({
-          label: opportunity.PartNumber,
-          y: opportunity.CommercialArbitrage,
-        }));
-        this.chartOptions.data[1].dataPoints = this.opportunities.map(opportunity => ({
-          label: opportunity.PartNumber,
-          y: opportunity.UserSimulatedArbitrage,
-        }));
-        this.gettotaloppurtunity();
-        this.getGraphstyle();
+    const Commerical_data = await this.AdminService.GetCommericalArtibage(categoryID).toPromise();
 
+    // this.AdminService.GetCommericalArtibage(categoryID).subscribe(
+    //   (response) => {
+    //     debugger
+    this.data = Commerical_data;
+    this.opportunities = this.data;
+    this.orginalopportunities = this.data;
 
-      },
-      (error) => {
-        console.error('Error fetching data:', error);
+    this.opportunities.forEach(opportunity => {
+      if (!opportunity.ProjectStatus) {
+        opportunity.ProjectStatus = 'Open'; // Default to "Open" if no value exists
       }
-    );
+      opportunity.UserSimulatedArbitrage = Number(opportunity.UserSimulatedArbitrage) || 0; // Convert to number
+      opportunity.CommercialArbitrage = Number(opportunity.CommercialArbitrage) || 0;
+    });
+    // Process the data for chart
+    debugger;
+    this.chartOptions.data[0].dataPoints = this.opportunities.map(opportunity => ({
+
+      label: opportunity.PartNumber,
+      y: opportunity.CommercialArbitrage,
+    }));
+    this.chartOptions.data[1].dataPoints = this.opportunities.map(opportunity => ({
+      label: opportunity.PartNumber,
+      y: opportunity.UserSimulatedArbitrage,
+    }));
+    this.gettotaloppurtunity();
+    this.getGraphstyle();
 
   }
-  getGraphstyle() {
+    catch (error) {
+      console.error("Error in GetCommericalArtibage():", error);
+      alert("Failed to fetch Commercial Arbitrage data. Please try again later.");
+    }
+  }
 
+
+  getGraphstyle() {
     const baseBarWidth = 50; // pixels per bar
     const minWidth = '100%';
-
     if (!this.data || this.data.length <= 20) {
       return { height: '375px', width: minWidth };
     }
-
     return {
       height: '375px',
       width: `${this.data.length * baseBarWidth}px`
     };
+  }
+
+  exportToExcel(): void {
+    const exportData = this.opportunities.map((opp, index) => ({
+      'Sr No': index + 1,
+      'Part Number': opp.PartNumber,
+      'Part Name': opp.PartName,
+      'MMID': opp.MMID,
+      'Supplier Name': opp.SupplierName,
+      'Supp Mfg Location': opp.SupplierMfgRegion,
+      'Annual Volume': opp.AnnualVolume,
+      'Updated Annual Volume': opp.UpdatedAnnualVolume,
+      'Should Cost': opp.ShouldCost,
+      'User Simulated Cost': opp.UserCalculatedCost,
+      'Supplier Quoted/Invoice Price': opp.SupplierQuoted,
+      'Delta Should Cost - Invoice Price': opp.InvoicePriceShouldCost,
+      'SC Attainment': this.RoundSCAttainment(opp),
+      'User SC Attainment': this.calculatePercentage(opp),
+      'Commercial Arbitrage': this.formatToMillions(opp.CommercialArbitrage),
+      'User Simulated Arbitrage': this.formatToMillions(this.calculateOpportunityValue(opp)),
+      'Submitted By': opp.ModifiedBy,
+      'Project Status': opp.ProjectStatus,
+      'Debrief Date': opp.DebriefDate,
+      'Comments': opp.Comments,
+    }));
+    const worksheet = utils.json_to_sheet(exportData);
+    worksheet['A1'].s = {
+      font: { bold: true, color: { rgb: 'FFFFFF' } },
+      fill: { fgColor: { rgb: '4F81BD' } }
+    };
+
+    const workbook = utils.book_new();
+    utils.book_append_sheet(workbook, worksheet, 'Opportunities');
+    writeFileXLSX(workbook, `CommericalArbitrage_${new Date().toISOString().slice(0, 10)}.xlsx`);
   }
 
 
@@ -247,14 +301,12 @@ export class CostReductionComponent implements OnInit {
       this.opportunities = this.data;
       for (let i = 0; i < this.opportunities.length; i++) {
         const opportunity = this.opportunities[i];
- 
+
         try {
           const debriefDate = opportunity.DebriefDate;
- 
+
           if (
-            debriefDate >= this.fromDate &&
-            debriefDate <= this.toDate
-          ) {
+            debriefDate >= this.fromDate && debriefDate <= this.toDate) {
             filteredData.push(opportunity);
           }
         } catch (error) {
@@ -263,26 +315,26 @@ export class CostReductionComponent implements OnInit {
       }
       this.filteredData = filteredData;
       this.opportunities = this.filteredData;
- 
+
       // Update chart data points based on filtered data
       this.chartOptions = { ...this.chartOptions };
- 
+
       this.chartOptions.data[0].dataPoints = this.filteredData.map(opportunity => ({
         label: opportunity.PartNumber,
         y: opportunity.CommercialArbitrage,
       }));
- 
+
       this.chartOptions.data[1].dataPoints = this.filteredData.map(opportunity => ({
         label: opportunity.PartNumber,
         y: opportunity.UserSimulatedArbitrage,
       }));
- 
+
       console.log('Updated Chart Data:', this.chartOptions);
     } else {
       console.error('Invalid Date Range');
- 
+
     }
- 
+
   }
 
   onDateRangeChange(): void {
@@ -299,14 +351,13 @@ export class CostReductionComponent implements OnInit {
       case "12":
         fromDate = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
         break;
-        // case "24":
-        //   fromDate = new Date(today.getFullYear() - 2, today.getMonth(), today.getDate());
-        //   break;
+      // case "24":
+      //   fromDate = new Date(today.getFullYear() - 2, today.getMonth(), today.getDate());
+      //   break;
       default:
         fromDate = null;
         break;
     }
-
     // Update the bound variables
     if (fromDate) {
       this.fromDate = fromDate.toISOString().split('T')[0]; // Format 'From Date' as 'YYYY-MM-DD'
@@ -316,9 +367,6 @@ export class CostReductionComponent implements OnInit {
       this.toDate = null;
     }
   }
- 
-
-
 
 
   ClearAll(): void {
@@ -327,7 +375,6 @@ export class CostReductionComponent implements OnInit {
     this.toDate = null;      // Clear 'To Date'
     this.filteredData = [];
     this.opportunities = this.data;
-
     // Process the data for chart
     this.chartOptions = { ...this.chartOptions };
 
@@ -347,53 +394,62 @@ export class CostReductionComponent implements OnInit {
 
   }
 
-
-
-
   hidename() {
-    //debugger
     const r = document.getElementById("chartOptionsId") as any;
     r.getElementsByClassName('canvasjs-chart-credit')[0].style.display = "none";
   }
 
+  backToCat3() {
+    this.showCat3Management = true;
+    this.showcostinsights = false;
+    this.showContent = false;
+    this.showRegionalContent = false;
+    this.showmgfprocess = false;
+    this.showdesign = false;
+    this.selectedCategoryIds = [];
+    this.test = [];
+    this.CategoryID = null
+    this.activeButton = '';
+    this.totalVariation = null;
+    this.totalAttainment = null;
+    this.totaluserAttainment = null;
+    this.selectAllText = 'Select All';
+
+  }
 
   async setActiveButton(buttonName: string) {
-
-    debugger
+    this.SpinnerService.show('spinner');
     this.activeButton = buttonName;
-   
     // Reset visibility for all sections
     this.showContent = buttonName === 'commercial';
     this.showRegionalContent = buttonName === 'regional';
     this.showmgfprocess = buttonName === 'manufacturing';
     this.showdesign = buttonName === 'design';
-
+    
     switch (this.activeButton) {
-
-      // case 'commercial':
-      //   this.totalVariation = this.gettotaloppurtunity();
       case 'regional':
         this.totalVariation = this.getTotalRegionalOppurtunity();
+        this.totalAttainment = this.RegionalSCAttainment();
         break;
       case 'manufacturing':
         this.totalVariation = this.getTotalMfgOppurtunity();
+        this.totalAttainment = this.ManufacturingSCAttainment();
         break;
       case 'design':
         this.totalVariation = this.gettotaloppurtunity();
+        this.totalAttainment = this.RegionalSCAttainment();
         break;
-      // case 'commercial':
-      //        this.totalVariation = this.gettotaloppurtunity();
       default:
-          this.totalVariation = this.gettotaloppurtunity();
+        this.totalVariation = this.gettotaloppurtunity();
+        this.totalAttainment = this.calculateWeightedSCAttainment();
+        this.totaluserAttainment = this.calculateWeightedUserSCAttainment();
     }
 
     setTimeout(() => {
-      debugger
-
       this.hidename();
     }, 200);
-   
 
+    this.SpinnerService.hide('spinner');
   }
 
   editRow(index: number) {
@@ -401,17 +457,23 @@ export class CostReductionComponent implements OnInit {
     this.editingIndex = index; // Enable edit mode for the selected row
   }
 
-  saveChanges(opportunity: CommericalArbitrage) {
-    //debugger;
-    // Default values for nullable columns
+  async saveChanges(opportunity: CommericalArbitrage) {
     if (!opportunity.UserSimulatedCostAttainment) {
       opportunity.UserSimulatedCostAttainment = "0"; // Default simulated cost attainment value
     }
     if (!opportunity.CommercialArbitrage) {
       opportunity.CommercialArbitrage = "0"; // Default arbitrage value
     }
+    opportunity.UserSimulatedCostAttainment = this.calculatePercentage(opportunity)
     opportunity.UserSimulatedArbitrage = this.calculateOpportunityValue(opportunity) || "0.00";
     opportunity.ModifiedBy = (localStorage.getItem("userFullName"))
+
+    const attainmentValue = parseFloat(opportunity.UserSimulatedCostAttainment);
+    if (attainmentValue > 100) {
+      console.error('UserSimulatedCostAttainment cannot exceed 100%.');
+      this.toastr.error('User Simulated Cost Attainment cannot exceed 100%', 'Validation Error');
+      return; // Prevent saving
+    }
 
     // Default CommercialArtibageID to 0 if null or undefined
     if (!opportunity.CommericalArtibageID) {
@@ -422,22 +484,40 @@ export class CostReductionComponent implements OnInit {
 
     this.AdminService.SaveCommericalArtibage(opportunity).subscribe({
       next: (response) => {
-        console.log('Opportunity saved successfully:', response);
+        console.log('Record saved successfully:', response);
         this.editingIndex = null; // Exit edit mode
-        this.GetCommericalArtibage();
-        this.chartOptions;
+        this.opportunities = this.data;
+        this.toastr.success('Opportunity saved successfully');
+
+        // this.chartOptions.data[1].dataPoints = this.opportunities.map(opportunity => ({
+        //   label: opportunity.PartNumber,
+        //   y: opportunity.UserSimulatedArbitrage,
+        // }));
+
+        setTimeout(async () => {
+          debugger
+          await this.GetCommericalArtibage();
+          this.totaluserAttainment = this.calculateWeightedUserSCAttainment();
+          this.chartOptions = { ...this.chartOptions };
+
+
+        }, 500);
       },
       error: (error) => {
         console.error('Error saving opportunity:', error);
+        this.toastr.error('Error while Saving Record');
       }
+
     });
+   
+
   }
 
 
   cancelEditing() {
     this.editingIndex = null; // Cancel edit mode without saving
   }
- 
+
 
   openCommentsPopup(comment: string, index: number): void {
     this.showModal = true;
@@ -450,26 +530,72 @@ export class CostReductionComponent implements OnInit {
 
   }
 
-  // saveComment(): void {
-  //   if (this.editingIndex !== null && this.editingIndex >= 0) {
-  //     this.opportunities[this.editingIndex].Comments = this.selectedComment;
-  //   }
-  //   this.closeCommentsPopup();
+
+  // CommericalSCAttainment(): string {
+
+  //   let totalShouldCost = 0;
+  //   let totalSupplierQuoted = 0;
+
+  //   this.orginalopportunities.forEach((opportunity: { ShouldCost: any; SupplierQuoted: any }) => {
+  //     totalShouldCost += opportunity.ShouldCost || 0;
+  //     totalSupplierQuoted += Number(opportunity.SupplierQuoted) || 0;
+  //   });
+  //   let percentage = (totalShouldCost / totalSupplierQuoted) * 100;
+  //   return percentage.toFixed(2) + '%';
   // }
 
-  // getRoundedAttainment(opportunity: any): string {
-  //   if (!this.opportunity.SCAttainment){
-  //     return '';
 
-  //   } 
-  //   const roundedValue = Math.round(Number(this.opportunity.SCAttainment));
-  //   return `${roundedValue}%`;
-  // }
+
+  calculateWeightedSCAttainment(): string {
+    let totalWeightedSCAttainment = 0;
+    let totalSupplierQuoted = 0;
+
+    this.orginalopportunities.forEach((opportunity: { SupplierQuoted: any; SCAttainment: any }) => {
+      const quoted = Number(opportunity.SupplierQuoted) || 0;
+      const scAttain = Number(opportunity.SCAttainment) || 0;
+
+      totalWeightedSCAttainment += quoted * (scAttain / 100);
+      totalSupplierQuoted += quoted;
+    });
+
+    const result = totalSupplierQuoted > 0
+      ? (totalWeightedSCAttainment / totalSupplierQuoted) * 100
+      : 0;
+
+    return result.toFixed(2) + '%';
+  }
+
+  calculateWeightedUserSCAttainment(): string {
+    let totalWeightedSCAttainment = 0;
+    let totalSupplierQuoted = 0;
+
+    this.orginalopportunities.forEach((opportunity: any) => {
+      const quoted = Number(opportunity.SupplierQuoted) || 0;
+      const cost = Number(opportunity.UserCalculatedCost) || 0;
+
+      let percentage = 0;
+      if (quoted > 0 && cost > 0) {
+        percentage = (cost / quoted) * 100;
+      }
+
+      totalWeightedSCAttainment += quoted * (percentage / 100);
+      totalSupplierQuoted += quoted;
+    });
+
+    const result = totalSupplierQuoted > 0
+      ? (totalWeightedSCAttainment / totalSupplierQuoted) * 100
+      : 0;
+
+    return result.toFixed(2) + '%';
+  }
+
+
+
 
   RoundSCAttainment(opportunity: any): string {
     if (opportunity.SCAttainment) {
       const roundedValue = (Math.round(Number(opportunity.SCAttainment)));
-    return `${roundedValue}%`;
+      return `${roundedValue}%`;
     }
     return ''; // Return an empty string if conditions are not met
   }
@@ -480,27 +606,25 @@ export class CostReductionComponent implements OnInit {
       event.target.value = value.slice(0, -1);
     }
   }
-  
+
 
 
   gettotaloppurtunity(): string {
-    debugger
-    
     let total = 0;
     // Iterate over the opportunities array and sum up the UserCalculatedCost values
-    this.opportunities.forEach((opportunity: { CommercialArbitrage: any; }) => {
+    this.orginalopportunities.forEach((opportunity: { CommercialArbitrage: any; }) => {
       total += opportunity.CommercialArbitrage || 0;
     });
     return `$${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
   }
+
 
   calculatePercentage(opportunity: any): string {
     if (opportunity.SupplierQuoted && opportunity.UserCalculatedCost > 0 && opportunity.SupplierQuoted > 0) {
       const percentage = ((opportunity.UserCalculatedCost / (opportunity.SupplierQuoted) * 100))
-      return Math.round(percentage) + '%'; 
+      return Math.round(percentage) + '%';
     }
-    return ''; 
+    return '';
   }
 
 
@@ -515,7 +639,7 @@ export class CostReductionComponent implements OnInit {
 
   formatToMillions(value: any): string {
     if (value > 0) {
-      return (value / 1000000).toFixed(2) + 'M';
+      return (value / 1000000).toFixed(2) + ' M$';
     }
     return value.toString();
   }
@@ -524,8 +648,6 @@ export class CostReductionComponent implements OnInit {
     this.selectedUniqueId = MMID;
     this.selectedRequestId = RequestHeaderId;
 
-
-    //debugger
     const result = await Swal.fire({
       title: 'TCO Upload is opening. Do you want to proceed?',
       showCancelButton: true,
@@ -538,13 +660,12 @@ export class CostReductionComponent implements OnInit {
       },
     });
 
-
     if (result.isConfirmed) {
       debugger
       // const UniqueId = this.selectedUniqueId;
       // const RequestId = this.selectedRequestId;
-      const encryptedUniqueId = btoa(this.selectedUniqueId); 
-      const encryptedRequestId = btoa(this.selectedRequestId); 
+      const encryptedUniqueId = btoa(this.selectedUniqueId);
+      const encryptedRequestId = btoa(this.selectedRequestId);
       this.router.navigate(['/home/tcoupload'], {
         queryParams: {
           UniqueId: encryptedUniqueId,
@@ -559,32 +680,25 @@ export class CostReductionComponent implements OnInit {
     this.showFileUpload = false;
     this.showTcoUploadModal = false;
   }
- 
 
-getSelectedPartsString(): string {
-  return this.SearchProductList
-    .filter((p: { selected: any; }) => p.selected)
-    .map((item: { childCategory: any; }) => item.childCategory)
-    .join(', ');
-}
-
-
+  getSelectedPartsString(): string {
+    // debugger;
+    return this.SearchProductList
+      .filter((p: { selected: any; }) => p.selected)
+      .map((item: { childCategory: any; }) => item.childCategory)
+      .join(', ');
+  }
 
   openUploadPopup(CommericalArtibageID: any, MMID: any, RequestHeaderId: any): void {
 
-    //debugger
     this.selectedCommercialID = CommericalArtibageID;
     this.selectedUniqueId = MMID;
     this.selectedRequestId = RequestHeaderId;
-
     this.showTcoUploadModal = true;
 
   }
 
-
-
   handleFileSelection(event: any): void {
-    //debugger
     const files: FileList = event.target.files; // Get selected files
     this.selectedFiles = []; // Clear previous selections
 
@@ -606,15 +720,19 @@ getSelectedPartsString(): string {
         next: (response) => {
           console.log('Files uploaded successfully:', response);
           alert('Files uploaded successfully!');
+          this.toastr.success('Files uploaded successfully!');
           this.selectedFiles = []; // Clear selected files after upload
         },
         error: (error) => {
           console.error('File upload failed:', error);
           alert('File upload failed!');
+          this.toastr.error('File upload Failed');
+
         },
       });
     } else {
       alert('Please select files to upload.');
+      this.toastr.warning('please select files to upload');
     }
   }
 
@@ -629,9 +747,11 @@ getSelectedPartsString(): string {
         anchor.download = `${CommericalArtibageID}.zip`; // Name the ZIP file with the commercial ID
         anchor.click();
         window.URL.revokeObjectURL(url); // Clean up the URL
+        this.toastr.success('File downloaded sucessfully')
       },
       (error) => {
         console.error('Error downloading ZIP file:', error);
+        this.toastr.error('Error downloading ZIP file');
       }
     );
   }
@@ -656,24 +776,27 @@ getSelectedPartsString(): string {
   }
 
 
-
   selectAll(): void {
-    //debugger
-    const allSelected = this.SearchProductList.every((group: { selected: boolean; }) => group.selected);
-    this.SearchProductList.forEach((group: { selected: boolean; }) => group.selected = !allSelected);
+    const allSelected = this.SearchProductList.every((group: { selected: boolean }) => group.selected);
+
+    this.SearchProductList.forEach((group: { selected: boolean }) => {
+      group.selected = !allSelected;
+    });
 
     if (!allSelected) {
-      this.selectedCategoryIds = this.SearchProductList.map((group: { categoryId: any; }) => group.categoryId);
+      this.selectedCategoryIds = this.SearchProductList.map((group: { categoryId: any }) => group.categoryId);
+      this.selectAllText = 'Unselect All';
     } else {
       this.selectedCategoryIds = [];
+      this.selectAllText = 'Select All';
     }
-    this.test = this.selectedCategoryIds
+
+    this.test = this.selectedCategoryIds;
   }
 
 
-  onCheckboxChange(item: any) {
-    //debugger;
 
+  onCheckboxChange(item: any) {
     if (item.selected) {
       if (!this.selectedCategoryIds.includes(item.categoryId)) {
         this.selectedCategoryIds.push(item.categoryId);
@@ -682,17 +805,17 @@ getSelectedPartsString(): string {
       this.selectedCategoryIds = this.selectedCategoryIds.filter(id => id !== item.categoryId);
     }
     this.test = this.selectedCategoryIds
+
   }
 
 
   navigateToCostInsight(CategoryID: number) {
-    //debugger;
     this.router.navigate(['/home/costinsights1', CategoryID]);
   }
 
 
   getCategoryId(e: any) {
-    //debugger
+    debugger
     const cat3 = document.getElementsByClassName("Cat3Checkbox") as any;
     var param_value = "";
 
@@ -708,6 +831,7 @@ getSelectedPartsString(): string {
     }
 
     this.ShowLandingPage(1, param_value);
+    this.selectAllText = 'Select All';
   }
 
 
@@ -717,30 +841,31 @@ getSelectedPartsString(): string {
     }
 
     this.ShowLandingPage(0, "0");
+    this.selectAllText = 'Select All';
+
   }
 
 
-  toggleView() {
+  async toggleView() {
     debugger;
+    this.SpinnerService.show('spinner');
     this.showcostinsights = true;
     if (!this.test || this.test.length === 0) {
       this.selectAll();
     }
 
-    // if (this.showArbitrage === false) {
-      this.GetCommericalArtibage();
-      this.GetRegionalArbitrage();
-      this.GetMgfProcessArtibage();
-
-    // }
+   await this.GetCommericalArtibage();
+   await this.GetRegionalArbitrage();
+   await this.GetMgfProcessArtibage();
 
     this.showArbitrage = true;
     this.showCat3Management = !this.showCat3Management;
     this.showContent = false;
-
     this.showRegionalContent = false;
     this.showmgfprocess = false;
     this.showdesign = false;
+    this.SpinnerService.hide('spinner');
+
   }
 
   async ShowCagetory3() {
@@ -752,35 +877,36 @@ getSelectedPartsString(): string {
 
   }
 
-
-
   //--------------------------------------------End of commerical Arbitrage----------------------------------------------------------------------------//
 
   selectedRegionalUniqueId: any;
   selectedRegionalRequestId: any;
-  RegionalfromDate:any;
-  RegionaltoDate:any;
+  RegionalfromDate: any;
+  RegionaltoDate: any;
   RegionData: any = [];
+  orgibnalRegional: any = [];
   showregioncomment: boolean = false;
   ShowRegionalUpload: boolean = false;
-  selectedRange_Regional:string=""
+  selectedRange_Regional: string = ""
   selectedRegional_ArtibageID: any;
- 
+
   async GetRegionalArbitrage(): Promise<void> {
     debugger
-    this.RegionData=[];
+    this.RegionData = [];
+    this.orgibnalRegional = [];
     const categoryID = this.test;
     try {
       const response = await this.AdminService.GetRegionalArbitrage(categoryID).toPromise();
+      debugger
       this.RegionData = response;
       this.Regional = this.RegionData;
+      this.orgibnalRegional = this.RegionData;
       this.Regional.forEach((region) => {
         console.log(region);
       });
       this.RegionchartOptions.data[0].dataPoints = this.Regional.map(region => ({
         label: region.PartNumber,
         y: Math.abs(Number(region.RegionalArbitrage)) || 0,
-        // y: Number(region.bestRegionCost)
       }));
       this.Regional.forEach(Region => {
         if (!Region.ProjectStatus) {
@@ -792,14 +918,41 @@ getSelectedPartsString(): string {
 
     } catch (err) {
       console.error('Error fetching regional arbitrage:', err);
+      this.toastr.error('Error fetching regional arbitrage');
     }
   }
+
+  exportRegionalTableToExcel(): void {
+    const exportData = this.Regional.map((region, index) => ({
+      'Sr No': index + 1,
+      'Part Number': region.PartNumber,
+      'Part Name': region.PartName,
+      'Supplier Mfg Location': region.MainRegion,
+      'Annual Volume': region.AnnualVolume,
+      'Supplier Quoted / Invoice Price': region.TotalCost,
+      'Supplier Name': region.Supplier,
+      'Best Region': region.BestRegion,
+      'Best Region Cost': region.BestRegionCost,
+      'Region Arbitrage (USD)': region.RegionalArbitrage,
+      'Region Relation': region.RegionRelation,
+      'Project Status': region.ProjectStatus,
+      'Debrief Date': region.DebriefDate,
+      'Comments': region.Comments,
+    }));
+
+    const worksheet = utils.json_to_sheet(exportData);
+    const workbook = utils.book_new();
+    utils.book_append_sheet(workbook, worksheet, 'RegionalData');
+
+    writeFileXLSX(workbook, `RegionalArbitrage_${new Date().toISOString().slice(0, 10)}.xlsx`);
+  }
+
 
   getTotalRegionalOppurtunity(): string {
     debugger
     let total = 0;
     // Iterate over the opportunities array and sum up the UserCalculatedCost values
-    this.Regional.forEach((Region: { RegionalArbitrage: any; }) => {
+    this.orgibnalRegional.forEach((Region: { RegionalArbitrage: any; }) => {
       total += parseFloat(Region.RegionalArbitrage) || 0;
     });
     return `$${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -844,10 +997,13 @@ getSelectedPartsString(): string {
     axisY: {
 
       title: "Regional Arbitrage",
-      labelFontSize: 10,
-      showInLegend: true,
-      indexLabelFontColor: "#000",
-      interval: 100,
+      // labelFontSize: 10,
+      // showInLegend: true,
+      // indexLabelFontColor: "#000",
+      // interval: 100,
+      labelFormatter: function (e: any) {
+        return `${e.value} $`;
+      }
     },
     dataPointWidth: 20,
     data: [{
@@ -862,37 +1018,7 @@ getSelectedPartsString(): string {
 
 
   }
-  // onDateRangeChange_regional(): void {
-  //   const today = new Date();
-  //   let fromDate: Date | null = null;;
-  //   // Calculate the 'From Date' based on the selected range
-  //   switch (this.selectedRange_regional) {
-  //     case "3":
-  //       fromDate = new Date(today.getFullYear(), today.getMonth() - 3, today.getDate());
-  //       break;
-  //     case "6":
-  //       fromDate = new Date(today.getFullYear(), today.getMonth() - 6, today.getDate());
-  //       break;
-  //     case "12":
-  //       fromDate = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
-  //       break;
-  //       // case "24":
-  //       //   fromDate = new Date(today.getFullYear() - 2, today.getMonth(), today.getDate());
-  //       //   break;
-  //     default:
-  //       fromDate = null;
-  //       break;
-  //   }
 
-  //   // Update the bound variables
-  //   if (fromDate) {
-  //     this.fromDate = fromDate.toISOString().split('T')[0]; // Format 'From Date' as 'YYYY-MM-DD'
-  //     this.toDate = today.toISOString().split('T')[0];      // Format 'To Date' as 'YYYY-MM-DD'
-  //   } else {
-  //     this.fromDate = null;
-  //     this.toDate = null;
-  //   }
-  // }
   onDateRangeChange_regional(): void {
     const today = new Date();
     let RegionalfromDate: Date | null = null;;
@@ -911,7 +1037,7 @@ getSelectedPartsString(): string {
         RegionalfromDate = null;
         break;
     }
- 
+
     // Update the bound variables
     if (RegionalfromDate) {
       this.RegionalfromDate = RegionalfromDate.toISOString().split('T')[0]; // Format 'From Date' as 'YYYY-MM-DD'
@@ -940,21 +1066,14 @@ getSelectedPartsString(): string {
     }
     this.closeregioncomment();
   }
-  cancelEditingRegional(){
-    this.editingIndexRegional=null;
+  cancelEditingRegional() {
+    this.editingIndexRegional = null;
   }
 
   RegionUploadTCO(Regional_ArtibageID: string) {
 
     this.selectedRegional_ArtibageID = Regional_ArtibageID
     this.ShowRegionalUpload = true;
-  }
-  SaveRegional(Region: any) {
-    // Default values for nullable columns
-    if (!Region.ProjectStatus) {
-      Region.ProjectStatus = "Open"; // Default simulated cost attainment value
-    }
-
   }
 
   UploadReginalFiles(Regional_ArtibageID: string): void {
@@ -964,21 +1083,25 @@ getSelectedPartsString(): string {
         next: (response) => {
           console.log('Files uploaded successfully:', response);
           alert('Files uploaded successfully!');
+          this.toastr.success('Files uploaded successfully!');
           this.selectedFiles = []; // Clear selected files after upload
         },
         error: (error) => {
           console.error('File upload failed:', error);
           alert('File upload failed!');
+          this.toastr.error('File upload failed!');
         },
       });
     } else {
       alert('Please select files to upload.');
+      this.toastr.error('Please select files to upload.');
+
     }
   }
   RegionaleditRow(index: number) {
     this.isEditing = !this.isEditing;
     // this.editingIndex = index; 
-    this.editingIndexRegional= index;
+    this.editingIndexRegional = index;
   }
 
 
@@ -998,9 +1121,11 @@ getSelectedPartsString(): string {
         anchor.download = `${Regional_ArtibageID}.zip`; // Name the ZIP file with the commercial ID
         anchor.click();
         window.URL.revokeObjectURL(url); // Clean up the URL
+        this.toastr.success('File Downloaded successfully');
       },
       (error) => {
         console.error('Error downloading ZIP file:', error);
+        this.toastr.error('Error downloading ZIP file');
       }
     );
   }
@@ -1017,12 +1142,14 @@ getSelectedPartsString(): string {
     this.AdminService.SaveRegionalArtibage(Region).subscribe({
       next: (response) => {
         console.log('Opportunity saved successfully:', response);
+        this.toastr.success('Record saved successfully');
         this.editingIndexRegional = null; // Exit edit mode
         this.GetRegionalArbitrage
         this.chartOptions;
       },
       error: (error) => {
         console.error('Error saving opportunity:', error);
+        this.toastr.error('Error while Saving Record"');
       }
     });
   }
@@ -1034,10 +1161,10 @@ getSelectedPartsString(): string {
       this.Regional = this.RegionData;
       for (let i = 0; i < this.Regional.length; i++) {
         const Region = this.Regional[i];
- 
+
         try {
           const debriefDate = Region.DebriefDate;
- 
+
           if (
             debriefDate >= this.RegionalfromDate &&
             debriefDate <= this.RegionaltoDate
@@ -1046,33 +1173,34 @@ getSelectedPartsString(): string {
           }
         } catch (error) {
           console.error('Error parsing DebriefDate:', Region.DebriefDate, error);
+          this.toastr.error('Error parsing DebriefDate');
+
         }
       }
       this.filteredData = filteredData;
       this.Regional = this.filteredData;
       this.RegionchartOptions = { ...this.RegionchartOptions };
- 
+
       this.RegionchartOptions.data[0].dataPoints = this.Regional.map(region => ({
         label: region.PartNumber,
         y: Math.abs(Number(region.RegionalArbitrage)) || 0,
         // y: Number(region.bestRegionCost)
       }));
- 
+
       console.log('Updated Chart Data:', this.RegionchartOptions);
     } else {
       console.error('Invalid Date Range');
- 
+      this.toastr.error('Invalid Date Range');
+
     }
- 
+
   }
 
 
   ClearDateFilter(): void {
-    this.selectedRange = ""; // Reset dropdown
-    // this.fromDate = null;    // Clear 'From Date'
-    this.RegionalfromDate = null;  
-    // this.toDate = null;      // Clear 'To Date'
-    this.RegionaltoDate = null;    
+    this.selectedRange_regional = ""; // Reset dropdown
+    this.RegionalfromDate = null;
+    this.RegionaltoDate = null;
     this.filteredData = [];
     this.Regional = this.RegionData;
 
@@ -1083,11 +1211,8 @@ getSelectedPartsString(): string {
     }));
 
   }
-  // RouteToTco(MMID: any, RequestHeaderId: any) {
 
-  // }
-
-  async RouteToTco( MMID: any, RequestHeaderId: any): Promise<void> {
+  async RouteToTco(MMID: any, RequestHeaderId: any): Promise<void> {
     debugger
     this.selectedRegionalUniqueId = MMID;
     this.selectedRegionalRequestId = RequestHeaderId;
@@ -1120,6 +1245,21 @@ getSelectedPartsString(): string {
       });
     }
   }
+
+  RegionalSCAttainment(): string {
+    debugger;
+    let totalShouldCost = 0;
+    let totalSupplierQuoted = 0;
+
+    this.orgibnalRegional.forEach((Region: { ShouldCost: any; TargetQuote: any }) => {
+      totalShouldCost += Number(Region.ShouldCost) || 0;
+      totalSupplierQuoted += Number(Region.TargetQuote) || 0;
+    });
+    let percentage = (totalShouldCost / totalSupplierQuoted) * 100;
+    return percentage.toFixed(2) + '%'; // Ensuring two decimal places in the output
+  }
+
+
   //-------------------------------------End of Regional --------------------------------------------//
 
 
@@ -1133,72 +1273,20 @@ getSelectedPartsString(): string {
   datefilterMfg!: FormGroup
   isEditingMfg = false;
   ShowRegionalUploadMfg: boolean = false;
-   selectedUniqueIdMfg: any;
+  selectedUniqueIdMfg: any;
   selectedRequestIdMfg: any;
-  
-
   minDateMfg: string = '';
   maxDateMfg: string = '';
-
   filteredDataMfg: any[] = [];
   RegionDataMfg: any = [];
+  orginalmfg: any = [];
   opportunitiesMfg: any = [];
+  orginalopportunities: any = [];
   showModalMfg: any;
   selectedCommentMfg: any;
   editingIndexMfg: number | null = null;
   showTcoUploadModalMfg: boolean = false;
   showFileUploadMfg: boolean = false;
-
-  //chart optons
-  chartOptionsMfg = {
-
-    animationEnabled: true,
-
-    title: {
-      text: "Part Number vs Manufacturing Artibage ($)",
-      fontFamily: "Trebuchet MS, Helvetica, sans-serif",
-
-    },
-    axisX: {
-      title: "Part Number",
-      interval: 1,
-      labelFontSize: 9,
-      showInLegend: true,
-      indexLabelFontColor: "#000",
-
-      labelAngle: -240,
-
-    },
-    axisY: {
-
-      title: "Manufacturing Artibage",
-      labelFontSize: 10,
-      showInLegend: true,
-      indexLabelFontColor: "#000",
-      interval: 100,
-    },
-    dataPointWidth: 20,
-    data: [
-      {
-        type: "column",
-        color: "#da291c",
-        indexLabelFontColor: "#000",
-        toolTipContent: "{label} : {y}$",
-        name: "HighLevel Process1",
-        showInLegend: true,
-        dataPoints: [] as { label: string; y: any }[],
-      },
-      {
-        type: "column",
-        color: "#2fa365",
-        indexLabelFontColor: "#000",
-        toolTipContent: "{label} : {y}$",
-        name: "HighLevel Process2",
-        showInLegend: true,
-        dataPoints: [] as { label: string; y: any }[],
-      },
-    ],
-  }
 
 
   getAbsoluteDifference(col2First: number, col2Second: number): number {
@@ -1209,38 +1297,32 @@ getSelectedPartsString(): string {
   openUploadPopupMfg(UniqueId: any): void {
     debugger;
     this.selectedUniqueIdMfg = UniqueId;
-
     this.showTcoUploadModalMfg = true;
 
   }
-//Total Variation 
 
-//  getTotalMfgOppurtunity(): number {
-//   return this.mgfprocess.reduce((sum, data) => {
-//     const diff = Math.abs(data.Col2_First - data.Col2_Second);
-//     return sum + diff;
-    
-//   }, 0);
-// }
 
-getTotalMfgOppurtunity(): string {
-  const total = this.mgfprocess.reduce((sum, data) => {
-    const diff = Math.abs(data.Col2_First - data.Col2_Second);
-    return sum + diff;
-  }, 0);
+  getTotalMfgOppurtunity(): string {
+    const total = this.orginalmfg.reduce((sum: number, data: { Col2_First: number; Col2_Second: number; }) => {
+      const diff = Math.abs(data.Col2_First - data.Col2_Second);
+      return sum + diff;
+    }, 0);
 
-  return `$${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-}
+    return `$${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
 
 
   async GetMgfProcessArtibage() {
     debugger;
     //  Refer This
     this.mgfprocess = [];
+    this.orginalmfg = [];
     this.AdminService.GetMgfProcess(this.test).subscribe(
       (response: any) => {
+        debugger
         this.data1 = response;
-        this.mgfprocess =  this.data1;
+        this.mgfprocess = this.data1;
+        this.orginalmfg = this.data1;
 
         this.mgfprocess.forEach((data) => {
           if (!data.ProjectStatus) {
@@ -1268,6 +1350,32 @@ getTotalMfgOppurtunity(): string {
     );
 
   }
+  exportMfgTableToExcel(): void {
+    const exportData = this.mgfprocess.map((item, index) => ({
+      'Sr No': index + 1,
+      'Part Number': item.PartNumber,
+      'Part Name': item.PartName,
+      'Supplier Mfg Location': item.MfgRegion,
+      'Supplier Quoted / Invoice Price (USD)': item.TargetQuote ? this.roundToTwoDecimalPlaces(item.TargetQuote) : '',
+      'Debrief Date': item.DebriefDate.split('T')[0],
+      'Process1 Quote / Should Cost': item.Col2_First.toFixed(2),
+      'Process1 Name': item.HighLevelProcess_First,
+      'Process2 Quote / Should Cost': item.Col2_Second.toFixed(2),
+      'Process2 Name': item.HighLevelProcess_Second,
+      'Variation': this.getAbsoluteDifferenceMfg(item.Col2_First, item.Col2_Second).toFixed(2),
+      'High Level Process Flow': `${item.Col2_First > item.Col2_Second ? item.HighLevelProcess_First : item.HighLevelProcess_Second} → ${item.Col2_First > item.Col2_Second ? item.HighLevelProcess_Second : item.HighLevelProcess_First}`,
+      'Comments': item.Comments,
+      'Submitted By': item.ModifiedBy,
+      'Project Status': item.ProjectStatus
+    }));
+
+    const worksheet = utils.json_to_sheet(exportData);
+    const workbook = utils.book_new();
+    utils.book_append_sheet(workbook, worksheet, 'Manufacturing');
+
+    writeFileXLSX(workbook, `ManufacturingArbitrage_${new Date().toISOString().slice(0, 10)}.xlsx`);
+  }
+
 
   saveComment(): void {
     debugger;
@@ -1277,7 +1385,7 @@ getTotalMfgOppurtunity(): string {
     this.closeCommentsPopup();
   }
 
-   getGraphstyleMfg() {
+  getGraphstyleMfg() {
 
     const baseBarWidth = 50; // pixels per bar
     const minWidth = '100%';
@@ -1291,6 +1399,7 @@ getTotalMfgOppurtunity(): string {
       width: `${this.data1.length * baseBarWidth}px`
     };
   }
+
 
   calculateTop80Variation() {
     const variationData = this.mgfprocess
@@ -1332,19 +1441,23 @@ getTotalMfgOppurtunity(): string {
       next: (response) => {
         //debugger
         console.log('Opportunity saved successfully:', response);
+        this.toastr.success("Record Saved Successfully.");
         this.editingIndexMfg = null; // Exit edit mode
         this.GetMgfProcessArtibage();
         //this.chartOptions;
       },
       error: (error) => {
         console.error('Error saving opportunity:', error);
-        alert('Error: ' + error.message);
+        this.toastr.error("Error while Saving Record");
       },
     });
   }
 
   cancelEditingMfg() {
     this.editingIndexMfg = null; // Cancel edit mode without saving
+  }
+  roundToTwoDecimalPlaces(value: string): string {
+    return parseFloat(value).toFixed(2);
   }
 
 
@@ -1362,14 +1475,14 @@ getTotalMfgOppurtunity(): string {
       case "12":
         fromDate = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
         break;
-        case "24":
-          fromDate = new Date(today.getFullYear() - 2, today.getMonth(), today.getDate());
-          break;
+      case "24":
+        fromDate = new Date(today.getFullYear() - 2, today.getMonth(), today.getDate());
+        break;
       default:
         fromDate = null;
         break;
     }
-     // Update the bound variables
+    // Update the bound variables
     if (fromDate) {
       this.fromDateMfg = fromDate.toISOString().split('T')[0]; // Format 'From Date' as 'YYYY-MM-DD'
       this.toDateMfg = today.toISOString().split('T')[0];      // Format 'To Date' as 'YYYY-MM-DD'
@@ -1380,13 +1493,13 @@ getTotalMfgOppurtunity(): string {
 
   }
   MfgchartOptions = {
- 
+
     animationEnabled: true,
- 
+
     title: {
       text: "Part Number vs Manufacturing Arbitrage ($)",
       fontFamily: "Trebuchet MS, Helvetica, sans-serif",
- 
+
     },
     axisX: {
       title: "Part Number",
@@ -1394,17 +1507,20 @@ getTotalMfgOppurtunity(): string {
       labelFontSize: 9,
       showInLegend: true,
       indexLabelFontColor: "#000",
- 
+
       labelAngle: -240,
- 
+
     },
     axisY: {
- 
+
       title: "Manufacturing Arbitrage",
-      labelFontSize: 10,
-      showInLegend: true,
-      indexLabelFontColor: "#000",
-      interval: 100,
+      // labelFontSize: 10,
+      // showInLegend: true,
+      // indexLabelFontColor: "#000",
+      // interval: 200,
+      labelFormatter: function (e: any) {
+        return `${e.value} $`;
+      }
     },
     dataPointWidth: 20,
     data: [
@@ -1427,53 +1543,13 @@ getTotalMfgOppurtunity(): string {
         dataPoints: [] as { label: string; y: any }[],
       },
     ],
-   
- 
+
+
   }
 
   onViewClickMfg() {
     debugger;
-    // if (this.fromDate && this.toDate) {
-    //   const filteredData: any[] = [];
-    //   this.mgfprocess = this.data1;
-    //   for (let i = 0; i < this.mgfprocess.length; i++) {
-    //     const opportunity = this.mgfprocess[i];
-  
-    //     try {
-    //       // const debriefDate = opportunity.DebriefDate;
-    //       const debriefDate = opportunity.DebriefDate.split('T')[0];
-  
-    //       if (
-    //         debriefDate >= this.fromDate &&
-    //         debriefDate <= this.toDate
-    //       ) {
-    //         filteredData.push(opportunity);
-    //       }
-    //     } catch (error) {
-    //       console.error('Error parsing DebriefDate:', opportunity.DebriefDate, error);
-    //     }
-    //   }
-    //   this.filteredData = filteredData;
-    //   this.mgfprocess = this.filteredData;
-     
-    //   // Update chart data points based on filtered data
-    //   this.chartOptions = { ...this.chartOptions };
-    //   this.chartOptions.data[0].dataPoints = this.filteredData.map(data => ({
-    //     label: data.PartNumber,
-    //     y:Number(data.Col2_First)
-    //   }));
-    //   this.chartOptions.data[1].dataPoints = this.filteredData
-    //     .map(data => ({
-    //       label: data.PartNumber,
-    //       y: data.Col2_Second
-    //     }));
-  
-    //   console.log('Updated Chart Data:', this.chartOptions);
-    // } else {
-    //   console.error('Invalid Date Range');
-  
-    // }
-  
+
     if (this.fromDateMfg && this.toDateMfg) {
       const filteredData: any[] = [];
       this.mgfprocess = this.data1;
@@ -1490,6 +1566,7 @@ getTotalMfgOppurtunity(): string {
           }
         } catch (error) {
           console.error('Error parsing DebriefDate:', opportunity.DebriefDate, error);
+          this.toastr.error('Error parsing DebriefDate');
         }
       }
       this.filteredDataMfg = filteredData;
@@ -1500,7 +1577,7 @@ getTotalMfgOppurtunity(): string {
 
       this.MfgchartOptions.data[0].dataPoints = this.filteredDataMfg.map(data => ({
         label: data.PartNumber,
-      y:Number(data.Col2_First)
+        y: Number(data.Col2_First)
       }));
 
       this.MfgchartOptions.data[1].dataPoints = this.filteredDataMfg.map(data => ({
@@ -1534,11 +1611,10 @@ getTotalMfgOppurtunity(): string {
     }));
 
     this.MfgchartOptions.data[1].dataPoints = this.mgfprocess
-    .map(data => ({
-      label: data.PartNumber,
-      y: data.Col2_Second
-    }));
-   // this.gettotaloppurtunity();
+      .map(data => ({
+        label: data.PartNumber,
+        y: data.Col2_Second
+      }));
   }
 
   getAbsoluteDifferenceMfg(col2First: number, col2Second: number): number {
@@ -1555,18 +1631,21 @@ getTotalMfgOppurtunity(): string {
         anchor.download = `${UniqueId}.zip`; // Name the ZIP file with the commercial ID
         anchor.click();
         window.URL.revokeObjectURL(url); // Clean up the URL
+        this.toastr.success("File Downloaded Successfully");
       },
-      (error:any) => {
+      (error: any) => {
         console.error('Error downloading ZIP file:', error);
+        this.toastr.error("Error Downloading ZIP file");
       }
     );
   }
 
 
   openCommentsPopupMfg(comment: string, index: number): void {
-    debugger;
-    this.showModalMfg = true;
-    this.selectedCommentMfg = comment || '';
+    if (this.editingIndexMfg === index) {
+      this.selectedCommentMfg = comment;
+      this.showModalMfg = true;
+    }
   }
 
 
@@ -1579,9 +1658,8 @@ getTotalMfgOppurtunity(): string {
   closeCommentsPopupMfg(): void {
     this.selectedCommentMfg = '';
     this.showModalMfg = false;
-  
-
   }
+
 
   saveCommentMfg(): void {
     debugger;
@@ -1591,6 +1669,7 @@ getTotalMfgOppurtunity(): string {
     }
     this.closeCommentsPopupMfg();
   }
+
 
   closeUploadPopupMfg(): void {
     this.showFileUploadMfg = false;
@@ -1603,8 +1682,9 @@ getTotalMfgOppurtunity(): string {
     }
     this.closeCommentsPopup();
   }
+  
   closeComment(): void {
-    this.saveComment(); 
+    this.saveComment();
   }
 
   handleFileSelectionMfg(event: any): void {
@@ -1627,20 +1707,57 @@ getTotalMfgOppurtunity(): string {
     debugger
     if (this.selectedFilesMfg && this.selectedFilesMfg.length > 0) {
       this.AdminService.Uploadfiles_mfg(UniqueId, this.selectedFilesMfg).subscribe({
-        next: (response:any) => {
+        next: (response: any) => {
           console.log('Files uploaded successfully:', response);
           alert('Files uploaded successfully!');
           this.selectedFilesMfg = []; // Clear selected files after upload
+          this.toastr.success("Files uploaded successfully.");
         },
-        error: (error:any) => {
+        error: (error: any) => {
           console.error('File upload failed:', error);
           alert('File upload failed!');
+          this.toastr.error("File upload Failed")
         },
       });
     } else {
       alert('Please select files to upload.');
     }
   }
+
+
+  ManufacturingSCAttainment(): string {
+    debugger;
+    let totalShouldCost = 0;
+    let totalSupplierQuoted = 0;
+    if (!this.mgfprocess || this.mgfprocess.length === 0) {
+      return '0.00%';
+    }
+
+    this.orginalmfg.forEach((Mfg: { ShouldCost: any; TargetQuote: any }) => {
+      totalShouldCost += Number(Mfg.ShouldCost) || 0;
+      totalSupplierQuoted += Number(Mfg.TargetQuote) || 0;
+    });
+    let percentage = (totalShouldCost / totalSupplierQuoted) * 100;
+    return percentage.toFixed(2) + '%'; // Ensuring two decimal places in the output
+  }
+
+
+  GetMfgGraphStyle() {
+
+    const baseBarWidth = 50; // pixels per bar
+    const minWidth = '100%';
+
+    if (!this.data1 || this.data1.length <= 20) {
+      return { height: '375px', width: minWidth };
+    }
+
+    return {
+      height: '375px',
+      width: `${this.data1.length * baseBarWidth}px`
+    };
+  }
+
+
 
 
   //-------------------------------------end mfg process Arbitrage --------------------------------------------//
@@ -1872,34 +1989,9 @@ getTotalMfgOppurtunity(): string {
       'fromtotechspec': '41118->41081'
     }
   ]
-  highlightedRow: number | null = null;
 
-  highlightRow(index: number) {
-    this.highlightedRow = index;
-  }
 
-  
 
-  backToCat3() {
-    
-    this.showCat3Management = true;
-
-      this.showcostinsights = false;
-      this.showContent = false;
-      this.showRegionalContent = false;
-      this.showmgfprocess = false;
-      this.showdesign = false;
-      this.selectedCategoryIds = [];
-      this.test=[];
-      this.CategoryID=null
-      this.activeButton = '';
-
-    //  window.location.reload();
-    
-      
-     
-      
-  }
-
+ 
 
 }

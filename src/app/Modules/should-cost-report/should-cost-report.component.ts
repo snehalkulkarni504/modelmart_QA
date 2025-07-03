@@ -6,6 +6,8 @@ import { SaveMatetialCost, SaveMatetialCostDetails, SaveMatetialCostHeader, Save
 import { SearchService } from 'src/app/SharedServices/search.service';
 import { Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
+//import * as ExcelJS from 'exceljs';
+// import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-should-cost-report',
@@ -41,6 +43,7 @@ export class ShouldCostReportComponent {
   updatePercentValue: number = 0;
   display = "none";
   display_Material = "none";
+  display_Tariff = "none";
   MaterialGrade: any = [];
   CSHeaderId: any;
 
@@ -123,6 +126,11 @@ export class ShouldCostReportComponent {
         this.IsCESmodel = true;
         this.ModelwiseNote = "Material rate update can not be performed on this Cost Model"
       }
+      else if (this.ModelTypes_Id == 5) {
+        this.IsExternalCostmodel = true;
+        this.IsCESmodel = true;
+        this.ModelwiseNote = "This is China Model, In this model Material rate update can not be performed."
+      }
       else {
         this.IsExternalCostmodel = false;
         this.IsCESmodel = false;
@@ -193,6 +201,9 @@ export class ShouldCostReportComponent {
       this.TierCostReportNonList[i].totalCostPer = data2[i].usdValue / this.TotalInUSD * 100;
     }
 
+    const SetValueTarifUpdatedT1 = document.getElementById('TarifUpdatedT1') as any;
+    SetValueTarifUpdatedT1.value = 0.00;
+
   }
 
   findsumTier2(data: any, data2: any) {
@@ -217,6 +228,9 @@ export class ShouldCostReportComponent {
     for (let i = 0; i < this.TierCostReportNonList.length; i++) {
       this.Tier2CostReportNonList[i].totalCostPer = data2[i].usdValue / this.TotalInUSDT2 * 100;
     }
+
+    const SetValueTarifUpdatedT2 = document.getElementById('TarifUpdatedT2') as any;
+    SetValueTarifUpdatedT2.value = 0.00;
 
   }
 
@@ -378,17 +392,13 @@ export class ShouldCostReportComponent {
 
 
     this.Non_TotalInLocal = this.Non_TotalInLocal_Per;
-    var TarifT1;
 
-    const TarifUpdatedT1 = document.getElementById('TarifUpdatedT1') as any;
-    if (TarifUpdatedT1.value != "") {
-      TarifT1 = TarifUpdatedT1.value;
-    }
-    else {
-      TarifT1 = 0;
+
+    if (this.TarifT1Cost == undefined) {
+      this.TarifT1Cost = 0;
     }
 
-    this.TotalInLocal = this.Manu_TotalInLocal + this.Non_TotalInLocal + parseFloat(TarifT1);
+    this.TotalInLocal = this.Manu_TotalInLocal + this.Non_TotalInLocal + parseFloat(this.TarifT1Cost);
 
   }
 
@@ -589,17 +599,12 @@ export class ShouldCostReportComponent {
 
     this.Non_TotalInLocalT2 = this.Non_TotalInLocal_Per;
 
-    var TarifT2;
 
-    const TarifUpdatedT2 = document.getElementById('TarifUpdatedT2') as any;
-    if (TarifUpdatedT2.value != "") {
-      TarifT2 = TarifUpdatedT2.value;
-    }
-    else {
-      TarifT2 = 0;
+    if (this.TarifT2Cost == undefined) {
+      this.TarifT2Cost = 0;
     }
 
-    this.TotalInLocalT2 = this.Manu_TotalInLocalT2 + this.Non_TotalInLocalT2 + parseFloat(TarifT2);
+    this.TotalInLocalT2 = this.Manu_TotalInLocalT2 + this.Non_TotalInLocalT2 + parseFloat(this.TarifT2Cost);
 
     const updatedTier1Cost = document.getElementById('UpdateCost2') as any;
     const updatedSrcapCost = document.getElementById('UpdateCost0') as any;
@@ -686,7 +691,7 @@ export class ShouldCostReportComponent {
 
   async openModal(t: string, value: any, id: any) {
 
-    //debugger;;
+    debugger;;
     this.UpdateCostfromPopup_id = id;
     this.ModelPopUpheaderLable = '';
     this.DirectMaterialCostT1 = 0;
@@ -1029,7 +1034,7 @@ export class ShouldCostReportComponent {
 
   UpdateCost(T: any) {
 
-    //debugger;;
+    debugger;;
 
     this.CalculatePercentNon_DirectCost();
     if (T == 'T1') {
@@ -1100,6 +1105,7 @@ export class ShouldCostReportComponent {
   onCloseHandled() {
     this.display_Material = "none";
   }
+
 
   new_Rate: number = 0;
   TotalMaterialRate_Update: number = 0;
@@ -2102,6 +2108,7 @@ export class ShouldCostReportComponent {
       else {
         TarifT2 = 0;
       }
+
       for (var i = 0; i < this.TierCostReportTextT1.length; i++) {
         for (var j = i; j < this.UpdateRate.length; j++) {
           this.MatetialTierUpdate.push(
@@ -2221,7 +2228,6 @@ export class ShouldCostReportComponent {
   previousUserAddedCostList: any[] = [];
 
   display_process = "none";
-  TarifValueT1: number = 0;
   IsHiddenT1_process = true;
 
 
@@ -2563,6 +2569,176 @@ export class ShouldCostReportComponent {
     }
 
   }
+
+
+  Notes1_Tariff = "Add Tariff";
+  Notes2_Tariff: any;
+  IsHiddenT1_Tarrif = false;
+  totalcostforTeriff: any;
+
+  onCloseHandled_TariffPopup() {
+    this.display_Tariff = "none";
+  }
+
+  openModalTariff(supplyLevel: any) {
+    debugger;
+    this.display_Tariff = "block";
+    this.totalcostforTeriff = 0;
+    if (supplyLevel == 'T1') {
+      this.IsHiddenT1_Tarrif = true;
+      this.Notes2_Tariff = "Total Part Cost is " + this.TotalInLocal.toFixed(2);
+      const UpdateCostTeriffPerT1 = document.getElementById('UpdateCostTeriffPerT1') as any;
+      const SetValueTarifUpdatedT1 = document.getElementById('UpdateTariff_Popup') as any;
+
+      this.totalcostforTeriff = this.TotalInLocal.toFixed(2);
+      // const TarifUpdatedT1 = document.getElementById('TarifUpdatedT1') as any;
+      if (UpdateCostTeriffPerT1.value != null) {
+
+        SetValueTarifUpdatedT1.value = UpdateCostTeriffPerT1.value;
+      }
+      else {
+        SetValueTarifUpdatedT1.value = 0;
+      }
+
+    }
+    else {
+      this.IsHiddenT1_Tarrif = false;
+      this.Notes2_Tariff = "Total Part Cost is " + this.TotalInLocalT2.toFixed(2);
+      this.totalcostforTeriff = this.TotalInLocalT2.toFixed(2);
+
+      const TarifUpdatedT2 = document.getElementById('TarifUpdatedT2') as any;
+      if (TarifUpdatedT2.value != null) {
+        const SetValueTarifUpdatedT2 = document.getElementById('UpdateTariff_Popup') as any;
+        SetValueTarifUpdatedT2.value = TarifUpdatedT2.value;
+      }
+    }
+
+    this.CalculatePercent_Teriff();
+  }
+
+  TarifT1Cost: any;
+  TarifT2Cost: any;
+  SaveTariff(supplyLevel: any) {
+    debugger;
+    if (supplyLevel == 'T1') {
+      this.TarifT1Cost = 0;
+
+      const UpdateCostTeriffPerT1 = document.getElementById('UpdateCostTeriffPerT1') as any;
+
+      const UpdateTariff_Popup = document.getElementById('UpdateTariff_Popup') as any;
+      const SetValueTarifUpdatedT1 = document.getElementById('TarifUpdatedT1') as any;
+      const TarifUpdatedT1 = document.getElementById('TotalTariff_Popup') as any;
+
+      if (TarifUpdatedT1.value != "") {
+        this.TarifT1Cost = TarifUpdatedT1.value;
+        SetValueTarifUpdatedT1.value = this.TarifT1Cost;
+        UpdateCostTeriffPerT1.value = UpdateTariff_Popup.value;
+      }
+      else {
+        this.TarifT1Cost = 0;
+        SetValueTarifUpdatedT1.value = this.TarifT1Cost;
+        UpdateCostTeriffPerT1.value = '';
+      }
+
+      this.findsumPercent();
+    }
+    else {
+
+      this.TarifT2Cost = 0;
+
+      const SetValueTarifUpdatedT2 = document.getElementById('TarifUpdatedT2') as any;
+      const TarifUpdatedT2 = document.getElementById('TotalTariff_Popup') as any;
+      if (TarifUpdatedT2.value != "") {
+        this.TarifT2Cost = TarifUpdatedT2.value;
+        SetValueTarifUpdatedT2.value = this.TarifT2Cost;
+      }
+      else {
+        this.TarifT2Cost = 0;
+        SetValueTarifUpdatedT2.value = this.TarifT2Cost;
+      }
+
+      this.findsumPercentT2();
+    }
+
+    this.onCloseHandled_TariffPopup();
+
+  }
+
+  FrequentlyUsedMaterialGrade() {
+    this.router.navigate(['/home/frequentlyusedmaterialgrade']);
+  }
+
+  CalculatePercent_Teriff() {
+    debugger;
+
+    const UpdateTariff_Popup = document.getElementById('UpdateTariff_Popup') as any;
+    const TotalTariff_Popup = document.getElementById('TotalTariff_Popup') as any;
+    const TotalTeriffandCost_Popup = document.getElementById('TotalTeriffandCost_Popup') as any;
+
+    if (UpdateTariff_Popup.value > 0) {
+      var rr = (parseFloat(UpdateTariff_Popup.value) / 100) * parseFloat(this.totalcostforTeriff.replace(/,/g, ""));
+      TotalTariff_Popup.value = rr.toFixed(2);
+      var tt = parseFloat(this.totalcostforTeriff.replace(/,/g, "")) + parseFloat(TotalTariff_Popup.value);
+      TotalTeriffandCost_Popup.value = tt.toFixed(2);
+
+    }
+    else {
+      TotalTariff_Popup.value = null;
+      TotalTeriffandCost_Popup.value = null
+    }
+
+  }
+
+
+ // exportToExcel() {
+    // const workbook = new ExcelJS.Workbook();
+    // const worksheet = workbook.addWorksheet('Process Cost');
+
+    // // Header row with bold font
+    // const headerRow = worksheet.addRow([
+    //   'Part Number',
+    //   'Process',
+    //   'Initial Cost ($)',
+    //   'Process Active',
+    //   'Updated Cost ($)'
+    // ]);
+
+    // headerRow.font = { bold: true };
+
+    // // Add data rows
+    // this.userAddedCostList.forEach((item: { partNumber: any; manufacturingProcessName: any; manufacturingCost: number; updatedCost: any; }, i: number) => {
+    //   const isOn = this.isEnabled(i); //true or false
+    //   worksheet.addRow([
+    //     item.partNumber,
+    //     item.manufacturingProcessName,
+    //     item.manufacturingCost.toFixed(2),
+    //     isOn ? 'On' : 'Off',
+    //     item.updatedCost ?? ''
+    //   ]);
+    // });
+
+    // // Footer row with bold style, skipping first column
+    // const footerRow = worksheet.addRow([
+    //   '',
+    //   'Total Initial Cost',
+    //   this.totalInitialCost.toFixed(2),
+    //   'Total Updated Cost',
+    //   this.totalUpdatedCost.toFixed(2)
+    // ]);
+
+    // footerRow.font = { bold: true };
+
+    // // Adjust column width (optional)
+    // worksheet.columns.forEach((col) => {
+    //   col.width = 20;
+    // });
+
+    // // Export the file
+    // workbook.xlsx.writeBuffer().then((buffer: BlobPart) => {
+    //   const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    //   FileSaver.saveAs(blob, 'Process_Costs.xlsx');
+    // });
+  //}
 
 
 

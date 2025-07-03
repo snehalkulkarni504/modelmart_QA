@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild,ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild,ElementRef, QueryList,ViewChildren, } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router,ActivatedRoute } from '@angular/router';
 import { TreeviewConfig, TreeviewItem } from '@charmedme/ngx-treeview';
@@ -9,13 +9,15 @@ import { ChangeDetectorRef } from '@angular/core';
 import { BomService } from 'src/app/SharedServices/bom.service';
 import { SearchService } from 'src/app/SharedServices/search.service';
 import * as XLSX from 'xlsx';
-import { DatePipe, Location } from '@angular/common';
+import { DatePipe, Location,DecimalPipe } from '@angular/common';
+
 
 
 @Component({
   selector: 'app-cartdetails',
   templateUrl: './cartdetails.component.html',
-  styleUrl: './cartdetails.component.css'
+  styleUrl: './cartdetails.component.css',
+  providers: [DecimalPipe, DatePipe]
 })
 export class CartdetailsComponent {
 
@@ -27,6 +29,7 @@ export class CartdetailsComponent {
     public toastr: ToastrService,
     private location: Location,
     public SpinnerService: NgxSpinnerService,
+    private decimalPipe: DecimalPipe,
     private datePipe: DatePipe,
     private cdr: ChangeDetectorRef) {
     // this.myScriptElement = document.createElement("script");
@@ -37,6 +40,13 @@ export class CartdetailsComponent {
   @ViewChild('cat3') public cat3: any;
   @ViewChild('tableContainer') tableContainer!: ElementRef;
   @ViewChild('tableRows') tableRows!: ElementRef;
+  //@ViewChildren('excelnameInput, excelenginedisplacementInput, excelitemcountInput, excelPlatformInput, excelpartnoInput, excelcurrentprogramInput') inputs!: QueryList<ElementRef>;
+  @ViewChildren('excelnameInput') excelnameInputs!: QueryList<ElementRef>;
+@ViewChildren('excelPlatformInput') excelPlatformInputs!: QueryList<ElementRef>;
+@ViewChildren('excelcurrentprogramInput') excelcurrentprogramInputs!: QueryList<ElementRef>;
+@ViewChildren('excelenginedisplacementInput') excelenginedisplacementInputs!: QueryList<ElementRef>;
+@ViewChildren('excelpartnoInput') excelpartnoInputs!: QueryList<ElementRef>;
+@ViewChildren('excelitemcount') excelitemcountInput!: QueryList<ElementRef>;
   selectedFile!: File | undefined;
   matchType: string = 'approximate';
   deleteType:string='all';
@@ -121,6 +131,7 @@ export class CartdetailsComponent {
 
 
   getrouteprogname:any;
+  getrouteprogramid:any;
   getroutecartid:any;
   getroutecartname:any;
   getrouteuniqty:any;
@@ -148,7 +159,8 @@ export class CartdetailsComponent {
       this.getrouteuniqty=params['uniqty'] || null,
       this.getroutebomqty=params['bomqty'] || null,
       this.getroutebomcost=params['bomcost'] || null,
-      this.getroutelastsim=params['lastsim'] || null
+      this.getroutelastsim=params['lastsim'] || null,
+      this.getrouteprogramid=params['programid']||null
     });
    
     console.log("demo:-",this.getroutecartid,this.getroutecartname);
@@ -278,6 +290,9 @@ export class CartdetailsComponent {
     row.editable = true;
     const tableContainer = document.querySelector('.table-container'); // Adjust selector if needed
 
+    if (!row.excelitemcount || row.excelitemcount === 0) {
+    row.excelitemcount = 1;
+  }
   if (tableContainer) {
     tableContainer.scrollLeft = 0; // Scroll to the left
   }
@@ -398,11 +413,48 @@ openMatchModal(row:any): void {
         }
 
     const updatedRow = { ...row };  // Create a copy of the row
-    if(updatedRow.excelpartno=="" ||updatedRow.excelcurrentprogram==""||updatedRow.excelenginedisplacement==""||updatedRow.excelname=="")
-      {
-        this.toastr.warning("Please fill out all required fields.");
-        return;
+   const requiredFields = [
+    { key: 'excelname', list: this.excelnameInputs },
+    { key: 'excelPlatform', list: this.excelPlatformInputs },
+    { key: 'excelcurrentprogram', list: this.excelcurrentprogramInputs },
+    { key: 'excelenginedisplacement', list: this.excelenginedisplacementInputs },
+    { key: 'excelpartno', list: this.excelpartnoInputs },
+    {key:'excelitemcount',list:this.excelitemcountInput}
+  ];
+
+  //const missing = requiredFields.find(field => !row[field.key] || row[field.key].trim() === '');
+const missing = requiredFields.find(field => {
+  const value = row[field.key];
+  return !value || String(value).trim() === '';
+});
+  if (missing) {
+    this.toastr.warning('Please fill out all required fields.');
+    this.hide1();
+
+    // Wait for DOM update before focusing
+    setTimeout(() => {
+      this.cdr.detectChanges();  // re-run in case inputs not yet in DOM
+
+      const inputEl = missing.list.find(input =>
+        input.nativeElement.closest('tr')?.contains(document.activeElement)
+      ) || missing.list.first;
+
+      if (inputEl) {
+        inputEl.nativeElement.focus();
       }
+    }, 0); // delay 0 ensures DOM has rendered
+
+    return;
+  }
+
+  // Continue with saving logic...
+
+
+
+
+
+
+
   delete updatedRow.editable;  // Remove the editable property
   delete updatedRow.businessUnit;
   delete updatedRow.cartId;
@@ -459,11 +511,47 @@ openMatchModal(row:any): void {
 
     
     const updatedRow = { ...row };  // Create a copy of the row
-    if(updatedRow.excelpartno=="" ||updatedRow.excelcurrentprogram==""||updatedRow.excelenginedisplacement==""||updatedRow.excelname=="")
-    {
-      this.toastr.warning("Please fill out all required fields.");
-      return;
-    }
+   const requiredFields = [
+    { key: 'excelname', list: this.excelnameInputs },
+    { key: 'excelPlatform', list: this.excelPlatformInputs },
+    { key: 'excelcurrentprogram', list: this.excelcurrentprogramInputs },
+    { key: 'excelenginedisplacement', list: this.excelenginedisplacementInputs },
+    { key: 'excelpartno', list: this.excelpartnoInputs },
+    {key:'excelitemcount',list:this.excelitemcountInput}
+  ];
+
+ // const missing = requiredFields.find(field => !row[field.key] || row[field.key].trim() === '');
+const missing = requiredFields.find(field => {
+  const value = row[field.key];
+  return !value || String(value).trim() === '';
+});
+  if (missing) {
+    this.toastr.warning('Please fill out all required fields.');
+    this.hide1();
+    // Wait for DOM update before focusing
+    setTimeout(() => {
+      this.cdr.detectChanges();  // re-run in case inputs not yet in DOM
+
+      const inputEl = missing.list.find(input =>
+        input.nativeElement.closest('tr')?.contains(document.activeElement)
+      ) || missing.list.first;
+
+      if (inputEl) {
+        inputEl.nativeElement.focus();
+      }
+    }, 0); // delay 0 ensures DOM has rendered
+
+    return;
+  }
+
+  // Continue with saving logic...
+
+
+
+
+
+
+
   delete updatedRow.editable;  // Remove the editable property
   delete updatedRow.businessUnit;
   delete updatedRow.cartId;
@@ -801,7 +889,12 @@ this.selectedfilename='';
   }
 
   backToPreviousPage() {
-    this.location.back();
+    const Params = {
+    progname: this.getrouteprogname,
+    programid:this.getrouteprogramid
+    };
+  this.router.navigate(['/home/bomdetails'], { queryParams: Params });
+    //this.location.back();
   }
 
   // Function to open the upload modal
@@ -862,18 +955,18 @@ this.selectedfilename='';
     const fileHeaders = sheetData[headerRowIndex] as string[];
     //this.selectedFile = undefined;
 
-    if (!this.validateHeaders(fileHeaders, expectedHeaders)) {
-      this.toastr.error('Excel headers are incorrect or not in the correct order.');
-      this.selectedFile = undefined;
-      return;
-    }
+    // if (!this.validateHeaders(fileHeaders, expectedHeaders)) {
+    //   this.toastr.error('Excel headers are incorrect or not in the correct order.');
+    //   this.selectedFile = undefined;
+    //   return;
+    // }
 
     const dataRows = sheetData.slice(headerRowIndex + 1) as any;
-    if (!this.validateMandatoryFields(dataRows, fileHeaders, mandatoryFields)) {
-      this.toastr.error('Mandatory fields (Part Name, Displacement, Current Program, BomQty) are missing in one or more rows.');
-      this.selectedFile = undefined;
-      return;
-    }
+    // if (!this.validateMandatoryFields(dataRows, fileHeaders, mandatoryFields)) {
+    //   this.toastr.error('Mandatory fields (Part Name, Displacement, Current Program, BomQty) are missing in one or more rows.');
+    //   this.selectedFile = undefined;
+    //   return;
+    // }
 
     this.toastr.success('Excel file is valid.');
   };
@@ -1014,17 +1107,19 @@ validateMandatoryFields(rows: any[][], headers: string[], mandatoryFields: strin
             'Excel Material':item.excelmeterial,
             'Excel Weight':item.excelweight,
             'Excel Parent Part No':item.excelparentpartid,
+            'Excel Platform':item.excelPlatform,
+            'BomQuantity':item.excelitemcount,
             'Name': item.name,
             'ModelMart Id': item.categoryId,
             'Part Number': item.partNumber,
             'Part Name': item.partName,
+            'Platform':item.platform,
             'Program':item.projectName,
             'Region':item.mfgRegion,
             'Should Cost':item.scost,
             'Invoice':item.invoice,
             'Model.Type':'Original',
-            
-            'Weight':item.weight,
+            'Weight(lbs)':this.decimalPipe.transform(item.weight * 2.20462, '1.2-2'),
             'Raw Material':item.rowmaterial,
             'Mfg Process':item.mfgProcess,
             'Utilization':item.utilization,
@@ -1099,7 +1194,7 @@ validateMandatoryFields(rows: any[][], headers: string[], mandatoryFields: strin
     excelparentprogram: '',
     excelutilization: '',
     excelsuppliername: '',
-    excelitemcount: 0,
+    excelitemcount: 1,
     excelenginedisplacement:'',
     excelname:'',
     //name: '',
@@ -1120,12 +1215,18 @@ validateMandatoryFields(rows: any[][], headers: string[], mandatoryFields: strin
     isNew: true
   };
   this.SearchProductList.unshift(newRow);
-  const tableBody = this.tableContainer.nativeElement.querySelector('tbody');
-    const lastRow = tableBody?.lastElementChild;
+   this.tableContainer.nativeElement.scrollTop = 0;
+  // const tableBody = this.tableContainer.nativeElement.querySelector('tbody');
+   
+  //   const lastRow = tableBody?.firstElementChild;
 
-    if (lastRow) {
-      lastRow.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }
+  //  if (lastRow) {
+  //     lastRow.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  //     this.tableContainer.nativeElement.scrollTop = 0;
+      
+  //   }
+
+    
  // this.scrollToBottom();
 }
 
@@ -1199,7 +1300,7 @@ colspanhide3 = 2;
     }
     else {
       this.Ishide1 = false;
-      this.colspanhide1 = 12;
+      this.colspanhide1 = 11;
     }
 
   }

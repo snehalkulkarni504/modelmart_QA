@@ -1,7 +1,7 @@
-
-*{
-    font-family:  Helvetica, Arial !important;
+* {
+    font-family: Helvetica, Arial !important;
 }
+
 .table-container {
     width: 100%;
     overflow-x: auto;
@@ -20,9 +20,9 @@ th {
     min-width: 150px !important ; */
 }
 
-.title{
-    background-color:#fdfbfb;
-    font-family: Helvetica ,  Arial !important;
+.title {
+    background-color: #fdfbfb;
+    font-family: Helvetica, Arial !important;
     color: rgba(0, 0, 0, 0.726);
     /* text-align: center; */
     /* height: 50px;
@@ -34,17 +34,20 @@ th {
 }
 
 .dropdown-container {
-    display: flex; /* Use flexbox to align items horizontally */
-    gap: 10px; /* Add some space between the dropdowns */
+    display: flex;
+    /* Use flexbox to align items horizontally */
+    gap: 10px;
+    /* Add some space between the dropdowns */
     margin-left: 10px;
     /* background-color: #9e1a14; */
 }
 
 @media (max-width: 600px) {
     .dropdown-container {
-      flex-direction: column; /* Stack dropdowns vertically on small screens */
+        flex-direction: column;
+        /* Stack dropdowns vertically on small screens */
     }
-  }
+}
 
 th,
 td {
@@ -59,16 +62,19 @@ td {
     text-overflow: ellipsis;
 }
 
-td:hover{
-    max-width: 150px;   
+td:hover {
+    max-width: 150px;
     white-space: pre-wrap;
 }
 
 th.hidden-header {
     visibility: hidden;
     /* width: 0 !important; */
-    position: sticky; left:-2px; top:-2px; z-index: 4;
-    
+    position: sticky;
+    left: -2px;
+    top: -2px;
+    z-index: 4;
+
 }
 
 th.header-box {
@@ -81,7 +87,7 @@ th.header-box {
     box-sizing: border-box;
 }
 
-th.header-box-id{
+th.header-box-id {
     min-width: 45px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border: 1px solid #ddd;
@@ -89,7 +95,7 @@ th.header-box-id{
     background-color: #fff;
     height: 30px;
     box-sizing: border-box;
-    
+
 }
 
 .header-content {
@@ -115,27 +121,28 @@ th.header-box-id{
 .search-row {
     background-color: #f8f9fa;
     /* position: sticky; */
-    top: 40px; /* Adjust based on your header height */
+    top: 40px;
+    /* Adjust based on your header height */
     /* z-index: 2; */
-  }
+}
 
-  .column-search1 {
+.column-search1 {
     width: 45px;
     padding: 5px;
     margin: 2px 0;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 12px;
-  }
+}
 
-  .column-search {
+.column-search {
     width: 100%;
     padding: 5px;
     margin: 2px 0;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 12px;
-  }
+}
 
 .header-line {
     margin-bottom: -3px;
@@ -316,7 +323,8 @@ tr:not(:last-child)::after {
 
 /* Set default row height to two rows of data */
 tr {
-    height: 45px; /* Default height equal to two rows of data */
+    height: 45px;
+    /* Default height equal to two rows of data */
 }
 
 h3 {
@@ -419,37 +427,46 @@ hr {
 }
 
 ::ng-deep .custom-pagination .page-link {
-    color: rgb(9, 9, 10) !important; /* Default (non-active) text color */
+    color: rgb(9, 9, 10) !important;
+    /* Default (non-active) text color */
 }
 
 ::ng-deep .custom-pagination .page-item.active .page-link {
-    background-color: #da291c !important; /* Red background when the tab is active */
-    border-color: #da291c !important; /* Red border when active */
-    color: white !important; /* White text for readability */
+    background-color: #da291c !important;
+    /* Red background when the tab is active */
+    border-color: #da291c !important;
+    /* Red border when active */
+    color: white !important;
+    /* White text for readability */
 }
 
 
 
-.id1{
+.id1 {
     text-align: center;
     color: blue;
     cursor: pointer;
 }
 
-.exportToExcel{
-    width: 30px;height: 30px;
+.exportToExcel {
+    width: 30px;
+    height: 30px;
     float: right;
     margin-top: 10px;
     margin-right: 10px;
 }
-.exportToExcel:hover{
+
+.exportToExcel:hover {
     /* transform: translateY(-2px); */
     cursor: pointer !important;
 }
 
 
-#freeze{
-    position: sticky; left:-2px; top:-2px; z-index: 4;
+#freeze {
+    position: sticky;
+    left: -2px;
+    top: -2px;
+    z-index: 4;
 }
 
 /* @media (max-width: 883) {
@@ -457,3 +474,10 @@ hr {
      position: relative;   
     }
   } */
+
+.RemarkSection {
+    margin-top: 10px;
+    font-size: 12px;
+    padding-bottom: 5px;
+    color: #da291c;
+}

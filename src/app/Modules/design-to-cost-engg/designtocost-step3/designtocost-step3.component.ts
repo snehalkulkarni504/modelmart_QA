@@ -18,7 +18,7 @@ interface TableRow {
   feasibility: string;
   ideaOwner: string;
   currentStatus: string;
-  sharepoint_ID: number | null;
+  sharepoint_ID: number;
   id: number;
   created: Date | null;
   ideaSelected?: boolean;
@@ -36,7 +36,7 @@ interface TableRow {
 export class DesigntocostStep3Component {
 
   newIdea: TableRow = {
-    sharepoint_ID: null,
+    sharepoint_ID: 0,
     idea: '',
     nounName: '',
     program: '',
@@ -111,33 +111,28 @@ export class DesigntocostStep3Component {
   filteredNonunProgramTableData_original: TableRow[] = [];
 
   isSecondDropdownDisabled: boolean = true;
-
-
   selectedColumn2: string = '';
-  selectedValue2: string = '';
-  columnValues2: string[] = [];
-  filteredTableData2: TableRow[] = [];
-  isSecondDropdownDisabled2: boolean = true;
-
   selectedColumn3: string = '';
-  selectedValue3: string = '';
-  columnValues3: string[] = [];
-  filteredTableData3: TableRow[] = [];
-  isSecondDropdownDisabled3: boolean = true;
   IsNoData = true;
-
+  userId: any;
+  display = "none";
+  margin_top = "0px";
 
   async ngOnInit() {
     debugger;
-    this.PartNumber = 'LLO90';
-    this.ProgramName = 'engine';
-    this.NounName = 'HOUSING,TURBINE';
+
+    this.userId = localStorage.getItem("userId");
+
+    this.NounName = localStorage.getItem("VAVE_NounName");
+    this.ProgramName = localStorage.getItem("VAVE_ProgramName");
+    this.PartNumber = localStorage.getItem("VAVE_PartNumber");
 
     this.gettabledata();
   }
+
   gettabledata() {
     debugger;
-    this.searchService.GetDesignToCostAvailableDetail(this.NounName, this.ProgramName, this.PartNumber)
+    this.searchService.GetDesignToCostDataAccordignUser(this.NounName, this.ProgramName, this.PartNumber, this.userId)
       .subscribe({
         next: (response: any) => {
           debugger;
@@ -152,9 +147,12 @@ export class DesigntocostStep3Component {
             })
 
             this.IsNoData = false;
+            this.margin_top = "0px";
           }
           else {
             this.IsNoData = true;
+            this.margin_top = "50px";
+
           }
           //console.log("this.filteredPartNumberTableData_original",this.filteredPartNumberTableData_original);
 
@@ -213,9 +211,6 @@ export class DesigntocostStep3Component {
       newIdea.sharepoint_ID = 0;
     }
 
-
-
-
     this.adminService.addDesignToCostEntry(newIdea).subscribe({
       next: (response) => {
         console.log('Opportunity saved successfully:', response);
@@ -224,8 +219,7 @@ export class DesigntocostStep3Component {
 
         this.showIdeaModal = false;
         this.gettabledata();
-
-
+        this.onCloseHandled();
       },
       error: (error) => {
         console.error('Error adding idea:', error);
@@ -426,11 +420,12 @@ export class DesigntocostStep3Component {
 
   //Add new Idea
   openIdeaModal(): void {
+    debugger;
     console.log('Add Idea button clicked');
 
     this.newIdea = {
 
-      sharepoint_ID: null,
+      sharepoint_ID: 0,
       idea: '',
       nounName: '',
       program: '',
@@ -444,12 +439,17 @@ export class DesigntocostStep3Component {
       createdBy: '',
     };
 
+    this.display = "block";
     this.showIdeaModal = true;
     this.newIdea.created = new Date();
   }
 
   backToPreviousPage() {
     this.location.back();
+  }
+
+  onCloseHandled() {
+    this.display = "none";
   }
 
 }

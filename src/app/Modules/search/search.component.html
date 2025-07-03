@@ -409,7 +409,9 @@
                 <!-- <div *ngFor="let t of SearchList  | paginate: { itemsPerPage: 100, currentPage: page }"
                     class="prodDetails2"> -->
                 <div *ngFor="let t of SearchList  | paginate: { itemsPerPage: 100, currentPage: page }"
-                    class="prodDetails">
+                 [ngClass]="{'prodDetails': t.modelTypes_Id ===1 || t.modelTypes_Id ===4 ,
+                    'prodDetailsYellow': t.modelTypes_Id ===2 || t.modelTypes_Id ===3|| t.modelTypes_Id ===5}">
+                    <!-- class="prodDetails"> -->
                     <div class="prdImgDesc" (click)="getShouldeCost(t)">
 
                         <img *ngIf="t.imagePath == '' else multi" src="assets/No-Image.png" class="prdIcon"

@@ -2,11 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Location } from '@angular/common';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { BUnitMaster } from 'src/app/Model/BUnitMaster';
 import { AdminService } from 'src/app/SharedServices/admin.service';
-import { MasterServiceService } from 'src/app/SharedServices/master-service.service';
-
+ 
 @Component({
   selector: 'app-welcomeuser',
   templateUrl: './welcomeuser.component.html',
@@ -37,7 +34,7 @@ export class WelcomeuserComponent implements OnInit {
 
 
   async ngOnInit() {
-    debugger
+
 
     this.userName = localStorage.getItem('userName');
 
@@ -45,12 +42,24 @@ export class WelcomeuserComponent implements OnInit {
       this.router.navigate(['/welcome']);
       return;
     }
-    
+
     await this.getMenusUserInfo(this.userName);
 
     this.Getwelcomelist();
     this.Getmenulist();
+    debugger
+    const savedSubMenu = sessionStorage.getItem('selectedSubMenu');
+    if (savedSubMenu) {
+      this.submenu = JSON.parse(savedSubMenu);
+      // this.submenu = savedSubMenu;
+      this.showDynamicMenus = true;
+      this.showMainMenus = false;
+    } else {
+      this.showMainMenus = true;
+      this.showDynamicMenus = false;
 
+    }
+    sessionStorage.removeItem('selectedSubMenu');
 
   }
 
@@ -85,12 +94,48 @@ export class WelcomeuserComponent implements OnInit {
     menu.isHovered = isHovered;
   }
 
+  // navigate(event: string): void {
+  //   sessionStorage.setItem('lastSubmenuUrl', event);
+  //   // sessionStorage.removeItem('selectedSubMenu');
+
+  //   this.router.navigate([event]);
+  //   console.log('Navigating to:', event);
+
+  // }
   navigate(event: string): void {
+    debugger
+    sessionStorage.setItem('selectedSubMenu', JSON.stringify(this.submenu));
+    // sessionStorage.setItem('selectedSubMenu', this.submenu);
+    // sessionStorage.setItem('selectedSubMenu', this.submenu.SubMenu);
+
+    sessionStorage.setItem('lastSubmenuUrl', event);
+
+    // Check if the clicked URL exists in the current submenu
+    const isInSubmenu = this.submenu?.some((menu: any) =>
+      menu.submenulist?.some((sub: any) => sub.Navigate_Url === event)
+    );
+
+    if (!isInSubmenu) {
+      // If not part of submenu, clear submenu and show main menu
+      sessionStorage.removeItem('selectedSubMenu');
+      this.submenu = null;
+      this.showDynamicMenus = false;
+      this.showMainMenus = true;
+    }
+
+    this.router.navigate([event]);
+    console.log('Navigating to:', event);
+  }
+
+  mainnavigate(event: string): void {
+    sessionStorage.setItem('lastSubmenuUrl', event);
+
 
     this.router.navigate([event]);
     console.log('Navigating to:', event);
 
   }
+
 
   public navigateToMasters(menu: any): void {
     // this.filterSubMenus(menu);
@@ -159,6 +204,7 @@ export class WelcomeuserComponent implements OnInit {
 
     console.log(this.menulist);
     this.submenu = this.menulist.filter((d: { SubMenu: any; }) => d.SubMenu == menu);
+    // sessionStorage.setItem('selectedSubMenu', JSON.stringify(this.submenu));
 
     this.showDynamicMenus = true;
     this.showMainMenus = false;
@@ -178,6 +224,10 @@ export class WelcomeuserComponent implements OnInit {
   gowelcome() {
     this.router.navigate(['/welcomeuser']);
   }
+
+
+
+
 
 
 

@@ -6,8 +6,8 @@
 
     <div class="fixsubheader">
         <div class="MasterHeader">
-            <div style="width: 20%;">
-                <h2>Design to Cost</h2>
+            <div style="width: 20%;  ">
+                <h2>Design for Manufacturing, Assembly & Cost</h2>
             </div>
             <div style="width: 60%;">
                 <div class="DTO_steps">
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div style="width: 20%; text-align: center; align-items: center;">
-                <input type="button" class="btnback" value="back" Name="back" (click)="backToPreviousPage()">
+                <input type="button" class="btnback" value="Back" Name="Back" (click)="backToPreviousPage()">
             </div>
         </div>
     </div>
@@ -44,7 +44,7 @@
     <div style="margin-top: 95px; font-size: 12px !important; ">
         <div class="MasterHeader2">
             <div class="text-center" style="width: 100%;">
-                <h2>User Simulation</h2>
+                <h2>User Simulation for <b>{{ Projecttitle }}</b> </h2>
             </div>
         </div>
         <div class="datapanal">
@@ -55,8 +55,8 @@
 
                         <div class="col-md-12 " style="border-bottom: 1px solid #da291c; margin-bottom: 10px; ">
                             <div class="row">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-9" style="padding: 10px 0px;">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-10" style="padding: 10px 0px;">
                                     <table>
                                         <tr>
                                             <td style="width: 13%;"><label for="PartName" class="default-lbl">Part Name
@@ -86,10 +86,10 @@
                                         </tr>
                                     </table>
                                 </div>
-                                <div class="col-md-2">
+                                <!-- <div class="col-md-2">
                                     <input type="button" class="btn btn-outline-danger btn-GetReport" name="GetReport"
-                                        value="Save & Go to Next" (click)="GetReport()">
-                                </div>
+                                        value="Save & Go to Next Step" (click)="GetReport()">
+                                </div> -->
                                 <div class="text-center">
                                     <label [hidden]="!IsCESmodel" class="text-center CSModelRemark"
                                         style="margin-left: 0px;">{{ModelwiseNote}}</label>
@@ -143,7 +143,7 @@
                                     <tr>
                                         <td style="padding: 10px 10px; padding-right: 0px" class="TierCostReportTextT1">
                                             User Added Cost
-                                            <input id="getdataUserAdded" type="button"
+                                            <input  [hidden]="ModelTypes_Id == 5" id="getdataUserAdded" type="button"
                                                 class="btn btn-sm btn-outline-danger" name="GetData" value="Update"
                                                 (click)="openModalProcess('T1')" />
                                         </td>
@@ -218,13 +218,18 @@
                                 </tr> -->
                                     <!-- ----- Terif Cost ------ -->
                                     <tr>
-                                        <td colspan="1" class=""> Tariff </td>
+                                        <td colspan="1" class=""> Tariff
+                                            <input id="getdataTierNon1" type="button"
+                                                class="btn btn-sm btn-outline-danger" name="GetData" value="Update"
+                                                (click)="openModalTariff('T1')">
+                                        </td>
                                         <td class=""></td>
                                         <td class=""></td>
                                         <td class="text-center">
                                             <input type="text" class="form-control UpdateTarif Notdisabled Non T1"
-                                                id="TarifUpdatedT1" name="TarifUpdatedT1" [(ngModel)]="TarifValueT1"
-                                                (keyup)="updateTotalCost('T1')" (keypress)="keyPressDecimal($event)" />
+                                                id="TarifUpdatedT1" name="TarifUpdatedT1"
+                                                style="background-color: #8080801a;" (keyup)="updateTotalCost('T1')"
+                                                (keypress)="keyPressDecimal($event)" readonly />
                                         </td>
                                     </tr>
 
@@ -242,12 +247,12 @@
                                 </tbody>
                             </table>
                         </div>
-                        <!-- <div class="row" [hidden]="Istier_1_CostReportBreakdown">
+                        <div class="row" [hidden]="Istier_1_CostReportBreakdown">
                             <div class="col-md-12 text-end">
                                 <input type="button" class="btn btn-outline-danger btn-GetReport" name="GetReport"
-                                    value="Save & Go to Next 1" (click)="GetReport()">
+                                    value="Save & Go to Next Step" (click)="GetReport()">
                             </div>
-                        </div> -->
+                        </div>
 
                         <!-- -----------  Tier 2 ----------------------------------------------- -->
                         <div class="col-md-6 " id="hideTier2Box">
@@ -291,7 +296,7 @@
                                     <tr>
                                         <td style="padding: 10px 10px; padding-right: 0px" class="TierCostReportTextT2">
                                             User Added Cost
-                                            <input id="getdataUserAddedT2" type="button"
+                                            <input [hidden]="ModelTypes_Id == 5" id="getdataUserAddedT2" type="button"
                                                 class="btn btn-sm btn-outline-danger" name="GetData" value="Update"
                                                 (click)="openModalProcess('T2')" />
                                         </td>
@@ -367,13 +372,18 @@
 
                                     <!-- ----- Terif Cost ------ -->
                                     <tr>
-                                        <td colspan="1" class=""> Tariff </td>
+                                        <td colspan="1" class=""> Tariff
+                                            <input id="getdataTierNon2" type="button"
+                                                class="btn btn-sm btn-outline-danger" name="GetData" value="Update"
+                                                (click)="openModalTariff('T2')">
+                                        </td>
                                         <td class=""></td>
                                         <td class=""></td>
                                         <td class="text-center">
                                             <input type="text" class="form-control UpdateTarif Notdisabled Non T2"
-                                                id="TarifUpdatedT2" name="TarifUpdatedT2" [(ngModel)]="TarifValueT1"
-                                                (keyup)="updateTotalCost('T2')" (keypress)="keyPressDecimal($event)" />
+                                                id="TarifUpdatedT2" name="TarifUpdatedT2"
+                                                style="background-color: #8080801a;" (keyup)="updateTotalCost('T2')"
+                                                (keypress)="keyPressDecimal($event)" readonly />
                                         </td>
                                     </tr>
                                     <!-- ----- Total Cost Tier 2 ------ -->
@@ -391,12 +401,12 @@
                             </table>
                         </div>
                     </div>
-                    <!-- <div class="row" [hidden]="Istier_2_CostReportBreakdown">
+                    <div class="row" [hidden]="Istier_2_CostReportBreakdown">
                         <div class="col-md-12 text-end">
                             <input type="button" class="btn btn-outline-danger btn-GetReport" name="GetReport"
-                                value="Save & Go to Next  2" (click)="GetReport()">
+                                value="Save & Go to Next Step" (click)="GetReport()">
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </form>
         </div>
@@ -455,6 +465,7 @@
                                         <th style="width: 10%;" class="ShouldCostBreakdowntableth">New Material Rate³ ($
                                             /
                                             kg)
+                                            <div (click)="FrequentlyUsedMaterialGrade()" class="FrequentlyUsed_Material"> View Frequently Used Material</div>
                                         </th>
                                         <th style="width: 10%;" class="ShouldCostBreakdowntableth">Updated Material Cost
                                             ($)
@@ -686,7 +697,7 @@
         </div>
 
 
-        <!-- ================== CUSTOM MODAL for process ================== -->
+        <!-- ================== CUSTOM MODAL for process start ================== -->
         <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display_process}">
             <div class="modelsize_DirectCostProcess" role="document">
                 <div class="modal-content">
@@ -833,6 +844,75 @@
                 </div>
             </div>
         </div>
+        <!-- ================== CUSTOM MODAL for process  end ================== -->
+
+        <!-- --------- Terrif start ------------- -->
+
+        <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display_Tariff}">
+            <div class="modelsize_Tariff" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Add Tariff</h3>
+                        <label class="close modal-close-icn" (click)="onCloseHandled_TariffPopup()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
+                                viewBox="0 0 16 16">
+                                <path
+                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                        </label>
+                    </div>
+                    <div class="tableFixHead_Tariff">
+                        <form>
+                            <table class="table table-bordered ">
+                                <thead>
+                                    <tr>
+                                        <!-- <th style="width: 30%;" class="ShouldCostBreakdowntableth">Total Part Cost </th> -->
+                                        <th style="width: 30%;" class="ShouldCostBreakdowntableth">Tariff </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="ShouldCostBreakdowntabletr">
+                                         <!-- <td style="padding: 12px 8px 0px 0px;" class="text-end">
+                                            {{ModelPopUp_usdValue |
+                                            number:'1.2-2' }}</td> -->
+                                        <td style="padding: 10px 10px;">
+                                            <input autofocus type="text" class="form-control percentText DirectCost"
+                                                maxlength="10" id="UpdateTariff_Popup"
+                                                (keypress)="keyPressDecimal($event)">
+                                        </td>
+                                    </tr>
+                            </table>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row" style="width: 100%;">
+                            <div class="col-md-7 Remark_nopadding">
+                                <b>Remarks : </b>
+                                <ol type="1">
+                                    <li>{{Notes1_Tariff}}</li>
+                                    <li>{{Notes2_Tariff}}</li>
+                                </ol>
+                            </div>
+                            <div class="col-md-5 text-center">
+                                <button type="button" class="btn btn-outline-dark  btn-save" data-bs-dismis="modal"
+                                    (click)="onCloseHandled_TariffPopup()">Close</button>
+
+                                <input [hidden]="!IsHiddenT1_Tarrif" type="button"
+                                    class="btn btn-outline-danger btn-save" name="GetData" id="btn_Tarrif_T1"
+                                    value="Update" (click)="SaveTariff('T1')">
+                                <input [hidden]="IsHiddenT1_Tarrif" type="button"
+                                    class="btn btn-outline-danger btn-save" name="GetData" id="btn_Tarrif_T2"
+                                    value="Update" (click)="SaveTariff('T2')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- --------- Terrif end ------------- -->
+
+
     </div>
 
 </div>

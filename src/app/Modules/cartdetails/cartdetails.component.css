@@ -1,6 +1,9 @@
 * {
     font-family: Helvetica, Arial !important;
 }
+body {
+  overflow: hidden;
+}
 
 
 .MasterHeader {
@@ -488,7 +491,7 @@ td:last-child {
   /* -------------------------------- */
 
   .table-container {
-    height: 400px;
+     height: 450px;
     overflow: auto;
     border-radius: 12px;
     border: 1px solid #ddd;
@@ -538,7 +541,7 @@ td:last-child {
    .styled-table thead th
    {
     font-size: 12px;
-    height: 16px;
+    height: 16px; 
     text-align: center;
    }
    /* Sticky Action Column */

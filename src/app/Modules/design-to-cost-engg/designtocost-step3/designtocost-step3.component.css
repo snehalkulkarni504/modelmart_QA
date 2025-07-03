@@ -10,7 +10,7 @@
     background-color: #fff;
     z-index: 20;
     border-bottom: 1px solid #da291c;
-     top: 50px;
+    top: 50px;
 }
 
 .MasterHeader {
@@ -24,19 +24,19 @@
 }
 
 .MasterHeader h2 {
-    /* margin: 20px 0px; */
-    font-size: 30px;
+    font-size: 17px;
     font-family: Helvetica, Arial !important;
     color: #808080;
     margin-left: 20px;
+    text-align: center;
+    vertical-align: middle !important;
     font-weight: 600;
+    height: 40px;
+    margin-top: 20px;
     text-size-adjust: 100%;
-    height: 80px;
-    line-height: 80px;
     background: linear-gradient(to right, #7b4397, #dc2430);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-
 }
 
 /* ------------ steps design start ------------ */
@@ -573,6 +573,10 @@ hr {
     cursor: pointer;
 }
 
+.idNA {
+    text-align: center;
+}
+
 .idSelection {
     background-color: #f0f0f0 !important;
 }
@@ -641,15 +645,17 @@ td.id1 {
 }
 
 .is-invalid {
-border: 1px solid red;
-    }
-    
-.default-btn{
+    border: 1px solid red;
+}
+
+.default-btn {
     padding: 1px 12px;
 }
+
 .modal {
     background: rgba(0, 0, 0, .5);
 }
+
 .modal-close-icn {
     width: 30px;
     height: 30px;
@@ -658,7 +664,7 @@ border: 1px solid red;
     justify-content: center;
     align-items: center;
     transition: .2s ease-in-out;
-  }
+}
 
 /* Add Idea  */
 .modal-backdrop {
@@ -671,29 +677,36 @@ border: 1px solid red;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .modal-content {
+}
+
+.modal-content {
     background: #fff;
     padding: 20px;
     border-radius: 6px;
     width: 600px;
     margin-left: 130px;
     margin-bottom: 12px;
-    
-  }
-  
-  .modal-close-icn {
+
+}
+
+.modal-close-icn {
     width: 30px;
     height: 30px;
     color: #000;
-    display: flex;
     justify-content: center;
     align-items: center;
     transition: .2s ease-in-out;
-  
+    float: right;
 }
-.modal-close-icn:hover{
+
+.modal-close-icn:hover {
     rotate: 90deg;
 
+}
+
+.RemarkSection {
+   margin-top: 10px;
+    font-size: 12px;
+    padding-bottom: 5px;
+    color: #da291c;
 }

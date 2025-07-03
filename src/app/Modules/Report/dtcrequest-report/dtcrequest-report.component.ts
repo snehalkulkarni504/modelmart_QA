@@ -30,10 +30,10 @@ export class DtcrequestReportComponent {
     public reportservice: ReportServiceService,
     public router: Router,
     private datePipe: DatePipe, private location: Location, private SpinnerService: NgxSpinnerService, public toastr: ToastrService) {
-      this.route.queryParams.subscribe(params => {
-        this.CSHeaderId = params['csHeaderID'];
-        this.SCReportId= params['screportID'];
-      });
+    this.route.queryParams.subscribe(params => {
+      this.CSHeaderId = params['csHeaderID'];
+      this.SCReportId = params['screportID'];
+    });
 
   }
 
@@ -41,7 +41,7 @@ export class DtcrequestReportComponent {
   MaterailGrade: any;
   MaterailGradeT2: any;
   NonManufacturingCost: any;
-  Vavedetails:any;
+  Vavedetails: any;
   TierData: any; Tier2Data: any;
   CSHeaderId: any;
   SM_Id: number = 0;
@@ -60,15 +60,15 @@ export class DtcrequestReportComponent {
   CurruntDate: any;
   UserName: any;
   userId: any;
-  totalcost:number=0;
-  totalvavecost:number=0;
+  totalcost: number = 0;
+  totalvavecost: number = 0;
   //IsCastingSheet: any;
   SCReportId: any;
   IsUserLog: any;
   ProjectName: any;
   userFullName: any;
   //UniqueId:any;
-  VaveIdea:number[]=[];
+  VaveIdea: number[] = [];
 
   T2NotPresent = true;
 
@@ -82,11 +82,11 @@ export class DtcrequestReportComponent {
       this.router.navigate(['/welcome']);
       return;
     }
-    this.VaveIdea=[137,191,272]
+    this.VaveIdea = [137, 191, 272]
 
     //this.IsCastingSheet = localStorage.getItem('IsCastingSheet');
 
-     //this.userId = localStorage.getItem("userId");
+    //this.userId = localStorage.getItem("userId");
     //this.ForexRegion = localStorage.getItem("DTCForexRegion");
 
     //this.UserName = localStorage.getItem("userName");
@@ -100,7 +100,7 @@ export class DtcrequestReportComponent {
 
     // if (this.IsUserLog == 1) {
     this.GetReportData();
-      
+
     // }
     // else {
     //   this.GetReportData_UserLog();
@@ -120,21 +120,21 @@ export class DtcrequestReportComponent {
     try {
 
       this.SpinnerService.show('spinner');
-      const data = await this.reportservice.GetDTCRequestReport(this.CSHeaderId,this.SCReportId).toPromise();
+      const data = await this.reportservice.GetDTCRequestReport(this.CSHeaderId, this.SCReportId).toPromise();
 
       this.ProductDetail = data.ProductDetail;
-      this.ProjectName=data.ProductDetail[0].ProjectName;
-      this.DebriefDateFormated=data.ProductDetail[0].DebriefDate;
-      this.ForexRegion =data.ProductDetail[0].ForexRegion;
-      this.hh =data.ImagePath;
+      this.ProjectName = data.ProductDetail[0].ProjectName;
+      this.DebriefDateFormated = data.ProductDetail[0].DebriefDate;
+      this.ForexRegion = data.ProductDetail[0].ForexRegion;
+      this.hh = data.ImagePath;
       this.MaterailGrade = data.MaterailGrade;
       this.NonManufacturingCost = data.nonManufacturingCost;
       this.TierData = data.TierData;
       this.Tier2Data = data.TierDataT2;
-      this.userId=data.UserInfo[0].UserId;
-      this.UserName=data.UserInfo[0].UserName;
-      this.userFullName=data.UserInfo[0].FullName;
-      this.Vavedetails=data.Vavedetails;
+      this.userId = data.UserInfo[0].UserId;
+      this.UserName = data.UserInfo[0].UserName;
+      this.userFullName = data.UserInfo[0].FullName;
+      this.Vavedetails = data.Vavedetails;
       // this.Vavedetails = [
       //   { Id:'267',Idea: 'Value 1A', Potsav: '3' },
       //   { Id:'546',Idea: 'Value 2A', Potsav: '2' },
@@ -146,9 +146,9 @@ export class DtcrequestReportComponent {
       // } catch (error) {
       //   console.error('Error fetching data:', error);
       // }
-    
-      this.totalcost=this.TierData[this.TierData.length-1].smUSDValue
-     
+
+      this.totalcost = this.TierData[this.TierData.length - 1].smUSDValue
+
       this.onvaveChange();
       //console.log("this.totalvavecost",this.TierData[this.TierData.length-1].smUSDValue)
       this.ContributionInTotal(data.TierData);
@@ -393,7 +393,7 @@ export class DtcrequestReportComponent {
           doc.text(splitText[j], fileWidth / 2, 80 + line, { align: 'center' });
           line = line + 10;
         }
-       // debugger;
+        // debugger;
         this.hh = localStorage.getItem("DTCimagePath")?.toString();
         //'../../../assets/CRANKSHAFT,ENGINE-5714721/ISO.JPG' ;
 
@@ -482,7 +482,7 @@ export class DtcrequestReportComponent {
     let Lessthan = [193, 232, 194]
 
     const Tier1rows = [
-      [this.ProductDetail[0].SGA_T1, this.SGA_per, this.ProductDetail[0].Profit_T1, this.Profit_per, 
+      [this.ProductDetail[0].SGA_T1, this.SGA_per, this.ProductDetail[0].Profit_T1, this.Profit_per,
       this.ProductDetail[0].Packaging_T1, this.Packaging_per, this.ProductDetail[0].Freight_T1, this.FreightLogistics_per]
     ];
 
@@ -536,7 +536,7 @@ export class DtcrequestReportComponent {
       let finalY0 = (doc as any).lastAutoTable.finalY;
 
       const Tier2rows = [
-        [this.ProductDetail[0].SGA_T2, this.SGA_per_T2, this.ProductDetail[0].Profit_T2, this.Profit_per_T2, 
+        [this.ProductDetail[0].SGA_T2, this.SGA_per_T2, this.ProductDetail[0].Profit_T2, this.Profit_per_T2,
         this.ProductDetail[0].Packaging_T2, this.Packaging_per_T2, this.ProductDetail[0].Freight_T2, this.FreightLogistics_per_T2]
       ];
 
@@ -619,13 +619,13 @@ export class DtcrequestReportComponent {
 
     debugger;
     let finalY = (doc as any).lastAutoTable.finalY;
-    
-    let pageadded=false
-    
+
+    let pageadded = false
+
     // this.MaterailGrade.length
     if (this.MaterailGrade.length >= 8) {
 
-      pageadded=true
+      pageadded = true
       doc.addPage();
       /// header
       const headerlogo1 = '../../../assets/welcome/Model Mart_Final Logo_130325.png';
@@ -683,12 +683,12 @@ export class DtcrequestReportComponent {
               // if (data.row.index == 6 || data.row.index === rows.length - 1) {
               //   data.cell.styles.fillColor = [217, 217, 217];
               // }
-              
+
               if (data.row.index == 7 || data.row.index === rows.length - 1) {
                 data.cell.styles.fillColor = [217, 217, 217];
               }
 
-              
+
               data.table.head[0].cells[0].styles.fillColor = [217, 217, 217];
             },
             willDrawCell: function (data: any) {
@@ -785,8 +785,7 @@ export class DtcrequestReportComponent {
     doc.setGState(doc.GState({ opacity: 0.5 }));
     doc.text('User simulation, not a Cost Model', 132, finalY + 90, { angle: 46 });
 
-    if(pageadded==false)
-    {
+    if (pageadded == false) {
       doc.addPage();
       /// header
       const headerlogo1 = '../../../assets/welcome/Model Mart_Final Logo_130325.png';
@@ -824,7 +823,7 @@ export class DtcrequestReportComponent {
     autoTable(doc, {
       head: headers,
       body: data,
-      startY: 30+7,
+      startY: 30 + 7,
       theme: 'grid',
       headStyles: { fontSize: 7, fillColor: [179, 179, 179], textColor: [0, 0, 0] },
       bodyStyles: { fontSize: 7, fontStyle: 'bold', textColor: [0, 0, 0] },
@@ -835,6 +834,20 @@ export class DtcrequestReportComponent {
         2: { cellWidth: 40 }
       },
       margin: 35
+    });
+
+    let finalYVAVE = (doc as any).lastAutoTable.finalY;
+
+    let TotalCost = [['Total Cost : $ ' + this.totalvavecost]];
+    autoTable(doc, {
+      head: TotalCost,
+      body: [],
+      startY: finalYVAVE + 10,
+      theme: 'grid',
+      headStyles: { fontSize: 9, fillColor: [217, 217, 217], textColor: [0, 0, 0], halign: 'center' },
+      bodyStyles: { fillColor: [255, 255, 255] },
+      margin: 35,
+      tableWidth: 140,
     });
 
 
@@ -858,22 +871,20 @@ export class DtcrequestReportComponent {
     this.location.back();
   }
 
-  onvaveChange()
-  {
-    this.totalvavecost=0;
+  onvaveChange() {
+    this.totalvavecost = 0;
     for (let i = 0; i < this.Vavedetails.length; i++) {
-      this.totalvavecost=this.totalvavecost+Number(this.Vavedetails[i].PSavings)
-      console.log("this.totalvavecost",this.totalvavecost)
+      this.totalvavecost = this.totalvavecost + Number(this.Vavedetails[i].PSavings)
+      console.log("this.totalvavecost", this.totalvavecost)
     }
-    this.totalvavecost= Math.round((this.totalcost-this.totalvavecost+ Number.EPSILON) * 100) / 100
+    this.totalvavecost = Math.round((this.totalcost - this.totalvavecost + Number.EPSILON) * 100) / 100
   }
 
-  SaveVavedetails()
-  {
-    console.log('this.Vavedetails',this.Vavedetails)
-    let vavelist: any[]=[];
+  SaveVavedetails() {
+    console.log('this.Vavedetails', this.Vavedetails)
+    let vavelist: any[] = [];
     for (let i = 0; i < this.Vavedetails.length; i++) {
-      vavelist.push({CSHeaderId:this.CSHeaderId,SCReportId:this.SCReportId,IdeaId:this.Vavedetails[i].ID,PSavings:this.Vavedetails[i].PotentialSavingsPerPieceMDO,CreatedBy:this.userId})
+      vavelist.push({ CSHeaderId: this.CSHeaderId, SCReportId: this.SCReportId, IdeaId: this.Vavedetails[i].ID, PSavings: this.Vavedetails[i].PotentialSavingsPerPieceMDO, CreatedBy: this.userId })
     }
     this.reportservice.insertDPVavedetails(vavelist).subscribe({
       next: (_res: any) => {
@@ -884,7 +895,7 @@ export class DtcrequestReportComponent {
         console.error('Inserting API call error:', error);
       },
     });
-   
+
   }
 
   // SendNewRequest() {

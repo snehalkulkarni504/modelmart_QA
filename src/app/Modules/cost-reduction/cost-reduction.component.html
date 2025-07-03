@@ -69,17 +69,19 @@
       </marquee>
     </div>
 
-    <div class="col-12">
+    <div class="col-12" *ngIf="activeButton === 'default' || activeButton === 'commercial'">
       <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-          <p>Your current SC Attainment is <strong>80%</strong></p>
+          <p>Your current User SC Attainment is <strong>{{ totaluserAttainment }}</strong></p>
         </div>
-        <!-- <div class="col-md-3">
-          <button class="btnback" (click)="backToCat3()">Back</button>
-        </div> -->
       </div>
     </div>
+    
+    <div class="col-12">
+      <p>Your current SC Attainment is <strong>{{ totalAttainment }}</strong></p>
+    </div>
+    
 
     <div class="col-12">
       <p>You have current opportunities worth <strong>{{ totalVariation }}</strong></p>
@@ -136,6 +138,13 @@
 
       <button class="btn view-btn" style="margin-right: 10px;" (click)="onViewClick()">View</button>
       <button class="btn view-btn" (click)="ClearAll()">clear</button>
+   
+      <!-- <button (click)="exportToExcel()" class="btn btn-success">Export Full Table to Excel</button> -->
+      <img src="../../../../assets/exportexcel.png" class="exportToExcel" (click)="exportToExcel()" ngbTooltip="Export to Excel">
+
+    
+    
+      
     </div>
 
     <div class="col-md-6" style="max-width: 100%;width: 90%; overflow-x: auto;margin-bottom: 60px;">
@@ -152,34 +161,37 @@
               <th>Annual<br> Volume</th>
               <th>Updated Annual<br> Volume</th>
               <th>Should Cost</th>
-              <th>User Calculated<br> Cost</th>
+              <th>User Simulated<br> Cost</th>
               <th>Supplier Quoted/<br>Invoice Price</th>
-              <th>Invoice Price<br>Should Cost</th>
+              <th>Delta Should Cost<br>- Invoice price</th>
               <th>SC<br>Attainment</th>
               <th>User SC<br> Attainment</th>
               <th>Commerical<br> Arbitrage</th>
-              <th>User Simulalated <br>Arbitrage</th>
+              <th>User Simulated <br>Arbitrage</th>
               <th>Submitted By</th>
               <th>Project Status</th>
-              <th hidden>Debreif Date</th>
+              <th>Debreif Date</th>
               <th>Comments</th>
-              <th>Documents <br>Upload</th>
+              <th>User <br>Activity</th>
               <th style="position: sticky; right: 0px; z-index: 3;">Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let opportunity of opportunities;  let i=index">
+            <!-- <tr *ngFor="let opportunity of opportunities;  let i=index"> -->
+          <tr *ngFor="let opportunity of opportunities | search: textsearch:filterMetadata  | paginate: { itemsPerPage: 25, currentPage: page };  let i=index">
+ 
 
-              <td style="position: sticky; left: 0px; ">{{i + 1}}</td>
+              <!-- <td style="position: sticky; left: 0px; ">{{i + 1}}</td> -->
+              <td style="position: sticky; left:0px;">{{ (page - 1) * pageSize + i + 1 }}</td>
               <td style="position: sticky; left: 32px;">
-                <span title="{{opportunity.PartNumber}}">{{opportunity.PartNumber.length > 10 ? opportunity.PartNumber.slice(0, 10) + '...' : opportunity.PartNumber}}</span>
+                <span ngbTooltip ="{{opportunity.PartNumber}}">{{opportunity.PartNumber.length > 10 ? opportunity.PartNumber.slice(0, 10) + '...' : opportunity.PartNumber}}</span>
               </td>
               <td>
-                <span title="{{opportunity.PartName}}"> {{opportunity.PartName.length > 12 ? opportunity.PartName.slice(0, 12) + '...' : opportunity.PartName}} </span>
+                <span ngbTooltip ="{{opportunity.PartName}}"> {{opportunity.PartName.length > 12 ? opportunity.PartName.slice(0, 12) + '...' : opportunity.PartName}} </span>
               </td>
               <td class="align-center">{{opportunity.MMID}}</td>
               <td>
-                <span class="hover-text" title="{{opportunity.SupplierName}}"> 
+                <span class="hover-text" ngbTooltip ="{{opportunity.SupplierName}}"> 
                   {{ opportunity.SupplierName ? (opportunity.SupplierName.length > 12 ? opportunity.SupplierName.slice(0, 12) + '...' : opportunity.SupplierName) : '' }} </span>
               </td>
               <td>{{opportunity.SupplierMfgRegion}}</td>
@@ -220,10 +232,10 @@
                   <option value="Reject">Reject</option>
                 </select>
               </td>
-              <td hidden>{{opportunity.DebriefDate}}</td>
+              <td>{{opportunity.DebriefDate}}</td>
               <td>
                 <span (click)="openCommentsPopup(opportunity.Comments, i)"
-                  [style.pointer-events]="editingIndex !== i ? 'none' : 'auto'"  style="cursor: pointer; color: #ef7659;">
+                [ngbTooltip]=" opportunity.Comments " [style.pointer-events]="editingIndex !== i ? 'none' : 'auto'"  style="cursor: pointer; color: #ef7659;">
                   {{ opportunity.Comments && opportunity.Comments.length > 12 ? (opportunity.Comments | slice:0:12) + '...' : opportunity.Comments || 'Add Comment' }}
                 </span>
               </td>
@@ -310,6 +322,15 @@
           </div>
         </div>
       </div>
+      <div class="d-flex justify-content-between p-2 pagination">
+                             
+        <ngb-pagination [collectionSize]="filterMetadata.count" [(page)]="page" [pageSize]="pageSize"
+            [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm" >
+            <ng-template ngbPaginationPrevious>Prev</ng-template>
+            <ng-template ngbPaginationNext>Next</ng-template>
+        </ngb-pagination>
+        <br>
+    </div>
     </div>
   </div>
 </div>
@@ -344,6 +365,8 @@
 
     <button class="btn view-btn" style="margin-right: 10px;" (click)="RegionalDateFilter()">View</button>
     <button class="btn view-btn" (click)="ClearDateFilter()">clear</button>
+
+    <img src="../../../../assets/exportexcel.png" class="exportToExcel" (click)="exportRegionalTableToExcel()" ngbTooltip="Export to Excel">
   </div>
   <div class="col-md-6" style="max-width: 100%;width: 90%; overflow-x: auto; margin-bottom: 60px; ">
     <div class="table-responsive" style="border: 1px solid #808080;">
@@ -358,21 +381,22 @@
             <th>Supplier quoted/<br>Invoice Price</th>
             <th>Supplier Name</th>
             <th>Best<br>Region</th>
-            <th>Best<br>Region Cost</th>
+            <th>Quoted Cost From<br>Best Region</th>
             <th>Region<br>Arbitrage (USD)</th>
             <th>RegionRelation</th>
             <th>Project Status</th>
-            <th hidden>Debreif Date</th>
+            <th>Debreif Date</th>
             <th>Comments</th>
-            <th>Documents Upload</th>
+            <th>User Activity</th>
             <th style="position: sticky; right: 0px; z-index: 3;" container="body">Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let Region of Regional ; let i=index">
-            <td style="position: sticky; left: 0px; ">{{i + 1}}</td>
+         
+          <tr *ngFor="let Region of Regional | search: textsearch:filterMetadata  | paginate: { itemsPerPage: 25, currentPage: page };  let i=index">
+            <td style="position: sticky; left: 0px; ">{{ (page - 1) * pageSize + i + 1 }}</td>
             <td style="position: sticky; left: 32px;">
-              <span title="{{Region.PartNumber}}"> {{Region.PartNumber.length > 10 ? Region.PartNumber.slice(0, 10) + '...' : Region.PartNumber}} </span>
+              <span ngbTooltip ="{{Region.PartNumber}}"> {{Region.PartNumber.length > 10 ? Region.PartNumber.slice(0, 10) + '...' : Region.PartNumber}} </span>
             </td>
             <td>{{Region.PartName}}</td>
             <td>{{Region.MainRegion}}</td>
@@ -380,8 +404,8 @@
             <td>$ {{Region.TotalCost}}</td>
             <td>{{Region.Supplier}}</td>
             <td>{{Region.BestRegion}}</td>
-            <td>$ {{Region.BestRegionCost}}</td>
-            <td>$ {{Region.RegionalArbitrage}}</td>
+            <td>$ {{Region.BestRegionCost | number:'1.2-2'}}</td>
+            <td>$ {{Region.RegionalArbitrage | number:'1.2-2'}}</td>
             <td>{{Region.RegionRelation}}</td>
             <td>
               <select [(ngModel)]="Region.ProjectStatus" class="form-select" [disabled]="editingIndexRegional !== i"  style="width: 100%; height: 25px; font-size: 9px; font-weight: bold;">
@@ -391,11 +415,11 @@
                 <option value="Reject">Reject</option>
               </select>
             </td>
-            <td hidden>{{Region.DebriefDate}}</td>
+            <td>{{Region.DebriefDate}}</td>
 
             <td>
               <span (click)=" editingIndexRegional === i && openregioncomment(Region.Comments, i)"
-                [style.pointer-events]="editingIndexRegional !== i ? 'none' : 'auto'" style="cursor: pointer; color: #ef7659;">
+                ngbTooltip="Region.Comments" [style.pointer-events]="editingIndexRegional !== i ? 'none' : 'auto'" style="cursor: pointer; color: #ef7659;">
                 {{ Region.Comments && Region.Comments.length > 12? (Region.Comments | slice:0:12) + '...': Region.Comments || 'Add Comment' }}
               </span>
             </td>
@@ -471,7 +495,17 @@
           </div>
         </div>
       </div>
+      
     </div>
+    <div class="d-flex justify-content-between p-2 pagination">
+                             
+      <ngb-pagination [collectionSize]="filterMetadata.count" [(page)]="page" [pageSize]="pageSize"
+          [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm" >
+          <ng-template ngbPaginationPrevious>Prev</ng-template>
+          <ng-template ngbPaginationNext>Next</ng-template>
+      </ngb-pagination>
+      <br>
+  </div>
   </div>
 </div>
 
@@ -484,7 +518,7 @@
   <div class="row" style="width: 100%; display: flex; justify-content: center">
     <div class="graph">
       <div class="chart-box">
-        <canvasjs-chart class="canvas-chart" [options]="MfgchartOptions" [styles]="getGraphstyle()" id="chartOptionsId"></canvasjs-chart>
+        <canvasjs-chart class="Mfgcanvas-chart" [options]="MfgchartOptions" [styles]="GetMfgGraphStyle()" id="chartOptionsId"></canvasjs-chart>
       </div>
     </div>
 
@@ -504,6 +538,8 @@
       <input type="date" id="to-date" [(ngModel)]="toDateMfg" [attr.min]="minDateMfg" [attr.max]="maxDateMfg" class="custom-input" style="padding: 5px" />
       <button class="btn view-btn" style="margin-right: 10px" (click)="onViewClickMfg()">View</button>
       <button class="btn view-btn" (click)="ClearAllMfg()">clear</button>
+
+      <img src="../../../../assets/exportexcel.png" class="exportToExcel" (click)="exportMfgTableToExcel()" ngbTooltip="Export to Excel">
     </div>
     <div class="col-md-6" style="max-width: 90%; width: 100%; overflow-x: auto; margin-bottom: 60px">
       <div class="table-responsive" style="border: 1px solid #808080">
@@ -515,36 +551,39 @@
               <th>Part Name</th>
               <th>Supplier Mfg Location</th>
               <th>Supplier Quoted/Invoice<br />Price (USD)</th>
+              <th >DebriefDate</th>
               <th>Process1 Quote/Should Cost</th>
               <th>Process1 Name</th>
               <th>Process2 Quote/Should Cost</th>
               <th>Process2 Name</th>
               <th>Variation</th>
               <th>High Level Process</th>
-              <th>Documents <br />Upload</th>
+              <th>User<br />Activity</th>
               <th>Comments</th>
               <th>Submitted By</th>
               <th>Project Status</th>
               <th style="position: sticky; right: 0px; z-index: 4">Action</th>
-              <th hidden>DebriefDate</th>
+             
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of mgfprocess; let i = index">
+            <tr *ngFor="let data of mgfprocess | search: textsearch:filterMetadata  | paginate: { itemsPerPage: 25, currentPage: page }; let i = index">
 
-              <td style="position: sticky; left:0px;">{{ i + 1 }}</td>
+              <td style="position: sticky; left:0px;">{{ (page - 1) * pageSize + i + 1 }}</td>
               <!-- <td style="position: sticky; left: 31px;">{{ data.PartNumber }}</td> -->
               <td style="position: sticky; left: 32px;">
-                <span title="{{data.PartNumber}}"> {{data.PartNumber.length > 10 ? data.PartNumber.slice(0, 10) + '...' : data.PartNumber}} </span>
+                <span ngbTooltip ="{{data.PartNumber}}"> {{data.PartNumber.length > 10 ? data.PartNumber.slice(0, 10) + '...' : data.PartNumber}} </span>
               </td>
               <td>{{ data.PartName }}</td>
               <td>{{ data.MfgRegion }}</td>
-              <td>{{ data.TargetQuote }}</td>
-              <td>$ {{ data.Col2_First.toFixed(3) }}</td>
+              <!-- <td>{{ roundToTwoDecimalPlaces(data.TargetQuote)}}</td> -->
+              <td>{{ data.TargetQuote ? roundToTwoDecimalPlaces(data.TargetQuote) : '' }}</td>
+              <td>{{ data.DebriefDate.split('T')[0] }}</td>
+              <td>$ {{ data.Col2_First.toFixed(2) }}</td>
               <td>{{ data.HighLevelProcess_First }}</td>
-              <td>$ {{ data.Col2_Second.toFixed(3) }}</td>
+              <td>$ {{ data.Col2_Second.toFixed(2) }}</td>
               <td>{{ data.HighLevelProcess_Second }}</td>
-              <td> ${{getAbsoluteDifferenceMfg(data.Col2_First,data.Col2_Second).toFixed(3)}}</td>
+              <td> ${{getAbsoluteDifferenceMfg(data.Col2_First,data.Col2_Second).toFixed(2)}}</td>
               <td>
                 {{ data.Col2_First > data.Col2_Second ? data.HighLevelProcess_First : data.HighLevelProcess_Second }}
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
@@ -562,7 +601,7 @@
 
               <td>
                 <span (click)="openCommentsPopupMfg(data.Comments, i)" style="cursor: pointer; color: #ef7659">
-                  {{ data.Comments && data.Comments.length > 12 ? (data.Comments | slice : 0 : 12) + "..." : data.Comments || "Add Comment"}}
+                   {{ data.Comments && data.Comments.length > 12 ? (data.Comments | slice : 0 : 12) + "..." : data.Comments || "Add Comment"}}
                 </span>
               </td>
 
@@ -586,7 +625,8 @@
                     (click)="editRowMfg(i)" ngbTooltip="Edit"></i>
                 </ng-template>
               </td>
-              <td hidden>{{ data.DebriefDate }}</td>
+              <!-- <td >{{ data.DebriefDate }}</td> -->
+              
             </tr>
           </tbody>
         </table>
@@ -638,13 +678,22 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismis="modal" (click)="closeUploadPopupMfg()">Close</button>
-                <button type="button" class="btn btn-sm  btn-default default-btn_popup">Save</button>
+                <button type="button" class="btn btn-sm  btn-default default-btn_popup" data-bs-dismis="modal" (click)="closeUploadPopupMfg()">Close</button>
+                <!-- <button type="button" class="btn btn-sm  btn-default default-btn_popup">Save</button> -->
               </div>
             </div>
           </div>
         </div>
       </div>
+      <div class="d-flex justify-content-between p-2 pagination">
+                             
+        <ngb-pagination [collectionSize]="filterMetadata.count" [(page)]="page" [pageSize]="pageSize"
+            [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm" >
+            <ng-template ngbPaginationPrevious>Prev</ng-template>
+            <ng-template ngbPaginationNext>Next</ng-template>
+        </ngb-pagination>
+        <br>
+    </div>
     </div>
   </div>
 </div>

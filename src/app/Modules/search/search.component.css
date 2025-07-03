@@ -132,12 +132,38 @@
 }
 
 
+.prodDetailsYellow {
+    position: relative;
+    width: 21%;
+    padding: 10px;
+    border: 1.5px solid #e2e208da;
+    transition: all .3s ease-in-out;
+    margin: 15px;
+    animation: showpanal alternate 1s;
+    border-radius: 10px;
+}
+
+.prodDetailsYellow:hover {
+    box-shadow: 0px 0px 10px #e2e208da;
+    transition: all .3s ease-in-out;
+    transform: scale(1.02, 1.02);
+}
+
 @media screen and (max-width: 992px) {
     .prodDetails {
         position: relative;
         width: 30%;
         padding: 10px;
         border: 1px solid #8080802c;
+        transition: all .3s ease-in-out;
+        margin: 10px;
+    }
+
+    .prodDetailsYellow {
+        position: relative;
+        width: 30%;
+        padding: 10px;
+        border: 1.5px solid #e2e208da;
         transition: all .3s ease-in-out;
         margin: 10px;
     }
@@ -167,6 +193,15 @@
         width: 43%;
         padding: 10px;
         border: 1px solid #8080802c;
+        transition: all .3s ease-in-out;
+        margin: 10px;
+    }
+
+    .prodDetailsYellow {
+        position: relative;
+        width: 43%;
+        padding: 10px;
+        border: 1.5px solid #e2e208da;
         transition: all .3s ease-in-out;
         margin: 10px;
     }

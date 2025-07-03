@@ -98,7 +98,7 @@ export class FeedbackComponent {
   }
 
   closethankyoubox() {
-    this.router.navigate(['/home/sendmessage'])
+    this.router.navigate(['/home/contact'])
   }
 
   backToPreviousPage() {

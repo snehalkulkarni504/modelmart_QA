@@ -121,6 +121,40 @@ p {
   white-space: nowrap;
   /* Prevent line breaks for part numbers */
 }
+.Mfgcanvas-chart {
+  text-align: center;
+  padding-left: 3%;
+  padding-right: 5%;
+  display: inline-block;
+  display: block;
+  width: auto;
+  /* Changed from 100% to auto */
+  min-width: 100%;
+  /* Ensures full width when not scrolling */
+  height: max-content;
+  max-height: 100%;
+  overflow: visible;
+  overflow-y: visible;
+  /* Changed from auto to visible */
+}
+
+.Mfgcanvas-chart_GreaterThan30 {
+
+  text-align: center;
+  padding-left: 3%;
+  padding-right: 5%;
+  display: block;
+  height: 100%;
+  /* Match parent height */
+
+  overflow-x: auto;
+  /* Enable horizontal scrolling */
+  /* overflow-y: auto; */
+  /* Disable vertical scrolling if unnecessary */
+  white-space: nowrap;
+  /* Prevent line breaks for part numbers */
+}
+
 
 
 
@@ -843,7 +877,22 @@ p {
 .scroll1::-webkit-scrollbar-thumb {
   background: #da291c;
 }
+.exportToExcel {
+  width: 40px;
+  height: 40px;
+  margin-left: 50px;
+  transition: transform 0.2s ease;
+}
 
+.exportToExcel:hover {
+  cursor: pointer !important;
+  transform: scale(1.1);
+}
+.exportToExcel img {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
 
 /* ////// checkbox  ////////////////////////////////////////////////////////////////// */
 
@@ -1054,4 +1103,8 @@ input[type=checkbox][_ngcontent-ng-c1223772666] {
 .image-container {
   position: relative;
   display: inline-block;
+}
+.pagination{
+  width: 80%;
+  /* margin-left: 10%; */
 }

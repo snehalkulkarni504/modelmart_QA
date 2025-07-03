@@ -5,11 +5,11 @@
     </ngx-spinner>
     <div class="setheight">
         <div class="MasterHeader">
-            <div style="width: 50%;">
-                <h2>Bom Simulation <label for="" style="font-size: medium;">({{getrouteprogname}},
-                        {{getroutecartname}})</label></h2>
+            <div style="width: 70%;">
+                <h3>Bill of Material (BoM) Simulation Module <label for="" style="font-size: medium;">({{getrouteprogname}},
+                        {{getroutecartname}})</label></h3>
             </div>
-            <div class="text-end" style="width: 80%;">
+            <div class="text-end" style="width: 30%;">
                 <!-- <button class="btnCreateCart" (click)="Downloadtemplate()">Download Template</button>
                 <button class="btnCreateCart" (click)="excelU=true" (click)="cartcreate=false"
                     (click)="openUploadModal()">Upload Excel</button> -->
@@ -89,14 +89,14 @@
 
                         <div class="col-md-6" style="display: ruby-text;">
                             <button class="btndemo" style="width: 120%;" (click)="Downloadtemplate()">Download Template</button>
-                            <button class="btndemo" style="margin-top: 15px; margin-left:34px"  (click)="addRow()" (click)="scroll(target)">Add Row</button>
+                            <button class="btndemo" style="margin-top: 15px; margin-left:34px"  (click)="addRow()">Add Row</button>
                         </div>
 
                         <div class="col-md-6" style="display: ruby-text;">
                             <button class="btndemo" (click)="matchconfirm=false" (click)="matchconfirmnew=false"  (click)="excelU=true" (click)="cartcreate=false" (click)="openUploadModal()"
                             style="margin-top: 0px;margin-left: 29%; width: 80px;">Upload Bom</button>
 
-                        <img style="margin-top: 14px; margin-left:30px" src="../../../../assets/exportexcel.png" class="exportToExcel" (click)="exportToExcel()" title="Export to Excel">
+                        <button class="btndemo" style="margin-top: 14px; margin-left:30px"  (click)="exportToExcel()" title="Export to Excel">Export to Excel</button>
 
                         </div>
 
@@ -122,8 +122,9 @@
                     </ng-template>
 
         <!-- -------------------------------- -->
+         
 
-        <div class="table-container">
+        <div class="table-container" #tableContainer>
             <table class="styled-table">
               <thead >
                 <tr class="header-top">
@@ -166,7 +167,7 @@
                         <th class="collapsed1" [hidden]="Ishide1">Weight (lbs)</th>
                         <th class="collapsed1" [hidden]="Ishide1" >Mfg Loc</th>
                         
-                        <th class="collapsed1" [hidden]="Ishide1">CostType</th>
+                       <!-- <th class="collapsed1" [hidden]="Ishide1">CostType</th>-->
                         
                         
                         
@@ -208,30 +209,30 @@
                         <td hidden>{{row.bomId}}</td>
                         <td title="{{ row.excelname }}" class="sticky-part-name"><span *ngIf="!row.editable">{{ row.excelname }}</span>
                             <input *ngIf="row.editable" [(ngModel)]="row.excelname" value="{{row.excelname}}"
-                                class="editable-input" />
+                                class="editable-input" #excelnameInput  required/>
                         </td>
                         <td class="sticky-part-number"><span *ngIf="!row.editable">{{ row.excelenginedisplacement }}</span>
                             <input *ngIf="row.editable" [(ngModel)]="row.excelenginedisplacement"
-                                value="{{row.excelenginedisplacement}}" class="editable-input" />
+                                value="{{row.excelenginedisplacement}}" class="editable-input"  #excelenginedisplacementInput required/>
                         </td>
                         <td>
                             <span *ngIf="!row.editable">{{ row.excelitemcount }}</span>
                             <input *ngIf="row.editable" [(ngModel)]="row.excelitemcount" value="{{row.excelitemcount}}"
-                                class="editable-input" />
+                                class="editable-input" #excelitemcountInput required/>
                         </td>
                         <td [hidden]="Ishide1"><span *ngIf="!row.editable">{{ row.excelPlatform}}</span>
                             <input *ngIf="row.editable" [(ngModel)]="row.excelPlatform"
-                                value="{{row.excelPlatform}}" class="editable-input" />
+                                value="{{row.excelPlatform}}" class="editable-input" #excelPlatformInput required/>
                         </td>
                         <td [hidden]="Ishide1">
                             <span *ngIf="!row.editable">{{ row.excelpartno }}</span>
                             <input *ngIf="row.editable" [(ngModel)]="row.excelpartno" value="{{row.excelpartno}}"
-                                class="editable-input" />
+                                class="editable-input" #excelpartnoInput required/>
                         </td>
                         <td [hidden]="Ishide1">
                             <span *ngIf="!row.editable">{{ row.excelcurrentprogram}}</span>
                             <input *ngIf="row.editable" [(ngModel)]="row.excelcurrentprogram"
-                                value="{{row.excelcurrentprogram}}" class="editable-input" />
+                                value="{{row.excelcurrentprogram}}" class="editable-input" #excelcurrentprogramInput required/>
                         </td>
                         
                         <td [hidden]="Ishide1">
@@ -266,11 +267,11 @@
                         </td>
 
                         
-                        <td [hidden]="Ishide1">
+                        <!-- <td [hidden]="Ishide1">
                             <span *ngIf="!row.editable">{{ row.excelcosttype }}</span>
                             <input *ngIf="row.editable" [(ngModel)]="row.excelcosttype" value="{{row.excelcosttype}}"
                                 class="editable-input" />
-                        </td>
+                        </td> -->
                         
                         
                         
@@ -286,8 +287,9 @@
                         <td [hidden]="Ishide2">{{row.scost}}</td>
                         <td [hidden]="Ishide2">{{row.ucost}}</td>
                         <td [hidden]="Ishide2" *ngIf="row.ucost <= 0">
-                            <span *ngIf="!row.editable">{{row.scost}}</span>
-                            <input *ngIf="row.editable" [(ngModel)]="row.scost" value="{{row.scost}}" />
+                            <!-- <span *ngIf="!row.editable">{{row.scost}}</span>
+                            <input *ngIf="row.editable" [(ngModel)]="row.scost" value="{{row.scost}}" /> -->
+                        {{row.scost}}
                         </td>
                         <td [hidden]="Ishide2" *ngIf="row.ucost > 0">{{row.ucost}}</td>
                         <td [hidden]="Ishide2">{{row.totalCost}}</td>
@@ -345,13 +347,7 @@
         <!-- -------------------------------- -->
 
 
-        <div class="row">
-            <div class="col-md-10">
-            </div>
-            <div class="col-md-2" style="padding-left: 80px;" #target>
-                <!-- <button class="btn btn-sm default-btn" (click)="SaveRow()" style="padding: 10px 10px; margin-top: 10px;">Save BOM</button> -->
-            </div>
-        </div>
+        
     </div>
 
     <!--Start cratdetails-->
@@ -372,14 +368,14 @@
                     <div class="modal-body">
                         <form>
                             <div class="form-group">
-                                <label for="cartName" class="default-lbl" style="font-size: 16px;">Cart Name</label>
+                                <label for="cartName" class="default-lbl" style="font-size: 16px;">Simulation Name</label>
                                 <input class="form-control form-control-sm" type="text" name="cartName" id="cartName"
                                     placeholder="Please enter Cart Name" [(ngModel)]='Cartcategory'>
                                 <div class="error-message" *ngIf="showError1" style="font-size: 10px;color: red;">
-                                    Please enter CartName.
+                                    Please enter SimulationName.
                                 </div>
                                 <div class="error-message" *ngIf="showError2" style="font-size: 10px;color: red;">
-                                    CartName allready exist please use different Cart Name.
+                                    CartName allready exist please use different Simulation Name.
                                 </div>
 
                             </div>
@@ -509,10 +505,10 @@
                              <label><strong>Delete Type:</strong></label><br>
                              <div class="row">
                              <label >
-                        <input type="radio" name="deleteType" [(ngModel)]="deleteType" value="all" style="width: 25px;"> All Row
+                        <input type="radio" name="deleteType" [(ngModel)]="deleteType" value="all" style="width: 25px;"> Complete Row
                         </label></div>
                             <div class="row"> <label>
-                        <input type="radio" name="deleteType" [(ngModel)]="deleteType" value="output" style="width: 25px;"> Output 
+                        <input type="radio" name="deleteType" [(ngModel)]="deleteType" value="output" style="width: 25px;">Input to be deleted
                             </label></div>
                         
                         </div></div>
@@ -544,7 +540,7 @@
                             <div class="modal-body" style="padding: 0 2%;">
                                 <div class="modal-body">
                                     <div class="popup-table-container">
-                        <table class="table table-bordered table-striped popup-table" >
+                        <table class="table table-bordered table-striped" >
                             <!-- <table class="styled-table" > -->
                             <thead style="font-size: 11px;">
                                 <tr>

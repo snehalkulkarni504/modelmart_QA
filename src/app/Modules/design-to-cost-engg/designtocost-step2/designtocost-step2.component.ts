@@ -82,7 +82,10 @@ export class DesigntocostStep2Component implements OnInit {
   ModelwiseNote: any;
   IsYellowModel = false;
   additional_Information: any;
+  ModelTypeName:any;
 
+  manufacturing_mainT1: any[] = [];
+  manufacturing_mainT2: any[] = [];
 
   ngOnInit(): void {
 
@@ -104,7 +107,7 @@ export class DesigntocostStep2Component implements OnInit {
 
     this.userId = localStorage.getItem("userId");
 
-    this.ComapredId = localStorage.getItem("ComapredId");
+    this.ComapredId = localStorage.getItem("DTCComapredId");
     // this.mainimg = localStorage.getItem("imagePath");
     // if (this.mainimg == "") {
     //   this.mainimg = 'assets/No-Image.png';
@@ -128,12 +131,19 @@ export class DesigntocostStep2Component implements OnInit {
     this.getShouldeCost(this.ComapredId);
 
     setTimeout(() => {
+
       this.appexChart();
       // this.getPiedata();
     }, 500);
 
+    setTimeout(() => {
+      const r = document.getElementById("chartOptionsId") as any;
+      r.getElementsByClassName('canvasjs-chart-credit')[0].style.display = "none";
+    }, 600);
 
   }
+
+
 
   hasData(): boolean {
     return this.MaterialGrade.length > 0;
@@ -147,7 +157,7 @@ export class DesigntocostStep2Component implements OnInit {
   async getShouldeCost(id: number) {
     try {
       this.SpinnerService.show('spinner');
-      debugger;
+      // debugger;
       const data = await this.searchservice.getShouldeCost(id, this.userId).toPromise();
       //this.ShouldeCostData = data;
 
@@ -175,7 +185,11 @@ export class DesigntocostStep2Component implements OnInit {
       this.EngineDisplacement = data.projectDetails[0].engineDisplacement;
 
       this.modelTypes_Id = data.projectDetails[0].modelTypes_Id;
+      this.ModelTypeName = data.projectDetails[0].modelTypes_Desc;
       this.additional_Information = data.projectDetails[0].additional_Information;
+
+      this.manufacturing_mainT1 = data.manufacturingProcessMain.filter((item: any) => item.supplyLevel === 'T1');
+      this.manufacturing_mainT2 = data.manufacturingProcessMain.filter((item: any) => item.supplyLevel === 'T2');
 
 
       if (this.modelTypes_Id == 4) {
@@ -190,6 +204,10 @@ export class DesigntocostStep2Component implements OnInit {
         this.IsCESmodel = true;
         this.IsYellowModel = true;
         this.ModelwiseNote = "The update feature can not be performed on this yellow model."
+      }
+      else if (this.modelTypes_Id == 5) {
+        this.IsCESmodel = true;
+        this.ModelwiseNote = "This is China Model, In this model Material rate update can not be performed."
       }
       else {
         this.IsCESmodel = false;
@@ -327,7 +345,7 @@ export class DesigntocostStep2Component implements OnInit {
 
       this.imgsilderData = data.imgsilderDatas;
 
-      debugger;;
+      //debugger;;
       if (this.imgsilderData.length <= 0) {
         this.mainimg = localStorage.getItem("imagePath");
       }
@@ -347,6 +365,11 @@ export class DesigntocostStep2Component implements OnInit {
       localStorage.setItem("ForexRegion", this.ForexRegion)
       var ProjectName = this.Projecttype + '-' + this.BusinessUnit + '-' + this.ProjectName + '-' + this.Location + '-' + this.PartName + '-' + this.PartNumber;
       localStorage.setItem("ProjectName", ProjectName);
+
+      localStorage.setItem("VAVE_PartNumber", this.PartNumber);
+      localStorage.setItem("VAVE_NounName", this.PartName);
+      localStorage.setItem("VAVE_ProgramName", this.ProjectName);
+
 
       this.SpinnerService.hide('spinner');
     }
@@ -463,7 +486,7 @@ export class DesigntocostStep2Component implements OnInit {
 
   @ViewChild('printsection') printsection!: ElementRef;
   async DownloadReport() {
-    debugger;
+    //debugger;
     var id = this.UniqueId;
     var staticUrl = environment.apiUrl_Search + 'DownloadPDF?Id=' + id + '&modelTypes_Id=' + this.modelTypes_Id;
 
@@ -570,7 +593,7 @@ export class DesigntocostStep2Component implements OnInit {
 
 
   appexChart() {
-    debugger;
+    //debugger;
     this.TotalMaterailDetails = [];
 
     for (var i = 0; i < this.shouldCostBreakdownList.length; i++) {
@@ -581,7 +604,7 @@ export class DesigntocostStep2Component implements OnInit {
       }
       if (i == 3) {
         this.TotalMaterailDetails.push(
-          { label: "Total Material Cost", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "inside", color: "#d0ddd7" },
+          { label: "Total Material Cost", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "outside", color: "#d0ddd7" },
         );
         break;
       }
@@ -590,14 +613,14 @@ export class DesigntocostStep2Component implements OnInit {
     for (var i = 0; i < this.shouldCostBreakdownList.length; i++) {
       if (i > 2 && this.shouldCostBreakdownList.length - 1) {
         this.TotalMaterailDetails.push(
-          { label: this.shouldCostBreakdownList[i].particular, y: Number(this.shouldCostBreakdownList[i].usdValue.toFixed(2)), indexLabelPlacement: "inside", color: "#78B3CE" },
+          { label: this.shouldCostBreakdownList[i].particular, y: Number(this.shouldCostBreakdownList[i].usdValue.toFixed(2)), indexLabelPlacement: "outside", color: "#78B3CE" },
         );
       }
     }
 
 
     this.TotalMaterailDetails.push(
-      { label: "Total Manu. Cost", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "inside", color: "#a5ae9e" },
+      { label: "Total Manu. Cost", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "outside", color: "#a5ae9e" },
     );
 
     //////////// shouldCostBreakdownNonList /////////////
@@ -605,37 +628,37 @@ export class DesigntocostStep2Component implements OnInit {
     for (var i = 0; i < this.shouldCostBreakdownNonList.length; i++) {
       if (i <= 1) {
         this.TotalMaterailDetails.push(
-          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)), indexLabelPlacement: "inside", color: "#9EDF9C" },
+          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)), indexLabelPlacement: "outside", color: "#9EDF9C" },
         );
       }
     }
 
-    this.TotalMaterailDetails.push(
-      { label: "Total SGA & Profit", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "inside", color: "#d0ddd7" },
-    );
+    // this.TotalMaterailDetails.push(
+    //   { label: "Total SGA & Profit", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "outside", color: "#d0ddd7" },
+    // );
 
     for (var i = 0; i < this.shouldCostBreakdownNonList.length; i++) {
       if (i > 1 && i < 4) {
         this.TotalMaterailDetails.push(
-          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)), indexLabelPlacement: "inside", color: "#9EDF9C" },
+          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)), indexLabelPlacement: "outside", color: "#9EDF9C" },
         );
       }
     }
 
-    this.TotalMaterailDetails.push(
-      { label: "Total Packaging", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "inside", color: "#d0ddd7" },
-    );
+    // this.TotalMaterailDetails.push(
+    //   { label: "Total Packaging", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "outside", color: "#d0ddd7" },
+    // );
 
     for (var i = 0; i < this.shouldCostBreakdownNonList.length; i++) {
       if (i > 4) {
         this.TotalMaterailDetails.push(
-          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)), indexLabelPlacement: "inside", color: "#9EDF9C" },
+          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)), indexLabelPlacement: "outside", color: "#9EDF9C" },
         );
       }
     }
 
     this.TotalMaterailDetails.push(
-      { label: "Part Cost", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "inside", color: "#36BA98" },
+      { label: "Part Cost", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "outside", color: "#36BA98" },
     );
 
 
@@ -676,7 +699,7 @@ export class DesigntocostStep2Component implements OnInit {
   PiachartOptions: any = [];
 
   getPiedata() {
-    debugger;
+    //debugger;
     this.PiachartOptionsData = [];
 
     this.shouldCostBreakdownList.forEach((element: {
@@ -717,7 +740,7 @@ export class DesigntocostStep2Component implements OnInit {
     si.getElementsByClassName('canvasjs-chart-credit')[0].innerHTML = '';
 
   }
-  
+
   // UpdateReport() {
   //   this.router.navigate(['/home/tiercost']);
   // }
@@ -732,11 +755,11 @@ export class DesigntocostStep2Component implements OnInit {
     localStorage.setItem("DTCProjectName", this.ProjectName);
     localStorage.setItem("DTCDebriefDateFormated", this.DebriefDateFormated);
     localStorage.setItem("DTCimagePath", this.mainimg);
-    localStorage.setItem("DTCUniqueId",this.UniqueId);
-    localStorage.setItem("DTCProjecttitle",this.ChekNull(this.Projecttype)+ '-'+ this.ChekNull(this.BusinessUnit) +'-' +this.ChekNull(this.ProjectName) +'-' +this.Location+'-' +this.PartName+'-' +this.PartNumber );
-   
-   
-   // {{ChekNull(Projecttype)}}-{{ChekNull(BusinessUnit)}}-{{ChekNull(ProjectName)}}-{{Location}}-{{PartName}}-{{PartNumber}}
+    localStorage.setItem("DTCUniqueId", this.UniqueId);
+    localStorage.setItem("DTCProjecttitle", this.ChekNull(this.Projecttype) + '-' + this.ChekNull(this.BusinessUnit) + '-' + this.ChekNull(this.ProjectName) + '-' + this.Location + '-' + this.PartName + '-' + this.PartNumber);
+
+
+    // {{ChekNull(Projecttype)}}-{{ChekNull(BusinessUnit)}}-{{ChekNull(ProjectName)}}-{{Location}}-{{PartName}}-{{PartNumber}}
 
     // this.SCReportId = localStorage.getItem("DTCSCReportId");
 

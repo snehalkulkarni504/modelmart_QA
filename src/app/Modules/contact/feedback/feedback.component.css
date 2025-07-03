@@ -227,7 +227,7 @@ form {
     width: 140px;
     padding: 8px 0px;
     border-radius: 4px;
-    border: 1px solid #da291c;
+    border: 1px solid #9c9998;
     background-color: white;
     color: #333;
     font-weight: bolder;
@@ -236,24 +236,109 @@ form {
   }
   .btngroup:hover
   {
-    background-color: #da291c;
+    border: 1px solid green;
+    background-color: green;
     color: white;
   }
+
+  .buttongroup button.selected 
+  {
+    background-color: green;
+    color: white;
+    border-color: green;
+  }
+
+  .btngroup:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: white;
+    color: #333;
+  }
+
+
+
+
+  .btngroup2
+  {
+    width: 140px;
+    padding: 8px 0px;
+    border-radius: 4px;
+    border: 1px solid #9c9998;
+    background-color: white;
+    color: #333;
+    font-weight: bolder;
+    font-size: 12px !important;
+    transition: all 0.3s ease-in-out;
+  }
+  .btngroup2:hover
+  {
+    border: 1px solid rgb(217, 217, 75);
+    background-color: rgb(217, 217, 75);
+    color: white;
+  }
+
+  .buttongroup button.selected2 
+  {
+    background-color: rgb(217, 217, 75);
+    color: white;
+    border-color: rgb(217, 217, 75);
+  }
+
+  .btngroup2:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: white;
+    color: #333;
+  }
+
+
+
+
+  .btngroup3
+  {
+    width: 140px;
+    padding: 8px 0px;
+    border-radius: 4px;
+    border: 1px solid #9c9998;
+    background-color: white;
+    color: #333;
+    font-weight: bolder;
+    font-size: 12px !important;
+    transition: all 0.3s ease-in-out;
+  }
+  .btngroup3:hover
+  {
+    border: 1px solid red;
+    background-color: red;
+    color: white;
+  }
+
+  .buttongroup button.selected3
+  {
+    background-color: red;
+    color: white;
+    border-color: red;
+  }
+
+  .btngroup3:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: white;
+    color: #333;
+  }
+
+
+
+
 
   .buttongroup
   {
     gap: 35px;
     display: flex;
-    padding-left: 86px;
+    padding-left: 20%;
     margin-bottom: 15px;
   }
 
-
-.buttongroup button.selected {
-    background-color: #da291c;
-    color: white;
-    border-color: #da291c;
-}
 
 .btngroup:disabled {
   opacity: 0.6;

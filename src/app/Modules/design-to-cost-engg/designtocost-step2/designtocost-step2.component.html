@@ -6,8 +6,8 @@
 
     <div class="fixsubheader">
         <div class="MasterHeader">
-            <div style="width: 20%;">
-                <h2>Design to Cost</h2>
+            <div style="width: 20%;  ">
+                <h2>Design for Manufacturing, Assembly & Cost</h2>
             </div>
             <div style="width: 60%;">
                 <div class="DTO_steps">
@@ -35,14 +35,14 @@
                 </div>
             </div>
             <div style="width: 20%; text-align: center; align-items: center;">
-                <input type="button" class="btnback" value="back" Name="back" (click)="backToPreviousPage()">
+                <input type="button" class="btnback" value="Back" Name="Back" (click)="backToPreviousPage()">
             </div>
         </div>
     </div>
 
 
     <div class="row projectname text-center ">
-        <div class="col-md-10" style="line-height: 50px; font-size: 16px; font-weight: 600;">
+        <div class="col-md-12" style="line-height: 50px; font-size: 16px; font-weight: 600;">
             {{ChekNull(Projecttype)}}-{{ChekNull(BusinessUnit)}}-{{ChekNull(ProjectName)}}-{{Location}}-{{PartName}}-{{PartNumber}}
         </div>
     </div>
@@ -217,6 +217,10 @@
                                                 <td style="width: 30%;"><label for="AnnualVolume"
                                                         class="default-lblvalue">{{ChekNull(AnnualVolume
                                                         |number:'1.0-2')}}</label></td>
+                                                <td style="width: 15%;"> <label for="BatchSize"
+                                                        class="default-lbl">Model Type :</label></td>
+                                                <td style="width: 30%;"><label for="BatchSize"
+                                                        class="default-lblvalue">{{ModelTypeName}}</label></td>
                                             </tr>
                                         </table>
                                     </div>
@@ -486,17 +490,80 @@
                                 </div>
 
                                 <div>
-                                    <canvasjs-chart [options]="WaterfallchartOptions"
+                                    <canvasjs-chart [options]="WaterfallchartOptions" id="chartOptionsId"
                                         [styles]="{width: '100%', height:'360px'}"></canvasjs-chart>
                                 </div>
 
+                            </fieldset>
+                            <br>
+
+                            <fieldset class="border rounded-3 p-3"
+                                *ngIf="(manufacturing_mainT1?.length ?? 0) > 0 || (manufacturing_mainT2?.length ?? 0) > 0">
+                                <legend class="w-auto labelDetailsheader">Manufacturing Process Cost Details</legend>
+
+                                <div class="row">
+
+                                    <!-- Finish Part Process (T1) -->
+                                    <div [ngClass]="manufacturing_mainT2.length > 0 ? 'col-md-6' : 'col-md-12'"
+                                        *ngIf="(manufacturing_mainT1?.length ?? 0) > 0">
+                                        <label class="CostHeading">Finish Part Process</label>
+                                        <div class="scrollable-body"
+                                            [ngClass]="{'scroll-enabled': (manufacturing_mainT1?.length ?? 0) > 6}">
+                                            <table class="table border">
+                                                <thead class="ShouldCostBreakdowntablethStick">
+                                                    <tr>
+                                                        <th class="ShouldCostBreakdowntableth">Part Number</th>
+                                                        <th class="ShouldCostBreakdowntableth">Process Name</th>
+                                                        <th class="ShouldCostBreakdowntableth">Initial Cost</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let val of manufacturing_mainT1">
+                                                        <td class="ShouldCostBreakdowntabletr">{{ val.partNumber }}</td>
+                                                        <td class="ShouldCostBreakdowntabletr">{{
+                                                            val.manufacturingProcessName }}</td>
+                                                        <td class="ShouldCostBreakdowntabletr">$ {{
+                                                            val.manufacturingCost | number:'1.2-2' }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- Tier2 Process (T2) -->
+                                    <div class="col-md-6" *ngIf="(manufacturing_mainT2?.length ?? 0) > 0">
+                                        <label class="CostHeading">Tier2 Process</label>
+                                        <div class="scrollable-body"
+                                            [ngClass]="{'scroll-enabled': (manufacturing_mainT2?.length ?? 0) > 6}">
+                                            <table class="table border">
+                                                <thead class="ShouldCostBreakdowntablethStick">
+                                                    <tr>
+                                                        <th class="ShouldCostBreakdowntableth">Part Number</th>
+                                                        <th class="ShouldCostBreakdowntableth">Process Name</th>
+                                                        <th class="ShouldCostBreakdowntableth">Initial Cost</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let val of manufacturing_mainT2">
+                                                        <td class="ShouldCostBreakdowntabletr">{{ val.partNumber }}</td>
+                                                        <td class="ShouldCostBreakdowntabletr">{{
+                                                            val.manufacturingProcessName }}</td>
+                                                        <td class="ShouldCostBreakdowntabletr">$ {{
+                                                            val.manufacturingCost | number:'1.2-2' }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </fieldset>
                         </div>
                     </div>
                     <div class="">
                         <div class="page dataPanel" style="margin-top: -30px;">
 
-                            <fieldset class="border rounded-3 p-3">
+                            <fieldset [hidden]="modelTypes_Id == 5 || modelTypes_Id == 3" class="border rounded-3 p-3">
                                 <legend class="w-auto labelDetailsheader">Material Grade Details</legend>
                                 <br>
                                 <label class="CostHeading">Material Grade Details for Finish Part</label>
@@ -643,7 +710,7 @@
                                 <br>
                             </fieldset>
                             <br>
-                            <fieldset class="border rounded-3 p-3">
+                            <fieldset [hidden]="ManufacturingProcess.length <= 0" class="border rounded-3 p-3">
                                 <legend class="w-auto labelDetailsheader">Manufacturing Process</legend>
                                 <div class="row">
                                     <div class="col-md-12">
@@ -684,8 +751,8 @@
                     <div class="col-md-12 text-end" style="padding-right: 40px;">
                         <!-- <input type="button" class="btn btn-primary btnDownload" value="Refresh Model⁴"
                             Name="Refresh Model⁴" (click)="SendNewRequest()"> -->
-                        <input type="button" class="btn btn-primary btnDownload" value="Download Model"
-                            Name="Download Model" (click)="DownloadReport()">
+                        <input [hidden]="modelTypes_Id == 5" type="button" class="btn btn-primary btnDownload"
+                            value="Download Model" Name="Download Model" (click)="DownloadReport()">
                         <input [hidden]="IsYellowModel" type="button" class="btn btn-primary btnDownload"
                             value="Go to next Step³" Name="Go to next Step³" (click)="UpdateReport()">
                         <!-- <input [hidden]="IsYellowModel" type="button" class="btn btn-primary btnDownload"

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {  FormGroup } from '@angular/forms';
-import { Router} from '@angular/router';
+import { Router,ActivatedRoute } from '@angular/router';
 import { TreeviewConfig } from '@charmedme/ngx-treeview';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AdminService } from 'src/app/SharedServices/admin.service';
@@ -22,6 +22,7 @@ import { Filters } from '../../Model/filters';
 export class BomdetailsComponent {
 
   constructor(public router: Router,
+    public actrouter:ActivatedRoute,
     public Searchservice: SearchService,
     public adminService: AdminService,
     public bomservice:BomService,
@@ -30,6 +31,8 @@ export class BomdetailsComponent {
     private toastr:ToastrService) {
     
   }
+  getrouteprogname:any;
+  getrouteprogramid:any;
 
   ngOnInit(): void {
     if (localStorage.getItem("userName") == null) {
@@ -37,6 +40,12 @@ export class BomdetailsComponent {
       return;
     }
     this.userId = localStorage.getItem("userId");
+    this.actrouter.queryParams.subscribe((params) =>
+    {
+      this.getrouteprogname=params['progname'],
+      
+      this.getrouteprogramid=params['programid']||null
+    });
     this.fetchprogramnames();
 
   }
@@ -127,9 +136,33 @@ async fetchprogramnames()
   debugger;
   const data=await this.bomservice.fetchprogramname(parseInt(this.userId)).toPromise();
   this.allprogramdata=data;
+  if(this.getrouteprogramid==null){
   this.toggleviewchild(this.allprogramdata[0]);
+  }
+  else{
+    this.toggleviewchildrout(this.getrouteprogname,parseInt(this.getrouteprogramid))
+  }
 }
+toggleviewchildrout(programname:any,programid:any)
+{
+  this.selectedprogramname=programname;
+  this.selectedprogramidparam=programid;
+  this.cartdetailshead=programname;
+  if(this.selectedcheckbox===programid)
+  {
+    this.selectedcheckbox=null;
+    this.visiblecartlist[programid]=false;
+    this.cartlist=null;
+  }
+  else
+  {
+    this.selectedcheckbox=programid;
+    this.visiblecartlist={};
+    this.visiblecartlist[programid]=true;
+    this.getcartname(programid);
+  }
 
+}
 
 
 addcartprogram:any;
@@ -178,10 +211,12 @@ visiblecartlist: { [key: string]: boolean } = {};
 selectedcheckbox:string | null = null
 cartdetailshead:any
 selectedprogramname:any;
+selectedprogramidparam:any;
 
 toggleviewchild(event:any)
 {
-  this.selectedprogramname=event.programname
+  this.selectedprogramname=event.programname;
+  this.selectedprogramidparam=event.programid;
   this.cartdetailshead=event.programname;
   if(this.selectedcheckbox===event.programid)
   {
@@ -270,6 +305,7 @@ closeprogrammodel(){
 onroute(cart:any) {
   const Params = {
     progname: this.selectedprogramname,
+    programid:this.selectedprogramidparam,
     cartid: cart.cartId,
     cartname: cart.cartName,
     uniqty : cart.uniqueQty || 0,

@@ -214,8 +214,8 @@ export class ShouldCostRequestComponent implements OnInit {
         this.Origin = 2
       }
       this.SpinnerService.show('spinner');
-      const data = await this.adminservice.SendShouldCostRequest(this.selectedFiles, this.userId, this.cmd, this.FolderLink,
-        MMID, localStorage.getItem('DTCSCReportId'), this.Origin).toPromise();
+      debugger;
+      const data = await this.adminservice.SendShouldCostRequest(this.selectedFiles, this.userId, this.cmd, this.FolderLink, MMID, localStorage.getItem('DTCSCReportId'), this.Origin).toPromise();
         
       if (data == true) {
         this.toastr.success("Should Cost Request Sent successfully");

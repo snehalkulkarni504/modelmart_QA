@@ -123,6 +123,7 @@ html, body {
   margin: 10px;
 
   transition: all 0.3s ease-in-out;
+  border-radius: 7px;
   /* background-color: #19eae3; */
 }
 /* 
@@ -142,6 +143,7 @@ html, body {
   color: #808080;
   transform: scale(1.03); */
   box-shadow: 0px 0px 15px #000000a7;
+  border-radius: 7px;
   /* border-radius: 10px;
   align-items: center;
   justify-content: center;
@@ -155,7 +157,7 @@ html, body {
   transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
   cursor: pointer;
   width: 180px;
-  height: 255px;
+  height: 275px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -482,7 +484,7 @@ html, body {
   justify-content: left;
   display: block !important;
   text-align: left !important;
-  font-size: 16px !important;
+  font-size: 14px !important;
   font-weight: bold;
   margin: 10px;
   margin-bottom: 0;
@@ -555,6 +557,8 @@ html, body {
   height: 300px;
   width: 100%;
   max-width: 1000px;
+
+
   /* Reduced max width */
   /* margin: 15px auto; */
   /* Smaller margin */

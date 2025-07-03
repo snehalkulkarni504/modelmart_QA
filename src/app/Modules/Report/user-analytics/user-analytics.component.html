@@ -32,7 +32,7 @@
                     <label for="datepicker1" class="default-lbl">From Date</label>
                     <br>
                     <input type="date" formControlName="currentDate" [(ngModel)]="selectedFromDate"
-                        class="form-control form-control-sm">
+                        class="form-control form-control-sm" [min]="minDate">
                 </div>
 
                 <div class="col-md-2">
@@ -99,7 +99,7 @@
                 <div class="card-body d-flex cardbodys">
                     <img style="height: 80%;width: 20%;" class="icon" src="../../../assets/upload (2).png" />
                     <div style="padding-left: 10%;text-align: left;">
-                        <h6 class="card-title cardheading">No.of Sheets uploaded</h6>
+                        <h6 class="card-title cardheading">No.of Cost Models uploaded</h6>
                         <p style="font-weight: 700;" class="card-text">{{NoofUpload}}</p>
                     </div>
                 </div>
@@ -107,9 +107,9 @@
         </div>
 
         <div class="row gridcardsdiv">
-            <div class="card gridcards" style=" margin-left: 5%">
+            <div class="card gridcards" >
                 <div class="card-body p-2">
-                    <label class="default-lbl" style="font-weight: 700;">Usage by Roles</label>
+                    <label class="default-lbl" style="font-weight: 700;">Usage by Team</label>
                     <div class="table-responsive" style="font-size: 12px !important;">
                         <table class="table p-0 table-borderless bsb-table-xl text-nowrap align-middle m-0">
                             <thead>
@@ -128,7 +128,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card   gridcards">
+            <div class="card   gridcards" style="margin-left: 2%;">
                 <div class="card-body p-2">
                     <label class="default-lbl" style="font-weight: 700;">Usage by Module</label>
                     <div class="table-responsive" style="font-size: 12px !important;">
@@ -150,21 +150,47 @@
                     </div>
                 </div>
             </div>
+            <div class="card   gridcards" style="margin-left: 2%;">
+                <div class="card-body p-2">
+                    <label class="default-lbl" style="font-weight: 700;">Usage by Role</label>
+                    <div class="table-responsive" style="font-size: 12px !important;">
+                        <table class="table p-0 table-borderless bsb-table-xl text-nowrap align-middle m-0">
+                            <thead>
+                                <tr class="shaded">
+                                    <th>Role</th>
+                                    <th>Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="highlight" style="text-align: center"
+                                    *ngFor="let val of RolecountArray let i=index">
+                                    <td class="highlight">{{val.Role}}</td>
+                                    <td>{{val.Count}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
         </div>
 
         <div class="row cardsdiv" style="margin-top: 2%;">
-            <div class="gridcards">
+            <div *ngIf="dataloaded" class="gridcards">
                 <canvasjs-chart [options]="TeamChartOptions" [styles]="{width: '100%', height:'250px'}"
-                    id="chartOptionsId"></canvasjs-chart>
+                    id="TeamChartId"></canvasjs-chart>
             </div>
-            <div class="gridcards">
+            <div *ngIf="dataloaded" class="gridcards" style="margin-left: 2%;">
                 <canvasjs-chart [options]="PageChartOptions" [styles]="{width: '100%', height:'250px'}"
-                    id="chartOptionsId"></canvasjs-chart>
+                    id="ModulecardsId"></canvasjs-chart>
+            </div>
+            <div *ngIf="dataloaded"  class="gridcards" style="margin-left: 2%;">
+                <canvasjs-chart [options]="RoleChartOptions" [styles]="{width: '100%', height:'250px'}"
+                    id="RoleChartId"></canvasjs-chart>
             </div>
         </div>
         <br><br><br>
-        <div class="card  gridcards" style="margin-left: 30%;">
+        <div class="card  gridcards" style="margin-left: 30%;width: 40%;">
             <div class="card-body p-2">
                 <label class="default-lbl" style="font-weight: 700;">Average time spent per page</label>
                 <div class="table-responsive" style="font-size: 12px !important;">
@@ -187,9 +213,9 @@
             </div>
         </div>
         <div class="row cardsdiv" style="margin-top: 2%;">
-            <div class="col">
+            <div *ngIf="dataloaded" class="col">
                 <canvasjs-chart [options]="pagetimechartOptions" [styles]="{width: '100%', height:'400px'}"
-                    id="chartOptionsId" (stockChartInstance)="getChartInstance($event)"></canvasjs-chart>
+                    id="pagetimechartId" (stockChartInstance)="getChartInstance($event)"></canvasjs-chart>
             </div>
         </div>
     </form>

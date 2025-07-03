@@ -74,7 +74,12 @@ export class DesigntocostStep4Component {
   ProjectTitle: any;
   UniqueId: any;
   NA: any = "NA";
+
+  fixsubheader = false;
+  shouldcostreport = false;
   shouldcostrequets = true;
+  showthankyou = true;
+
 
   ngOnInit(): void {
 
@@ -384,8 +389,8 @@ export class DesigntocostStep4Component {
         }
         else {
           //const partImgNew = '../.../../../assets/2021000001/ISO.jpg';
-          const partImg = '../../../../assets/No-Image.png';
-          // const partImg = this.hh;
+          //const partImg = '../../../../assets/No-Image.png';
+          const partImg = this.hh;
           doc.addImage(partImg, 70, 120, 70, 70);
         }
 
@@ -786,13 +791,13 @@ export class DesigntocostStep4Component {
       doc.text('Page ' + 3 + ' of ' + 3, doc.internal.pageSize.getWidth() - 30, doc.internal.pageSize.getHeight() - 5);
     }
 
-    let finalYSimulation = (doc as any).lastAutoTable.finalY;
+    //let finalYSimulation = (doc as any).lastAutoTable.finalY;
 
     let Vavecolumns = [['VAVE Changes']];
     autoTable(doc, {
       head: Vavecolumns,
       body: [],
-      startY: finalYSimulation + 10,
+      startY: 30,
       theme: 'grid',
       headStyles: { fontSize: 9, fillColor: [217, 217, 217], textColor: [0, 0, 0], halign: 'center' },
       bodyStyles: { fillColor: [255, 255, 255] },
@@ -800,15 +805,26 @@ export class DesigntocostStep4Component {
       tableWidth: 140,
     });
 
-    const headers = [['ID', 'Idea', 'Potential Savings PP ($)']];
+    debugger;
+    const headers = [['Sr. No', 'Idea', 'Potential Savings PP ($)']];
 
     // Map your data to match the headers
-    const data = this.Vavedetails.map((val: { ID: any; Idea: any; PotentialSavingsPerPieceMDO: any; }) =>
-      [val.ID, val.Idea, val.PotentialSavingsPerPieceMDO]);
+    var vavedata = [];
+
+    const vavetextvalues = document.getElementsByClassName("vavePercentText") as any;
+
+    for (var i = 0; i < this.Vavedetails.length; i++) {
+      vavedata.push([i + 1, this.Vavedetails[i].Idea, vavetextvalues[i].value])
+    }
+
+    if (this.Vavedetails.length <= 0) {
+      vavedata.push(['', "VAVE Ideas not selected", '']);
+    }
+
     ////  Vave Greade
     autoTable(doc, {
       head: headers,
-      body: data,
+      body: vavedata,
       startY: 30 + 7,
       theme: 'grid',
       headStyles: { fontSize: 7, fillColor: [179, 179, 179], textColor: [0, 0, 0] },
@@ -824,7 +840,7 @@ export class DesigntocostStep4Component {
 
     let finalYVAVE = (doc as any).lastAutoTable.finalY;
 
-    let TotalCost = [['Total Cost : ' + this.totalvavecost]];
+    let TotalCost = [['Total Cost : $ ' + this.totalvavecost]];
     autoTable(doc, {
       head: TotalCost,
       body: [],
@@ -851,8 +867,11 @@ export class DesigntocostStep4Component {
     else {
       this.shouldcostrequets = true;
     }
+
   }
 
+
+  rr: any;
   onvaveChange() {
     debugger;
     this.totalvavecost = 0;
@@ -861,12 +880,18 @@ export class DesigntocostStep4Component {
 
     for (let i = 0; i < vavePercentText.length; i++) {
       if (vavePercentText[i].value == "") {
-        vavePercentText[i].value = 0;
+        this.rr = '0';
       }
-      this.totalvavecost = this.totalvavecost + parseFloat(vavePercentText[i].value.replace(/,/g, ""));
+      else {
+        this.rr = vavePercentText[i].value;
+        this.Vavedetails[i].PotentialSavingsPerPieceMDO = vavePercentText[i].value;
+      }
+
+      this.totalvavecost = this.totalvavecost + parseFloat(this.rr.replace(/,/g, ""));
     }
 
     this.totalvavecost = Math.round((this.totalcost - this.totalvavecost + Number.EPSILON) * 100) / 100;
+
   }
 
   IsVAVEDataInsert = false;
@@ -879,10 +904,10 @@ export class DesigntocostStep4Component {
     const vavePercentText = document.getElementsByClassName("form-control vavePercentText") as any;
 
     for (let i = 0; i < this.Vavedetails.length; i++) {
-      vavelist.push({ CSHeaderId: this.CSHeaderId, IdeaId: this.Vavedetails[i].ID, PSavings: vavePercentText[i].value, CreatedBy: this.userId })
+      vavelist.push({ CSHeaderId: this.CSHeaderId, IdeaId: this.Vavedetails[i].id, PSavings: vavePercentText[i].value, CreatedBy: this.userId })
     }
-    
-    if(this.Vavedetails.length <= 0){
+
+    if (this.Vavedetails.length <= 0) {
       vavelist.push({ CSHeaderId: this.CSHeaderId, IdeaId: 0, PSavings: 0, CreatedBy: this.userId })
     }
 
@@ -906,14 +931,16 @@ export class DesigntocostStep4Component {
 
   GoToRefreshRequest() {
     debugger;
+   
     if (!this.IsVAVEDataInsert) {
       this.SaveVavedetails();
     }
 
     setTimeout(() => {
-      //this.router.navigate(['/home/shouldcostrequest', 'DTC' + this.UniqueId]);
-      this.shouldcostrequets = false;
       this.ShowRequesterData();
+      this.shouldcostreport = true;
+      this.shouldcostrequets = false;
+      this.showthankyou = true;
     }, 500);
 
   }
@@ -971,7 +998,7 @@ export class DesigntocostStep4Component {
     this.RequesteDate = this.datePipe.transform(this.RequesteDate, 'MMM dd yyyy');
 
     this.IsRefresModelComments = true;
-    this.RefresModelComments = 'Design To Cost for ' + this.ProjectTitle;
+    this.RefresModelComments = 'Design for Manufacturing, Assembly & Cost (DfMAC) for ' + this.ProjectTitle;
     this.UploadSheetcomments = '1. Please upload CAD, prints of all parts & subcomponents (if any) for the New Design. Also add any design review documents, standards and other artefacts. ';
 
   }
@@ -1017,6 +1044,8 @@ export class DesigntocostStep4Component {
   cmd: any;
   async upload() {
     debugger;
+
+    var flag = false;
     console.log("Select File " + this.selectedFiles.length);
     if (this.Status != 'Rejected') {
       if (this.selectedFiles.length <= 0) {
@@ -1040,24 +1069,29 @@ export class DesigntocostStep4Component {
       this.Origin = 2
 
       this.SpinnerService.show('spinner');
-      const data = await this.adminservice.SendShouldCostRequest(this.selectedFiles, this.userId, this.cmd, this.FolderLink,
-        MMID, localStorage.getItem('DTCSCReportId'), this.Origin).toPromise();
+      debugger;
+      const data = await this.adminservice.SendShouldCostRequest(this.selectedFiles, this.userId, this.cmd, this.FolderLink, MMID, localStorage.getItem('DTCSCReportId'), this.Origin).toPromise();
 
       if (data == true) {
         this.toastr.success("Should Cost Request Sent successfully");
         this.SpinnerService.hide('spinner');
+        flag = true;
+
       }
       else {
         this.toastr.error("Should Cost Request not Sent");
         this.SpinnerService.hide('spinner');
+
+
       }
 
       console.log(this.FolderLink);
 
       if (data == true) {
-        const da = await this.adminservice.SendMail(this.userId, this.cmd, this.FolderLink,'DTC').toPromise();
+        const da = await this.adminservice.SendMail(this.userId, this.cmd, this.FolderLink, 'DTC').toPromise();
         if (da) {
           this.toastr.success("Mail Sent successfully");
+          flag = true;
         }
         else {
           this.toastr.error("Mail not Sent");
@@ -1074,6 +1108,7 @@ export class DesigntocostStep4Component {
       const data2 = await this.searchservice.UpdateShouldCostRequest(this.selectedFiles, this.userId, this.cmd, this.FolderLink, this.RequestId, this.Status).toPromise();
       if (data2) {
         this.toastr.success("Request Status Sent successfully");
+        flag = true;
       }
       else {
         this.toastr.error("Request Can not Sent");
@@ -1087,6 +1122,7 @@ export class DesigntocostStep4Component {
 
         if (da) {
           this.toastr.success("Mail Sent successfully");
+          flag = true;
         }
         else {
           this.toastr.error("Mail not Sent");
@@ -1097,6 +1133,19 @@ export class DesigntocostStep4Component {
       this.SpinnerService.hide('spinner');
 
 
+    }
+
+    if (flag) {
+      this.fixsubheader = true;
+      this.shouldcostreport = true;
+      this.shouldcostrequets = true;
+      this.showthankyou = false;
+    }
+    else {
+      this.fixsubheader = true;
+      this.shouldcostreport = true;
+      this.shouldcostrequets = false;
+      this.showthankyou = true;
     }
 
   }
@@ -1124,6 +1173,11 @@ export class DesigntocostStep4Component {
 
   //  ----------------- should cost request send  end ---------  
 
+
+  Step1() {
+
+    this.router.navigate(['/home/designtocost']);
+  }
 
 }
 

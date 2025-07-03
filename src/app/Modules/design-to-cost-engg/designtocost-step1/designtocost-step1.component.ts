@@ -131,20 +131,6 @@ export class DesigntocostStep1Component implements OnInit {
 
   ////////////////////////////////////////////////////////
 
-  //  items: TreeviewItem[] = [];
-  //  PartSpecific: TreeviewItem[] = [];
-  //  config = TreeviewConfig.create({
-  //    hasAllCheckBox: false,
-  //    hasFilter: true,
-  //    hasCollapseExpand: false,
-  //    decoupleChildFromParent: false,
-  //  });
-  //  Partconfig = TreeviewConfig.create({
-  //    hasAllCheckBox: false,
-  //    hasFilter: true,
-  //    hasCollapseExpand: false,
-  //    decoupleChildFromParent: false
-  //  });
 
   userId: any;
   usernm: any;
@@ -172,6 +158,7 @@ export class DesigntocostStep1Component implements OnInit {
   PartName: any;
   PlatformList: any;
   EngineDisplacementList: any;
+  EngineDisplacementListmain: any;
   MaterialGradeList: any;
   HighLevelProcessList: any;
   selectedPartName: any;
@@ -182,7 +169,7 @@ export class DesigntocostStep1Component implements OnInit {
   radiobtn: any;
 
   async ngOnInit(): Promise<void> {
-    debugger;
+    //debugger;
 
     this.router.events.subscribe((event) => {
       window.scrollTo(0, 0)
@@ -240,12 +227,37 @@ export class DesigntocostStep1Component implements OnInit {
 
     this.GetPartName();
 
-    // await this.GetEngine();
-    // await this.SupplierLocation();
-    // await this.ShowCagetory3("");
-    // await this.GetBusinessUnit();
-    // await this.GetProgramName();
+    await this.GetEngine();
+    await this.SupplierLocation();
+    await this.ShowCagetory3("");
+    await this.GetBusinessUnit();
+    await this.GetProgramName();
+    // debugger;
 
+    //console.log(localStorage.getItem("DTCComapredId"));
+
+    if (localStorage.getItem("DTCComapredId") != null) {
+
+      const el = document.getElementById("step1");
+
+      el?.classList.add("step1_0");
+      el?.classList.remove("step1");
+
+      const elfiltter = document.getElementById("Id_Filters");
+
+      elfiltter?.classList.add("Id_Filters");
+      elfiltter?.classList.remove("Id_Filters_hide");
+
+      if (localStorage.getItem("DTCselectedPartName") != null) {
+        this.selectedPartName = localStorage.getItem("DTCselectedPartName");
+        this.getPartName();
+      }
+
+
+
+      this.ViewDataOnSelection();
+
+    }
 
   }
 
@@ -266,12 +278,35 @@ export class DesigntocostStep1Component implements OnInit {
     const data = await this.designtocost.GetAdditionfilters(partname).toPromise();
     this.PlatformList = data.plat_form_DTC;
     this.EngineDisplacementList = data.engineDisplacement_DTC;
+    this.EngineDisplacementListmain = data.engineDisplacement_DTC;
     this.MaterialGradeList = data.materialGrade_DTC;
     this.HighLevelProcessList = data.highLevelProcess_DTC;
+
+  }
+
+  async GetEngineBaseOnPlatform() {
+    debugger;
+    this.EngineDisplacementList = [];
+    if (this.selectedPlatform == null) {
+      this.EngineDisplacementList = this.EngineDisplacementListmain;
+      return;
+    }
+
+    const data = await this.designtocost.GetEngineBaseOnPlatform(this.selectedPlatform, this.selectedPartName.trim()).toPromise();
+    this.EngineDisplacementList = data;
+
   }
 
   getPartName() {
-    debugger;
+    // debugger;
+
+    this.IsDatahidden = false
+    this.SearchList = [];
+    this.ModelCount = 0;
+    this.ModelFound = false;
+    const si = document.getElementById("ModelFound") as HTMLElement;
+    si.style.visibility = 'hidden';
+
 
     this.selectedPlatform = null;
     this.selectedEngineDisplacement = null;
@@ -286,16 +321,18 @@ export class DesigntocostStep1Component implements OnInit {
 
     const myElement = document.getElementById("additionalconstraint");
     if (this.selectedPartName == null) {
+      myElement?.classList.add("additionalconstraint_remove");
       myElement?.classList.remove("additionalconstraint");
       myElement?.classList.remove("additionalconstraint_none");
-      myElement?.classList.add("additionalconstraint_remove");
+
       hi.style.height = '150px';
     }
     else {
       myElement?.classList.remove("additionalconstraint_remove");
       myElement?.classList.add("additionalconstraint");
-      hi.style.height = '270px';
+      hi.style.height = '300px';
 
+      localStorage.setItem("DTCselectedPartName", this.selectedPartName);
       this.GetAdditionfilters(this.selectedPartName.trim());
     }
 
@@ -306,11 +343,6 @@ export class DesigntocostStep1Component implements OnInit {
       elfiltter?.classList.remove("Id_Filters_hide");
       elfiltter?.classList.add("Id_Filters_hide0");
     }
-    // else {
-    //   elfiltter?.classList.add("Id_Filters");
-    //   elfiltter?.classList.remove("Id_Filters_hide");
-    // }
-
 
     const el = document.getElementById("step1");
     if (this.selectedPartName == null) {
@@ -320,24 +352,6 @@ export class DesigntocostStep1Component implements OnInit {
 
     }
 
-
-    // ------ show fillers start ----------
-
-    //  const el = document.getElementById("step1");
-    //  if (this.selectedPartName == null) {
-    //    el?.classList.remove("step1_00");
-    //    el?.classList.remove("step1_0");
-    //    el?.classList.add("step1");
-    //  }
-
-    //  const elfiltter = document.getElementById("Id_Filters");
-    //  if (this.selectedPartName == null) {
-    //    elfiltter?.classList.remove("Id_Filters");
-    //    elfiltter?.classList.add("Id_Filters_hide");
-
-    //  }
-
-    // ------ show fillers end ----------
 
 
   }
@@ -357,10 +371,13 @@ export class DesigntocostStep1Component implements OnInit {
     this.ModelCount = 0;
     this.ModelFound = true;
 
-    console.log(this.selectedEngineDisplacement);
-    console.log(this.selectedMaterialGrade);
+    if (this.selectedPartName != null) {
+      this.filters.PartName = this.selectedPartName.trim();
+    }
+    else {
+      this.filters.PartName = '';
+    }
 
-    this.filters.PartName = this.selectedPartName.trim();
 
     if (this.selectedEngineDisplacement != null) {
       let param_value = "";
@@ -370,28 +387,41 @@ export class DesigntocostStep1Component implements OnInit {
       param_value = param_value.substring(0, param_value.length - 1);
       this.filters.engine = param_value;
     }
-
-    if (this.selectedPlatform != null) {
-      let param_value = "";
-      for (var i = 0; i < this.selectedPlatform.length; i++) {
-        param_value += this.selectedPlatform[i] + ",";
-      }
-      param_value = param_value.substring(0, param_value.length - 1);
-      this.filters.Platform = param_value;
+    else {
+      this.filters.engine = '';
     }
 
+    if (this.selectedPlatform != null) {
+      this.filters.Platform = this.selectedPlatform.trim();
+    }
+    else {
+      this.filters.Platform = '';
+    }
+
+    // if (this.selectedPlatform != null) {
+    //   let param_value = "";
+    //   for (var i = 0; i < this.selectedPlatform.length; i++) {
+    //     param_value += this.selectedPlatform[i] + ",";
+    //   }
+    //   param_value = param_value.substring(0, param_value.length - 1);
+    //   this.filters.Platform = param_value;
+    // }
+    // else {
+    //   this.filters.Platform = '';
+    // }
+
     if (this.selectedMaterialGrade != null) {
-      // let param_value = "";
-      // for (var i = 0; i < this.selectedMaterialGrade.length; i++) {
-      //   param_value += this.selectedMaterialGrade[i] + ",";
-      // }
-      // param_value = param_value.substring(0, param_value.length - 1);
-      // this.filters.MaterialGrade = param_value;
       this.filters.MaterialGrade = this.selectedMaterialGrade.trim();
+    }
+    else {
+      this.filters.MaterialGrade = '';
     }
 
     if (this.selectedHighProcess != null) {
       this.filters.HighProcess = this.selectedHighProcess.trim();
+    }
+    else {
+      this.filters.HighProcess = '';
     }
 
     // this.filters.PartName = 'MANIFOLD,EXHAUST';
@@ -404,7 +434,6 @@ export class DesigntocostStep1Component implements OnInit {
     // ------ show fillers start ----------
     const si = document.getElementById("ModelFound") as HTMLElement;
     si.style.visibility = 'visible';
-
 
     const el = document.getElementById("step1");
     if (this.selectedPartName == null) {
@@ -425,6 +454,7 @@ export class DesigntocostStep1Component implements OnInit {
       elfiltter?.classList.add("Id_Filters");
       elfiltter?.classList.remove("Id_Filters_hide");
     }
+
     // ------ show fillers end ----------
 
 
@@ -1307,7 +1337,7 @@ export class DesigntocostStep1Component implements OnInit {
 
   async GetSearchdata(filters_list: any) {
     try {
-      debugger;
+      // debugger;
       this.SpinnerService.show('spinner');
       this.SortSearchData = 0;
       this.checkcount = 0;
@@ -1320,7 +1350,7 @@ export class DesigntocostStep1Component implements OnInit {
 
       const data = await this.searchservice.SearchFilters(filters_list, this.userId).toPromise();
 
-      console.log(data);
+      //console.log(data);
       this.SearchList = data;
       this.flag = false;
 
@@ -1521,14 +1551,14 @@ export class DesigntocostStep1Component implements OnInit {
   }
 
   getShouldeCost(e: any) {
-    debugger;
+    //debugger;
 
-    localStorage.setItem("ComapredId", e.csHeaderId);
+    localStorage.setItem("DTCComapredId", e.csHeaderId);
     if (e.imagePath == null || e.imagePath == "") {
-      localStorage.setItem("imagePath", "../../../assets/No-Image.png");
+      localStorage.setItem("DTCimagePath", "../../../assets/No-Image.png");
     }
     else {
-      localStorage.setItem("imagePath", e.imagePath);
+      localStorage.setItem("DTCimagePath", e.imagePath);
     }
 
     this.router.navigate(['/home/designtocost/step2']);
@@ -1614,7 +1644,7 @@ export class DesigntocostStep1Component implements OnInit {
 
 
   getPartId(e: any, model: any) {
-    debugger;
+    //debugger;
     var IsChecked = false;
 
     const Comparecheckboxs = document.getElementsByClassName("SearchCheckbox") as any;
@@ -1822,7 +1852,7 @@ export class DesigntocostStep1Component implements OnInit {
 
 
   RemoveModelfromCompare(arr: any, index: any) {
-    debugger;
+    //debugger;
 
     // -- main models
     const comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
@@ -1858,7 +1888,7 @@ export class DesigntocostStep1Component implements OnInit {
   }
 
   async ShowSimulatedPopup() {
-    debugger;
+    //debugger;
 
     this.getComparison();
 
@@ -1921,7 +1951,7 @@ export class DesigntocostStep1Component implements OnInit {
   async DownloadPDF(data: any) {
 
     //debugger;
-    console.log(this.SearchList);
+    //console.log(this.SearchList);
 
     this.toastr.success("Report downloading has started.");
 
@@ -2004,7 +2034,7 @@ export class DesigntocostStep1Component implements OnInit {
   }
 
   viewReport(val: any) {
-    debugger;
+    // debugger;
     const Params = {
       param_CSHeaderId: val.csHeaderId,
       param_SCReportId: val.scReportId

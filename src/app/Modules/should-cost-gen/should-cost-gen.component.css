@@ -106,6 +106,18 @@ table td {
     font-weight: 600;
     margin-left: 10px;
 }
+/* 
+.prodDetails {
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 10px;
+}
+.prodDetailsYellow{
+     font-size: 12px;
+    font-weight: 600;
+    margin-left: 10px;
+    color: #fec20efb;
+} */
 
 
 .labelDetails {
@@ -127,8 +139,20 @@ table td {
 
 }
 
+.scroll-enabled {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
 .ShouldCostBreakdowntableth {
     background-color: #da291c0d;
+    font-size: 12px;
+}
+
+.ShouldCostBreakdowntablethStick {
+    position: sticky;
+    top: -1px;
+    background-color: #ffffff;
     font-size: 12px;
 }
 
@@ -147,6 +171,23 @@ table td {
     font-size: 12px;
     background-color: #80808024;
 }
+
+.table-wrapper {
+    max-height: auto;
+    overflow-y: hidden;
+}
+
+.table-wrapper.scrollable {
+    max-height: 120px;
+    /* adjust based on row height */
+    overflow-y: auto;
+}
+
+.scrollable-body {
+    max-height: 280px;
+    border: 1px solid #808080;
+}
+
 
 .TotalInPer {
     position: absolute;

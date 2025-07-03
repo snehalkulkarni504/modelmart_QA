@@ -186,11 +186,23 @@ export class SearchService {
     const encodedPartNumber = encodeURIComponent(partNumber);
     const encodedNounName = encodeURIComponent(nounName);
     const encodedProgram = encodeURIComponent(program);
-
+   
     return this.httpClient.get<any[]>(
       `${this.apiUrl}GetDesignToCostAvailableDetail/${encodedPartNumber}/${encodedNounName}/${encodedProgram}`
     );
   }
+
+  GetDesignToCostDataAccordignUser(nounName: string, program: string, partNumber: string,CreatedBy:string): Observable<any> {
+    const encodedPartNumber = encodeURIComponent(partNumber);
+    const encodedNounName = encodeURIComponent(nounName);
+    const encodedProgram = encodeURIComponent(program);
+    const encodedCreatedBy = encodeURIComponent(CreatedBy);
+
+    return this.httpClient.get<any[]>(
+      `${this.apiUrl}GetDesignToCostDataAccordignUser/${encodedPartNumber}/${encodedNounName}/${encodedProgram}/${encodedCreatedBy}`
+    );
+  }
+
 
 
 

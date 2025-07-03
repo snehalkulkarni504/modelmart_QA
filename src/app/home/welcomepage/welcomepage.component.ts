@@ -27,6 +27,7 @@ export class WelcomepageComponent implements OnInit {
 
 
   GotoLogin() {
+    sessionStorage.removeItem('selectedSubMenu');
     this.router.navigate(['/login']);
   }
 

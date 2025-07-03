@@ -374,8 +374,9 @@
                     <h5 for="myTextbox" class="TotalTextlbl">Total Cost :</h5>
                 </div>
                 <div class="col-md-3 text-start" style="background-color: #ccc;">
-                    <input class="form-control TotalText" type="text" id="myTextbox" [(ngModel)]="this.totalvavecost"
-                        readonly>
+                    <!-- <input class="form-control TotalText" type="text" id="myTextbox" [(ngModel)]="this.totalvavecost" readonly> -->
+                    <h5 for="myTextbox" class="TotalTextlbl" id="myTextbox">$ {{totalvavecost}}</h5>
+
                 </div>
             </div>
             <br><br><br>

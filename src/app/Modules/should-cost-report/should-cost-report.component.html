@@ -90,9 +90,10 @@
                                     class="ShouldCostBreakdowntabletr">
                                     <td style="padding: 10px 10px; padding-right: 0px;" class="TierCostReportTextT1">
                                         {{val.particular}}
-                                        <input [class.hideTextBox]="val.updateValue == 0" [hidden]="IsExternalCostmodel && val.particular != 'Direct Labour Cost' "  id="getdataTier1"
-                                            type="button" class="btn btn-sm btn-outline-danger" name="GetData"
-                                            value="Update" (click)="openModal('T1',val,i)">
+                                        <input [class.hideTextBox]="val.updateValue == 0"
+                                            [hidden]="IsExternalCostmodel && val.particular != 'Direct Labour Cost' "
+                                            id="getdataTier1" type="button" class="btn btn-sm btn-outline-danger"
+                                            name="GetData" value="Update" (click)="openModal('T1',val,i)">
                                     </td>
                                     <td style="padding: 12px 8px 0px 0px;" class="text-end TierCostReportListusdValueT1"
                                         id="UpdateCostTD{{i}}">
@@ -115,8 +116,9 @@
                                 <tr>
                                     <td style="padding: 10px 10px; padding-right: 0px" class="TierCostReportTextT1">
                                         User Added Cost
-                                        <input id="getdataUserAdded" type="button" class="btn btn-sm btn-outline-danger"
-                                            name="GetData" value="Update" (click)="openModalProcess('T1')" />
+                                        <input [hidden]="ModelTypes_Id == 5" id="getdataUserAdded" type="button"
+                                            class="btn btn-sm btn-outline-danger" name="GetData" value="Update"
+                                            (click)="openModalProcess('T1')" />
                                     </td>
                                     <td style="padding: 12px 8px 0px 0px" class="text-end TierCostReportListusdValueT1">
                                         <!-- {{ Cal_totalInitialCost | number : '1.2-2' }} --> 0.00
@@ -128,8 +130,7 @@
                                             (keyup)="CalculatePercent($event, null, 1)" />
                                     </td>
                                     <td>
-                                        <input type="text"
-                                            class="form-control UpdateText disabled NotNon T1"
+                                        <input type="text" class="form-control UpdateText disabled NotNon T1"
                                             id="UpdateCostUserAddedT1" name="UpdateCostUserAddedT1" readonly
                                             value="{{ costDifference | number : '1.2-2' }}" />
                                     </td>
@@ -187,13 +188,21 @@
                                 </tr> -->
                                 <!-- ----- Terif Cost ------ -->
                                 <tr>
-                                    <td colspan="1" class=""> Tariff </td>
+                                    <td colspan="1" class=""> Tariff
+                                        <input id="getdataTierNon1" type="button" class="btn btn-sm btn-outline-danger"
+                                            name="GetData" value="Update" (click)="openModalTariff('T1')">
+                                    </td>
                                     <td class=""></td>
-                                    <td class=""></td>
+                                    <td class="">
+                                        <input type="text" class="form-control percentText Non T1" maxlength="5"
+                                            id="UpdateCostTeriffPerT1" (keypress)="keyPressDecimal($event)"
+                                            tabindex="1">
+                                    </td>
                                     <td class="text-center">
                                         <input type="text" class="form-control UpdateTarif Notdisabled Non T1"
-                                            id="TarifUpdatedT1" name="TarifUpdatedT1" [(ngModel)]="TarifValueT1"
-                                            (keyup)="updateTotalCost('T1')" (keypress)="keyPressDecimal($event)" />
+                                            id="TarifUpdatedT1" name="TarifUpdatedT1"
+                                            style="background-color: #8080801a;" (keyup)="updateTotalCost('T1')"
+                                            (keypress)="keyPressDecimal($event)" readonly />
                                     </td>
                                 </tr>
 
@@ -229,9 +238,10 @@
                                 <tr *ngFor="let val of Tier2CostReportList; let i=index"
                                     class="ShouldCostBreakdowntabletr">
                                     <td style="padding: 10px 10px;" class="TierCostReportTextT2">{{val.particular}}
-                                        <input [class.hideTextBox]="val.updateValue == 0" [hidden]="IsExternalCostmodel && val.particular != 'Direct Labour Cost' " id="getdataTier2"
-                                            type="button" class="btn btn-sm btn-outline-danger" name="GetData"
-                                            value="Update" (click)="openModal('T2',val,i)">
+                                        <input [class.hideTextBox]="val.updateValue == 0"
+                                            [hidden]="IsExternalCostmodel && val.particular != 'Direct Labour Cost' "
+                                            id="getdataTier2" type="button" class="btn btn-sm btn-outline-danger"
+                                            name="GetData" value="Update" (click)="openModal('T2',val,i)">
                                     </td>
                                     <td style="padding: 12px 8px 0px 0px;" class="text-end TierCostReportListusdValueT2"
                                         id="UpdateCostT2TD{{i}}">
@@ -248,29 +258,29 @@
                                             value="{{val.usdValue  | number:'1.2-2'}}"> </td>
 
                                 </tr>
-                                    <!-- ----- User Added Cost ------ -->
-                                    <tr>
-                                        <td style="padding: 10px 10px; padding-right: 0px" class="TierCostReportTextT2">
-                                            User Added Cost
-                                            <input id="getdataUserAddedT2" type="button" class="btn btn-sm btn-outline-danger"
-                                                name="GetData" value="Update" (click)="openModalProcess('T2')" />
-                                        </td>
-                                        <td style="padding: 12px 8px 0px 0px" class="text-end TierCostReportListusdValueT2">
-                                            <!-- {{ Cal_totalInitialCostT2 | number : '1.2-2' }} --> 0.00
-                                        </td>
-                                        <td class="hideTextBox">
-                                            <input type="text" class="form-control percentText T2" maxlength="4"
-                                                id="userAddedInputT2" name="userAddedInputT2"
-                                                (keypress)="keyPressDecimal($event)"
-                                                (keyup)="CalculatePercent($event, null, 1)" />
-                                        </td>
-                                        <td>
-                                            <input type="text"
-                                                class="form-control UpdateText disabled NotNon T2"
-                                                id="UpdateCostUserAddedT2" name="UpdateCostUserAddedT2" readonly
-                                                value="{{ costDifferenceT2 | number : '1.2-2' }}" />
-                                        </td>
-                                    </tr>   
+                                <!-- ----- User Added Cost ------ -->
+                                <tr>
+                                    <td style="padding: 10px 10px; padding-right: 0px" class="TierCostReportTextT2">
+                                        User Added Cost
+                                        <input [hidden]="ModelTypes_Id == 5" id="getdataUserAddedT2" type="button"
+                                            class="btn btn-sm btn-outline-danger" name="GetData" value="Update"
+                                            (click)="openModalProcess('T2')" />
+                                    </td>
+                                    <td style="padding: 12px 8px 0px 0px" class="text-end TierCostReportListusdValueT2">
+                                        <!-- {{ Cal_totalInitialCostT2 | number : '1.2-2' }} --> 0.00
+                                    </td>
+                                    <td class="hideTextBox">
+                                        <input type="text" class="form-control percentText T2" maxlength="4"
+                                            id="userAddedInputT2" name="userAddedInputT2"
+                                            (keypress)="keyPressDecimal($event)"
+                                            (keyup)="CalculatePercent($event, null, 1)" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control UpdateText disabled NotNon T2"
+                                            id="UpdateCostUserAddedT2" name="UpdateCostUserAddedT2" readonly
+                                            value="{{ costDifferenceT2 | number : '1.2-2' }}" />
+                                    </td>
+                                </tr>
                                 <!-- ----- Total Manufacturing Cost Tier 2 ------ -->
                                 <tr>
                                     <td colspan="1" class="footer-color"><b>Total Manufacturing Cost</b></td>
@@ -324,15 +334,19 @@
                                     </td>
                                 </tr> -->
 
-                                 <!-- ----- Terif Cost ------ -->
-                                 <tr>
-                                    <td colspan="1" class=""> Tariff </td>
+                                <!-- ----- Terif Cost ------ -->
+                                <tr>
+                                    <td colspan="1" class=""> Tariff
+                                        <input id="getdataTierNon2" type="button" class="btn btn-sm btn-outline-danger"
+                                            name="GetData" value="Update" (click)="openModalTariff('T2')">
+                                    </td>
                                     <td class=""></td>
                                     <td class=""></td>
                                     <td class="text-center">
                                         <input type="text" class="form-control UpdateTarif Notdisabled Non T2"
-                                            id="TarifUpdatedT2" name="TarifUpdatedT2" [(ngModel)]="TarifValueT1"
-                                            (keyup)="updateTotalCost('T2')" (keypress)="keyPressDecimal($event)" />
+                                            id="TarifUpdatedT2" name="TarifUpdatedT2"
+                                            style="background-color: #8080801a;" (keyup)="updateTotalCost('T2')"
+                                            (keypress)="keyPressDecimal($event)" readonly />
                                     </td>
                                 </tr>
                                 <!-- ----- Total Cost Tier 2 ------ -->
@@ -408,6 +422,8 @@
                                         ($)</th>
                                     <th style="width: 10%;" class="ShouldCostBreakdowntableth">New Material Rate³ ($ /
                                         kg)
+                                        <div (click)="FrequentlyUsedMaterialGrade()" class="FrequentlyUsed_Material">
+                                            View Frequently Used Material</div>
                                     </th>
                                     <th style="width: 10%;" class="ShouldCostBreakdowntableth">Updated Material Cost ($)
                                     </th>
@@ -447,7 +463,7 @@
                                             name="PopUpGross{{i}}" (keypress)="keyPressDecimal($event)"
                                             value="{{val.grossWeightKG}}"
                                             (keyup)="CalculateMaterialRate($event, val, i)" maxlength="8"> -->
-                                    
+
                                     </td>
                                     <td class="HideRow"
                                         [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
@@ -461,7 +477,7 @@
                                         [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
                                         class="ShouldCostBreakdowntabletr" style="text-align: right; ">
                                         {{val.grossNetWeightKG | number:'1.4-4' }}
-                                    
+
                                         <!-- <input type="text" class="form-control PopupText RMText" id="PopUpNet{{i}}"
                                         name="PopUpGross{{i}}" (keypress)="keyPressDecimal($event)"
                                         value="{{val.grossNetWeightKG}}"
@@ -629,7 +645,7 @@
     </div>
 
 
-    <!-- ================== CUSTOM MODAL for process ================== -->
+    <!-- ================== CUSTOM MODAL for process start ================== -->
     <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display_process}">
         <div class="modelsize_DirectCostProcess" role="document">
             <div class="modal-content">
@@ -728,9 +744,9 @@
                         placeholder="Enter Process" class="form-control" />
                     <input type="text" style="width: 100px;height:30px;" (keypress)="keyPressDecimal($event)"
                         name="newUpdatedCost" id="newUpdatedCost" placeholder="Enter Cost" class="form-control" />
-                
-                    <input type="button" class="btn btn-sm btn-outline-danger" name="Add"
-                    value="Add" (click)="addNewProcess()">
+
+                    <input type="button" class="btn btn-sm btn-outline-danger" name="Add" value="Add"
+                        (click)="addNewProcess()">
 
                     <label class="close process-close-icn" (click)="closeaddNewProcess()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
@@ -753,18 +769,20 @@
                         <div class="col-md-9 Remark_nopadding">
                             <b>Remarks : </b>
                             <ol type="1">
-                                <li>This cost is inclusive of labor, direct overhead and indirect overhead for each processes</li>
+                                <li>This cost is inclusive of labor, direct overhead and indirect overhead for each
+                                    processes</li>
                             </ol>
                         </div>
                         <div class="col-md-3 text-center">
+                            <!-- <button type="button" class="btn btn-outline-danger btn-save" data-bs-dismis="modal"
+                                (click)="exportToExcel()">Download</button> -->
+
                             <button type="button" class="btn btn-outline-dark  btn-save" data-bs-dismis="modal"
                                 (click)="onCloseHandled_ProcessPopup()">Close</button>
-                            <input [hidden]="!IsHiddenT1_process" type="button"
-                                class="btn btn-outline-danger btn-save" name="GetData" id="btn_DirectCost_T1"
-                                value="Update" (click)="saveUserAddedCost('T1')">
-                            <input [hidden]="IsHiddenT1_process" type="button"
-                                class="btn btn-outline-danger btn-save" name="GetData" id="btn_DirectCost_T2"
-                                value="Update" (click)="saveUserAddedCost('T2')">
+                            <input [hidden]="!IsHiddenT1_process" type="button" class="btn btn-outline-danger btn-save"
+                                name="GetData" id="btn_DirectCost_T1" value="Update" (click)="saveUserAddedCost('T1')">
+                            <input [hidden]="IsHiddenT1_process" type="button" class="btn btn-outline-danger btn-save"
+                                name="GetData" id="btn_DirectCost_T2" value="Update" (click)="saveUserAddedCost('T2')">
 
                         </div>
                     </div>
@@ -772,6 +790,82 @@
             </div>
         </div>
     </div>
- 
+    <!-- ================== CUSTOM MODAL for process end ================== -->
+
+    <!-- --------- Terrif start ------------- -->
+
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display_Tariff}">
+        <div class="modelsize_Tariff" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Add Tariff</h3>
+                    <label class="close modal-close-icn" (click)="onCloseHandled_TariffPopup()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                        </svg>
+                    </label>
+                </div>
+                <div class="tableFixHead_Tariff">
+                    <form>
+                        <table class="table table-bordered ">
+                            <thead>
+                                <tr>
+                                    <th style="width: 20%;" class="ShouldCostBreakdowntableth">Total Cost ($)</th>
+                                    <th style="width: 20%;" class="ShouldCostBreakdowntableth">Add Tariff in %</th>
+                                    <th style="width: 30%;" class="ShouldCostBreakdowntableth">Total Tariff ($)</th>
+                                    <th style="width: 30%;" class="ShouldCostBreakdowntableth">Total Tariff + Cost ($)
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="ShouldCostBreakdowntabletr">
+                                    <td style="padding: 12px 8px 0px 0px;" class="text-center">
+                                        {{totalcostforTeriff | number:'1.2-2' }}</td>
+
+                                    <td style="padding: 10px 10px;">
+                                        <input autofocus type="text" class="form-control percentText DirectCost"
+                                            maxlength="10" id="UpdateTariff_Popup" (keypress)="keyPressDecimal($event)"
+                                            (keyup)="CalculatePercent_Teriff()">
+                                    </td>
+                                    <td style="padding: 10px 10px;">
+                                        <input type="text" class="form-control percentText DirectCost" maxlength="10"
+                                            style="background-color: #8080801a;" id="TotalTariff_Popup" readonly>
+                                    </td>
+                                    <td style="padding: 10px 10px;">
+                                        <input type="text" class="form-control percentText DirectCost" maxlength="10"
+                                            style="background-color: #8080801a;" id="TotalTeriffandCost_Popup" readonly>
+                                    </td>
+                                </tr>
+                        </table>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="row" style="width: 100%;">
+                        <div class="col-md-7 Remark_nopadding">
+                            <b>Remarks : </b>
+                            <ol type="1">
+                                <li>{{Notes1_Tariff}}</li>
+                                <li>{{Notes2_Tariff}}</li>
+                            </ol>
+                        </div>
+                        <div class="col-md-5 text-center">
+                            <button type="button" class="btn btn-outline-dark  btn-save" data-bs-dismis="modal"
+                                (click)="onCloseHandled_TariffPopup()">Close</button>
+
+                            <input [hidden]="!IsHiddenT1_Tarrif" type="button" class="btn btn-outline-danger btn-save"
+                                name="GetData" id="btn_Tarrif_T1" value="Update" (click)="SaveTariff('T1')">
+                            <input [hidden]="IsHiddenT1_Tarrif" type="button" class="btn btn-outline-danger btn-save"
+                                name="GetData" id="btn_Tarrif_T2" value="Update" (click)="SaveTariff('T2')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- --------- Terrif end ------------- -->
 
 </div>

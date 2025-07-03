@@ -24,7 +24,7 @@ export class HeaderComponent implements OnInit {
     public toastr: ToastrService,
     private adminService: AdminService,
     private idle: Idle, private cd: ChangeDetectorRef, public apppcomp: AppComponent) {
-    idle.setIdle(600);  // 60 sec = 1 mint
+    idle.setIdle(1200);  // 60 sec = 1 mint
     idle.setTimeout(60);  // 60 sec = 1 mint
     idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
@@ -192,6 +192,7 @@ export class HeaderComponent implements OnInit {
   }
 
   gowelcome(){
+    sessionStorage.removeItem('selectedSubMenu');
     this.router.navigate(['/welcomeuser']);
   }
 

@@ -90,12 +90,12 @@
         <div class="col-md-9" style="padding: 0;">
             <div class="carttitle"
             style="border-bottom: 1px solid black;padding-bottom: 10px;background-color: #da291c;text-align: center;color: white;">
-            <label style="margin-top: 7px;font-size: medium;">Cart Details - {{cartdetailshead}}</label>
+            <label style="margin-top: 7px;font-size: medium;">Simulation Details - {{cartdetailshead}}</label>
         </div>
           
             <div class="cartdata">
               <div class="cartlist-card" style="padding-left: 4px;" *ngFor="let data of cartlist">
-                <i style="font-size: 33px; color: #df473d;" class="bi bi-cart-fill"></i>
+                <!-- <i style="font-size: 33px; color: #df473d;" class="bi bi-cart-fill"></i> -->
                 <div class="cart-info">
                   <p class="cart-name">{{ data.cartName }}</p>
                   <div class="cart-meta">
@@ -112,13 +112,13 @@
           
                 <div class="cart-actions">
                   <button class="btnCreateCart" (click)="opencopycart(data.cartId,data.cartName)">
-                    Copy Cart
+                    Copy Simulation
                   </button>
                   <button class="btnCreateCart" (click)="onroute(data)" >
                     View
                   </button>
                 </div>
-                <i class="bi-trash-fill" style="color: #da291c; font-size: 20px; cursor: pointer; " ngbTooltip="Delete Cart" (click)="deletecart(data.cartId)"></i>
+                <i class="bi-trash-fill" style="color: #da291c; font-size: 20px; cursor: pointer; " ngbTooltip="Delete Simulation" (click)="deletecart(data.cartId)"></i>
               </div>
             </div>
           </div>
@@ -148,7 +148,7 @@
                 <ng-option *ngFor="let item of addcartprogram" [value]="item">{{item.programname}}</ng-option>
             </ng-select>
 
-            <input type="text" [(ngModel)]="cartname" placeholder=" Enter Cart Name" class="modal-input"
+            <input type="text" [(ngModel)]="cartname" placeholder=" Enter Simulation" class="modal-input"
                 style="padding: 3px; padding-left: 10px;" />
 
             <div class="modal-buttons">
@@ -160,7 +160,7 @@
 
     <div *ngIf="copycartmodal" class="modal-overlay">
         <div class="modal-content">
-            <h3 style="background-color: #da291c; color: whitesmoke; margin: 0; padding-bottom: 10px;">Copy Cart</h3>
+            <h3 style="background-color: #da291c; color: whitesmoke; margin: 0; padding-bottom: 10px;">Copy Simulatiom</h3>
 
             <div class="copycart-label-container">
                 <div style="width: 100%;">

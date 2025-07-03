@@ -7,8 +7,8 @@
 
         <div class="fixsubheader">
             <div class="MasterHeader">
-                <div style="width: 20%;">
-                    <h2>Design to Cost</h2>
+                <div style="width: 20%;  ">
+                    <h2>Design for Manufacturing, Assembly & Cost</h2>
                 </div>
                 <div style="width: 60%;">
                     <div class="DTO_steps">
@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div style="width: 20%; text-align: center; align-items: center;">
-                    <input type="button" class="btnback" value="back" Name="back" (click)="backToPreviousPage()">
+                    <input type="button" class="btnback" value="Back" Name="Back" (click)="backToPreviousPage()">
                 </div>
             </div>
         </div>
@@ -46,20 +46,69 @@
         <div class="step1_00" id="step1">
 
             <div class="row hellouser text-center" id="hellouser">
-                <h4>Hello <span class="userfullname">{{userfullname}}</span>, what would you like to design today?</h4>
-                <div class="col-md-3"></div>
-                <div class="col-md-6 text-start">
-                    <label for="dropdown5" class="default-lbl">Part Name</label>
-                    <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true" (change)="getPartName()"
-                        [(ngModel)]='selectedPartName' placeholder="Please select">
-                        <ng-option *ngFor="let item of PartName" [value]="item.partName">
-                            {{item.partName}}
-                        </ng-option>
-                    </ng-select>
+                <div class="row text-center " style="height: 50px !important; z-index: 15; ">
+                    <h4>Hello <span class="userfullname">{{userfullname}}</span>, what would you like to design today?
+                    </h4>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6 text-start"
+                        style="height: 50px; margin-top: 0px; ">
+                        <label for="dropdown5" class="default-lbl">Part Name</label>
+                        <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true" (change)="getPartName()"
+                            [(ngModel)]='selectedPartName' placeholder="Please select">
+                            <ng-option *ngFor="let item of PartName" [value]="item.partName">
+                                {{item.partName}}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                    <div class="col-md-3"></div>
                 </div>
-                <div class="col-md-3"></div>
-                <div class="row  text-start additionalconstraint_none" id="additionalconstraint">
-                    <h6>Please specify additional constraints</h6>
+               <div class="text-start additionalconstraint_none" id="additionalconstraint">
+                    <div class="row" >
+                        <h6>Please specify additional constraints</h6>
+                        <div class="col-md-3">
+                            <label for="dropdown5" class="default-lbl">Platform</label>
+                            <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"  
+                                [(ngModel)]='selectedPlatform' placeholder="Please select" (change)="GetEngineBaseOnPlatform()">
+                                <ng-option *ngFor="let item of PlatformList" style="font-size: 12px;"
+                                    [value]="item.plat_form">{{item.plat_form}}</ng-option>
+                            </ng-select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="dropdown5" class="default-lbl">Engine Displacement</label>
+                            <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"  [multiple]="true"
+                                [(ngModel)]='selectedEngineDisplacement' placeholder="Please select">
+                                <ng-option *ngFor="let item of EngineDisplacementList"
+                                    [value]="item.edId">{{item.engineDisplacement}}</ng-option>
+                            </ng-select>
+                        </div>
+                        <div class="col-md-3"></div>
+                        <div class="col-md-3"></div>
+
+                        <div class="col-md-5 mt-2">
+                            <label for="dropdown5" class="default-lbl">Material Name</label>
+                            <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
+                                [(ngModel)]='selectedMaterialGrade' placeholder="Please select">
+                                <ng-option *ngFor="let item of MaterialGradeList"
+                                    [value]="item.materialGrade">{{item.materialGrade}}</ng-option>
+                            </ng-select>
+                        </div>
+                        <div class="col-md-5 mt-2">
+                            <label for="dropdown5" class="default-lbl">Process Name</label>
+                            <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
+                                [(ngModel)]='selectedHighProcess' placeholder="Please select">
+                                <ng-option *ngFor="let item of HighLevelProcessList"
+                                    [value]="item.highLevelProcess">{{item.highLevelProcess}}</ng-option>
+                            </ng-select>
+                        </div>
+                        <div class="text-center col-md-2 mt-3">
+                            <input type="button" class="btnview" value="View" Name="View"
+                                (click)="ViewDataOnSelection()">
+                        </div>
+                    </div>
+                </div>  
+
+
+                <!-- <h6>Please specify additional constraints</h6>
                     <div class="col-md-3">
                         <label for="dropdown5" class="default-lbl">Platform</label>
                         <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true" [multiple]="true"
@@ -95,8 +144,8 @@
 
                     <div class="text-center">
                         <input type="button" class="btnview" value="View" Name="View" (click)="ViewDataOnSelection()">
-                    </div>
-                </div>
+                    </div> -->
+                <!-- </div> -->
             </div>
 
 
@@ -456,7 +505,8 @@
 
             <div class="row setOpacity" id="SearchFilters">
                 <div *ngFor="let t of SearchList  | paginate: { itemsPerPage: 100, currentPage: page }"
-                    class="prodDetails">
+                     [ngClass]="{'prodDetails': t.modelTypes_Id ===1 || t.modelTypes_Id ===4 ,
+                    'prodDetailsYellow': t.modelTypes_Id ===2 || t.modelTypes_Id ===3|| t.modelTypes_Id ===5}">
                     <div class="prdImgDesc" (click)="getShouldeCost(t)">
 
                         <img *ngIf="t.imagePath == '' else multi" src="assets/No-Image.png" class="prdIcon"

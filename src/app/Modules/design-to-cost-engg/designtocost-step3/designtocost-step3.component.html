@@ -6,8 +6,8 @@
 
     <div class="fixsubheader">
         <div class="MasterHeader">
-            <div style="width: 20%;">
-                <h2>Design to Cost</h2>
+            <div style="width: 20%;  ">
+                <h2>Design for Manufacturing, Assembly & Cost</h2>
             </div>
             <div style="width: 60%;">
                 <div class="DTO_steps">
@@ -35,20 +35,20 @@
                 </div>
             </div>
             <div style="width: 20%; text-align: center; align-items: center;">
-                <input type="button" class="btnback" value="back" Name="back" (click)="backToPreviousPage()">
+                <input type="button" class="btnback" value="Back" Name="Back" (click)="backToPreviousPage()">
             </div>
         </div>
     </div>
 
     <div class="table-container">
 
-        <div style="width: 85%; float: left; height: 50px;">
+        <div style="width: 80%; float: left; height: 50px;">
             <h3 class="title">VAVE Ideas for {{NounName}}<span *ngIf="filteredPartNumberTableData.length <= 0"
                     style="margin-left: 10px;">{{message}} </span> </h3>
         </div>
-        <div style="width: 15%; float: left; height: 50px;  ">
-            <button type="button" class="btn btn-sm default-btn" style="margin-top: 10px;" (click)="openIdeaModal()">
-                Add </button>
+        <div style="width: 20%; float: left; height: 50px;  ">
+            <button type="button" class="btn btn-sm default-btn" style="margin-top: 13px;" (click)="openIdeaModal()">
+                Add New Idea </button>
             <img [hidden]="IsNoData" src="../../../../assets/exportexcel.png" class="exportToExcel"
                 (click)="exportToExcel(filteredPartNumberTableData)" title="Export to Excel">
         </div>
@@ -141,8 +141,15 @@
                         <tr
                             *ngFor="let row of filteredPartNumberTableData_original | paginate: {itemsPerPage:itemonperpage, currentPage: page}">
                             <td id="freeze"> {{ row.idea }}</td>
-                            <td class="id1" (click)="OpenVBD()" title="{{row.id}}"> {{row.id}}
+                            <td class="id1" (click)="OpenVBD()" title="{{row.id}}"
+                                *ngIf="row.sharepoint_ID > 0; else noData">
+                                {{row.id}}
+
                             </td>
+
+                            <ng-template #noData>
+                                <td class="idNA"> NA</td>
+                            </ng-template>
 
                             <td style="text-align: start;" title="{{row.program}}">{{ row.program }}</td>
                             <td style="text-align: start;" title="{{row.partNumber}}">{{ row.partNumber }}</td>
@@ -158,106 +165,10 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
 
-                <div class="modal" tabindex="-1" role="dialog"
-                    [ngStyle]="{'display': showIdeaModal ? 'block' : 'none'}">
-                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                        <div class="modal-content modal-lg">
-
-                            <!-- Header -->
-                            <div class="modal-header">
-                                <h4 class="modal-title">Add New Idea</h4>
-                                <label class=" close modal-close-icn" (click)="showIdeaModal = false">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000"
-                                        class="bi bi-x" viewBox="0 0 16 16">
-                                        <path
-                                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                                    </svg>
-                                </label>
-                            </div>
-
-
-
-
-                            <div class="modal-body">
-                                <form #ideaForm="ngForm" novalidate>
-                                    <div class="row">
-
-                                        <div class="col-md-12 mb-3">
-                                            <label class="default-lbl">Idea <span style="color: red;">*</span></label>
-
-                                            <textarea class="form-control form-control-sm"
-                                                [ngClass]="{'is-invalid': idea.invalid && idea.touched}"
-                                                [(ngModel)]="newIdea.idea" name="Idea" rows="3"
-                                                placeholder="Describe the Idea..." required #idea="ngModel"></textarea>
-
-                                            <div class="error-message text-danger" *ngIf="idea.invalid && idea.touched"
-                                                style="font-size: 12px;color: red;">
-                                                Please enter a valid Idea.
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6 mb-3">
-                                            <label class="default-lbl">Program <span
-                                                    style="color: red;">*</span></label>
-                                            <input class="form-control form-control-sm" type="text"
-                                                [(ngModel)]="newIdea.program" name="Program" placeholder="Enter Program"
-                                                required #program="ngModel">
-                                            <div class="error-message text-danger"
-                                                *ngIf="program.invalid && program.touched" style="font-size: 12px;">
-                                                Please enter a valid Program.
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6 mb-3">
-                                            <label class="default-lbl">Part Number <span
-                                                    style="color: red;">*</span></label>
-                                            <input class="form-control form-control-sm" type="text"
-                                                [(ngModel)]="newIdea.partNumber" name="PartNumber"
-                                                placeholder="Enter Part Number" required #partNumber="ngModel">
-                                            <div class="error-message text-danger"
-                                                *ngIf="partNumber.invalid && partNumber.touched"
-                                                style="font-size: 12px;">
-                                                Please enter a valid Part Number.
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6 mb-3">
-                                            <label class="default-lbl">Potential Savings PP($) <span
-                                                    style="color: red;">*</span></label>
-                                            <input class="form-control form-control-sm" type="text"
-                                                (keypress)="keyPressDecimal($event)"
-                                                [(ngModel)]="newIdea.potentialSavingsPerPieceMDO"
-                                                name="PotentialSavings" placeholder="Enter Savings" required
-                                                #savings="ngModel">
-                                            <div class="error-message text-danger"
-                                                *ngIf="savings.invalid && savings.touched" style="font-size: 12px;">
-                                                Please enter a valid Potential Saving.
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-                                </form>
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal"
-                                    (click)="showIdeaModal = false">
-                                    Close
-                                </button>
-                                <button type="button" class="btn btn-sm btn-default default-btn_popup"
-                                    [disabled]="ideaForm.invalid" (click)="submitIdea(newIdea)"
-                                    style="background-color: #da291c; color: #fff;">
-                                    Save
-                                </button>
-                            </div>
-
-
-                        </div>
-                    </div>
-                </div>
-
+            <div class="text-start RemarkSection">
+                <p> <b>Notes : </b> All listed Ideas may not be feasible for the said Part No/Noun Name</p>
             </div>
 
             <div style="width: 70%;float: left;">
@@ -271,10 +182,107 @@
             </div>
         </div>
 
+        <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content modal-lg">
+
+                    <!-- Header -->
+                    <div class="row modal-header">
+                        <div class="col-md-6 text-start ">
+                            <h4 class="modal-title">Add New Idea</h4>
+                        </div>
+                        <div class="col-md-6 text-end ">
+                            <label class="close modal-close-icn" (click)="onCloseHandled()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000"
+                                    class="bi bi-x" viewBox="0 0 16 16">
+                                    <path
+                                        d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="modal-body">
+                        <form #ideaForm="ngForm" novalidate>
+                            <div class="row">
+
+                                <div class="col-md-12 mb-3">
+                                    <label class="default-lbl">Idea <span style="color: red;">*</span></label>
+
+                                    <textarea class="form-control form-control-sm"
+                                        [ngClass]="{'is-invalid': idea.invalid && idea.touched}"
+                                        [(ngModel)]="newIdea.idea" name="Idea" rows="3"
+                                        placeholder="Describe the Idea..." required #idea="ngModel"></textarea>
+
+                                    <div class="error-message text-danger" *ngIf="idea.invalid && idea.touched"
+                                        style="font-size: 12px;color: red;">
+                                        Please enter a valid Idea.
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="default-lbl">Program <span style="color: red;">*</span></label>
+                                    <input class="form-control form-control-sm" type="text"
+                                        [(ngModel)]="newIdea.program" name="Program" placeholder="Enter Program"
+                                        required #program="ngModel">
+                                    <div class="error-message text-danger" *ngIf="program.invalid && program.touched"
+                                        style="font-size: 12px;">
+                                        Please enter a valid Program.
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="default-lbl">Part Number <span style="color: red;">*</span></label>
+                                    <input class="form-control form-control-sm" type="text"
+                                        [(ngModel)]="newIdea.partNumber" name="PartNumber"
+                                        placeholder="Enter Part Number" required #partNumber="ngModel">
+                                    <div class="error-message text-danger"
+                                        *ngIf="partNumber.invalid && partNumber.touched" style="font-size: 12px;">
+                                        Please enter a valid Part Number.
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="default-lbl">Potential Savings PP($) 
+                                        </label>
+                                    <input class="form-control form-control-sm" type="text"
+                                        (keypress)="keyPressDecimal($event)"
+                                        [(ngModel)]="newIdea.potentialSavingsPerPieceMDO" name="PotentialSavings"
+                                        placeholder="Enter Savings" #savings="ngModel">
+                                    <!-- <div class="error-message text-danger" *ngIf="savings.invalid && savings.touched"
+                                        style="font-size: 12px;">
+                                        Please enter a valid Potential Saving.
+                                    </div> -->
+                                </div>
+
+
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal"
+                            (click)="onCloseHandled()">
+                            Close
+                        </button>
+                        <button type="button" class="btn btn-sm btn-default default-btn_popup"
+                            [disabled]="ideaForm.invalid" (click)="submitIdea(newIdea)"
+                            style="background-color: #da291c; color: #fff;">
+                            Save
+                        </button>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
 
         <div class="row nextbutton">
-            <div class="col-md-12 text-center ">
-                <input type="button" class="btn btn_go_next" value="Go to Next" Name="Go to Next" (click)="onNext()">
+            <div class="col-md-12 text-end " [ngStyle]="{'margin-top':margin_top}">
+                <input type="button" class="btn btn_go_next" value="Go to Next Step" Name="Go to Next Step"
+                    (click)="onNext()">
             </div>
         </div>
         <br><br><br>

@@ -44,7 +44,7 @@ export class ComparisonnewComponent implements OnInit {
   TotalInUSD: number = 0;
 
   ngOnInit(): void {
-    debugger;
+    //debugger;
     if (localStorage.getItem("userName") == null) {
       this.router.navigate(['/welcome']);
       return;
@@ -64,7 +64,7 @@ export class ComparisonnewComponent implements OnInit {
 
     this.compare_Ids = JSON.parse(this.ids);
 
-    debugger;
+    //debugger;
     this.GetData();
     this.GetDataTier2();
     this.InsertCompareLog();
@@ -100,11 +100,11 @@ export class ComparisonnewComponent implements OnInit {
   ComparePartCount: any;
   Hidematerial_Detailedtable3 = true;
   Hidematerial_Detailedtable4 = true;
-  IsTechnicalParameter =  true;
+  IsTechnicalParameter = true;
 
-  
+
   async GetData() {
-    debugger;
+    //debugger;
     this.TechnicalParameter = [];
     const data = await this.searchservice.getComparisonDataNew(this.compare_Ids).toPromise();
     this.partDetails = data.partDetails;
@@ -120,7 +120,7 @@ export class ComparisonnewComponent implements OnInit {
     this.CommericalDetailsShouldCostTier2 = data.commericalDetailsShouldCostTier2;
     this.material_Main = data.material_Main;
     this.material_Detailed = data.material_Detailed;
-    debugger
+    //debugger
     this.TechnicalParameter = data.technicalParameter;
 
     if (data.partDetails.length == 3) {
@@ -224,7 +224,7 @@ export class ComparisonnewComponent implements OnInit {
   chartOptionstest: any = [];
 
   ShowChart() {
-    //debugger;
+    debugger;
     this.ShoudeCostInfo = [];
     this.TotalComparePart = [];
     this.TotalCost = [];
@@ -236,33 +236,41 @@ export class ComparisonnewComponent implements OnInit {
 
         if (this.compardata[i].id != 11) {
           if (this.compardata[i].details1 != null) {
-            this.TotalCost.push(
-              { y: 0, label: '', indexLabel: this.compardata[i].details1 + '$' }
-            );
+            if (this.compardata[i].id == 20) {
+              this.TotalCost.push(
+                { y: null, label: '', indexLabel: this.compardata[i].details1 + '$' }
+              );
+            }
             this.TotalComparePart.push(
               { y: Number(this.compardata[i].details1), label: this.compardata[1].details1 + ' ' + this.compardata[2].details1 },
             );
           }
           if (this.compardata[i].details2 != null) {
-            this.TotalCost.push(
-              { y: 0, label: '', indexLabel: this.compardata[i].details2 + '$' }
-            );
+            if (this.compardata[i].id == 20) {
+              this.TotalCost.push(
+                { y: null, label: '', indexLabel: this.compardata[i].details2 + '$' }
+              );
+            }
             this.TotalComparePart.push(
               { y: Number(this.compardata[i].details2), label: this.compardata[1].details2 + ' ' + this.compardata[2].details2 },
             );
           }
           if (this.compardata[i].details3 != null) {
-            this.TotalCost.push(
-              { y: 0, label: '', indexLabel: this.compardata[i].details3 + '$' }
-            );
+            if (this.compardata[i].id == 20) {
+              this.TotalCost.push(
+                { y: null, label: '', indexLabel: this.compardata[i].details3 + '$' }
+              );
+            }
             this.TotalComparePart.push(
               { y: Number(this.compardata[i].details3), label: this.compardata[1].details3 + ' ' + this.compardata[2].details3 },
             );
           }
           if (this.compardata[i].details4 != null) {
-            this.TotalCost.push(
-              { y: 0, label: '', indexLabel: this.compardata[i].details4 + '$' }
-            );
+            if (this.compardata[i].id == 20) {
+              this.TotalCost.push(
+                { y: null, label: '', indexLabel: this.compardata[i].details4 + '$' }
+              );
+            }
             this.TotalComparePart.push(
               { y: Number(this.compardata[i].details4), label: this.compardata[1].details4 + ' ' + this.compardata[2].details4 },
             );
@@ -285,7 +293,7 @@ export class ComparisonnewComponent implements OnInit {
               type: "stackedColumn",
               name: this.compardata[i].particular,
               indexLabelTextAlign: "left",
-              dataPoints: this.TotalComparePart
+              dataPoints: this.TotalComparePart,
             },
           );
         }
@@ -293,6 +301,14 @@ export class ComparisonnewComponent implements OnInit {
 
     }
 
+    this.ShoudeCostInfo.push(
+      {
+        type: "stackedColumn",
+        name: this.compardata[i].particular,
+        indexLabelTextAlign: "top",
+        dataPoints: [],
+      },
+    );
 
     this.chartOptions = {
 
@@ -320,10 +336,59 @@ export class ComparisonnewComponent implements OnInit {
         reversed: true
       },
       data: this.ShoudeCostInfo,
-
-
     }
 
+
+
+    setTimeout(() => {
+      this.calculateAndSetTotals();
+    }, 1000);
+
+
+  }
+
+  calculateAndSetTotals(): void {
+    debugger;
+
+    // for (var i = 0; i < this.compardata.length; i++) {
+    //   if (this.compardata[i].id == 20) {
+    //     this.TotalCost = [];
+
+    //     if (this.compardata[i].details1 != null) {
+    //       if (this.compardata[i].id == 20) {
+    //         this.TotalCost.push(
+    //           { label: '', indexLabel: this.compardata[i].details1 + '$' },
+    //           { label: '', indexLabel: this.compardata[i].details2 + '$' },
+    //           { label: '', indexLabel: this.compardata[i].details3 + '$' },
+    //           { label: '', indexLabel: this.compardata[i].details4 + '$' }
+
+    //         );
+    //       }
+    //     }
+    //   }
+
+    // }
+
+    this.chartOptions.data[this.chartOptions.data.length - 1].dataPoints = this.TotalCost;
+
+    const totalDataPoints: { label: string, y: number }[] = [];
+    const dataSeries = this.chartOptions.data;
+
+    // Assuming all data series have the same labels and number of data points
+    if (dataSeries.length > 0 && dataSeries[0].dataPoints) {
+      for (let i = 0; i < dataSeries[0].dataPoints.length; i++) {
+        let sum = 0;
+        const label = dataSeries[0].dataPoints[i].label;
+
+        for (let j = 0; j < dataSeries.length - 1; j++) { // Exclude the last (hidden) series
+          if (dataSeries[j].dataPoints.length > 0) {
+            sum += dataSeries[j].dataPoints[i].y;
+          }
+        }
+        totalDataPoints.push({ label: label, y: sum });
+      }
+    }
+    this.chartOptions.data[this.chartOptions.data.length - 1].dataPoints = totalDataPoints;
   }
 
 
@@ -640,7 +705,7 @@ export class ComparisonnewComponent implements OnInit {
   }
 
   getsuppComparison(e: string) {
-    debugger;
+    // debugger;
     var colindex: number;
     const ShouldCost: any[][] = (this.CommericalDetailsShouldCost as any[]).map(item => [item.id, item.particular, item.details1,
     item.details2, item.details3, item.details4]);

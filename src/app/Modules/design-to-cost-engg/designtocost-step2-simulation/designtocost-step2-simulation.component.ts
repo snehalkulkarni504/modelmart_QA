@@ -48,6 +48,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
   display_Material = "none";
   MaterialGrade: any = [];
   CSHeaderId: any;
+  display_Tariff = "none";
 
   //MaterialGridUpdated: any = []
   MaterialGridUpdated: SaveMatetialCostDetails[] = [];
@@ -78,9 +79,9 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
   ModelTypes_Id: any;
   IsCESmodel: boolean = false;
   ModelwiseNote: any;
-  // Istier_1_CostReportBreakdown = false;
-  // Istier_2_CostReportBreakdown = false;
-
+  Istier_1_CostReportBreakdown = true;
+  Istier_2_CostReportBreakdown = true;
+  Projecttitle: any;
 
   ngOnInit(): void {
 
@@ -98,6 +99,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
     this.CSHeaderId = localStorage.getItem("DTCComapredId"); //--- CSHeaderId
     this.GetTierCostData();
 
+    this.Projecttitle = localStorage.getItem("DTCProjecttitle");
   }
 
   async GetTierCostData() {
@@ -119,16 +121,6 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
       this.AluminiumCastingGrade = data.aluminiumCastingGrade;
       console.log(this.AluminiumCastingGrade);
 
-      // if (data.tier_2_CostReportBreakdown.length <= 0) {
-      //   this.Istier_1_CostReportBreakdown = true;
-      //   this.Istier_2_CostReportBreakdown = false;
-      // }
-      // else {
-      //   this.Istier_1_CostReportBreakdown = false;
-      //   this.Istier_2_CostReportBreakdown = true;
-      // }
-
-
       this.PartName = this.TierCostDetails.partName;
       this.PartNumber = this.TierCostDetails.partNumber;
       this.ProjectName = this.TierCostDetails.projectName;
@@ -140,6 +132,11 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
         this.IsCESmodel = true;
         this.ModelwiseNote = "Material rate update can not be performed on this Cost Model"
       }
+      else if (this.ModelTypes_Id == 5) {
+        this.IsExternalCostmodel = true;
+        this.IsCESmodel = true;
+        this.ModelwiseNote = "This is China Model, In this model Material rate update can not be performed."
+      }
       else {
         this.IsExternalCostmodel = false;
         this.IsCESmodel = false;
@@ -148,7 +145,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
 
       this.findsum(data.tier_1_CostReportBreakdown, data.tier_1_CostReportBreakdownNon);
 
-      //debugger;;
+      debugger;;
       if (data.tier_2_CostReportBreakdown.length > 0) {
         let tt = 0;
         for (let i = 0; i < data.tier_2_CostReportBreakdown.length; i++) {
@@ -164,19 +161,28 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
           myElement2?.classList.remove("col-md-8");
           myElement2?.classList.add("col-md-6");
           this.IsHiddenDiv = true;
+
+          this.Istier_1_CostReportBreakdown = true;
+          this.Istier_2_CostReportBreakdown = false;
+
         }
         else {
           myElement1?.classList.add("hideTier2Box");
           myElement2?.classList.add("col-md-8");
           myElement2?.classList.remove("col-md-6");
           this.IsHiddenDiv = false;
+          this.Istier_1_CostReportBreakdown = false;
+          this.Istier_2_CostReportBreakdown = true;
         }
+
       }
       else {
         myElement1?.classList.add("hideTier2Box");
         myElement2?.classList.add("col-md-8");
         myElement2?.classList.remove("col-md-6");
         this.IsHiddenDiv = false;
+        this.Istier_1_CostReportBreakdown = false;
+        this.Istier_2_CostReportBreakdown = true;
       }
 
       this.SpinnerService.hide('spinner');
@@ -210,6 +216,9 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
       this.TierCostReportNonList[i].totalCostPer = data2[i].usdValue / this.TotalInUSD * 100;
     }
 
+    const SetValueTarifUpdatedT1 = document.getElementById('TarifUpdatedT1') as any;
+    SetValueTarifUpdatedT1.value = 0.00;
+
   }
 
   findsumTier2(data: any, data2: any) {
@@ -234,6 +243,9 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
     for (let i = 0; i < this.TierCostReportNonList.length; i++) {
       this.Tier2CostReportNonList[i].totalCostPer = data2[i].usdValue / this.TotalInUSDT2 * 100;
     }
+
+    const SetValueTarifUpdatedT2 = document.getElementById('TarifUpdatedT2') as any;
+    SetValueTarifUpdatedT2.value = 0.00;
 
   }
 
@@ -397,15 +409,11 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
     this.Non_TotalInLocal = this.Non_TotalInLocal_Per;
     var TarifT1;
 
-    const TarifUpdatedT1 = document.getElementById('TarifUpdatedT1') as any;
-    if (TarifUpdatedT1.value != "") {
-      TarifT1 = TarifUpdatedT1.value;
-    }
-    else {
-      TarifT1 = 0;
+    if (this.TarifT1Cost == undefined) {
+      this.TarifT1Cost = 0;
     }
 
-    this.TotalInLocal = this.Manu_TotalInLocal + this.Non_TotalInLocal + parseFloat(TarifT1);
+    this.TotalInLocal = this.Manu_TotalInLocal + this.Non_TotalInLocal + parseFloat(this.TarifT1Cost);
 
   }
 
@@ -608,15 +616,11 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
 
     var TarifT2;
 
-    const TarifUpdatedT2 = document.getElementById('TarifUpdatedT2') as any;
-    if (TarifUpdatedT2.value != "") {
-      TarifT2 = TarifUpdatedT2.value;
-    }
-    else {
-      TarifT2 = 0;
+    if (this.TarifT2Cost == undefined) {
+      this.TarifT2Cost = 0;
     }
 
-    this.TotalInLocalT2 = this.Manu_TotalInLocalT2 + this.Non_TotalInLocalT2 + parseFloat(TarifT2);
+    this.TotalInLocalT2 = this.Manu_TotalInLocalT2 + this.Non_TotalInLocalT2 + parseFloat(this.TarifT2Cost);
 
     const updatedTier1Cost = document.getElementById('UpdateCost2') as any;
     const updatedSrcapCost = document.getElementById('UpdateCost0') as any;
@@ -2579,6 +2583,88 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
       this.findsumPercentT2();
     }
 
+  }
+
+
+
+  Notes1_Tariff = "Add Terrif";
+  Notes2_Tariff: any;
+  IsHiddenT1_Tarrif = false;
+
+  onCloseHandled_TariffPopup() {
+    this.display_Tariff = "none";
+  }
+
+  openModalTariff(supplyLevel: any) {
+    debugger;
+    this.display_Tariff = "block";
+    if (supplyLevel == 'T1') {
+      this.IsHiddenT1_Tarrif = true;
+      this.Notes2_Tariff = "Total Part Cost is " + this.TotalInLocal.toFixed(2);
+
+      const TarifUpdatedT1 = document.getElementById('TarifUpdatedT1') as any;
+      if (TarifUpdatedT1.value != null) {
+        const SetValueTarifUpdatedT1 = document.getElementById('UpdateTariff_Popup') as any;
+        SetValueTarifUpdatedT1.value = TarifUpdatedT1.value;
+      }
+    }
+    else {
+      this.IsHiddenT1_Tarrif = false;
+      this.Notes2_Tariff = "Total Part Cost is " + this.TotalInLocalT2.toFixed(2);
+
+      const TarifUpdatedT2 = document.getElementById('TarifUpdatedT2') as any;
+      if (TarifUpdatedT2.value != null) {
+        const SetValueTarifUpdatedT2 = document.getElementById('UpdateTariff_Popup') as any;
+        SetValueTarifUpdatedT2.value = TarifUpdatedT2.value;
+      }
+    }
+  }
+
+  TarifT1Cost: any;
+  TarifT2Cost: any;
+  SaveTariff(supplyLevel: any) {
+    debugger;
+    if (supplyLevel == 'T1') {
+      this.TarifT1Cost = 0;
+
+      const SetValueTarifUpdatedT1 = document.getElementById('TarifUpdatedT1') as any;
+      const TarifUpdatedT1 = document.getElementById('UpdateTariff_Popup') as any;
+      if (TarifUpdatedT1.value != "") {
+        this.TarifT1Cost = TarifUpdatedT1.value;
+        SetValueTarifUpdatedT1.value = this.TarifT1Cost;
+      }
+      else {
+        this.TarifT1Cost = 0;
+        SetValueTarifUpdatedT1.value = this.TarifT1Cost;
+      }
+
+      this.findsumPercent();
+    }
+    else {
+
+      this.TarifT2Cost = 0;
+
+      const SetValueTarifUpdatedT2 = document.getElementById('TarifUpdatedT2') as any;
+      const TarifUpdatedT2 = document.getElementById('UpdateTariff_Popup') as any;
+      if (TarifUpdatedT2.value != "") {
+        this.TarifT2Cost = TarifUpdatedT2.value;
+        SetValueTarifUpdatedT2.value = this.TarifT2Cost;
+      }
+      else {
+        this.TarifT2Cost = 0;
+        SetValueTarifUpdatedT2.value = this.TarifT2Cost;
+      }
+
+      this.findsumPercentT2();
+    }
+
+    this.onCloseHandled_TariffPopup();
+
+  }
+
+  
+  FrequentlyUsedMaterialGrade() {
+    this.router.navigate(['/home/frequentlyusedmaterialgrade']);
   }
 
 

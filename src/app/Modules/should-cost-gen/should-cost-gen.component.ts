@@ -87,11 +87,14 @@ export class ShouldCostGenComponent implements OnInit {
   IsHiddenT2: boolean = false;
   AluminiumCastingGrade: any;
   modelTypes_Id: any;
+  ModelTypeName:any;
   IsCESmodel: boolean = false;
   ModelwiseNote: any;
   IsYellowModel = false;
   additional_Information: any;
 
+  manufacturing_mainT1: any[] = [];
+  manufacturing_mainT2: any[] = [];
 
   ngOnInit(): void {
 
@@ -140,6 +143,11 @@ export class ShouldCostGenComponent implements OnInit {
       this.appexChart();
       // this.getPiedata();
     }, 500);
+
+    setTimeout(() => {
+      const r = document.getElementById("chartOptionsId") as any;
+      r.getElementsByClassName('canvasjs-chart-credit')[0].style.display = "none";
+    }, 600);
 
 
   }
@@ -205,7 +213,11 @@ export class ShouldCostGenComponent implements OnInit {
       this.EngineDisplacement = data.projectDetails[0].engineDisplacement;
 
       this.modelTypes_Id = data.projectDetails[0].modelTypes_Id;
+      this.ModelTypeName = data.projectDetails[0].modelTypes_Desc;
       this.additional_Information = data.projectDetails[0].additional_Information;
+
+      this.manufacturing_mainT1 = data.manufacturingProcessMain.filter((item: any) => item.supplyLevel === 'T1');
+      this.manufacturing_mainT2 = data.manufacturingProcessMain.filter((item: any) => item.supplyLevel === 'T2');
 
 
       if (this.modelTypes_Id == 4) {
@@ -214,12 +226,16 @@ export class ShouldCostGenComponent implements OnInit {
       }
       else if (this.modelTypes_Id == 3) {
         this.IsCESmodel = true;
-        this.ModelwiseNote = "Material rate update can not be performed on this Cost Model"
+        this.ModelwiseNote = "Material rate update can not be performed on this Cost model"
       }
       else if (this.modelTypes_Id == 2) {
         this.IsCESmodel = true;
         this.IsYellowModel = true;
         this.ModelwiseNote = "The update feature can not be performed on this yellow model."
+      }
+      else if (this.modelTypes_Id == 5) {
+        this.IsCESmodel = true;
+        this.ModelwiseNote = "This is China Model, In this model Material rate update can not be performed."
       }
       else {
         this.IsCESmodel = false;
@@ -551,12 +567,12 @@ export class ShouldCostGenComponent implements OnInit {
   }
 
   SendNewRequest() {
-    this.router.navigate(['/home/shouldcostrequest', 'RFM'+this.UniqueId]);
+    this.router.navigate(['/home/shouldcostrequest', 'RFM' + this.UniqueId]);
     // this.router.navigate(['/home/shouldcostrequest', this.UniqueId]);
   }
 
 
- 
+
   @ViewChild('printsection') printsection!: ElementRef;
   async DownloadReport() {
     debugger;
@@ -579,8 +595,8 @@ export class ShouldCostGenComponent implements OnInit {
     else {
       PartNm = this.PartName;
     }
- 
-   // this.toastr.success("Report downloading has started.");
+
+    // this.toastr.success("Report downloading has started.");
 
     var xhr = new XMLHttpRequest();
     xhr.open('GET', staticUrl, true);
@@ -619,7 +635,7 @@ export class ShouldCostGenComponent implements OnInit {
     xhr.send();
 
   }
- 
+
 
   setImg(e: any) {
     this.mainimg = e
@@ -749,7 +765,7 @@ export class ShouldCostGenComponent implements OnInit {
       }
       if (i == 3) {
         this.TotalMaterailDetails.push(
-          { label: "Total Material Cost", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "inside", color: "#d0ddd7" },
+          { label: "Total Material Cost", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "outside", color: "#d0ddd7" },
         );
         break;
       }
@@ -758,16 +774,16 @@ export class ShouldCostGenComponent implements OnInit {
     for (var i = 0; i < this.shouldCostBreakdownList.length; i++) {
       if (i > 2 && this.shouldCostBreakdownList.length - 1) {
         this.TotalMaterailDetails.push(
-          { label: this.shouldCostBreakdownList[i].particular, y: Number(this.shouldCostBreakdownList[i].usdValue.toFixed(2)), indexLabelPlacement: "inside", color: "#78B3CE" },
+          { label: this.shouldCostBreakdownList[i].particular, y: Number(this.shouldCostBreakdownList[i].usdValue.toFixed(2)), indexLabelPlacement: "outside", color: "#78B3CE" },
         );
       }
     }
     // this.TotalMaterailDetails.push(
-    //   { label: "Total Manu Cost", isCumulativeSum: true, indexLabel: "{y}",  indexLabelPlacement: "inside", color: "#a5ae9e" },
+    //   { label: "Total Manu Cost", isCumulativeSum: true, indexLabel: "{y}",  indexLabelPlacement: "outside", color: "#a5ae9e" },
     // );
 
     this.TotalMaterailDetails.push(
-      { label: "Total Manu. Cost", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "inside", color: "#a5ae9e" },
+      { label: "Total Manu. Cost", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "outside", color: "#a5ae9e" },
     );
 
     //////////// shouldCostBreakdownNonList /////////////
@@ -775,37 +791,37 @@ export class ShouldCostGenComponent implements OnInit {
     for (var i = 0; i < this.shouldCostBreakdownNonList.length; i++) {
       if (i <= 1) {
         this.TotalMaterailDetails.push(
-          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)), indexLabelPlacement: "inside", color: "#9EDF9C" },
+          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)), indexLabelPlacement: "outside", color: "#9EDF9C" },
         );
       }
     }
 
-    this.TotalMaterailDetails.push(
-      { label: "Total SGA & Profit", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "inside", color: "#d0ddd7" },
-    );
+    // this.TotalMaterailDetails.push(
+    //   { label: "Total SGA & Profit", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "outside", color: "#d0ddd7" },
+    // );
 
     for (var i = 0; i < this.shouldCostBreakdownNonList.length; i++) {
       if (i > 1 && i < 4) {
         this.TotalMaterailDetails.push(
-          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)), indexLabelPlacement: "inside", color: "#9EDF9C" },
+          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)), indexLabelPlacement: "outside", color: "#9EDF9C" },
         );
       }
     }
 
-    this.TotalMaterailDetails.push(
-      { label: "Total Packaging", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "inside", color: "#d0ddd7" },
-    );
+    // this.TotalMaterailDetails.push(
+    //   { label: "Total Packaging", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "outside", color: "#d0ddd7" },
+    // );
 
     for (var i = 0; i < this.shouldCostBreakdownNonList.length; i++) {
       if (i > 4) {
         this.TotalMaterailDetails.push(
-          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)), indexLabelPlacement: "inside", color: "#9EDF9C" },
+          { label: this.shouldCostBreakdownNonList[i].particular, y: Number(this.shouldCostBreakdownNonList[i].usdValue.toFixed(2)), indexLabelPlacement: "outside", color: "#9EDF9C" },
         );
       }
     }
 
     this.TotalMaterailDetails.push(
-      { label: "Part Cost", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "inside", color: "#36BA98" },
+      { label: "Part Cost", isCumulativeSum: true, indexLabel: "{y}", indexLabelPlacement: "outside", color: "#36BA98" },
     );
 
 

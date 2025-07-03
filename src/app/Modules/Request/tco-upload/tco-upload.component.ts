@@ -83,11 +83,7 @@ showModal = false;
     this.showError0 = !this.selectedRequestID;
     this.showError1 = !this.selectedModelMartID;
   }
-  constructor( public TcoService: TcoService ,
-    private location : Location ,
-    private SpinnerService: NgxSpinnerService,
-    private actroute:ActivatedRoute,
-    private toaster:ToastrService ) { }
+  constructor( public TcoService: TcoService ,private location : Location ,private SpinnerService: NgxSpinnerService,private actroute:ActivatedRoute,private toaster:ToastrService ) { }
 
   ngOnInit() {
     debugger;
@@ -275,7 +271,6 @@ clearFileInput(): void {
 
 
 upload(): void {
-  debugger;
   if (!this.selectedSheetType) {
     alert('Please select a sheet type.');
     return;
@@ -337,7 +332,7 @@ uploadFile(): void {
         .subscribe({
           next: (response) => {
             console.log('File uploaded successfully:', response);
-           this.toaster.success("Tco sheet UPloaded Successfully")
+           this.toaster.success("Tco sheet Uploaded Successfully")
             this.isUploading = false;
             this.clearFileInput();
             this.submitForm();
@@ -368,7 +363,6 @@ uploadFile(): void {
 
 
 uploadNewFile(): void {
-  debugger;
 
   if (this.selectedFiles.length > 0 && this.SupllierData.length == 0) {
     this.isUploading = true;
@@ -443,9 +437,6 @@ uploadNewFile(): void {
 
 
 editRow(row: any) {
-  // throw new Error('Method not implemented.');
-    // row.isEditing = !row.isEditing; // Toggle the editing mode
-    // this.enableUpload = row.isEditing; // Enable the upload button when editing
   
     this.enableUpload =true;
     this.TCO_Version=row.TCO_Version;
@@ -454,6 +445,7 @@ editRow(row: any) {
     this.requestID=this.selectedRequestID.value;
     this.uniqueId=this.selectedModelMartID.value;
     this.Status="change_version";
+  
   }
   
   
@@ -469,7 +461,6 @@ editRow(row: any) {
     this.uniqueId=this.selectedModelMartID.value;
     this.Status="update";
   }
-  
   newaddRow() { 
     // Toggle the editing mode
         // this.isUploading=true;
@@ -508,17 +499,20 @@ editRow(row: any) {
           next: (response) => {
             console.log('File uploaded successfully:', response);
             //alert('File uploaded successfully!');
+            this.SpinnerService.hide('spinner');
             this.toaster.success("File uploaded successfully!")
             this.isUploading = false;
             this.clearFileInput();
-            this.SpinnerService.hide('spinner');
           },
           error: (error) => {
             console.error('File upload failed:', error);
             if (error.status === 409) {
               alert('A file with the same name already exists.');
+              this.SpinnerService.hide('spinner');
+
             } else {
               alert('File upload failed!');
+              this.SpinnerService.hide('spinner');
             }
             this.isUploading = false;
             this.clearFileInput();
@@ -543,8 +537,12 @@ editRow(row: any) {
             console.error('File upload failed:', error);
             if (error.status === 409) {
               alert('A file with the same name already exists.');
+              this.SpinnerService.hide('spinner');
+
             } else {
               alert('File upload failed!');
+              this.SpinnerService.hide('spinner');
+
             }
             this.isUploading = false;
             this.clearFileInput();

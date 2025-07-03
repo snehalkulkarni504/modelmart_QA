@@ -22,4 +22,8 @@ export class DesigntocostService {
     GetAdditionfilters(partname:any): Observable<any> {
       return this.httpClient.get<any[]>(this.apiUrl + `GetAdditionfilters_DTC?partname=${partname}`);
     }
+
+    GetEngineBaseOnPlatform(platform:any,partname:any):Observable<any>{
+      return this.httpClient.get<any[]>(this.apiUrl + `GetEngineBaseOnPlatform?platform=${platform}&partname=${partname}`);
+    }
 }

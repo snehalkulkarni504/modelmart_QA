@@ -23,20 +23,21 @@
     border-bottom: 1px solid #da291c;
 }
 
+
 .MasterHeader h2 {
-    /* margin: 20px 0px; */
-    font-size: 30px;
+    font-size: 17px;
     font-family: Helvetica, Arial !important;
     color: #808080;
     margin-left: 20px;
+    text-align: center;
+    vertical-align: middle !important;
     font-weight: 600;
+    height: 40px;
+    margin-top: 20px;
     text-size-adjust: 100%;
-    height: 80px;
-    line-height: 80px;
     background: linear-gradient(to right, #7b4397, #dc2430);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-
 }
 
 /* ------------ steps design start ------------ */
@@ -125,9 +126,8 @@
 }
 
 
-
 .btnback {
-    margin-top: 20px;
+    margin-top: 20px !important;
     font-size: 15px !important;
     background-color: #da291c;
     color: #fff;
@@ -351,16 +351,33 @@ input[type=text]:focus {
     margin-left: 10%;  
 }
 
-.modelsize_DirectCost > .modal-content{
+.modelsize_Tariff {
+    margin-top: 50px;
+    width: 50% !important;
+    margin-left: 25%;
+}
+
+
+.modelsize_DirectCost>.modal-content,
+.modelsize_Tariff>.modal-content {
     height: 390px !important;
 }
-  
+
 .tableFixHead_DirectCost{
     overflow-y: auto;  
     height: 150px !important ;  
     width: 90%;
     margin-left: 5%;
 }
+
+
+.tableFixHead_Tariff {
+    overflow-y: auto;
+    height: 150px !important;
+    width: 60%;
+    margin-left: 20%;
+}
+
 
 .PopupText{
     width: 90%;
@@ -474,7 +491,7 @@ input[type=text]:focus {
  
 .MasterHeader2 h2{
     margin: 10px 0px;
-    font-size: 20px !important; 
+    font-size: 15px !important; 
 }
 
 .toggle-btn {
@@ -598,4 +615,13 @@ input[type=text]:focus {
     color: #da291c;
     margin-bottom: 0px;
     margin-left: 50px;
+}
+
+.FrequentlyUsed_Material{
+    margin: 0px;
+    padding: 0px;
+    color: #0000ff;
+    font-size: 9px !important;
+    cursor:  pointer;
+    font-weight: 500;
 }
