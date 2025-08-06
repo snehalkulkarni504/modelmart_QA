@@ -1,0 +1,160 @@
+* {
+    font-family: Helvetica, Arial !important;
+}
+
+*:focus{
+    box-shadow: none;
+}
+
+.tooltip-cmn {
+    background-color: #f00;
+}
+
+.table {
+    /* width: 80% !important; */
+    margin-top: 15px; 
+
+
+}
+
+.table td {
+    text-align: center;
+}
+
+.table thead {
+    text-align: center;
+
+}
+
+#add-btn {
+    margin: 2% 0% 1.5% 82.8%;
+}
+/* 
+.default-btn {
+    background-color: #da291c;
+    color: #fff;
+    margin-top: 30px;
+} */
+
+.modal-close-icn {
+    border: 0px;
+    background-color: #fff;
+}
+
+.modal {
+    background: rgba(0, 0, 0, .5);
+}
+
+.default-lbl {
+    margin: 0px 0px 3px 2px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 15px;
+
+}
+.custom-dropdown{
+    width: 100%;
+   
+}
+#checkbox:checked{
+    background-color: #da291c;
+
+}
+
+.setHeight{
+    min-height: 100dvh;
+}
+
+
+.MasterHeader{
+    width: 80%;
+    display: inline-flex;
+    /* height: 80px; */
+    margin-left: 10%;
+    margin-right: 10%;
+    font-family: Helvetica, Arial  ;
+    border-bottom: 1px solid #da291c;
+    margin-bottom: 20px;
+    /* box-shadow: 0 6px 2px -6px #da291c; */
+}
+.tableHeader{
+    width: 80%;
+    /* height: 80px; */
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 30px;
+    font-family: Helvetica, Arial  ;
+    margin-bottom: 20px;
+
+}
+
+.MasterHeader h2{
+    /* position: absolute; */
+    margin: 20px 0px;
+}
+
+.MasterHeaderlable{
+    width: 80%;
+    /* height: 80px; */
+    margin-left: 10%;
+    font-family: Helvetica, Arial  ;
+}
+
+
+.table thead tr th {
+    background-color:  #da291c;
+    color: #fff;
+    padding: 3px;
+}
+/* 
+.table tfoot tr td{
+    background-color:  #da291c17;
+    color: #000;
+    padding: 3px;
+} */
+
+
+input[type=checkbox]{
+    accent-color: #da291c;
+}
+
+.searchDiv {
+    width: 50%;
+    /* height:2%; */
+    /* margin-left: 10%; */
+}
+.search-input{
+    height:38px;
+}
+    
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 38px;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #f8f6f6;
+    background-color: #da291c;
+}
+
+.has-search .form-control {
+    padding-left: 2.8rem;
+}
+
+.has-search  {
+    float:right;
+}
+
+.form-group.has-error input {
+    border: 2px solid red !important;
+    background-color: #ffeeee;
+
+}
+
+
+.tabledatafont{
+    font-size: 13px !important;
+}

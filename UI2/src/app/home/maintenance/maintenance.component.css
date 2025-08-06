@@ -1,0 +1,27 @@
+body {
+    text-align: center;
+    padding: 150px;
+    color: #333;
+    font-family: Helvetica, Arial !important;
+}
+
+h1 {
+    font-size: 40px;
+}
+
+#article {
+    padding-top: 100px;
+    display: block;
+    text-align: left;
+    width: 650px;
+    margin: 0 auto;
+}
+
+a {
+    color: #da291c;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

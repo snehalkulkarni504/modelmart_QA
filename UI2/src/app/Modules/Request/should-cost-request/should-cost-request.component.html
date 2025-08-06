@@ -1,0 +1,131 @@
+<div class="setHeight">
+  <ngx-spinner name="spinner" bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="square-jelly-box"
+    [fullScreen]="true">
+    <img alt="Loading Please Wait..." style="width:100px ; height:100px ;" src="../../../assets/Spin-2.gif" />
+  </ngx-spinner>
+
+  <div class="MasterHeader ">
+    <div style="width: 50%;">
+      <h2>Should Cost Request</h2>
+    </div>
+    <div class="text-end" style="width: 50%;">
+      <button class="btnbackLeft" (click)="backToPreviousPage()">Back</button>
+    </div>
+  </div>
+
+  <div *ngIf="RequestId=== undefined " class="MasterDetails border">
+    <label class="labelDetails">Request Details</label>
+    <div class="row">
+      <div class="col-md-6">
+        <label>Requester Name :</label>
+        <span style="margin-left: 10px; ">{{RequesterName}}</span>
+      </div>
+      <div class="col-md-6">
+        <label>Requested Date :</label>
+        <span style="margin-left: 10px;">{{RequesteDate}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="RequestId !=undefined " class="MasterDetails border">
+    <label class="labelDetails">Request Details</label>
+    <div class="row">
+      <div class="col-md-6">
+        <label>Requester Name :</label>
+        <span style="margin-left: 10px; ">{{RequestUsername}}</span>
+      </div>
+      <div class="col-md-6">
+        <label>Requested Date :</label>
+        <span style="margin-left: 10px;">{{CreatedDate | date: 'dd-MMM-YYYY  HH:MM:SS'}}</span>
+      </div>
+      <div class="col-md-6">
+        <label>Request ID:</label>
+        <span style="margin-left: 10px; ">{{RequestId}}</span>
+      </div>
+      <div class="col-md-6">
+        <label>Status:</label>
+        <span style="margin-left: 10px;">{{Status}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="MasterDetails border">
+    <label class="labelDetails">Input Details</label>
+
+    <div class="row">
+      <div class="col-md-10">
+        <br>
+        <label for="floatingTextarea" class="default-lbl"><b style="color: #ff0000;">*</b>Input Request Form¹</label>
+        <input #myFile type="file" id="myFile" (change)="onChange($event)" class="form-control"
+        accept=".xlsx, .xls, .xlsm"> 
+        <span class="remark">{{UploadSheetcomments}}</span>
+      </div>
+      <div class="col-md-2">
+        <br>
+        <div [hidden]="IsDTCRequest" class="RequestFormIcon">
+          <img alt="Loading Please Wait..." class="RequestExelFormat" src="../../../assets/excelicon.png"
+            (click)="downloadInputRequestForm()" /><br>
+          Click here for Input Request Form
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row ">
+      <div class="col-md-10" style="padding-left: 10px;">
+        <label for="floatingTextarea" class="default-lbl">Input Folder Link²</label>
+        <input type="text" class="form-control" [(ngModel)]="FolderLink" placeholder="Folder Path....">
+        <span class="remark"> 2. 2D prints/3D CAD for all assembly and child parts are required - if they are not
+          available on PLM, please load it in a OneDrive folder and provide the link above with folder access to wwid
+          PL315.</span>
+      </div>
+    </div>
+    <br>
+    <div class="row ">
+      <div class="col-md-10">
+        <label for="floatingTextarea" class="default-lbl"><b style="color: #ff0000;">*</b>Comments</label>
+        <span  [hidden]="!IsRefresModelComments" style="color: #000; font-size: 12px; padding-left: 10px;"> <br> {{RefresModelComments}}</span>
+        
+        <textarea class="form-control" [(ngModel)]="Comments" placeholder="Comments...."
+          id="floatingTextarea"></textarea>
+      </div>
+      <div class="col-md-2 text-center">
+        <button (click)="upload()" type="button" class="btn btn-sm default-btn" style="margin-top: 40px;"
+          data-bs-dismis="modal">{{Btn_Text}}</button>
+
+      </div>
+    </div>
+<br>
+    <div class="row " [hidden]="ResubmitRequest">
+      <div class="col-md-12">
+        <h6 style="color: #ff0000; font-family: Helvetica, Arial;">Please update the request based on COE team suggestion and resubmit the form for
+          further processing by COE team.</h6>
+      </div>
+    </div>
+
+
+    <!-- <div class="row" style="width: 100%;">
+      <label for="floatingTextarea"><b>Comments </b></label>
+      <div class="form-floating">
+        <textarea class="form-control" [(ngModel)]="Comments" placeholder="Comments...." id="floatingTextarea"></textarea>
+      </div>
+    </div> -->
+  </div>
+  <!-- <div class="MasterHeaderlable text-end">
+    <div class="col-md-12">
+      <button (click)="upload()" type="button" class="btn btn-sm default-btn" style="margin-top: 0px;"
+        data-bs-dismis="modal">Upload</button>
+
+    </div>
+  </div> -->
+
+  <div class="MasterDetails" style="margin-top: 0px;">
+    <div class="row">
+      <div class="col-md-6">
+        <!-- <input   type="file" (change)="onChange($event)" class="form-control"> -->
+      </div>
+      <!-- <div class="col-md-6">
+        <button (click)="upload()" type="button" class="btn btn-sm default-btn" style="margin-top: 0px;" data-bs-dismis="modal">Upload</button>
+      </div> -->
+    </div>
+  </div>
+</div>

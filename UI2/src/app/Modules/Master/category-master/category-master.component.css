@@ -1,0 +1,154 @@
+* {
+    font-family: Helvetica, Arial !important;
+}
+ 
+.setHeight {
+    min-height: 100dvh;
+}
+
+.MasterHeader{
+    width: 80%;
+    display: inline-flex;
+    height: 80px;
+    margin-left: 10%;
+    margin-right: 10%;
+    font-family: Helvetica, Arial  ;
+    border-bottom: 1px solid #da291c;
+    margin-bottom: 20px;
+    /* box-shadow: 0 6px 2px -6px #da291c; */
+}
+
+
+.MasterHeaderlable{
+    width: 80%;
+    display: inline-flex;
+    margin-left: 10%;
+    margin-right: 10%;
+    font-family: Helvetica, Arial  ;
+   
+    /* box-shadow: 0 6px 2px -6px #da291c; */
+}
+
+
+.MasterHeader h2{
+    /* position: absolute; */
+    margin: 20px 0px;
+}
+
+
+#add-btn {
+    margin: 0px  ;
+    padding: 7px 10px;
+}
+
+
+.searchDiv {
+    width: 50%;
+}
+
+
+.has-search .form-control {
+    padding-left: 2.8rem;
+}
+
+.form-group.has-error input {
+    border: 2px solid red !important;
+    background-color: #ffeeee;
+
+}
+.default-btn_popup {
+    background-color: #da291c;
+    color: #fff;
+}
+
+.MasterHeader h2 {
+    margin: 20px 0px;
+}
+
+.search-input{
+    height:38px;
+}
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height:38px;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #f8f6f6;
+    background-color:#da291c;
+}
+
+.talbeStyle {
+    margin-top: 15px;
+    width: 80% !important ;
+    margin-left: 10%;
+    font-size: 12px !important;
+    font-family: Helvetica, Arial;
+    font-weight: 600;
+}
+ 
+.CatTable2{
+    border: 1px solid black;
+}
+ 
+.CatTable2 th {
+    border: 1px solid #da291c;
+    background-color: #da291c;
+    color: #fff;
+    text-align: center;
+}
+ 
+.CatTable2td{
+    border: 1px solid black;
+    width: 30% !important;
+    padding-left: 5px;
+}
+ 
+.CatTable3td{
+    border: 1px solid black;
+    width: 40% !important;
+    padding-left: 5px;
+}
+ 
+.CatTable4{
+    border: 1px solid black;
+    width: 100% !important;
+}
+ 
+.CatTable4td{
+    padding-left: 5px;
+    border: 1px solid black;
+}
+.CatTable5td{
+    display: none;
+    text-align:center;
+    border: 1px solid black;
+    width: 8% !important;
+}
+ 
+.CatTable3td:hover,.CatTable4td:hover,.CatTable2td:hover{
+    cursor: pointer;
+    /* color: rgb(250, 245, 245); */
+    background-color: #ead7d5;
+}
+.modal-close-icn {
+    width: 30px;
+    height: 30px;
+    color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .2s ease-in-out;
+}
+
+.modal-close-icn:hover {
+    rotate: 90deg;
+    cursor: pointer;
+}
+
+.modal {
+    background: rgba(0, 0, 0, .5);
+}

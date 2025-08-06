@@ -1,0 +1,25 @@
+
+#topnavbarfooter{
+    overflow: hidden;
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right:0;
+    z-index: 99990;
+    /* background: linear-gradient(to right,#0099cc,#006080); */
+    background-color: #ffffff;
+  } 
+  
+  #topnavbarfooter h6{
+    float: right; 
+    font-size: 11px; 
+    /* color: #ffffff; */
+    line-height: 20px;
+    margin-bottom: 0px; 
+    font-weight: 400; 
+    margin-right: 5px; 
+    color: #da291c;
+  } 
+  #topnavbarfooter a{
+    color: #da291c;
+  }

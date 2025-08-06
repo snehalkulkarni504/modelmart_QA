@@ -1,0 +1,120 @@
+.services{
+    width: 90%;
+    margin-left: 5%;
+    padding: 15px 30px 60px 15px;
+    
+}
+.services h1 {
+    font-size: 40px;
+    text-align: center;
+    position: relative;
+    font-weight: 600;
+    padding-bottom: 10px;
+   
+}
+
+.services h5{
+    /* font-size: 40px; */
+    text-align: center;
+    /* font-weight: 600; */
+    position: relative;
+    margin-bottom: 70px;
+    padding-bottom: 20px;
+}
+
+.services h5::after{
+ content: '';
+ position: absolute;
+ width: 170px;
+ height: 3px;
+ background-color: #da291c;
+ bottom: 0;
+ left: 50%;
+ transform: translateX(-50%);
+}
+.content{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.card{
+    /* width:calc(34% -20px);
+    background-color: rgb(236, 225, 225);
+    padding: 40px 15px;
+    text-align: center;
+    margin: 0 50px;
+    position: relative;
+    transition: all 0.5s ease-in; */
+    background-color: rgb(236, 225, 225);
+    /* padding: 40px 15px;
+    text-align: center;
+    margin: 20px;
+    position: relative;
+    transition: all 0.5s ease-in; */
+    
+    width: 350px;
+    height: 270px;
+    text-align: center;
+    transition: all 0.5s ease-in-out;
+     
+}
+
+.card:hover{
+    box-shadow: 0px 0px 5px rgb(255, 145, 2);
+    border: 1px solid rgb(255, 145, 2);
+}
+
+.card:hover .box i{
+   
+    color: rgb(255, 145, 2);
+    font-size: 40px;
+    border-color:#da291c ;
+}
+
+.box i{
+    font-size: 40px;
+    color: #da291c;
+    transition: all 0.5s ease;
+}
+
+ /* .card::after{
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgb(253, 252, 252);
+    top: 0;
+    left: 0;
+    z-index: -1;
+    transform: rotate(15deg);
+    transition: all 0.5s ease;
+ }
+
+ .card:hover::after{
+    background-color: #da291c;
+    border-radius: 5px;
+    transform: rotate(-15deg);
+ }
+
+  */
+
+  
+
+.btnbackContact {
+    position: absolute;
+    right: 126px;
+    top:75px;
+    z-index: 50;
+    font-size: 15px !important;
+    background-color: #da291c;
+    color: #fff;
+    padding: 4px 15px;
+    border: 1px solid #da291c;
+    font-family: Helvetica, Arial !important;
+    border-radius: 5px;
+}
+
+.btnbackContact:hover{
+    background-color: #fff;
+    color: #da291c;
+}

@@ -1,0 +1,165 @@
+<div class="MasterHeader">
+    <div style="width: 50%;margin-top: 20px">
+        <h2>TCO Upload</h2>
+    </div>
+    <div class="text-end" style="width: 50%; ">
+        <button class="btnbackLeft" (click)="backToPreviousPage()">Back</button>
+    </div>
+</div>
+<ngx-spinner name="spinner" bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="square-jelly-box"
+    [fullScreen]="true">
+    <img alt="Loading Please Wait..." style="width:100px ; height:100px ;" src="../../../../assets/Spin-2.gif" />
+</ngx-spinner>
+
+<div class="container">
+
+    <div class="row" id="panleborder">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="default-lbl">Request ID <span style="color: red;">*</span></label>
+                <ng-select [(ngModel)]="selectedRequestID" [items]="requestIDList"></ng-select>
+                <div class="error-message" *ngIf="showError0"> Please select Request ID.</div>
+            </div>
+
+            <div class="col-md-3">
+                <label class="default-lbl">Model Mart ID <span style="color: red;">*</span></label>
+                <ng-select [(ngModel)]="selectedModelMartID" [items]="modelMartIDList"></ng-select>
+                <div class="error-message" *ngIf="showError1"> Please select Model Mart ID.</div>
+            </div>
+
+            <div class="col-md-3">
+                <button class="btn view-btn mt-3" style="margin-right: 10px" (click)="submitForm()">view</button>
+                <button class="btn view-btn mt-3" style="margin-right: 10px" (click)="newaddRow()">Add</button>
+                <button class="btn view-btn mt-3" (click)="BulkUpload()">Bulk Upload</button>
+            </div>
+        </div>
+    </div>
+    <div class="row large-table" id="panleborder" *ngIf="showDetails">
+        <h3>Model Details</h3>
+        <table *ngIf="tableData.length > 0" class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Part Name</th>
+                    <th>Part Number</th>
+                    <th>Business Unit</th>
+                    <th>Program Name</th>
+                    <th>Category 4</th>
+                    <th>Debrief Date</th>
+                    <th>Supp. Manu. Location</th>
+                    <th>Should Cost</th>
+                    <th hidden>CSHeaderID</th>
+                    <th>Model Mart ID</th>
+                    <!-- <th>Action</th>  -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of tableData; let i=index">
+
+                    <!-- <td>{{ row.TCO_ID }}</td> -->
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ row.PartName }}</td>
+                    <td>{{ row.PartNumber }}</td>
+                    <td>{{ row.BusinessUnit }}</td>
+                    <td>{{ row.ProgramName }}</td>
+                    <td>{{ row.CAT4 }}</td>
+                    <td>{{ row.DebriefDate | date:'dd-MMM-YYYY' }}</td>
+                    <td>{{ row.MfgRegion }}</td>
+                    <td>{{ row.ToolingCost }}</td>
+                    <td hidden>{{ row.RequestHeaderId }}</td>
+                    <td>{{ row.UniqueId }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row small-table" id="panleborder" *ngIf="showDetails">
+        <h3>Uploaded TCO Details</h3>
+        <table *ngIf="SupllierData.length > 0 && isTableVisible" class="table  smallcontainer table-bordered mt-3 ">
+
+            <thead>
+                <tr>
+                    <th>Sr NO</th>
+                    <th>Model Mart ID</th>
+                    <th hidden>TCOID</th>
+                    <th>TCO Number</th>
+                    <th>Supplier Name</th>
+                    <th>TCO Version</th>
+                    <th hidden>Supplier_Company</th>
+                    <th hidden>TCO_SheetStatus</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of SupllierData; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <!-- <td>{{ row.MMID }}</td> -->
+                    <td>{{ row.UniqueID }}</td>
+                    <td hidden>{{ row.TCOID }}</td>
+                    <td>{{ row.TCO_Number }}</td>
+                    <td>{{ row.Supplier_Company }}</td>
+                    <td>{{ row.TCO_Version }}</td>
+                    <!-- <td>{{ row.TCO_Number }}</td> -->
+                    <td hidden>{{ row.Supplier_Number }}</td>
+                    <td hidden>{{ row.TCO_SheetStatus}}</td>
+                    <td>
+                        <button class="btn btn-success upload-btn" (click)="editRow(row)"
+                            style="margin-right: 10px;margin-left: 10px" ngbTooltip="Add New Version">Add New Version</button>
+                        <button class="btn btn-success upload-btn" (click)="addRow(row)"
+                            ngbTooltip="Update">Update</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="d-flex align-items-center gap-2 mt-3">
+            <!-- <select class="form-control sheet-type-dropdown" [(ngModel)]="selectedSheetType">
+                <option value ="default">Select Type</option>
+                <option value="type1">Old Sheet</option>
+                <option value="type2">New Sheet</option>
+            </select> -->
+            <ng-select [ngModelOptions]="{standalone: true}" [searchable]="false" placeholder="Please select"
+                class=" sheet-type-dropdown" [(ngModel)]='selectedSheetType'>
+                <ng-option value='default'>Select Type</ng-option>
+                <ng-option value='type1'>Old Sheet</ng-option>
+                <ng-option value='type2'>New Sheet</ng-option>
+            </ng-select>
+
+            <input type="file" (change)="onFileSelected($event)" #fileInput accept=".xls,.xlsx,xlsm"
+                class="form-control file-input" [multiple]="isBulkUpload">
+            <button class="btn btn-success upload-btn" (click)="upload()"
+                [disabled]="isUploading || (!enableUpload && SupllierData.length>0)">Upload</button>
+        </div>
+    </div>
+    <br>
+    <br>
+
+    <div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': showModal}" style="display: block;"
+    *ngIf="showModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bulk Upload</h5>
+                <label class="close modal-close-icn" (click)="closePopup()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
+                      viewBox="0 0 16 16">
+                      <path
+                        d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                    </svg>
+                  </label>
+            </div>
+            <div class="modal-body">
+                <label style="margin-right: 10px;">Select Type</label>
+                <select  [(ngModel)]="selectedSheet"  class="custom-input" style="padding: 5px;">
+                  <option *ngFor="let sheet of SheetType" [value]="sheet.value"> {{ sheet.label }} </option>
+                </select>
+            </div>
+           
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" (click)="BulkFileUpload()">Upload</button>
+                <button type="button" class="btn btn-sm  btn-default default-btn_popup" (click)="closePopup()">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</div>

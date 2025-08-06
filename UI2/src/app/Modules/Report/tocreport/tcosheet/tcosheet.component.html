@@ -1,0 +1,595 @@
+<div class="setHeight">
+    <ngx-spinner name="spinner" bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="square-jelly-box"
+        [fullScreen]="true">
+        <img alt="Loading Please Wait..." style="width:100px ; height:100px ;" src="../../../assets/Spin-2.gif" />
+    </ngx-spinner>
+
+    <form [formGroup]="Tcosheet">
+        <div class="MasterHeader">
+            <div style="width: 50%;">
+                <h2>TCO Sheet</h2>
+            </div>
+            <div class="text-end" style="width: 50%;">
+                <button class="btnbackLeft" (click)="backToPreviousPage()">Back</button>
+            </div>
+        </div>
+
+
+        <div class="container ">
+            <div class="row">
+                <div class="col-md-4" style="border:  1px solid #808080; padding: 0px;">
+                    <h5>Part Information</h5>
+                    <table class="table table-bordered" style="margin: 0px; width: 100% !important;">
+                        <tr>
+                            <td style=" padding: 2px">Part Number</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].partnum}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Part Description</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].partdesc}}</td>
+                        </tr>
+                        <tr>
+                            <td>Annual Volume</td>
+                            <td class="tdtd">{{getData[0].annualvol}}</td>
+                        </tr>
+                        <tr>
+                            <td>Finish Part Weight(lbs) if N/A or 1, insert 1 </td>
+                            <td class="tdtd">{{getData[0].finishpartweight}}</td>
+                        </tr>
+                        <tr>
+                            <td>Drawing Number(Rev)</td>
+                            <td class="tdtd">{{getData[0].drawingnum}}</td>
+                        </tr>
+                        <tr>
+                            <td>Minimum Order Quantity</td>
+                            <td class="tdtd">{{getData[0].minorderqty}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="col-md-4" style="border:  1px solid #808080; padding: 0px;">
+                    <h5>Cummins Information</h5>
+                    <table class="table table-bordered" style="margin: 0px; width: 100% !important;">
+                        <tr>
+                            <td colspan="3">Sourcing Manager</td>
+                            <td class="tdtd">{{getData[0].cmsrcmanager}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Phone Number</td>
+                            <td class="tdtd">{{getData[0].cmphnno}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Email Address</td>
+                            <td class="tdtd">{{getData[0].cmemail}}</td>
+                        </tr>
+                        <tr>
+                            <td>CMI Locations</td>
+                            <td>{{getData[0].cmloc}}&nbsp;</td>
+                            <td>&nbsp;Date:</td>
+                            <td>&nbsp;{{getData[0].cmdate}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Parts Per Container</td>
+                            <td class="tdtd">{{getData[0].cmpartcntr}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Parts Per Skid</td>
+                            <td class="tdtd">{{getData[0].cmpartskid}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="col-md-4" style="border:  1px solid #808080; padding: 0px;">
+                    <h5>Supplier Information - {{getData[0].suppno}}</h5>
+                    <!-- <h5>Supplier Information</h5> -->
+                    <table class="table table-bordered" style="margin: 0px; width: 100% !important;">
+                        <tr>
+                            <td>Company</td>
+                            <td class="tdtd">{{getData[0].suppcomp}}</td>
+                        </tr>
+                        <tr>
+                            <td>Contact</td>
+                            <td class="tdtd">{{getData[0].suppcont}}</td>
+                        </tr>
+                        <tr>
+                            <td>Phone/Email</td>
+                            <td class="tdtd">{{getData[0].suppemail}}</td>
+                        </tr>
+                        <tr>
+                            <td>Country of origin(Locations)</td>
+                            <td class="tdtd">{{getData[0].suppcountry}}</td>
+                        </tr>
+                        <tr>
+                            <td>Ownership transfer point</td>
+                            <td class="tdtd">{{getData[0].suppowner}}</td>
+                        </tr>
+                        <tr>
+                            <td>EXCHANGE RATE to USD</td>
+                            <td class="tdtd">{{getData[0].suppexchange}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3" style="border:  1px solid #808080; padding: 0px;">
+                    <h5>Material Information</h5>
+                    <table class="table table-bordered" style="margin: 0px; width: 100% !important;">
+                        <tr>
+                            <td>Cummins Material Spec</td>
+                            <td class="tdtd">{{getData[0].micmmatspec }}</td>
+                        </tr>
+                        <tr>
+                            <td>Lb/Unit or Per Piece=1</td>
+                            <td class="tdtd">{{getData[0].micmlb }}</td>
+                        </tr>
+                        <tr>
+                            <td>Material Cost$/lb or unit</td>
+                            <td class="tdtd">{{getData[0].mimatclb}}</td>
+                        </tr>
+                        <tr>
+                            <td>Surcharge$/lb or unit</td>
+                            <td class="tdtd">{{getData[0].misurcharge}}</td>
+                        </tr>
+                        <tr>
+                            <td>Energy/Melting Recovery$/lb or unit</td>
+                            <td class="tdtd">{{getData[0].mienermatrec}}</td>
+                        </tr>
+                        <tr>
+                            <td>Material Scrap $/lb or unit</td>
+                            <td class="tdtd">{{getData[0].miscraplb}}</td>
+                        </tr>
+                        <tr>
+                            <td>Material Cost/PC</td>
+                            <td class="tdtd">{{getData[0].mimatcpc}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="col-md-3" style="border:  1px solid #808080; padding: 0px;">
+                    <h5>Purchased Part Per Finished Unit</h5>
+                    <table class="table table-bordered" style="margin: 0px; width: 100% !important;">
+
+                        <tr>
+                            <td>Description</td>
+                            <td style="text-align: center;">Part#</td>
+                            <td style="text-align: end;">Cost/Part</td>
+                        </tr>
+
+
+                        <tr *ngFor="let item of purpartdata || []">
+                            <td>{{item.descr}}</td>
+                            <td style="text-align: center;">{{item.part}}</td>
+                            <td style="text-align: end;">{{item.costppp}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">&nbsp;</td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" style="text-align: center;">Total</td>
+
+                            <td style="text-align: end;">{{purpartdata?.[0]?.total || 'NA'}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="col-md-3" style="border:  1px solid #808080; padding: 0px;">
+                    <h5>Surface Treatments Per Finished Unit</h5>
+                    <table class="table table-bordered" style="margin: 0px; width: 100% !important;">
+
+                        <tr>
+                            <td>Description</td>
+                            <td style="text-align: end;">$/Part</td>
+                        </tr>
+
+
+                        <tr *ngFor="let data of surfacetreatment || []">
+                            <td>{{data.surfacetreatmentdesc}}</td>
+                            <td style="text-align: end;">{{data.surfacetreatmentprice}}</td>
+                        </tr>
+
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: center;">Total</td>
+                            <td style="text-align: end;">{{surfacetreatment?.[0]?.surfacetreatementtotal || 'NA'}}</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="col-md-3" style="border:  1px solid #808080; padding: 0px;">
+                    <h5>Supplier Packaging,Logistics & Warehousing</h5>
+                    <table class="table table-bordered" style="margin: 0px; width: 100% !important;">
+
+                        <tr>
+                            <td>Description</td>
+
+                            <td style="text-align: end;">{{getData[0].spdesc}}</td>
+                        </tr>
+                        <tr>
+                            <td>Freight/Logistcs Warehousing</td>
+                            <td style="text-align: center;">{{getData[0].spfreight}}</td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" style="text-align: center; background-color:#da291c; color: white;">Cummins
+                                Packaging</td>
+                        </tr>
+                        <tr>
+                            <td>Expandable Packaging/Corrigated</td>
+                            <td style="text-align: center;">{{getData[0].cpexpend}}</td>
+                        </tr>
+                        <tr>
+                            <td>Returnable Containers</td>
+                            <td style="text-align: center;">{{getData[0].cpretcont}}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">Total</td>
+                            <td style="text-align: center;">{{getData[0].cptotalcost}}</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9" style="border:  1px solid #808080; padding: 0px;">
+                    <h5>Manufacturing Process Information</h5>
+                    <table class="table  table-bordered table-striped" style="margin: 0px; width: 100% !important;">
+                        <thead>
+                            <tr>
+                                <td style="text-align: center;">Operations#</td>
+                                <td style="text-align: center;">Description</td>
+                                <td style="text-align: center;">Machine Description</td>
+                                <td style="text-align: center;">Pcs/Hrs</td>
+                                <td style="text-align: center;">Production Hours/Day</td>
+                                <td style="text-align: center;">Overhead Cost/Hr</td>
+                                <td style="text-align: center;">Labour Cost per Hr</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of getmfgprocess ||[]">
+
+                                <td class="tdtd">{{item.oper}}</td>
+                                <td class="tdtd">{{item.descr}}</td>
+                                <td class="tdtd">{{getmfgprocess[0].machinedesc}}</td>
+                                <!-- <td class="tdtd">${{item?.machinedesc || 'N/A'}}</td> -->
+                                <td class="tdtd">{{item.pcshr}}</td>
+                                <td class="tdtd">{{item.prodhrday}}</td>
+                                <td class="tdtd">{{item.overheadhr}}</td>
+                                <td class="tdtd">{{item.labcosthr}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="tdtd">&nbsp;</td>
+                                <td class="tdtd">&nbsp;</td>
+                                <td class="tdtd">&nbsp;</td>
+                                <td class="tdtd">&nbsp;</td>
+                                <td class="tdtd">&nbsp;</td>
+                                <td class="tdtd">&nbsp;</td>
+                                <td class="tdtd">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td class="tdtd">&nbsp;</td>
+                                <td class="tdtd">&nbsp;</td>
+                                <td class="tdtd">&nbsp;</td>
+                                <td class="tdtd">&nbsp;</td>
+                                <td class="tdtd">&nbsp;</td>
+                                <td class="tdtd">&nbsp;</td>
+                                <td class="tdtd">&nbsp;</td>
+                            </tr>
+
+                        </tbody>
+
+                        <thead>
+                            <tr style="font-weight: bold;">
+                                <td style="text-align: center;">Total</td>
+                                <td style="text-align: center;">&nbsp;</td>
+                                <td style="text-align: center;">&nbsp;</td>
+                                <td style="text-align: center;">${{getmfgprocess?.[0]?.totalpcshrsum}}</td>
+                                <td style="text-align: center;">${{getmfgprocess?.[0]?.totalprodhrday}}</td>
+                                <td style="text-align: center;">${{getmfgprocess?.[0]?.totaloverheadhr}}</td>
+                                <td style="text-align: center;">${{getmfgprocess?.[0]?.totallabourcost}}</td>
+                            </tr>
+                        </thead>
+
+                    </table>
+                </div>
+
+                <div class="col-md-3" style="border:  1px solid #808080; padding: 0px;">
+                    <h5>&nbsp;</h5>
+                    <table class="table table-bordered" style="margin: 0px; width: 100% !important;">
+                        <tr>
+                            <th colspan="2" style="font-weight:lighter; text-align: center;">Price Breakdown Per Piece
+                            </th>
+                        </tr>
+                        <tr>
+                            <td colspan="1">Material</td>
+                            <td style="text-align: center;">${{getData?.[0].pbmat || 'N/A'}}</td>
+                            <td style="text-align: center;">{{getData[0].pbmatper || 0}} %</td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="1">Purchased Parts</td>
+                            <td style="text-align: center;">${{getData[0].pbpur || 0.00}}</td>
+                            <td style="text-align: center;">{{getData[0].pbpurper || 0.0}}%</td>
+                        </tr>
+                        <tr>
+                            <td colspan="1">Labour Cost/Pc</td>
+                            <td style="text-align: center;">${{getData[0].pblab}}</td>
+                            <td style="text-align: center;">{{getData[0].pblabper}}%</td>
+                        </tr>
+                        <tr>
+                            <td colspan="1">OH Cost/Pc</td>
+                            <td style="text-align: center;">${{getData[0].pbwoh}}</td>
+                            <td style="text-align: center;">{{getData[0].pbwohper}}%</td>
+                        </tr>
+                        <tr>
+                            <td colspan="1">Surface Treatments</td>
+                            <td style="text-align: center;">${{getData[0].pbsurface}}</td>
+                            <td style="text-align: center;">{{getData[0].pbsurper}}%</td>
+                        </tr>
+                        <tr>
+                            <td colspan="1">Pack/Logistics/Ware</td>
+                            <td style="text-align: center;">${{getData[0].pbpack}}</td>
+                            <td style="text-align: center;">{{getData[0].pbpackper}}%</td>
+                        </tr>
+                        <tr>
+                            <td colspan="1">Tooling Amortization</td>
+                            <td style="text-align: center;">${{getData[0].pbtoolingamort}}</td>
+                            <td style="text-align: center;">{{getData[0].pbtoolper}}%</td>
+                        </tr>
+                        <tr>
+                            <td colspan="1">VAT</td>
+                            <td style="text-align: center;">${{getData?.[0]?.pbvat || '0'}}</td>
+                            <td style="text-align: center;">{{getData[0].pbvatper}}%</td>
+                        </tr>
+                        <tr>
+                            <td colspan="1">SG&A</td>
+                            <td style="text-align: center;">${{getData[0].pbsga||0}}</td>
+                            <td style="text-align: center;">{{getData[0].pbsgaper}}%</td>
+                        </tr>
+                        <tr>
+                            <td colspan="1">Profit</td>
+                            <td style="text-align: center;">${{getData[0].pbprofit}}</td>
+                            <td style="text-align: center;">{{getData[0].pbproper}}%</td>
+                        </tr>
+                        <tr>
+                            <td colspan="1">Total Part Price</td>
+                            <td style="text-align: center;">${{getData[0].pbtotal}}</td>
+                            <td style="text-align: center;">100%</td>
+                        </tr>
+
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container" style="margin-bottom: 50px;">
+            <div class="row">
+                <div class="col-md-3" style="border:  1px solid #808080; padding: 0px;">
+                    <h5>Tooling</h5>
+                    <table class="table table-bordered" style="margin: 0px; width: 100% !important;">
+                        <tr>
+                            <td style=" padding: 2px">Fixture:</td>
+                            <td colspan="2" class="tdtd" style=" padding: 2px">{{getData[0].toolfix ?? 0}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Die(s):</td>
+                            <td colspan="2" class="tdtd" style=" padding: 2px">{{getData[0].tooldie}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Patterns:</td>
+                            <td colspan="2" class="tdtd" style=" padding: 2px">{{getData[0].toolpat}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Gages:</td>
+                            <td colspan="2" class="tdtd" style=" padding: 2px">{{getData[0].toolgage}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Other:</td>
+                            <td colspan="2" class="tdtd" style=" padding: 2px">{{getData[0].toolother}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">TOTAL:</td>
+                            <td colspan="2" class="tdtd" style=" padding: 2px">{{getData[0].tooltotal}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px" colspan="2">Amortization Volume:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].toolamorvol}}</td>
+                        </tr>
+
+                        <tr>
+                            <td style=" padding: 2px;" colspan="2">Amortization Year:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].toolamoryr}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Amortization:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].toolamor}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px" colspan="2">Tool life in # pcs:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].toollife}}</td>
+                        </tr>
+
+                        <tr>
+                            <td style=" padding: 2px" colspan="2">Validation Testing Cost:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].toolvali}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="text-align: center; background-color:#da291c; color: white;">
+                                Prototype Information</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Leadtime:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].prolead}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Piece Price:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].propp}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Tooling:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].protool}}</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="col-md-3" style="border:  1px solid #808080; padding: 0px;">
+                    <h5>Capacity</h5>
+                    <table class="table table-bordered" style="margin: 0px; width: 100% !important;">
+                        <tr>
+                            <td style=" padding: 2px; font-weight:bold;">Normal Hours of Work</td>
+                            <td class="tdtd" style=" padding: 2px">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Days/Week:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].capday}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Shifts/Day:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].capshift}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Hours/Shift:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].caphr}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Pieces/Hours:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].cappchr}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px; font-weight: bold;">Annual Capacity:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].capannu}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px; font-weight:bold;">Peak Weekly Capacity</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].cappeak}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Days/Week:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].capdw}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Shifts/Day:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].capshiftdw}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Hours/Shift:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].caphrph}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px; font-weight: bold;">Yearly Cost Reduction:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].capyrcr}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align: center; background-color:#da291c; color: white;">Eco
+                                Friendly Considerations</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Recycle/Packaging:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].ecorp}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Enery Cost Per Piece:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].ecoecp}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Logistics Cost/Piece:</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].ecolcp}}</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="col-md-2" style="border:  1px solid #808080; padding: 0px;">
+                    <h5>Production Lead-Time:</h5>
+                    <table class="table table-bordered" style="margin: 0px; width: 100% !important;">
+                        <tr>
+                            <td style=" padding: 2px; font-weight:bold;">Factor</td>
+                            <td style=" padding: 2px; font-weight:bold;text-align: end;">Weeks</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Tooling</td>
+                            <td class="tdtd" style=" padding: 2px; padding-left: 30%;">{{getData[0].prodtool}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">PPAP</td>
+                            <td class="tdtd" style=" padding: 2px; padding-left: 30%;">{{getData[0].proppap}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Production</td>
+                            <td class="tdtd" style=" padding: 2px; padding-left: 30%;">{{getData[0].propro}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">Shipping</td>
+                            <td class="tdtd" style=" padding: 2px; padding-left: 30%;">{{getData[0].proship}}</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px">TOTAL</td>
+                            <td class="tdtd" style=" padding: 2px; padding-left: 30%;">{{getData[0].prototal}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"
+                                style="text-align: center; background-color:#da291c; color: white;padding: 2px;">Metal
+                                Market</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px; font-weight:bold;">Material</td>
+                            <td style=" padding: 2px; font-weight:bold;text-align: end;">Surcharge</td>
+                        </tr>
+                        <tr *ngFor="let item of getmetalmar || []">
+                            <td style=" padding: 2px">{{item.mat || '&nbsp;'}}</td>
+                            <td class="tdtd" style=" padding: 2px; padding-left: 15%;">{{item.quot ||'&nbsp;'}}</td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" style="text-align: center; background-color:#da291c; color: white;">Delivery
+                                Performance</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px; text-align: center;">%</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].delipp}}00%</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"
+                                style="text-align: center; background-color:#da291c; color: white;padding: 2px;">Quality
+                                Performance</td>
+                        </tr>
+                        <tr>
+                            <td style=" padding: 2px; text-align: center;">PPM</td>
+                            <td class="tdtd" style=" padding: 2px">{{getData[0].qpp}}</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="col-md-4" style="border:  1px solid #808080; padding: 0px;">
+                    <h5>Product Cost Breakdown</h5>
+                    <div class="container graphcont">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </form>
+
+</div>

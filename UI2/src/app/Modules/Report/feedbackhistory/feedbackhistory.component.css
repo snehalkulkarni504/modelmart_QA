@@ -1,0 +1,454 @@
+* {
+    font-family: Helvetica, Arial !important;
+}
+
+.tooltip-cmn {
+    background-color: #f00;
+}
+
+.table {
+    width: 80%;
+    margin-top: 15px;
+
+}
+
+
+.table td {
+    text-align: center;
+}
+
+.table thead {
+    text-align: center;
+
+}
+
+#add-btn {
+    margin: 2% 0% 1.5% 82.8%;
+}
+
+.modal-close-icn {
+    border: 0px;
+    background-color: #fff;
+}
+
+.modal {
+    background: rgba(0, 0, 0, .5);
+}
+
+.default-lbl {
+    margin: 0px 0px 3px 2px;
+    font-family: Helvetica, Arial !important;
+    font-size: 13px;
+
+}
+
+.custom-dropdown {
+    width: 100%;
+
+}
+
+#checkbox:checked {
+    background-color: #da291c;
+
+}
+
+.setHeight {
+    min-height: 100dvh;
+}
+
+
+.MasterHeader {
+    width: 80%;
+    display: inline-flex;
+    height: 80px;
+    margin-left: 10%;
+    margin-right: 10%;
+    font-family: Helvetica, Arial;
+    border-bottom: 1px solid #da291c;
+    margin-bottom: 20px;
+}
+
+.MasterHeader h2 {
+    margin: 20px 0px;
+}
+
+.MasterHeaderlable{
+    width: 80%;
+    display: inline-flex;
+    margin-left: 10%;
+    margin-right: 10%;
+    font-family: Helvetica, Arial  ;
+}
+
+.searchDiv {
+    width: 50%;
+}
+
+.has-search .form-control {
+    padding-left:2.8rem;
+}
+
+.form-group.has-error input {
+    border: 2px solid red !important;
+    background-color: #ffeeee;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height:38px;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #f8f6f6;
+    background-color:#da291c;
+}
+
+.search-input{
+    height:38px;
+}
+
+.search-input:focus{
+    border: 1px solid #da291c !important;
+}
+
+.table thead tr th {
+    background-color: #da291c;
+    color: #fff;
+    padding: 3px;
+}
+
+
+input[type=checkbox] {
+    accent-color: #da291c;
+}
+
+*:focus {
+    box-shadow: none;
+}
+
+.exportToExcel {
+    width: 30px;
+    height: 30px;
+}
+
+.exportToExcel:hover {
+    cursor: pointer !important;
+}
+
+
+.RemarkSection {
+    font-size: 11px;
+    padding-bottom: 5px;
+    color: #da291c;
+    width: 80%;
+
+}
+
+.THDebriefDate:hover {
+    cursor: pointer;
+}
+
+
+.pagination {
+    width: 80%;
+    margin-left: 10%;
+}
+
+.bi-download:hover {
+    cursor: pointer;
+}
+
+::ng-deep .canvasjs-chart-credit {
+    display: none !important;
+}
+
+
+
+
+
+/* .chart-card {
+    width: calc(50% - 50px);
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 10px;
+    display: inline-block;
+   
+    height: 250px;
+    margin-right: 5px;
+
+    margin-top: 5px;
+  } */
+
+.chart-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    /* Space between chart cards */
+    margin: 0 auto;
+    width: 80%;
+    margin-bottom: 50px;
+}
+
+.chart-card {
+    width: calc(50% - 20px);
+    /* Ensures two charts per row */
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    /* Ensures consistent height */
+    margin-top: 10px;
+    margin-left: 20px;
+    background-color: rgba(0, 0, 0, 0.052);
+}
+
+/* .chart-card h6{
+    font-size: 14px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.chart-card table {
+    width: 50%;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 12px !important;
+}
+
+.chart-card canvasjs-chart {
+    width: 100% !important;
+    height: 250 !important;
+}
+
+.canvasjs-chart-container {
+    width: 100% !important;
+    height: 250px !important;
+}
+
+.chart-card table thead tr{
+    text-align: left;
+}
+.chart-card table thead {
+border-top: 1px solid #da291c;
+}
+.chart-card table tbody tr {
+    text-align: left;
+}
+ */
+
+.chart-cardnew {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    margin: 1px;
+    text-align: center;
+    height: 400px !important;
+    margin-top: 20px;
+}
+
+.chart-cardnew h6 {
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #80808025;
+    padding: 0px;
+    margin: 0px;
+    border-top-left-radius : 5px;
+    border-top-right-radius : 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+
+}
+
+.chart-cardnew table {
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 12px !important;
+    background-color: #80808025;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+
+.chart-cardnew table thead tr {
+    text-align: left;
+}
+
+.chart-cardnew table thead {
+    border-top: 1px solid #da291c;
+}
+
+.chart-cardnew table tbody tr {
+    text-align: left;
+}
+/* 
+.movebuttons {
+    width: 80%;
+    margin-left: 10%;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    margin-top: -10px;
+}
+
+.movebuttons button {
+    background-color: inherit;
+    float: left;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 17px;
+    border: 1px solid #ccc;
+}
+
+.movebuttons .gridbtn {
+    background-color: #ccc;
+
+}
+
+.movebuttons .movebtn {
+    border: 1px solid #ccc;
+}
+
+.movebuttons button:hover {
+    background-color: #ddd;
+}
+  */
+
+
+
+.btn-view {
+    border-radius: 5px;
+    border: 1px solid #da291c;
+    padding: 2px 15px 5px 15px;
+    color: #da291c;
+    margin-top: 28px;
+}
+
+.btn-clear {
+    border-radius: 5px;
+    border: 1px solid #da291c;
+    padding: 2px 15px 5px 15px;
+    color: #da291c;
+    margin-top: 28px;
+    margin-left: 20px;
+}
+ 
+input[type="text"] {
+    font-size: 13px;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border: none;
+}
+
+.btn-view:hover, .btn-clear:hover {
+    background-color: #da291c;
+    color: #fff;
+    margin-top: 28px;
+}
+
+
+
+/* Change background color of buttons on hover */
+.TabMenu .Tab {
+    background-color: inherit;
+    /* border-bottom: 1px solid inherit; */
+}
+
+.TabMenu .InsideTabLine {
+    float: left;
+    /* border: 1px solid #ccc; */
+    height: 20px;
+    margin-top: 5px;
+}
+
+/* Create an active/current tablink class */
+.TabMenu .activeTab {
+    background-color: #da291c25;
+    /* border-top: 1px solid #da291c; */
+}
+
+.TabMenu button:hover {
+    background-color: #ddd;
+}
+
+/* Tab Menu Container */
+.TabMenu {
+    background-color: #fff;
+    padding: 5px 0px;
+    /* width: 74%;
+    margin-left: 26%; */
+    height: 50px;
+    z-index: 10;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+}
+
+
+/* Tab Container */
+.tab-container {
+    display: flex;
+    gap: 40px;
+    border-bottom: 2px solid #ccc;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+
+/* Individual Tab */
+.tab {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 12px 20px;
+    cursor: pointer;
+    position: relative;
+    color: #555;
+    transition: color 0.3s ease-in-out;
+}
+
+/* Hover Effect */
+.tab:hover {
+    color: #da291c;
+}
+
+/* Active Tab Indicator */
+.active-tab {
+    color: #da291c;
+}
+
+/* Active Tab Underline Effect */
+.active-tab::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 3px;
+    background-color: #da291c;
+    border-radius: 5px;
+}
+
+/* Tab Content Styling */
+.TabContent {
+    width: 74%;
+    margin-left: 26%;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-top: 60px;
+    font-size: 14px;
+}
