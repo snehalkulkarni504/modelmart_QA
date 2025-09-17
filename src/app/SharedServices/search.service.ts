@@ -186,13 +186,13 @@ export class SearchService {
     const encodedPartNumber = encodeURIComponent(partNumber);
     const encodedNounName = encodeURIComponent(nounName);
     const encodedProgram = encodeURIComponent(program);
-   
+
     return this.httpClient.get<any[]>(
       `${this.apiUrl}GetDesignToCostAvailableDetail/${encodedPartNumber}/${encodedNounName}/${encodedProgram}`
     );
   }
 
- GetDesignToCostDataAccordignUser(nounName: string, program: string, partNumber: string,CreatedBy:string): Observable<any> {
+  GetDesignToCostDataAccordignUser(nounName: string, program: string, partNumber: string, CreatedBy: string): Observable<any> {
     const encodedPartNumber = encodeURIComponent(partNumber);
     const encodedNounName = encodeURIComponent(nounName);
     const encodedProgram = encodeURIComponent(program);
@@ -202,7 +202,11 @@ export class SearchService {
       `${this.apiUrl}GetDesignToCostDataAccordignUser/${encodedPartNumber}/${encodedNounName}/${encodedProgram}/${encodedCreatedBy}`
     );
   }
- 
+
+  GetScreportId_SkipSimulationPorcess(CSHeaderId: any, UserId: any): Observable<any> {
+    return this.httpClient.get<any[]>(this.apiUrl + `GetScreportId_SkipSimulationPorcess?CSHeaderId=${CSHeaderId}&UserId=${UserId}`);
+  }
+
 
 
 

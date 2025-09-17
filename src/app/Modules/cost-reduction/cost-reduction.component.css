@@ -1141,6 +1141,14 @@ input[type=checkbox][_ngcontent-ng-c1223772666] {
   border-radius: 5px;
   margin-left: 1300px;
 }
+.clickable-wrapper {
+  display: flex;
+  cursor: pointer;
+}
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
 
 
 
@@ -1187,3 +1195,131 @@ th.sortable.descending::after {
   display: flex;
   gap: 10px;
 }
+
+
+.labelDetails {
+  text-decoration: underline 1px solid;
+  text-decoration-color: #da291c;
+  font-size: 13px;
+  letter-spacing: 1px;
+  margin-top: 20px;
+  margin-bottom: 0px;
+  font-weight: 600;
+}
+
+.labelDetailsheader {
+  text-decoration: underline 1px solid;
+  text-decoration-color: #da291c;
+  font-size: 20px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+
+}
+.default-lbl,
+.default-lblvalue {
+  font-size: 12px;
+}
+
+.default-lblvalue {
+  font-weight: 600;
+  margin-left: 10px;
+}
+
+/* changes----------------------------------------------- */
+.warning-popup_design {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.popup-content_design {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 340px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.popup-actions_design {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.cancel-btn_design {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #ccc;
+}
+
+.proceed-btn_design {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background:#da291c;
+  color: #fff;
+}
+.warning-title_design {
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+  margin-bottom: 10px;
+  margin-left: 80px;
+}
+
+.icon_design {
+  margin-right: 8px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 20px;
+}
+
+.warning-msg{
+  font-size: 13px;
+}
+
+/* changes */
+ 
+.dynamic-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 10px;
+  font-size: 12px; /* Smaller font */
+}
+ 
+.dynamic-table th,
+.dynamic-table td {
+  border: 1px solid #ccc;
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: middle;
+}
+ 
+.dynamic-table th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+  color: #333;
+}
+ 
+.default-lbl {
+  font-weight: 600;
+  font-size: 13px;
+  color: #444;
+}
+ 
+.default-lblvalue {
+  font-size: 13px;
+  color: #222;
+}
+

@@ -167,11 +167,11 @@ input[type="text"]:focus {
 
 
 .MasterHeader {
-    width: 80%;
+    width: 87%;
     display: inline-flex;
     height: 80px;
-    margin-left: 10%;
-    margin-right: 10%;
+    margin-left: 6%;
+    margin-right: 6%;
     font-family: Helvetica, Arial;
     border-bottom: 1px solid #da291c;
     margin-bottom: 20px;
@@ -307,4 +307,20 @@ input[type="text"]:focus {
     bottom: 0px;
 }
 
-  
+ 
+.btnModel {
+    /* margin-top: 25px; */
+    font-size: 15px !important;
+    /* background-color: #da291c; */
+    color: #da291c;
+    padding: 2px 10px;
+    border: 1px solid #da291c;
+    font-family: Helvetica, Arial !important;
+    border-radius: 5px;
+   
+}
+
+.btnModel:hover {
+    color: #fff;
+    background-color: #da291c;
+}

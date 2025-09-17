@@ -114,6 +114,13 @@
                   <button class="btnCreateCart" (click)="opencopycart(data.cartId,data.cartName)">
                     Copy Simulation
                   </button>
+
+                  <div class="cart-actions">
+                    <button class="btnCreateCart" (click)="updatecost(data.cartId,data.cartName)">
+                    Update Target Cost
+                  </button>
+                  </div>
+
                   <button class="btnCreateCart" (click)="onroute(data)" >
                     View
                   </button>
@@ -151,6 +158,9 @@
             <input type="text" [(ngModel)]="cartname" placeholder=" Enter Simulation" class="modal-input"
                 style="padding: 3px; padding-left: 10px;" />
 
+            <input type="text" [(ngModel)]="totalprice" placeholder=" Enter Target Price" class="modal-input"
+                style="padding: 3px; padding-left: 10px;margin-top: 0;" />
+                
             <div class="modal-buttons">
                 <button (click)="closeModal2()" class="modalbtn">Close</button>
                 <button class="modalbtn" (click)="addcartname()">Save</button>
@@ -182,6 +192,22 @@
             <div class="modal-buttons">
                 <button (click)="closecopycart()" class="modalbtn">Close</button>
                 <button class="modalbtn" (click)="copycart()">Copy</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="opentotalprice" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="background-color: #da291c; color: whitesmoke; margin: 0; padding-bottom: 10px;">Update Target Cost</h3>
+
+            <br/>
+            <input type="text" [(ngModel)]="totalprice" placeholder="Enter Target Price" class="modal-input"
+                style="padding: 3px; padding-left: 10px;margin-top: 0;" />
+                
+            <div class="modal-buttons">
+                <button (click)="closeModel12()" class="modalbtn">Close</button>
+                <button class="modalbtn" (click)="updatetotalcost()">Save</button>
             </div>
         </div>
     </div>

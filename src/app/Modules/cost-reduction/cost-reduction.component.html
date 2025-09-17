@@ -27,17 +27,6 @@
       </div>
 
       <div class="col-md-9" id="SearchFiltersdiv">
-        <!-- <div class="row border-bottom  CategoryWelcome">
-          <label class="form-label">
-            Welcome to the Cost Insights!<br>
-            Please select single/multiple categories below and click <b>Cost Insight</b> button on top right to navigate to arbitrage dashboards.
-          </label>
-          
-          <div class="col-md-12 text-end ">
-            <button class="costbtn" (click)="selectAll()" style="margin-right: 10px;"> {{ selectAllText }}</button>
-            <button class="costbtn" (click)="toggleView()"> Cost Insight</button>
-          </div>
-        </div> -->
 
         <div class="row border-bottom CategoryWelcome">
           <div class="col-md-8">
@@ -69,10 +58,10 @@
             <h4 class="col-md-12 Categoryheader">
               <label id="cetegoryname">{{ c.key }}</label>
             </h4>
-            <div *ngFor="let item of c.value" id="prodDetailsId" class="prodDetails">
+            <!-- <div *ngFor="let item of c.value" id="prodDetailsId" class="prodDetails" (click)="toggleSelection(item)">
               <div class="image-container">
                 <input class="input1" type="checkbox" [value]="item.value" [(ngModel)]="item.selected"
-                  (change)="onCheckboxChange(item)" />
+                  (click)="handleCheckboxClick($event, item)" />
                 <img *ngIf="item.imagePath == ''; else multi" src="assets/No-Image.png" class="prdIcon" />
                 <ng-template #multi>
                   <img src="{{ item.imagePath }}" class="prdIcon" />
@@ -81,7 +70,27 @@
               <div class="prdDescription">
                 <label id="PartName">{{ item.childCategory }}</label><br />
               </div>
-            </div>
+            </div> -->
+            <div *ngFor="let item of c.value" id="prodDetailsId" class="prodDetails">
+              <div class="image-container">
+                <label class="clickable-wrapper">
+                  <input
+                    class="input1"
+                    type="checkbox"
+                    [value]="item.value"
+                    [(ngModel)]="item.selected"
+                    (click)="handleCheckboxClick($event, item)"
+                  />
+                  <img
+                    [src]="item.imagePath || 'assets/No-Image.png'"
+                    class="prdIcon"
+                  />
+                </label>
+              </div>
+              <div class="prdDescription">
+                <label id="PartName">{{ item.childCategory }}</label><br />
+              </div>
+            </div>            
             <br /><br />
           </div>
         </div>
@@ -113,12 +122,12 @@
       </div>
     </div>
 
-    <div class="col-12">
+    <div class="col-12" *ngIf="activeButton !== 'design' && activeButton !== 'manufacturing'">
       <p>Your current SC Attainment is <strong>{{ totalAttainment }}</strong></p>
     </div>
 
 
-    <div class="col-12">
+    <div class="col-12" *ngIf="activeButton !== 'design' && activeButton !== 'manufacturing'">
       <p>You have current opportunities worth <strong>{{ totalVariation }}</strong></p>
     </div>
 
@@ -163,60 +172,7 @@
       </div>
     </div>
 
-    <!-- <div class="filterlabel">
-      <label for="date-range">Select:</label>
 
-      <select id="date-range" [(ngModel)]="selectedRange" (change)="onDateRangeChange()" class="custom-input" style="padding: 5px;">
-        <option *ngFor="let range of dateRanges" [value]="range.value"> {{ range.label }} </option>
-      </select>
-
-      <label for="from-date" style="margin-left: 10px;">From Date:</label>
-      <input type="date" id="from-date" [(ngModel)]="fromDate" [attr.min]="minDate" [attr.max]="maxDate" class="custom-input" style="padding: 5px;" />
-
-      <label for="to-date" style="margin-left: 10px;">To Date:</label>
-      <input type="date" id="to-date" [(ngModel)]="toDate" [attr.min]="minDate" [attr.max]="maxDate" class="custom-input" style="padding: 5px;" />
-
-      <button class="btn view-btn" style="margin-right: 10px;" (click)="onViewClick()">View</button>
-      <button class="btn view-btn" (click)="ClearAll()">clear</button>
-      
-    -->
-    <!-- <div class="filterlabel">
-      <label for="date-range">Select:</label>
-    
-      <select id="date-range" [(ngModel)]="selectedRange" (change)="onDateRangeChange()" class="custom-input" style="padding: 5px;">
-        <option *ngFor="let range of dateRanges" [value]="range.value"> {{ range.label }} </option>
-      </select>
-    
-      <label for="from-date" style="margin-left: 10px;">From Date:</label>
-      <input type="date" id="from-date" [(ngModel)]="fromDate"
-             [disabled]="selectedRange !== 'CUSTOM'"
-             [attr.min]="minDate" [attr.max]="maxDate"
-             class="custom-input" style="padding: 5px;" />
-    
-      <label for="to-date" style="margin-left: 10px;">To Date:</label>
-      <input type="date" id="to-date" [(ngModel)]="toDate"
-             [disabled]="selectedRange !== 'CUSTOM'"
-             [attr.min]="minDate" [attr.max]="maxDate"
-             class="custom-input" style="padding: 5px;" />
-      <label for="status-filter">Status:</label>
-      <select id="status-filter" [(ngModel)]="selectedStatus_commerical" class="custom-input" style="padding: 5px;">
-        <option value="">All</option>
-        <option value="Open">Open</option>
-        <option value="Close">Close</option>
-        <option value="WIP">WIP</option>/option>
-      </select>
-             
-             
-    
-      <button class="btn view-btn" style="margin-right: 10px;" (click)="onViewClick()">View</button>
-      <button class="btn view-btn" (click)="ClearAll()">Clear</button>
-  
-      <img src="../../../../assets/exportexcel.png" class="exportToExcel" (click)="exportToExcel()" ngbTooltip="Export to Excel">
-
-    
-    
-      
-    </div> -->
     <div class="filterlabel" style="display: flex; flex-wrap: wrap; gap: 15px;">
 
       <div style="display: flex; flex-direction: column;">
@@ -290,7 +246,7 @@
               <th>User Simulated <br>Arbitrage </th>
               <th>Submitted By</th>
               <th>Project Status</th>
-              <th>Debreif Date</th>
+              <th>Debrief Date</th>
               <th>Comments</th>
               <th>User <br>Activity</th>
               <th style="position: sticky; right: 0px; z-index: 3;">Action</th>
@@ -313,7 +269,8 @@
                   opportunity.PartName.slice(0, 12) + '...' : opportunity.PartName}} </span>
               </td>
               <!-- <td class="align-center">{{opportunity.MMID}}</td> -->
-              <td class="align-center">  <a (click)="navigateToDetails(opportunity.CSHeaderID)"  class="text-underlinecolour">{{opportunity.MMID}} </a> </td>
+              <td class="align-center"> <a (click)="navigateToDetails(opportunity.CSHeaderID)"
+                  class="text-underlinecolour">{{opportunity.MMID}} </a> </td>
 
               <td>{{opportunity.ProgramName}}</td>
               <td>{{opportunity.CAT4}}</td>
@@ -452,13 +409,6 @@
                 </label>
               </div>
               <div class="modal-body">
-                <!-- <button type="button" class="btn btn-sm default-btn" (click)="showFileUpload = true">Document Upload</button> -->
-                <!-- <div class="input-group custom-file-button" *ngIf="showFileUpload"
-                  style="margin-top: 10px; text-align: center; width: 300px !important ;">
-                  <label for="fileInput" class="input-group-text" > Select File</label>
-                  <input type="file" class="form-control" style="margin-right: 10px;" (change)="handleFileSelection($event)" multiple />
-                  <button type="button" class="btn btn-sm default-btn" (click)="uploadFiles(selectedCommercialID)">Upload</button>
-                </div> -->
                 <div class="input-group custom-file-button" *ngIf="showFileUpload"
                   style="margin-top: 10px; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto; display: flex; gap: 10px; align-items: center;">
                   <label for="fileInput" class="input-group-text" style="flex-shrink: 0;">Select File</label>
@@ -509,33 +459,6 @@
 
   </div>
 
-  <!-- <div class="filterlabel">
-    <label for="date-range">Select:</label>
-
-    <select id="date-range" [(ngModel)]="selectedRange_regional" (change)="onDateRangeChange_regional()" class="custom-input" style="padding: 5px;">
-      <option *ngFor="let range of dateRanges" [value]="range.value"> {{ range.label }} </option>
-    </select>
-
-    <label for="from-date" style="margin-left: 10px;">From Date:</label>
-    <input type="date" id="from-date" [(ngModel)]="RegionalfromDate" [disabled]="selectedRange_regional !== 'CUSTOM'" [attr.min]="minDate" [attr.max]="maxDate" class="custom-input" style="padding: 5px;" />
-
-    <label for="to-date" style="margin-left: 10px;">To Date:</label>
-    <input type="date" id="to-date" [(ngModel)]="RegionaltoDate" [disabled]="selectedRange_regional !== 'CUSTOM'" [attr.min]="minDate" [attr.max]="maxDate" class="custom-input" style="padding: 5px;" />
-
-    <label for="status-filter">Status:</label>
-    <select id="status-filter" [(ngModel)]="selectedStatus_regional" class="custom-input" style="padding: 5px;">
-      <option value="">All</option>
-      <option value="Open">Open</option>
-      <option value="Close">Close</option>
-      <option value="WIP">WIP</option>
-    </select>
-
-    <button class="btn view-btn" style="margin-right: 10px;" (click)="RegionalDateFilter()">View</button>
-    <button class="btn view-btn" (click)="ClearDateFilter()">clear</button>
-    
-
-    <img src="../../../../assets/exportexcel.png" class="exportToExcel" (click)="exportRegionalTableToExcel()" ngbTooltip="Export to Excel">
-  </div> -->
   <div class="filterlabel" style="display: flex; flex-wrap: wrap; gap: 15px;">
 
     <!-- Select Range -->
@@ -605,7 +528,7 @@
                   class="bi bi-sort-up"></i></span> </th>
             <th>Region Relation</th>
             <th>Project Status</th>
-            <th>Debreif Date</th>
+            <th>Debrief Date</th>
             <th>Comments</th>
             <th>User Activity</th>
             <th style="position: sticky; right: 0px; z-index: 3;" container="body">Action</th>
@@ -621,7 +544,8 @@
                 + '...' : Region.PartNumber}} </span>
             </td>
             <td>{{Region.PartName}}</td>
-            <td> <a (click)="navigateToDetails(Region.CSHeaderID)"  class="text-underlinecolour">{{Region.MMID}} </a></td>
+            <td> <a (click)="navigateToDetails(Region.CSHeaderID)" class="text-underlinecolour">{{Region.MMID}} </a>
+            </td>
             <td>{{Region.ProgramName}}</td>
             <td>{{Region.CAT4}}</td>
             <td>{{Region.MainRegion}}</td>
@@ -717,14 +641,6 @@
                 </svg>
               </label>
             </div>
-            <!-- <div class="modal-body">
-              <button type="button" class="btn btn-sm default-btn" (click)="showFileUpload = true">Document Upload</button>
-              <div class="input-group custom-file-button" *ngIf="showFileUpload" style="margin-top: 10px; text-align: center; width: 300px !important ;">
-                <label for="fileInput" class="input-group-text"> Select File</label>
-                <input type="file" class="form-control" style="margin-right: 10px;" (change)="handleFileSelection($event)" multiple />
-                <button type="button" class="btn btn-sm default-btn" (click)="UploadReginalFiles(selectedRegional_ArtibageID)">Upload</button>
-              </div>
-            </div> -->
             <div class="modal-body">
               <div class="input-group custom-file-button" *ngIf="showFileUpload"
                 style="margin-top: 10px; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto; display: flex; gap: 10px; align-items: center;">
@@ -766,53 +682,15 @@
   style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
   <div class="row" style="width: 100%; display: flex; justify-content: center">
     <header style="text-align: center;font-size: 24px;">
-      Part Number vs Manufacturing Arbitrage($)
+      Region vs Cost per Kg Difference($)
     </header>
     <div class="graph">
       <div class="chart-box">
-        <canvasjs-chart class="Mfgcanvas-chart" [options]="MfgchartOptions" [styles]="GetMfgGraphStyle()"
+        <canvasjs-chart class="Mfgcanvas-chart" [options]="MfgchartOptions"
           id="chartOptionsId"></canvasjs-chart>
       </div>
     </div>
 
-    <!-- <div class="filterlabel">
-      <div class="form-group">
-      <label for="date-range">Select:</label>
-      </div>
-      <select id="date-range" [(ngModel)]="selectedRangeMfg" (change)="onDateRangeChangeMfg()" class="custom-input" style="padding: 5px">
-        <option value="">Select Range</option>
-        <option value="3">Last 3 Months</option>
-        <option value="6">Last 6 Months</option>
-        <option value="12">Last 1 Year</option>
-        <option value="24">Last 2 Year</option>
-        <option value="ALL">Select All</option>
-        <option value="CUSTOM">Custom</option>2
-      </select>
-      <div class="form-group">
-      <label for="from-date" style="margin-left: 10px">From Date:</label>
-      </div>
-      <input type="date" id="from-date" [(ngModel)]="fromDateMfg" [disabled]="selectedRangeMfg !== 'CUSTOM'" [attr.min]="minDateMfg" [attr.max]="maxDateMfg" class="custom-input" style="padding: 5px" />
-      <div class="form-group">
-      <label for="to-date" style="margin-left: 10px">To Date:</label>
-      </div>
-
-      <input type="date" id="to-date" [(ngModel)]="toDateMfg" [disabled]="selectedRangeMfg !== 'CUSTOM'" [attr.min]="minDateMfg" [attr.max]="maxDateMfg" class="custom-input" style="padding: 5px" />
-      <div class="form-group">
-      <label for="status-filter">Status:</label>
-      </div>
-      <select id="status-filter" [(ngModel)]="selectedStatus_mfg" class="custom-input" style="padding: 5px;">
-        <option value="">All</option>
-        <option value="Open">Open</option>
-        <option value="Close">Close</option>
-        <option value="WIP">WIP</option>
-      </select>
-
-      <button class="btn view-btn" style="margin-right: 10px" (click)="onViewClickMfg()">View</button>
-      <button class="btn view-btn" (click)="ClearAllMfg()">clear</button>
-      
-
-      <img src="../../../../assets/exportexcel.png" class="exportToExcel" (click)="exportMfgTableToExcel()" ngbTooltip="Export to Excel">
-    </div> -->
     <div class="filterlabel" style="display: flex; flex-wrap: wrap; gap: 15px;">
 
       <!-- Select Range -->
@@ -871,24 +749,26 @@
           <thead>
             <tr>
               <th style="position: sticky; left:0px; top:-1px; z-index: 4;">Sr<br />no</th>
-              <th style="position: sticky; left: 32px; top: -1px;  z-index: 4;">Part Number</th>
+              <th style="position: sticky; left: 32px; top: -1px;  z-index: 4;">Part Number1</th>
+              <th>Part Number2</th>
               <th>Part Name</th>
               <th>MMID</th>
               <th>Program Name</th>
               <th>CAT4</th>
-              <th>Supplier Mfg Location</th>
+              <th>Supplier Mfg Location(Part1)</th>
+              <th>Supplier Mfg Location(Part2)</th>
               <th>Process1 Tooling Cost</th>
               <th>Process2 Tooling Cost</th>
               <th>Process1 Invoice Cost</th>
               <th>Process2 Invoice Cost</th>
- 
+
               <th>Process1 Annual Volume</th>
               <th>Process2 Annual Volume</th>
               <!-- <th>Supplier Quoted/Invoice<br />Price (USD) 
                  <i (click)="MfgSortBy('TargetQuote')" class="my-icon bi bi-sort-up"></i>
                 </th> -->
 
-             
+
               <th>Debrief Date</th>
               <th>Process1 Quote/Should Cost <span class="my-icon" (click)="MfgSortBy('Col2_First',$event)"><i
                     class="bi bi-sort-up"></i></span> </th>
@@ -896,11 +776,18 @@
               <th>Process2 Quote/Should Cost <span class="my-icon" (click)="MfgSortBy('Col2_Second',$event)"><i
                     class="bi bi-sort-up"></i></span></th>
               <th>Process2 Name</th>
-              <th>Should Cost Variation in the Process <span class="my-icon" (click)="MfgSortBy('Col2_First-Col2_Second',$event)"><i
-                    class="bi bi-sort-up"></i></span> </th>
-                    <th>Invoice Cost Variation</th>
+              <th>Should Cost Variation in the Process <span class="my-icon"
+                  (click)="MfgSortBy('Col2_First-Col2_Second',$event)"><i class="bi bi-sort-up"></i></span> </th>
+              <th>Invoice Cost Variation</th>
               <th>High Level Process </th>
+
+              <th>Weight(Part1)</th>
+              <th>Weight(Part2)</th>
+              <th>Cost Per Kg(Part1)</th>
+              <th>Cost Per Kg(Part2)</th>
+              <th>Cost Per Kg <br> Difference </th>
               <th>User<br />Activity</th>
+
               <th>Comments</th>
               <th>Submitted By</th>
               <th>Project Status</th>
@@ -918,27 +805,40 @@
                 <span ngbTooltip="{{data.PartNumber}}"> {{data.PartNumber.length > 10 ? data.PartNumber.slice(0, 10) +
                   '...' : data.PartNumber}} </span>
               </td>
+              <td>{{data.Part2}}</td>
               <td>{{ data.PartName }}</td>
-              <td> <a (click)="navigateToDetails(data.CSHeaderID)"  class="text-underlinecolour">{{ data.UniqueId }} </a></td>
+              <td> <a (click)="navigateToDetails(data.CSHeaderID)" class="text-underlinecolour">{{ data.UniqueId }} </a>
+              </td>
               <td>{{ data.ProgramName }}</td>
               <td>{{data.CAT4}}</td>
               <td>{{ data.MfgRegion }}</td>
-              <td>${{data.Process1_ToolingCost? roundToTwoDecimalPlaces(data.Process1_ToolingCost): "" }}</td>
-              <td>${{data.Process2_ToolingCost ? roundToTwoDecimalPlaces(data.Process2_ToolingCost) : "" }}</td>
-              <td>${{data.Process1_InvoiceCost? roundToTwoDecimalPlaces(data.Process1_InvoiceCost): "" }}</td>
-              <td>${{data.Process2_InvoiceCost? roundToTwoDecimalPlaces(data.Process2_InvoiceCost): "" }} </td>
-             
-              <td>${{data.Process1_AnnualVolume? roundToTwoDecimalPlaces(data.Process1_AnnualVolume): ""}}</td>
-              <td>${{data.Process2_AnnualVolume? roundToTwoDecimalPlaces(data.Process2_AnnualVolume): ""}}</td>
-              <!-- <td>{{ roundToTwoDecimalPlaces(data.TargetQuote)}}</td> -->
-              <td>{{ data.DebriefDate.split('T')[0] }}</td>
-              <td>$ {{ data.Col2_First.toFixed(2) }}</td>
+              <td>{{ data.Part2_region }}</td>
+              <td>{{ data.Process1_ToolingCost ? ('$' + roundToTwoDecimalPlaces(data.Process1_ToolingCost)) : '' }}</td>
+              <td>{{ data.Process2_ToolingCost ? ('$' + roundToTwoDecimalPlaces(data.Process2_ToolingCost)) : '' }}</td>
+              <td>{{ data.Process1_InvoiceCost ? ('$' + roundToTwoDecimalPlaces(data.Process1_InvoiceCost)) : '' }}</td>
+              <td>{{ data.Process2_InvoiceCost ? ('$' + roundToTwoDecimalPlaces(data.Process2_InvoiceCost)) : '' }}</td>
+
+              <td>{{ data.Process1_AnnualVolume ? ('$' + roundToTwoDecimalPlaces(data.Process1_AnnualVolume)) : '' }}
+              </td>
+              <td>{{ data.Process2_AnnualVolume ? ('$' + roundToTwoDecimalPlaces(data.Process2_AnnualVolume)) : '' }}
+              </td>
+
+              <td>{{ data.DebriefDate?.split('T')[0] }}</td>
+
+              <td>{{ data.Col2_First ? ('$' + data.Col2_First.toFixed(2)) : '' }}</td>
               <td>{{ data.HighLevelProcess_First }}</td>
-              <td>$ {{ data.Col2_Second.toFixed(2) }}</td>
+              <td>{{ data.Col2_Second ? ('$' + data.Col2_Second.toFixed(2)) : '' }}</td>
               <td>{{ data.HighLevelProcess_Second }}</td>
-              <td> ${{getAbsoluteDifferenceMfg(data.Col2_First,data.Col2_Second).toFixed(2)}}</td>
+              <td>{{ (data.Col2_First && data.Col2_Second) ? ('$' + getAbsoluteDifferenceMfg(data.Col2_First,
+                data.Col2_Second).toFixed(2)) : '' }}</td>
+
               <td>{{ getInvoiceCostVariation(data) }}</td>
               <td>{{ data.ProcessFlow }}</td>
+              <td>{{data.Part1_weight}}</td>
+              <td>{{data.Part2_weight}}</td>
+              <td>{{data.FromCostPerKg}}</td>
+              <td>{{data.ToCostPerKg}}</td>
+              <td>{{data.CostPerKgDifference}}</td>
               <td style="text-align: center">
                 <i class="bi bi-cloud-upload-fill" (click)="openUploadPopupMfg(data.Mfg_ArtibageID)"
                   style="color: #185ca4; font-size: 17px; cursor: pointer" ngbTooltip="Upload Document">
@@ -947,6 +847,7 @@
                   style="color: #2fa365;font-size: 17px;cursor: pointer;margin-left: 10px;"
                   ngbTooltip="Download Document"></i>
               </td>
+
 
               <td>
                 <span (click)="openCommentsPopupMfg(data.Comments, i)" style="cursor: pointer; color: #ef7659">
@@ -1024,17 +925,6 @@
                 </label>
               </div>
               <div class="modal-body">
-                <!-- <button type="button" class="btn btn-sm default-btn" (click)="showFileUploadMfg = true"> Document
-                  Upload</button>
-                <div class="input-group custom-file-button" *ngIf="showFileUploadMfg"
-                  style=" margin-top: 10px; text-align: center; width: 300px !important ;">
-                  <label for="fileInput" class="input-group-text">Select File</label>
-                  <input type="file" class="form-control" style="margin-right: 10px"
-                    (change)="handleFileSelectionMfg($event)" multiple />
-                  <button type="button" class="btn btn-sm default-btn" (click)="uploadFilesMfg(selectedUniqueIdMfg)">
-                    Upload</button>
-                </div> -->
-
                 <div class="input-group custom-file-button" *ngIf="showFileUploadMfg"
                   style="margin-top: 10px; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto; display: flex; gap: 10px; align-items: center;">
                   <label for="fileInput" class="input-group-text" style="flex-shrink: 0;">Select File</label>
@@ -1069,13 +959,12 @@
         <table class="table table-bordered table-hover table-striped" style="width: 100%; table-layout: 100%">
           <thead>
             <tr>
-              <th style="position: sticky; left:0px; top:-1px; z-index: 4;">Sr
-    No</th>
+              <th style="position: sticky; left:0px; top:-1px; z-index: 4;">Sr<br />no</th>
               <th style="position: sticky; left: 32px; top: -1px; z-index: 4;">Part Number</th>
               <th>Part Name</th>
               <th>MMID</th>
               <th>Program Name</th>
-              <th>Region</th>
+              <th>Supp Mfg <br>Location</th>
               <th>Debrief Date</th>
               <th>High Level Process</th>
               <th>Should Cost</th>
@@ -1095,11 +984,11 @@
                 </span>
               </td>
               <td>{{ data.PartName }}</td>
-              <td>{{ data.MMID }}</td>
-              <td class="align-center">  <a (click)="navigateToDetails(data.CSHeaderID)"  class="text-underlinecolour">{{data.MMID}} </a> </td>
+              <td class="align-center"> <a (click)="navigateToDetails(data.CSHeaderID)"
+                  class="text-underlinecolour">{{data.MMID}} </a> </td>
               <td>{{ data.ProgramName }}</td>
               <td>{{ data.MfgRegion }}</td>
-              <td>{{ data.DebriefDate | date:'yyyy-MM-dd' }}</td>
+              <td>{{ data.DebriefDate}}</td>
               <td>{{ data.HighLevelProcess }}</td>
               <td>$ {{ data.ShouldCost | number:'1.2-2' }}</td>
               <td>{{ data.FinishWeight }}</td>
@@ -1107,17 +996,11 @@
           </tbody>
         </table>
       </div>
-    
-      
+
+
       <div class="d-flex justify-content-between p-2 pagination">
-        <ngb-pagination 
-          [collectionSize]="mgfprocessComparison.length"
-          [(page)]="pageComparison"
-          [pageSize]="pageSizeComparison"
-          [rotate]="true"
-          [boundaryLinks]="true"
-          [maxSize]="5"
-          size="sm">
+        <ngb-pagination [collectionSize]="mgfprocessComparison.length" [(page)]="pageComparison"
+          [pageSize]="pageSizeComparison" [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm">
           <ng-template ngbPaginationPrevious>Prev</ng-template>
           <ng-template ngbPaginationNext>Next</ng-template>
         </ngb-pagination>
@@ -1134,54 +1017,227 @@
 
 <div *ngIf="showdesign" class="container-fluid"
   style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
+
   <div class="row" style="width: 100%; display: flex; justify-content: center; ">
     <div class="graph">
       <div class="chart-box">
-        <canvasjs-chart class="canvas-chart" [options]="Designchartoptions" [styles]="DesignGraphStyle()"
-          id="chartOptionsId"></canvasjs-chart>
+        <canvasjs-chart class="canvas-chart" [options]="Designchartoptions"
+          [styles]="{ width: '100%', height: '400px', display: 'block' }" id="designChartContainer">
+        </canvasjs-chart>
       </div>
     </div>
+
+    <div class="col-md-6" style="max-width: 100%; width: 90%; margin-bottom: 20px">
+      <fieldset class="border rounded-3 p-3">
+        <legend class="w-auto labelDetailsheader" style="margin-top:0px;">Rules Details</legend>
+          <div>
+            <table style="width: 100%;">
+              <tr *ngFor="let rule of attributeRules">
+                <td colspan="4">
+                  <div style="margin-top: 10px;"> 
+                  <!-- Fixed Rule Parameters in 3-column layout -->
+                  <table style="width: 100%;" class="fixed-table">
+                    <tr>
+                      <td style="width: 15%;"><label class="default-lbl">Part Name :</label></td>
+                      <td style="width: 18%;"><label class="default-lblvalue">{{ChekNull(rule.PartName)}}</label></td>
+                      <td style="width: 15%;"><label class="default-lbl">Length Rule :</label></td>
+                      <td style="width: 18%;"><label class="default-lblvalue">{{ChekNull(rule.LengthRule)}}</label></td>
+                      <td style="width: 15%;"><label class="default-lbl">Width Rule :</label></td>
+                      <td style="width: 18%;"><label class="default-lblvalue">{{ChekNull(rule.WidthRule)}}</label></td>
+                    </tr>
+                    <tr>
+                      <td><label class="default-lbl">Height Rule :</label></td>
+                      <td><label class="default-lblvalue">{{ChekNull(rule.HeightRule)}}</label></td>
+                      <td><label class="default-lbl">Weight Rule :</label></td>
+                      <td><label class="default-lblvalue">{{ChekNull(rule.WeightRule)}}</label></td>
+                      <td><label class="default-lbl">Material Grade Rule :</label></td>
+                      <td><label class="default-lblvalue">{{ChekNull(rule.MaterialTypeGradeRule)}}</label></td>
+                    </tr>
+                    <tr>
+                      <td><label class="default-lbl">Region Rule :</label></td>
+                      <td><label class="default-lblvalue">{{ChekNull(rule.RegionRule)}}</label></td>
+                      <td><label class="default-lbl">Debrief Date Rule :</label></td>
+                      <td><label class="default-lblvalue">{{ChekNull(rule.DebriefDateRule)}}</label></td>
+                      <td><label class="default-lbl">Type Code :</label></td>
+                      <td><label class="default-lblvalue">{{ChekNull(rule.TypeCode)}}</label></td>
+                    </tr>
+                  </table>
+                  </div>
+            
+                  <!-- Dynamic Parameters Table -->
+                  <label class="labelDetails" style="margin-top: 10px; margin-bottom: 3px;">Parameters Details</label>
+                  <table style="width: 100%; margin-top: 10px;" class="dynamic-table">
+                    <thead>
+                      <tr>
+                        <th *ngFor="let header of rule.paramHeaders1">{{ header }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td *ngFor="let header of rule.paramHeaders1">
+                          {{ SafeValue(rule.paramMap[header]) }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </table>            
+           
+          </div>
+
+          <div class="row mt-3">
+            <div class="col-md-12">
+              <label class="labelDetails" style="font-size: 12px;">Legend:</label>
+              <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px; font-size: 12px;">
+                <div style="display: flex; align-items: center;">
+                  <img src="assets/dashboard_icon.png" alt="R20 Icon" style="width: 12px; height: 12px; margin-right: 6px;" />
+                  <span>R20: Parameter should be within ±20%</span>
+                </div>
+      
+                <div style="display: flex; align-items: center;">
+                  <img src="assets/dashboard_icon.png" alt="R10 Icon" style="width: 12px; height: 12px; margin-right: 6px;" />
+                  <span>R10: Parameter should be within ±10%</span>
+                </div>
+      
+                <div style="display: flex; align-items: center;">
+                  <img src="assets/dashboard_icon.png" alt="Optional Icon" style="width: 12px; height: 12px; margin-right: 6px;" />
+                  <span>O: Optional</span>
+                </div>
+      
+                <div style="display: flex; align-items: center;">
+                  <img src="assets/dashboard_icon.png" alt="Exact Icon" style="width: 12px; height: 12px; margin-right: 6px;" />
+                  <span>E: Exact value only</span>
+                </div>
+              </div>
+            </div>
+          </div>
+      </fieldset>
+    </div>
+    <!-- <div class="filterlabel" style="display: flex; flex-wrap: wrap; gap: 15px;"> -->
+      <!-- Action Buttons -->
+      
+    <!-- </div> -->
+
+    <div class="col-md-6" style="max-width: 100%; width: 90%; margin-bottom: 10px;">
+      <!-- Export Icon Positioned Top-Right of Table -->
+      <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-bottom: 5px;">
+        <img src="../../../../assets/exportexcel.png" class="exportToExcel" (click)="  exportDesignTableToExcel()"
+             ngbTooltip="Export to Excel">
+      </div>
+      </div>
+
     <div class="col-md-6" style="max-width: 100%;width: 90%; overflow-x: auto;margin-bottom: 60px;  ">
       <div class="table-responsive" style="border: 1px solid #808080;">
         <table class="table table-bordered table-hover table-striped"
-          style="width: 100%; table-layout: 100%; font-size: 7px;">
+          style="width: 100%; table-layout: auto; font-size: 7px;">
           <thead>
             <tr>
+              <!-- Static Headers -->
               <th>Sr<br>no</th>
               <th>Part Name</th>
               <th>Part Number</th>
-              <th>MMID</th>
-              <th>Business Unit</th>
-              <th>Design Remarks</th>
-              <th>Target Quote</th>
+              <!-- <th>Part Number2</th> -->
               <th>Should Cost</th>
-              <th>Should Cost Diff</th>
-              <th>Target Quote Diff</th>
-              <th>Design Opportunity</th>
-              
+              <!-- <th>Should Cost(Part2)</th> -->
+              <!-- <th>Should Cost Diff</th> -->
+
+              <th>Cost Per Kg</th>
+              <!-- <th>Cost PerKg(Part2)</th> -->
+              <!-- <th>Cost PerKg Diff</th> -->
+              <th>Weight</th>
+              <!-- <th>Weight(Part2)</th> -->
+              <th>Platform</th>
+              <th>Type Code</th>
+              <th>Length</th>
+              <th>Width</th>
+              <th>Height</th>
+              <th>Cluster ID</th>
+              <th>Engine <br>Displacement</th>
+              <th>Program Name</th>
+              <th>Supp Mfg <br>Location</th>
+              <th>Debrief Date</th>
+              <ng-container *ngFor="let header of parameterHeaders">
+                <th>{{ header || '-' }}</th>
+              </ng-container>
+              <!-- <th>Design Remarks</th> -->
+
             </tr>
           </thead>
-          <tbody>
-            <tr *ngFor="let data of design; let i=index">
-              <td>{{i + 1}}</td>
-              <td>{{data.Part_Name}}</td>
-              <td>{{data.Part_Number}}</td>
-              <td>{{data.ModelMartId}}</td>
-              <td>{{data.Business_Unit}}</td>
-              <!-- <td>{{data.CAT4}}</td> -->
-              <td>{{data.DesignRemarks}}</td>
-              <td>{{data.TargetQuote}}</td>
-              <td>{{data.ShouldCost}}</td>
-              <td>{{data.ShouldCostDiff}}</td>
-              <td>{{data.TargetQuoteDiff}}</td>
-              <td> {{data.DesignOpportunity}}</td>
 
+          <tbody>
+            <tr *ngFor="let data of design; let i = index">
+              <!-- Static Data -->
+              <td>{{ i + 1 }}</td>
+              <td>{{ data.PartName }}</td>
+              <td>{{ data.PartNumber }}</td>
+              <!-- <td>{{ data.ToPart }}</td> -->
+              <td>${{ data.ArbitrageValue.toFixed(2) }}</td>
+              <!-- <td>${{ data.ToCost.toFixed(2) }}</td> -->
+              <!-- <td>${{ data.ArbitrageValue.toFixed(2) }}</td> -->
+
+              <td>${{ data.FromCostPerKg.toFixed(2) }}</td>
+              <!-- <td>${{ data.ToCostPerKg.toFixed(2) }}</td> -->
+              <!-- <td>${{ data.CostPerKgDifference.toFixed(2) }}</td> -->
+              <td>{{ data.FromPartWeight }}</td>
+              <!-- <td>{{ data.ToPartWeight }}</td> -->
+              <td>{{ data.Plat_form}}</td>
+              <td>{{ data.Type_Code }}</td>
+              <td>{{ data.Length }}</td>
+              <td>{{ data.Width }}</td>
+              <td>{{ data.Height }}</td>
+              <td>{{ data.ClusterId }}</td>
+              <td>{{ data.EngineDisplacement }}</td>
+              <td>{{ data.ProgramName }}</td>
+              <td>{{ data.MfgRegion }}</td>
+              <td>{{ data.DebriefDate }}</td>
+              <ng-container *ngFor="let header of parameterHeaders">
+                <td>
+                  <div style="text-align: center;">
+                    <div>{{ data.paramMap[header] || '-' }}</div>
+                  </div>
+                </td>
+              </ng-container>
+              <!-- <td>{{ data.DesignRemarks }}</td> -->
             </tr>
           </tbody>
         </table>
+
       </div>
     </div>
   </div>
+  <!-- </div> -->
 </div>
+<!-- Warning Popup -->
+
+<div class="warning-popup_design" *ngIf="showDesignWarning">
+  <div class="popup-content_design">
+    <!-- <h3>⚠ Warning</h3> -->
+    <h3 class="warning-title_design">
+      <span class="icon_design">
+        <!-- SVG icon -->
+        <svg fill="#fb0e0e" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+          <path d="M23,23H1c-0.4,0-0.7-0.2-0.9-0.5c-0.2-0.3-0.2-0.7,0-1l11-20c0.4-0.6,1.4-0.6,1.8,0l11,20c0.2,0.3,0.2,0.7,0,1 
+      C23.7,22.8,23.4,23,23,23z M2.7,21h18.6L12,4.1L2.7,21z" />
+          <path d="M12,16c-0.6,0-1-0.4-1-1v-5c0-0.6,0.4-1,1-1s1,0.4,1,1v5C13,15.6,12.6,16,12,16z" />
+          <circle cx="12" cy="18" r="1" />
+        </svg>
+      </span>
+      Warning
+    </h3>
+
+    <p class="warning-msg">Please select only one category at a time for Design view.</p>
+    <div class="popup-actions_design">
+      <!-- <button class="cancel-btn_design" (click)="closeDesignWarning()">Cancel</button> -->
+      <button class="proceed-btn_design" (click)="backToCat3()">Proceed</button>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
 
 <!------------------------------------------------end of design Arbitrage --------------------------->

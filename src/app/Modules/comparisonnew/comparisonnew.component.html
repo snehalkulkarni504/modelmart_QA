@@ -77,7 +77,7 @@
 
     <!-- Part Details -->
     <div class="d-flex justify-content-center setimage ">
-        <table class="table table-bordered tablePartDetails">
+        <table #tablePartDetails class="table table-bordered tablePartDetails" id="tablePartDetails">
             <tr>
                 <th rowspan="12" class="text-center mainpart">Part Details </th>
                 <th hidden>CSHeaderId</th>
@@ -87,20 +87,26 @@
 
                 </td>
             </tr>
-            <tr>
+            <tr id="tablePartDetailsImg">
                 <th class="particular">Part Image</th>
                 <td class="right" *ngFor="let i of this.partDetails">
                     <img *ngIf="i.imagePath == null else multi" src="../../../assets/No-Image.png"
-                        style="width: 150px; height: 150px;">
+                        style="width: 130px; height: 130px;">
                     <ng-template #multi>
-                        <img src="{{i.imagePath}}" style="width: 150px; height: 150px;">
+                        <img src="{{i.imagePath}}" style="width: 130px; height: 130px;">
                     </ng-template>
                 </td>
             </tr>
             <tr>
                 <th class="particular">ModelMart ID</th>
                 <td class="right" *ngFor="let i of this.partDetails">
-                    {{i.modelMartID}}
+                    <span style="padding: 0px; margin: 0px ;"
+                        *ngIf="i.modelCostType != 'Simulated Model' else simulatedmodel">
+                        {{i.modelMartID}}
+                    </span>
+                    <ng-template #simulatedmodel>
+                        -
+                    </ng-template>
                 </td>
             </tr>
             <tr>
@@ -162,7 +168,7 @@
     </div>
 
     <!-- Should Cost Volume -->
-    <div class="d-flex justify-content-center setimage ">
+    <div class="d-flex justify-content-center setimage " id="tableShouldCostVolume">
         <table class="table table-bordered ShouldCostVolume">
             <tr>
                 <th rowspan="8" class="text-center mainpart">Should Cost Volume and Location</th>
@@ -187,7 +193,12 @@
             <tr>
                 <th class="particular">Estimated Spend ($)</th>
                 <td class="right" *ngFor="let i of this.shouldCostVolume">
-                    {{i.estimatedSpend | number:'1.2-2'}}
+                    <span style="padding: 0px; margin: 0px ;" *ngIf="i.estimatedSpend == '-'">
+                        {{i.estimatedSpend}}
+                    </span>
+                    <span style="padding: 0px; margin: 0px ;" *ngIf="i.length != '-'">
+                        {{i.estimatedSpend | number:'1.2-2'}}
+                    </span>
                 </td>
             </tr>
             <tr>
@@ -227,17 +238,11 @@
     <div class="d-flex justify-content-center setimage ">
         <table class="table table-bordered tableTechnicalParameters">
             <tr>
-                <th rowspan="4" class="text-center mainpart">Technical Parameters</th>
+                <th  [rowSpan]="TechnicalParametersrowspan"  class="text-center mainpart">Technical Parameters</th>
                 <th hidden class="particular">csHeaderId</th>
                 <td hidden class="right" *ngFor="let i of this.technicalParatameters">
                     {{i.csHeaderId}}
                     {{i.scReportId}}
-                </td>
-            </tr>
-            <tr>
-                <th class="particular">Engine Displacement</th>
-                <td class="right" *ngFor="let i of this.technicalParatameters">
-                    {{i.engineDisplacement}}
                 </td>
             </tr>
             <tr>
@@ -249,68 +254,79 @@
             <tr>
                 <th class="particular">Dimension (LxWxH) mm</th>
                 <td class="right" *ngFor="let i of this.technicalParatameters">
-                    {{i.length | number:'1.2-2'}}
-                    X {{i.width | number:'1.2-2'}}
-                    X {{i.height | number:'1.2-2'}}
+                    <span style="padding: 0px; margin: 0px ;" *ngIf="i.length == '-'">
+                        {{i.length + i.width + i.height}}
+                    </span>
+                    <span style="padding: 0px; margin: 0px ;" *ngIf="i.length > 0 ">
+                        {{i.length | number:'1.2-2'}}
+                        X {{i.width | number:'1.2-2'}}
+                        X {{i.height | number:'1.2-2'}}
+                    </span>
                 </td>
             </tr>
-
-
-            <!-- <tr>
-                <th class="particular">Rough Weight (kg)</th>
+            <tr [hidden]="!IsEngineDisplacement">
+                <th class="particular">Engine Displacement</th>
                 <td class="right" *ngFor="let i of this.technicalParatameters">
-                    {{i.rough_Weight}}
+                    {{i.engineDisplacement}}
                 </td>
             </tr>
-            <tr>
-                <th class="particular">Part Volume</th>
+            <tr [hidden]="!IsPlatform">
+                <th class="particular">Platform</th>
                 <td class="right" *ngFor="let i of this.technicalParatameters">
-                    {{i.partVolume}}
+                    {{i.plat_form}}
                 </td>
             </tr>
-            <tr>
-                <th class="particular">Surface Area</th>
+            <tr [hidden]="!IsGensetOuputPower">
+                <th class="particular">Genset Ouput Power (KVA)</th>
                 <td class="right" *ngFor="let i of this.technicalParatameters">
-                    {{i.surfaceArea}}
+                    {{i.gensetoutputpower}}
                 </td>
             </tr>
-            <tr>
-                <th class="particular">Casting/Forging Yield (%)</th>
+            <tr [hidden]="!IsFrameSize">
+                <th class="particular">Model</th>
                 <td class="right" *ngFor="let i of this.technicalParatameters">
-                    {{i.castingForging_Yield | number:'1.0-0'}}
+                    {{i.frameSize}}
                 </td>
             </tr>
-            <tr>
-                <th class="particular">Average Wall Thickness (mm)</th>
+            <tr [hidden]="!IsSizeofAftertreatment">
+                <th class="particular">Substrate Size</th>
                 <td class="right" *ngFor="let i of this.technicalParatameters">
-                    {{i.averageWallThickness}}
+                    {{i.sizeOfAfterTreatment}}
                 </td>
             </tr>
-            <tr>
-                <th class="particular">Material Removal (Kg)</th>
-                <td class="right" *ngFor="let i of this.technicalParatameters">
-                    {{i.materialRemovag | number:'1.2-2'}}
-                </td>
-            </tr>
-            <tr>
+             <tr>
                 <th class="particular">No of Cores</th>
                 <td class="right" *ngFor="let i of this.technicalParatameters">
-                    {{i.noofCores}}
+                    {{i.no_of_Cores}}
                 </td>
             </tr>
             <tr>
-                <th class="particular">No of Cavity</th>
+                <th class="particular">No of Cavities</th>
                 <td class="right" *ngFor="let i of this.technicalParatameters">
-                    {{i.noofCavity}}
+                    {{i.no_of_Cavities}}
                 </td>
-            </tr> -->
+            </tr>
+            <tr>
+                <th class="particular">Yield</th>
+                <td class="right" *ngFor="let i of this.technicalParatameters">
+                    {{i.yield | number:'1.0-0'}}<span style="margin: 0; padding: 0;" *ngIf="i.yield > 0">%</span>
+                </td>
+            </tr>
+            <tr>
+                <th class="particular"> Avg Wall Thickness</th>
+                <td class="right" *ngFor="let i of this.technicalParatameters">
+                    {{i.avg_Wall_Thickness}}
+                </td>
+            </tr>
 
 
 
             <tr>
                 <th [rowSpan]="TechnicalParameterDetailed.length + 1"
                     class="text-center mainpart hideCommericalDetailsShouldCost"
-                    (click)="IsTechnicalParameterDetailed = !IsTechnicalParameterDetailed">Technical Parameters Detailed
+                    (click)="IsTechnicalParameterDetailed = !IsTechnicalParameterDetailed">
+                    Part Attributes
+                    <!-- Technical Parameters Detailed -->
                     <i *ngIf="IsTechnicalParameterDetailed" class="bi-chevron-down showhiderowstier2"></i>
                     <i *ngIf="!IsTechnicalParameterDetailed" class="bi-chevron-right showhiderowstier2"></i>
                 </th>
@@ -333,44 +349,7 @@
                         {{i.details4}}
                     </td>
                 </tr>
-                <!-- <tr>
-                    <td class="particular" style="vertical-align: top; ">
-                        <table class="setimage" style="width: 100%;">
-                            <tr *ngFor="let i of this.TechnicalParameter">
-                                <td style="border: 1px solid #80808041" *ngIf="i.details1 && i.id != 1">
-                                    {{i.details1}}
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td class="particular" style="vertical-align: top;">
-                        <table class="setimage" style="width: 100%;">
-                            <tr *ngFor="let i of this.TechnicalParameter">
-                               <td style="border: 1px solid #80808041" *ngIf="i.details2 && i.id != 1">
-                                    {{i.details2}}
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td [hidden]="Hidematerial_Detailedtable3" class="particular" style="vertical-align: top;">
-                        <table class="setimage" style="width: 100%;">
-                            <tr *ngFor="let i of this.TechnicalParameter">
-                               <td style="border: 1px solid #80808041" *ngIf="i.details3 && i.id != 1">
-                                    {{i.details3}}
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td [hidden]="Hidematerial_Detailedtable4" class="particular" style="vertical-align: top;">
-                        <table class="setimage" style="width: 100%;">
-                            <tr *ngFor="let i of this.TechnicalParameter">
-                               <td style="border: 1px solid #80808041" *ngIf="i.details4 && i.id != 1">
-                                    {{i.details4}}
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr> -->
+                
             </ng-container>
         </table>
     </div>
@@ -570,23 +549,6 @@
                 </th>
                 <th class="particular mainpart">Part Name </th>
                 <ng-container *ngFor="let i of this.CommericalDetailsSupplierCost">
-                    <td *ngIf="i.details1 && i.id == 2" class="right TotalCostData">
-                        {{i.details1}}
-                    </td>
-                    <td *ngIf="i.details2 && i.id == 2" class="right TotalCostData">
-                        {{i.details2}}
-                    </td>
-                    <td *ngIf="i.details3 && i.id == 2" class="right TotalCostData">
-                        {{i.details3}}
-                    </td>
-                    <td *ngIf="i.details4 && i.id == 2" class="right TotalCostData">
-                        {{i.details4}}
-                    </td>
-                </ng-container>
-            </tr>
-            <tr>
-                <th class="particular mainpart">Part Number </th>
-                <ng-container *ngFor="let i of this.CommericalDetailsSupplierCost">
                     <td *ngIf="i.details1 && i.id == 3" class="right TotalCostData">
                         {{i.details1}}
                     </td>
@@ -597,6 +559,23 @@
                         {{i.details3}}
                     </td>
                     <td *ngIf="i.details4 && i.id == 3" class="right TotalCostData">
+                        {{i.details4}}
+                    </td>
+                </ng-container>
+            </tr>
+            <tr>
+                <th class="particular mainpart">Part Number </th>
+                <ng-container *ngFor="let i of this.CommericalDetailsSupplierCost">
+                    <td *ngIf="i.details1 && i.id == 4" class="right TotalCostData">
+                        {{i.details1}}
+                    </td>
+                    <td *ngIf="i.details2 && i.id == 4" class="right TotalCostData">
+                        {{i.details2}}
+                    </td>
+                    <td *ngIf="i.details3 && i.id == 4" class="right TotalCostData">
+                        {{i.details3}}
+                    </td>
+                    <td *ngIf="i.details4 && i.id == 4" class="right TotalCostData">
                         {{i.details4}}
                     </td>
                 </ng-container>
@@ -717,9 +696,13 @@
                 <th rowspan="9" class="text-center mainpart"></th>
                 <th class="particular"></th>
                 <td class="right text-center" *ngFor="let i of this.partDetails" style="padding: 5px;">
-                    <button type="button" class="btn btn-sm btn-outline-danger btnview"
-                        data-bs-dismis="modal" (click)="getComparison(i.csHeaderId)">View <span *ngIf="i.scReportId > 0">Base</span> Model</button>
-                        <!-- [hidden]="i.scReportId > 0"  -->
+                    <!-- <button type="button" class="btn btn-sm btn-outline-danger btnview"
+                        data-bs-dismis="modal" (click)="getComparison(i.csHeaderId)">View <span *ngIf="i.scReportId > 0">Base</span> Model</button> -->
+                    <button type="button" class="btn btn-sm btn-outline-danger btnview" data-bs-dismis="modal"
+                        (click)="getComparison(i)">
+                        <span *ngIf="i.scReportId > 0 else multi">View Report</span>
+                        <ng-template #multi>View Model</ng-template>
+                    </button>
                 </td>
             </tr>
         </table>

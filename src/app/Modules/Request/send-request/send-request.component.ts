@@ -107,12 +107,11 @@ export class SendRequestComponent implements OnInit {
   CSHeaderID: any;
   loading = true;
   check = false;
-
   IsNullDebriefDate = false;
   IsNullCostType = false;
   IsNullShouldCostModeller = false;
   IsHopperValide = true;
-
+  selectedSheet = 1;
   ModelTypes: any;
   modelTypesID: any;
   modelexist: boolean = false;
@@ -120,6 +119,8 @@ export class SendRequestComponent implements OnInit {
 
   @ViewChild('excelFile_lbl')
   excelFile_lbl!: ElementRef;
+  id: any;
+
 
   constructor(
     private fileUploadService: RequestFileUploadService, public searchservice: SearchService,
@@ -177,7 +178,7 @@ export class SendRequestComponent implements OnInit {
   }
 
   onSelected() {
-    //debugger;
+    debugger;
 
     this.length = '';
     this.width = '';
@@ -256,6 +257,41 @@ export class SendRequestComponent implements OnInit {
 
   }
 
+  isTechnicalParameterModalOpen = false;
+  parameter = '';
+  name = '';
+  // technicalParameters: { parameter: string; name: string }[] = [];
+
+  technicalParameters = [
+    { parameter: 'Length from Groove to Guage Line', name: '114.4' },
+    { parameter: 'Length from Tip to Guage Line', name: '45.4' },
+    { parameter: 'Diameter of Stem', name: '12.4' }
+  ];
+
+  openTechnicalParameterModal() {
+    debugger
+    this.isTechnicalParameterModalOpen = true;
+  }
+
+  closeTechnicalParameterModal() {
+    this.isTechnicalParameterModalOpen = false;
+  }
+
+  // addTechnicalParameter() {
+  //     if (this.parameter && this.name) {
+  //         this.technicalParameters.push({ parameter: this.parameter, name: this.name });
+  //         this.parameter = '';
+  //         this.name = '';
+  //     }
+  // }
+
+
+
+  addTechnicalParameter() {
+    this.technicalParameters.push({ parameter: '', name: '' });
+  }
+
+
   // onChange(event: any, fileType: string) {
   //   const files = event.target.files;
   //   for (let i = 0; i < files.length; i++) {
@@ -270,231 +306,235 @@ export class SendRequestComponent implements OnInit {
   onUpload() {
     debugger;
     this.check = false;
+    if (this.selectedSheet != null || this.selectedSheet != undefined) {
+      if (this.selectedFiles === null || this.selectedFiles === undefined) {
 
-    if (this.selectedFiles === null || this.selectedFiles === undefined) {
+        this.toastr.warning("Please upload the file.")
+      }
 
-      this.toastr.warning("Please upload the file.")
-    }
-    else if (this.modelTypesID == 2) {
-      this.fileUploadService.yellowsheetupload(this.yellowmodeldata).subscribe({
-        next: (res) => {
-          // this.toastr.success("Excel data Inserted Successfully");
-          this.SpinnerService.hide('spinner');
-          this.addSuccess = false;
-          this.enableupload = false;
-          this.selectedPartName = this.getArr[0].partName
-          this.selectedPartNumber = this.getArr[0].partNumber
+      else if (this.modelTypesID == 2) {
+        this.fileUploadService.yellowsheetupload(this.yellowmodeldata).subscribe({
+          next: (res) => {
+            // this.toastr.success("Excel data Inserted Successfully");
+            this.SpinnerService.hide('spinner');
+            this.addSuccess = false;
+            this.enableupload = false;
+            this.selectedPartName = this.getArr[0].partName
+            this.selectedPartNumber = this.getArr[0].partNumber
 
-          this.imgName = this.selectedPartName + '-' + this.selectedPartNumber
-          this.username = localStorage.getItem("userName");
+            this.imgName = this.selectedPartName + '-' + this.selectedPartNumber
+            this.username = localStorage.getItem("userName");
 
-          this.SpinnerService.show('spinner');
-          this.fileUploadService.yellowmodelfileupload(this.selectedFiles, this.getAUID, this.selectedUniqueID, this.userId).subscribe({
-            next: (_res) => {
-              // debugger;
+            this.SpinnerService.show('spinner');
+            this.fileUploadService.yellowmodelfileupload(this.selectedFiles, this.getAUID, this.selectedUniqueID, this.userId).subscribe({
+              next: (_res) => {
+                // debugger;
 
-              this.toastr.success("File uploaded Successfully.");
+                this.toastr.success("File uploaded Successfully.");
 
-              this.SpinnerService.hide('spinner');
-              this.addSuccess = false;
-              this.enableupload = false;
-              let element: HTMLElement = document.getElementById('testbtn') as HTMLElement;
-              element.click();
-              setTimeout(() => {
+                this.SpinnerService.hide('spinner');
+                this.addSuccess = false;
+                this.enableupload = false;
+                let element: HTMLElement = document.getElementById('testbtn') as HTMLElement;
+                element.click();
+                setTimeout(() => {
 
-                this.clearALLData();
+                  this.clearALLData();
 
-                let element2: HTMLElement = document.getElementById('excelFile') as HTMLElement;
-                element2.innerText = '';
+                  let element2: HTMLElement = document.getElementById('excelFile') as HTMLElement;
+                  element2.innerText = '';
 
-              }, 200);
+                }, 200);
 
-              this.takeInputExcel.nativeElement.value = "";
-              this.takeInputPDF.nativeElement.value = "";
-              this.takeInputImage.nativeElement.value = "";
+                this.takeInputExcel.nativeElement.value = "";
+                this.takeInputPDF.nativeElement.value = "";
+                this.takeInputImage.nativeElement.value = "";
 
-              this.check = true;
+                this.check = true;
 
-            },
-            error: (error) => {
-              console.error('API call error:', error);
-              this.SpinnerService.hide('spinner');
-              this.toastr.error("File Not uploaded.");
-              this.selectedFiles = [];
+              },
+              error: (error) => {
+                console.error('API call error:', error);
+                this.SpinnerService.hide('spinner');
+                this.toastr.error("File Not uploaded.");
+                this.selectedFiles = [];
 
-              let element: HTMLElement = document.getElementById('testbtn') as HTMLElement;
-              element.click();
-              setTimeout(() => {
+                let element: HTMLElement = document.getElementById('testbtn') as HTMLElement;
+                element.click();
+                setTimeout(() => {
 
-                this.clearALLData();
+                  this.clearALLData();
 
-                let element2: HTMLElement = document.getElementById('excelFile') as HTMLElement;
-                element2.innerText = '';
+                  let element2: HTMLElement = document.getElementById('excelFile') as HTMLElement;
+                  element2.innerText = '';
 
-              }, 200);
+                }, 200);
 
-              this.takeInputExcel.nativeElement.value = "";
-              this.takeInputPDF.nativeElement.value = "";
-              this.takeInputImage.nativeElement.value = "";
+                this.takeInputExcel.nativeElement.value = "";
+                this.takeInputPDF.nativeElement.value = "";
+                this.takeInputImage.nativeElement.value = "";
 
-              this.check = true;
-              this.addSuccess = false;
-              this.enableupload = false;
-            },
-          });
-
-
-        },
-        error: (error) => {
-          console.error('API call error:', error);
-          this.SpinnerService.hide('spinner');
-          this.toastr.error("Excel data Not uploaded.");
-        }
-      })
-
-    }
-    else if (this.modelTypesID == 5) {
-      this.fileUploadService.chinasheetupload(this.chinamodeldata).subscribe({
-        next: (res: any) => {
-          // this.toastr.success("Excel data Inserted Successfully");
-          this.SpinnerService.hide('spinner');
-          this.addSuccess = false;
-          this.enableupload = false;
-          this.selectedPartName = this.getArr[0].partName
-          this.selectedPartNumber = this.getArr[0].partNumber
-
-          this.imgName = this.selectedPartName + '-' + this.selectedPartNumber
-          this.username = localStorage.getItem("userName");
-
-          this.SpinnerService.show('spinner');
-          this.fileUploadService.chinamodelfileupload(this.selectedFiles, this.getAUID, this.selectedUniqueID, this.userId).subscribe({
-            next: (_res: any) => {
-              // debugger;
-
-              this.toastr.success("File uploaded Successfully.");
-
-              this.SpinnerService.hide('spinner');
-              this.addSuccess = false;
-              this.enableupload = false;
-              let element: HTMLElement = document.getElementById('testbtn') as HTMLElement;
-              element.click();
-              setTimeout(() => {
-
-                this.clearALLData();
-
-                let element2: HTMLElement = document.getElementById('excelFile') as HTMLElement;
-                element2.innerText = '';
-
-              }, 200);
-
-              this.takeInputExcel.nativeElement.value = "";
-              this.takeInputPDF.nativeElement.value = "";
-              this.takeInputImage.nativeElement.value = "";
-
-              this.check = true;
-
-            },
-            error: (error: any) => {
-              console.error('API call error:', error);
-              this.SpinnerService.hide('spinner');
-              this.toastr.error("File Not uploaded.");
-              this.selectedFiles = [];
-
-              let element: HTMLElement = document.getElementById('testbtn') as HTMLElement;
-              element.click();
-              setTimeout(() => {
-
-                this.clearALLData();
-
-                let element2: HTMLElement = document.getElementById('excelFile') as HTMLElement;
-                element2.innerText = '';
-
-              }, 200);
-
-              this.takeInputExcel.nativeElement.value = "";
-              this.takeInputPDF.nativeElement.value = "";
-              this.takeInputImage.nativeElement.value = "";
-
-              this.check = true;
-              this.addSuccess = false;
-              this.enableupload = false;
-            },
-          });
+                this.check = true;
+                this.addSuccess = false;
+                this.enableupload = false;
+              },
+            });
 
 
-        },
-        error: (error: any) => {
-          console.error('API call error:', error);
-          this.SpinnerService.hide('spinner');
-          this.toastr.error("Excel data Not uploaded.");
-        }
-      })
+          },
+          error: (error) => {
+            console.error('API call error:', error);
+            this.SpinnerService.hide('spinner');
+            this.toastr.error("Excel data Not uploaded.");
+          }
+        })
 
+      }
+      else if (this.modelTypesID == 5) {
+        this.fileUploadService.chinasheetupload(this.chinamodeldata).subscribe({
+          next: (res: any) => {
+            // this.toastr.success("Excel data Inserted Successfully");
+            this.SpinnerService.hide('spinner');
+            this.addSuccess = false;
+            this.enableupload = false;
+            this.selectedPartName = this.getArr[0].partName
+            this.selectedPartNumber = this.getArr[0].partNumber
+
+            this.imgName = this.selectedPartName + '-' + this.selectedPartNumber
+            this.username = localStorage.getItem("userName");
+
+            this.SpinnerService.show('spinner');
+            this.fileUploadService.chinamodelfileupload(this.selectedFiles, this.getAUID, this.selectedUniqueID, this.userId).subscribe({
+              next: (_res: any) => {
+                // debugger;
+
+                this.toastr.success("File uploaded Successfully.");
+
+                this.SpinnerService.hide('spinner');
+                this.addSuccess = false;
+                this.enableupload = false;
+                let element: HTMLElement = document.getElementById('testbtn') as HTMLElement;
+                element.click();
+                setTimeout(() => {
+
+                  this.clearALLData();
+
+                  let element2: HTMLElement = document.getElementById('excelFile') as HTMLElement;
+                  element2.innerText = '';
+
+                }, 200);
+
+                this.takeInputExcel.nativeElement.value = "";
+                this.takeInputPDF.nativeElement.value = "";
+                this.takeInputImage.nativeElement.value = "";
+
+                this.check = true;
+
+              },
+              error: (error: any) => {
+                console.error('API call error:', error);
+                this.SpinnerService.hide('spinner');
+                this.toastr.error("File Not uploaded.");
+                this.selectedFiles = [];
+
+                let element: HTMLElement = document.getElementById('testbtn') as HTMLElement;
+                element.click();
+                setTimeout(() => {
+
+                  this.clearALLData();
+
+                  let element2: HTMLElement = document.getElementById('excelFile') as HTMLElement;
+                  element2.innerText = '';
+
+                }, 200);
+
+                this.takeInputExcel.nativeElement.value = "";
+                this.takeInputPDF.nativeElement.value = "";
+                this.takeInputImage.nativeElement.value = "";
+
+                this.check = true;
+                this.addSuccess = false;
+                this.enableupload = false;
+              },
+            });
+
+
+          },
+          error: (error: any) => {
+            console.error('API call error:', error);
+            this.SpinnerService.hide('spinner');
+            this.toastr.error("Excel data Not uploaded.");
+          }
+        })
+
+      }
+      else {
+        this.selectedPartName = this.getArr[0].partName
+        this.selectedPartNumber = this.getArr[0].partNumber
+
+        this.imgName = this.selectedPartName + '-' + this.selectedPartNumber
+        this.username = localStorage.getItem("userName");
+
+        this.SpinnerService.show('spinner');
+        this.fileUploadService.upload(this.selectedFiles, this.getAUID, this.selectedUniqueID, this.userId, this.selectedSheet).subscribe({
+          next: (_res) => {
+            // debugger;
+
+            this.toastr.success("File uploaded Successfully.");
+
+            this.SpinnerService.hide('spinner');
+            this.addSuccess = false;
+            this.enableupload = false;
+            let element: HTMLElement = document.getElementById('testbtn') as HTMLElement;
+            element.click();
+            setTimeout(() => {
+
+              this.clearALLData();
+
+              let element2: HTMLElement = document.getElementById('excelFile') as HTMLElement;
+              element2.innerText = '';
+
+            }, 200);
+
+            this.takeInputExcel.nativeElement.value = "";
+            this.takeInputPDF.nativeElement.value = "";
+            this.takeInputImage.nativeElement.value = "";
+
+            this.check = true;
+
+          },
+          error: (error) => {
+            console.error('API call error:', error);
+            this.SpinnerService.hide('spinner');
+            this.toastr.error("File Not uploaded.");
+            this.selectedFiles = [];
+
+            let element: HTMLElement = document.getElementById('testbtn') as HTMLElement;
+            element.click();
+            setTimeout(() => {
+
+              this.clearALLData();
+
+              let element2: HTMLElement = document.getElementById('excelFile') as HTMLElement;
+              element2.innerText = '';
+
+            }, 200);
+
+            this.takeInputExcel.nativeElement.value = "";
+            this.takeInputPDF.nativeElement.value = "";
+            this.takeInputImage.nativeElement.value = "";
+
+            this.check = true;
+            this.addSuccess = false;
+            this.enableupload = false;
+            //spinner.style.display = 'none';
+          },
+        });
+      }
     }
     else {
-      this.selectedPartName = this.getArr[0].partName
-      this.selectedPartNumber = this.getArr[0].partNumber
-
-      this.imgName = this.selectedPartName + '-' + this.selectedPartNumber
-      this.username = localStorage.getItem("userName");
-
-      this.SpinnerService.show('spinner');
-      this.fileUploadService.upload(this.selectedFiles, this.getAUID, this.selectedUniqueID, this.userId).subscribe({
-        next: (_res) => {
-          // debugger;
-
-          this.toastr.success("File uploaded Successfully.");
-
-          this.SpinnerService.hide('spinner');
-          this.addSuccess = false;
-          this.enableupload = false;
-          let element: HTMLElement = document.getElementById('testbtn') as HTMLElement;
-          element.click();
-          setTimeout(() => {
-
-            this.clearALLData();
-
-            let element2: HTMLElement = document.getElementById('excelFile') as HTMLElement;
-            element2.innerText = '';
-
-          }, 200);
-
-          this.takeInputExcel.nativeElement.value = "";
-          this.takeInputPDF.nativeElement.value = "";
-          this.takeInputImage.nativeElement.value = "";
-
-          this.check = true;
-
-        },
-        error: (error) => {
-          console.error('API call error:', error);
-          this.SpinnerService.hide('spinner');
-          this.toastr.error("File Not uploaded.");
-          this.selectedFiles = [];
-
-          let element: HTMLElement = document.getElementById('testbtn') as HTMLElement;
-          element.click();
-          setTimeout(() => {
-
-            this.clearALLData();
-
-            let element2: HTMLElement = document.getElementById('excelFile') as HTMLElement;
-            element2.innerText = '';
-
-          }, 200);
-
-          this.takeInputExcel.nativeElement.value = "";
-          this.takeInputPDF.nativeElement.value = "";
-          this.takeInputImage.nativeElement.value = "";
-
-          this.check = true;
-          this.addSuccess = false;
-          this.enableupload = false;
-          //spinner.style.display = 'none';
-        },
-      });
+      this.showError1 = true;
     }
-
   }
 
   getArr1: any;
@@ -535,12 +575,13 @@ export class SendRequestComponent implements OnInit {
             else {
               IsIteration = false;
             }
-          }
+          };
+          this.id = this.getArr[this.editRowIndex].requestID;
 
           if (IsIteration) {
-            if (!this.onBlurCheckValidation()) {
+            if (!this.checkBlankInputs()) {
               this.sendRequest = {
-                RequestHeaderID: this.selectedID,
+                RequestHeaderID: this.getArr[this.editRowIndex].requestID,
                 Cat2: this.getArr[this.editRowIndex].cat2,
                 Cat3: this.getArr[this.editRowIndex].cat3,
                 Cat4: this.getArr[this.editRowIndex].cat4,
@@ -650,84 +691,133 @@ export class SendRequestComponent implements OnInit {
 
   }
 
-  onBlurLength(event: any) {
-    this.length = event.target.value
+  onLengthInput() {
+    this.showError9 = !(this.length && this.length > 0);
   }
-  onBlurWidth(event: any) {
-    this.width = event.target.value
-  }
-  onBlurHeight(event: any) {
-    this.height = event.target.value
-  }
-  onBlurVolume(event: any) {
-    this.volume = event.target.value
-  }
-  onBlurPartWeight(event: any) {
-    this.partWeight = event.target.value
+  onWidthInput() {
+    this.showError10 = !(this.width && this.width > 0);
   }
 
-  onBlurCheckValidation(): boolean {
-    //debugger;
-    var count = 0;
-    // for (let i = 0; i < this.partspecification.filterItems.length; i++) {
+  onHeightInput() {
+    this.showError12 = !(this.height && this.height > 0);
+  }
 
-    //   if (this.partspecification.filterItems[i].checked) {
-    //     count = count + 1;
-    //   }
-    // }
-    if (this.modelTypesID != 2 && this.modelTypesID != 5) {
-      if (this.length == '' || this.length === undefined) {
-        this.showError9 = true;
-        return true;
-      }
-      else if (this.width == '' || this.width === undefined) {
-        this.showError10 = true;
-        return true;
-      }
-      else if (this.height == '' || this.height === undefined) {
-        this.showError12 = true;
-        return true;
-      }
-      else if (this.partWeight === '' || this.partWeight === null || this.partWeight === undefined) {
-        this.showError13 = true;
-        return true;
-      }
-      // else if (this.selectedPartSpecific === '' || this.selectedPartSpecific === null || this.selectedPartSpecific === undefined) {
-      //   this.showError8 = true;
-      //   return true;
-      // }
-      else {
-        return false;
-      }
+  onPartWeightInput() {
+    this.showError13 = !(this.partWeight && this.partWeight > 0);
+  }
+
+  onSheetTypeChange(value: any) {
+    console.log(this.selectedSheet)
+    this.showError2 = value === null || value === undefined || value === '';
+  }
+  //  onBlurLength(event: any) {
+  //     this.length = event.target.value
+
+  //   }
+  //   onBlurWidth(event: any) {
+  //     this.width = event.target.value
+
+  //   }
+  //   onBlurHeight(event: any) {
+  //     this.height = event.target.value
+
+  //   }
+
+  //   onBlurPartWeight(event: any) {
+  //     this.partWeight = event.target.value
+  //   }
+
+
+  // onBlurCheckValidation(): boolean {
+  //   //debugger;
+  //   var count = 0;
+  //   // for (let i = 0; i < this.partspecification.filterItems.length; i++) {
+
+  //   //   if (this.partspecification.filterItems[i].checked) {
+  //   //     count = count + 1;
+  //   //   }
+  //   // }
+  //   if (this.modelTypesID != 2 && this.modelTypesID != 5) {
+  //     if (this.length == '' || this.length === undefined) {
+  //       this.showError9 = true;
+  //       return true;
+  //     }
+  //     else if (this.width == '' || this.width === undefined) {
+  //       this.showError10 = true;
+  //       return true;
+  //     }
+  //     else if (this.height == '' || this.height === undefined) {
+  //       this.showError12 = true;
+  //       return true;
+  //     }
+  //     else if (this.partWeight === '' || this.partWeight === null || this.partWeight === undefined) {
+  //       this.showError13 = true;
+  //       return true;
+  //     }
+
+  //     else {
+  //       return false;
+  //     }
+  //   }
+  //   else {
+  //     return false;
+  //   }
+  // }
+
+
+  checkBlankInputs(): boolean {
+    let hasError = false;
+
+
+    if (this.selectedSheet !== 2 && (this.modelTypesID === 2 || this.modelTypesID === 5)) {
+      this.showError9 = this.length === '' || this.length === null || this.length === undefined;
+      this.showError10 = this.width === '' || this.width === null || this.width === undefined;
+      this.showError12 = this.height === '' || this.height === null || this.height === undefined;
+      this.showError13 = this.partWeight === '' || this.partWeight === null || this.partWeight === undefined;
+
+      hasError = this.showError9 || this.showError10 || this.showError12 || this.showError13;
+    } else {
+      this.showError9 = false;
+      this.showError10 = false;
+      this.showError12 = false;
+      this.showError13 = false;
     }
-    else {
-      return false;
+
+    if (this.id === null || this.id === undefined || this.id === '') {
+      this.toastr.warning("Request ID is not present");
+      hasError = true;
     }
 
+    return hasError;
   }
+
+
 
 
   onBlankInputValidation(): boolean {
-    if (this.selectedID === null || this.selectedID === undefined) {
-      this.showError0 = true;
-      this.SpinnerService.hide('spinner');
-      return true;
-    }
-    else if (this.selectedUniqueID === '' || this.selectedUniqueID === null || this.selectedUniqueID === undefined) {
+    let hasError = false;
+
+    if (this.selectedUniqueID === '' || this.selectedUniqueID === null || this.selectedUniqueID === undefined) {
       this.showError1 = true;
-      this.SpinnerService.hide('spinner');
-      return true;
-    }
-    else if (this.modelTypesID === '' || this.modelTypesID === null || this.modelTypesID === undefined) {
-      this.showError11 = true;
-      this.SpinnerService.hide('spinner');
-      return true;
+      hasError = true;
+    } else {
+      this.showError1 = false;
     }
 
-    else {
-      return false;
+
+    if (this.modelTypesID === '' || this.modelTypesID === null || this.modelTypesID === undefined) {
+      this.showError11 = true;
+      hasError = true;
+    } else {
+      this.showError11 = false;
     }
+    if (hasError) {
+      this.SpinnerService.hide('spinner');
+    }
+
+    return hasError;
   }
+
 
   onSelectedChangePartSpec(e: any) {
     //debugger;
@@ -770,6 +860,8 @@ export class SendRequestComponent implements OnInit {
     this.location.back();
   }
 
+
+
   deleteUploadedData(rowIndex: any) {
     this.editRowIndex = rowIndex;
     this.getAUID = this.getUArr[this.editRowIndex].csHeaderID;
@@ -805,6 +897,7 @@ export class SendRequestComponent implements OnInit {
       return;
     }
 
+
     // if (this.modelTypesID === '' || this.modelTypesID === null || this.modelTypesID === undefined) {
     //   this.showError11 = true;
     //   return
@@ -823,7 +916,8 @@ export class SendRequestComponent implements OnInit {
               progressBar: false,
               closeButton: true
             });
-          } else {
+          }
+          else {
             this.toastr.success(response.message || "Bulk Upload Completed.");
             this.SpinnerService.hide('spinner');
           }
@@ -831,12 +925,12 @@ export class SendRequestComponent implements OnInit {
           console.error('API call error:', error);
           this.toastr.error("Bulk Upload Failed.");
           this.SpinnerService.hide('spinner');
-        } finally {
+        }
+        finally {
           this.SpinnerService.hide('spinner');
         }
       }
       else if (this.modelTypesID == 5) {
-
         try {
           this.SpinnerService.show('spinner');
           const response: any = await this.fileUploadService.chinabulkupload(this.userId, this.modelTypesID).toPromise();
@@ -847,29 +941,38 @@ export class SendRequestComponent implements OnInit {
               progressBar: false,
               closeButton: true
             });
-          } else {
+          }
+          else {
             this.toastr.success(response.message || "Bulk Upload Completed.");
             this.SpinnerService.hide('spinner');
           }
-        } catch (error) {
+        }
+        catch (error) {
           console.error('API call error:', error);
           this.toastr.error("Bulk Upload Failed.");
           this.SpinnerService.hide('spinner');
-        } finally {
+        }
+        finally {
           this.SpinnerService.hide('spinner');
         }
       }
       else {
-
         this.SpinnerService.show('spinner');
-        const data = await this.fileUploadService.getBulkUpload(this.userId, this.modelTypesID).toPromise();
-        if (data == null) {
-          this.toastr.success("Bulk Upload Completed.")
-          this.SpinnerService.hide('spinner');
+        console.log(this.selectedSheet);
+        if (this.selectedSheet != null && this.selectedSheet != undefined) {
+          const data = await this.fileUploadService.getBulkUpload(this.userId, this.modelTypesID, this.selectedSheet).toPromise();
+          if (data == null) {
+            this.toastr.success("Bulk Upload Completed.")
+            this.SpinnerService.hide('spinner');
+          }
+          else {
+            console.error('API call error:', data);
+            this.toastr.error("Bulk Upload Failed.")
+            this.SpinnerService.hide('spinner');
+          }
         }
         else {
-          console.error('API call error:', data);
-          this.toastr.error("Bulk Upload Failed.")
+          this.showError2 = true;
           this.SpinnerService.hide('spinner');
         }
         this.SpinnerService.hide('spinner');
@@ -952,14 +1055,9 @@ export class SendRequestComponent implements OnInit {
             reader.readAsArrayBuffer(file);
           }
         }
-        else {
 
-          this.enableupload = true;
-
-        }
-        this.selectedFiles.push(file);
         this.enableupload = true;
-
+        this.selectedFiles.push(file);
       }
 
     }
@@ -1202,6 +1300,8 @@ export class SendRequestComponent implements OnInit {
     }
   }
 
+
 }
+
 
 

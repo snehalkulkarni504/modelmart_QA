@@ -6,7 +6,8 @@
     <div class="setheight">
         <div class="MasterHeader">
             <div style="width: 70%;">
-                <h3>Bill of Material (BoM) Simulation Module <label for="" style="font-size: medium;">({{getrouteprogname}},
+                <h3 style="margin-top: 20px;">Bill of Material (BoM) Simulation Module <label for=""
+                        style="font-size: medium;">({{getrouteprogname}},
                         {{getroutecartname}})</label></h3>
             </div>
             <div class="text-end" style="width: 30%;">
@@ -28,7 +29,7 @@
                     </div>
                     <div class="modal-body">
 
-                        
+
 
                         <div style="display: flex; align-items: center;">
                             <div style="flex: 1;">
@@ -48,57 +49,124 @@
 
         <form [formGroup]="BUnitMasterForm">
 
+            <div class="row g-4 justify-content-center" style="height: 200px;">
+
+                <!-- Stats Section -->
+                <div class="col-md-4">
+                    <div class="card fancy-card">
+                        <h6 class="fw-bold text-center">Statistics</h6>
+                        <div class="row text-center">
+                            <div class="col-6 stat-box">
+                                <div class="stat-label">Unique # Parts</div>
+                                <div class="stat-value text-primary">{{ uniqeqty }}</div>
+                            </div>
+                            <div class="col-6 stat-box">
+                                <div class="stat-label">Matched Records</div>
+                                <div class="stat-value text-success">{{ matchraw }}</div>
+                            </div>
+                            <div class="col-6 stat-box">
+                                <div class="stat-label">BOM Qty</div>
+                                <div class="stat-value text-warning">{{ bomqty }}</div>
+                            </div>
+                            <div class="col-6 stat-box">
+                                <div class="stat-label">Last Simulated</div>
+                                <div class="stat-value text-muted">{{ lastsumulate | date:'dd/MM/yyyy' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slider Section -->
+                <div class="col-md-4">
+                    <div class="card fancy-card">
+                        <h6 class="fw-bold text-center"></h6>
+                        <div class="slider-container">
+                            <div class="slider-track"></div>
+
+                            <ng-container *ngFor="let point of sortedPoints; let i = index">
+                                <div class="slider-point animate-point" [style.left.%]="getPositionPercent(point.value)"
+                                    [style.animation-delay.ms]="i * 300">
+                                    <div class="point-circle"></div>
+                                    <div class="point-label-wrapper"
+                                        [ngClass]="{ 'label-top': i % 2 === 0, 'label-bottom': i % 2 !== 0 }">
+                                        <div class="point-label badge bg-light text-dark shadow-sm">{{ point.label }}
+                                        </div>
+                                        <div class="point-value text-primary fw-bold">${{ point.value }}</div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formula Section -->
+                <div class="col-md-4">
+                    <div class="card fancy-card">
+                        <h6 class="fw-bold text-center">Cost Calculation</h6>
+                        <ul class="list-unstyled small">
+                            <li><strong> Best Cost</strong> = Σ Should Cost × BOM Qty</li>
+                            <li><strong> Probable Cost</strong> = [Σ GBPA OR (Should/80%)] × BOM Qty</li>
+                            <li><strong> Worst Cost</strong> = [Σ GBPA OR (Should/75%)] × BOM Qty</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+
             <div class="MasterHeaderlable">
                 <div class="row">
-                    <div class="col-md-3 form-group has-search" style="padding-top: 2.5rem;">
+                    <div class="col-md-3 form-group has-search">
                         <span class="bi bi-search form-control-feedback"></span>
                         <input type="text" class="form-control search-input" placeholder="Search"
                             formControlName="textsearch" [(ngModel)]="textsearch">
                     </div>
 
-                    <div class="col-md-7">
-                        <div class="card shadow-sm border-0" style="background: linear-gradient(135deg, #d0d1d4, #c3cfe2); padding: 10px;">
-                          <div class="row text-center text-dark fw-bold" style="font-size: 10px;">
-                            <div class="col-3">
-                              <div>Unique # Parts</div>
-                              <div class="text-primary fs-6">{{ uniqeqty }}</div>
-                            </div>
-                            <div class="col-2">
-                                <div>Matched Records</div>
-                                <div class="text-primary fs-6">{{matchraw}}</div>
-                              </div>
-                          
-                            <div class="col-2">
-                              <div>BOM Qty</div>
-                              <div class="text-success fs-6">{{bomqty}}</div>
-                            </div>
-                            <div class="col-2">
-                              <div>Optimistic BOM Cost (Should Cost – MDO)</div>
-                              <div class="text-danger fs-6">${{fcost| number:'1.2-2'}}</div>
-                            </div>
-                            <div class="col-3">
-                              <div>Last Simulated</div>
-                              <div class="text-muted fs-6">{{ lastsumulate | date:'dd/MM/yyyy'}}</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                    <div class="col-md-3">
 
+                    </div>
 
-                    <div class="col-md-2" style="display: inline-flex; font-size: smaller;" >
+                    <div class="col-md-6"
+                        style="display: inline-flex; font-size: smaller; padding-left: 60px; padding-right: 0px;">
 
-                        <div class="col-md-6" style="display: ruby-text;">
-                            <button class="btndemo" style="width: 120%;" (click)="Downloadtemplate()">Download Template</button>
-                            <button class="btndemo" style="margin-top: 15px; margin-left:34px"  (click)="addRow()">Add Row</button>
-                        </div>
+                        <!-- <div class="col-md-6" style="display: ruby-text;">
+                            <button class="btndemo" style="width: 120%;" (click)="Downloadtemplate()">Download
+                                Template</button>
+                            <button class="btndemo" style="width: 120%; margin-top: 15px; margin-left:4px"
+                                (click)="addRow()">Add Row</button>
+                        </div>  -->
 
-                        <div class="col-md-6" style="display: ruby-text;">
-                            <button class="btndemo" (click)="matchconfirm=false" (click)="matchconfirmnew=false"  (click)="excelU=true" (click)="cartcreate=false" (click)="openUploadModal()"
-                            style="margin-top: 0px;margin-left: 29%; width: 80px;">Upload Bom</button>
+                        <div style="display: inline;">
+                            <button class="btndemo" style="width: 120px;margin-right: 10px;"
+                                (click)="Downloadtemplate()">Download Template</button>
 
-                        <button class="btndemo" style="margin-top: 14px; margin-left:30px"  (click)="exportToExcel()" title="Export to Excel">Export to Excel</button>
+                            <button class="btndemo" style="width: 120px;margin-right: 10px;" (click)="addRow()">Add
+                                Row</button>
+
+                            <button class="btndemo" style="width: 120px;margin-right: 10px;"
+                                (click)="matchconfirm=false" (click)="matchconfirmnew=false" (click)="excelU=true"
+                                (click)="cartcreate=false" (click)="openUploadModal()">Upload Bom</button>
+
+                            <button class="btndemo" style="width: 120px;" (click)="exportToExcel()"
+                                title="Export to Excel">Export to Excel</button>
 
                         </div>
+
+                        <!-- <div style="display: flex;">
+                            <button class="btndemo" style="width: 120%;" (click)="Downloadtemplate()">Download
+                                Template</button>
+
+                            <button class="btndemo" style="width: 120%; margin-top: 15px; margin-left:4px"
+                                (click)="addRow()">Add Row</button>
+
+                            <button class="btndemo" (click)="matchconfirm=false" (click)="matchconfirmnew=false"
+                                (click)="excelU=true" (click)="cartcreate=false" (click)="openUploadModal()"
+                                style="margin-top: 0px;margin-left: 29%; width: 95%;">Upload Bom</button>
+
+                            <button class="btndemo" style="width: 95%; margin-top: 14px; margin-left:30px"
+                                (click)="exportToExcel()" title="Export to Excel">Export to Excel</button>
+
+                        </div> -->
 
                     </div>
 
@@ -109,68 +177,112 @@
             </div>
         </form>
 
-                    <ng-template #templateName>
-                                    <td [hidden]="Ishide3">
-                        not available
-                        </td>
-                                    </ng-template>
+        <ng-template #templateName>
+            <td [hidden]="Ishide3">
 
-                                    <ng-template #templateName1>
-                                    <td >
-                        not available
-                        </td>
-                    </ng-template>
+            </td>
+        </ng-template>
+
+        <ng-template #templateName1>
+            <td>
+
+            </td>
+        </ng-template>
+        <!---------------------Slider----------------------------->
+
+
+        <!-- <div class="slider-container">
+  <div class="slider-track"></div>
+
+  <ng-container *ngFor="let point of sortedPoints; let i = index">
+    <div
+      class="slider-point"
+      [style.left.%]="getPositionPercent(point.value)"
+    >
+      <div class="point-circle"></div>
+
+      <div
+        class="point-label-wrapper"
+        [ngClass]="{ 'label-top': i % 2 === 0, 'label-bottom': i % 2 !== 0 }"
+      >
+        <div class="point-label" [innerHTML]="point.label"></div>
+        <div class="point-value">${{ point.value}}</div>
+      </div>
+    </div>
+  </ng-container>
+</div> -->
+
+
 
         <!-- -------------------------------- -->
-         
+
 
         <div class="table-container" #tableContainer>
             <table class="styled-table">
-              <thead >
-                <tr class="header-top">
-                  <th [colSpan]="colspanhide1" class="collapsed1" (click)="hide1()" style="cursor: pointer; text-align: start;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-plus" viewBox="0 0 16 16 " *ngIf="Ishide1">
-                    <path d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5z"/>
-                    <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"/>
-                  </svg>
-                  <i class="bi bi-dash-square" *ngIf="!Ishide1"></i>
-                  </th>
-                  <th [colSpan]="colspanhide2" class="collapsed2" (click)="hide2()" style="cursor: pointer;text-align: start;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-plus" viewBox="0 0 16 16" *ngIf="Ishide2">
-                        <path d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5z"/>
-                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"/>
-                      </svg>
-                      <i class="bi bi-dash-square" *ngIf="!Ishide2"></i>
-                  </th>
-                  <th [colSpan]="colspanhide3" class="collapsed3" (click)="hide3()" style="cursor: pointer;text-align: start;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-plus" viewBox="0 0 16 16" *ngIf="Ishide3">
-                        <path d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5z"/>
-                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"/>
-                      </svg>
-                      <i class="bi bi-dash-square" *ngIf="!Ishide3"></i>
-                  </th>
-                  <th class="sticky-col" rowspan="2"  style="background: #f15045; text-align: center;padding: 0 22px !important;">Action</th>
-                </tr>
+                <thead>
+                    <tr class="header-top">
+                        <th [colSpan]="colspanhide1" class="collapsed1" (click)="hide1()"
+                            style="cursor: pointer; text-align: start;"><svg xmlns="http://www.w3.org/2000/svg"
+                                width="16" height="16" fill="currentColor" class="bi bi-file-plus" viewBox="0 0 16 16 "
+                                *ngIf="Ishide1">
+                                <path
+                                    d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5z" />
+                                <path
+                                    d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1" />
+                            </svg>
+                            <i class="bi bi-dash-square" *ngIf="!Ishide1"></i>
+                        </th>
+                        <th [colSpan]="colspanhide2" class="collapsed2" (click)="hide2()"
+                            style="cursor: pointer;text-align: start;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-file-plus" viewBox="0 0 16 16" *ngIf="Ishide2">
+                                <path
+                                    d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5z" />
+                                <path
+                                    d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1" />
+                            </svg>
+                            <i class="bi bi-dash-square" *ngIf="!Ishide2"></i>
+                        </th>
+                        <th [colSpan]="colspanhide3" class="collapsed3" (click)="hide3()"
+                            style="cursor: pointer;text-align: start;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-file-plus" viewBox="0 0 16 16" *ngIf="Ishide3">
+                                <path
+                                    d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5z" />
+                                <path
+                                    d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1" />
+                            </svg>
+                            <i class="bi bi-dash-square" *ngIf="!Ishide3"></i>
+                        </th>
+                        <th class="sticky-col" rowspan="2"
+                            style="background: #f15045; text-align: center;padding: 0 22px !important;">Action</th>
+                    </tr>
 
-                <tr class="header-sub" style="color: rgb(241, 239, 239);">
+                    <tr class="header-sub" style="color: rgb(241, 239, 239);">
                         <th class="collapsed1" hidden>ID</th>
                         <th class="collapsed1" hidden>Bomid</th>
-                        <th class="collapsed1 sticky-part-name">Part Name</th>
-                        <th class="collapsed1 sticky-part-number">Displacement (L)</th>
+                        <!-- <th class="collapsed1 sticky-part-name">Part Name</th> -->
+                        <th class="collapsed1 sticky-part-name" #resizableColumn>
+                            Part Name
+                            <div class="resizer" (mousedown)="onResizeStart($event, resizableColumn)"></div>
+                        </th>
+                        <!-- <th class="collapsed1 sticky-part-number">Displacement (L)</th> -->
+                        <th class="collapsed1">Displacement (L)</th>
                         <th class="collapsed1">Bom Qty</th>
                         <th class="collapsed1" [hidden]="Ishide1">Platform </th>
                         <th class="collapsed1" [hidden]="Ishide1">Part Number</th>
                         <th class="collapsed1" [hidden]="Ishide1">Current Program</th>
                         <th class="collapsed1" [hidden]="Ishide1">Parent Part Number</th>
                         <th class="collapsed1" [hidden]="Ishide1">Parent Program</th>
-                        
-                        <th class="collapsed1" [hidden]="Ishide1" >Material</th>
+
+                        <th class="collapsed1" [hidden]="Ishide1">Material</th>
                         <th class="collapsed1" [hidden]="Ishide1">Weight (lbs)</th>
-                        <th class="collapsed1" [hidden]="Ishide1" >Mfg Loc</th>
-                        
-                       <!-- <th class="collapsed1" [hidden]="Ishide1">CostType</th>-->
-                        
-                        
-                        
+                        <th class="collapsed1" [hidden]="Ishide1">Mfg Loc</th>
+
+                        <!-- <th class="collapsed1" [hidden]="Ishide1">CostType</th>-->
+
+
+
 
                         <th [hidden]="Ishide2" class="collapsed2">Representative Platform</th>
                         <th class="collapsed2">ModelMart Id</th>
@@ -190,51 +302,66 @@
                         <!--<th [hidden]="Ishide3" class="collapsed3">ask to Sura</th>-->
                         <th [hidden]="Ishide3" class="collapsed3">Representative Dimensions (mm)</th>
                         <th class="collapsed3">Representative Weight (lbs)</th>
-                        <th class="collapsed3">Representative Raw Material</th>
+                        <!-- <th class="collapsed3">Representative Raw Material</th> -->
+                        <th class="collapsed3" #resizableRawMaterial>
+                            Representative Raw Material
+                            <div class="resizer" (mousedown)="onResizeStart($event, resizableRawMaterial)"></div>
+                        </th>
                         <th class="collapsed3" [hidden]="Ishide3">Representative Invoice</th>
                         <th [hidden]="Ishide3" class="collapsed3">Representative Engine Displacement (L)</th>
-                        <th [hidden]="Ishide3" class="collapsed3">Representative Mfg Process </th>
+                        <!-- <th [hidden]="Ishide3" class="collapsed3">Representative Mfg Process </th> -->
+                        <th class="collapsed3" [hidden]="Ishide3" #resizableMfgProcess>
+                            Representative Mfg Process
+                            <div class="resizer" (mousedown)="onResizeStart($event, resizableMfgProcess)"></div>
+                        </th>
                         <!-- <th [hidden]="Ishide3" class="collapsed3">Utilization</th> -->
-                        <th [hidden]="Ishide3" class="collapsed3">Representative Supplier Name</th>
+                        <!-- <th [hidden]="Ishide3" class="collapsed3">Representative Supplier Name</th> -->
+                        <th class="collapsed3" [hidden]="Ishide3" #resizableSupplierName>
+                            Representative Supplier Name
+                            <div class="resizer" (mousedown)="onResizeStart($event, resizableSupplierName)"></div>
+                        </th>
                         <th [hidden]="Ishide3" class="collapsed3">Representative Cost Type ($)</th>
                         <th [hidden]="Ishide3" class="collapsed3">Representative Debrief Date</th>
-                </tr>
+                    </tr>
 
-              </thead>
-              <tbody style="font-size: 12px;">
-                <!-- Repeat for rows -->
-                <tr *ngFor="let row of SearchProductList | search: textsearch:filterMetadata ">
-                  
+                </thead>
+                <tbody style="font-size: 12px;">
+                    <!-- Repeat for rows -->
+                    <tr *ngFor="let row of SearchProductList | search: textsearch:filterMetadata ">
+
                         <td hidden>{{row.cartId}}</td>
                         <td hidden>{{row.bomId}}</td>
-                        <td title="{{ row.excelname }}" class="sticky-part-name"><span *ngIf="!row.editable">{{ row.excelname }}</span>
+                        <td class="sticky-part-name" title="{{ row.excelname }}"><span *ngIf="!row.editable">{{
+                                row.excelname }}</span>
                             <input *ngIf="row.editable" [(ngModel)]="row.excelname" value="{{row.excelname}}"
-                                class="editable-input" #excelnameInput  required/>
+                                class="editable-input" #excelnameInput required />
                         </td>
-                        <td class="sticky-part-number"><span *ngIf="!row.editable">{{ row.excelenginedisplacement }}</span>
+                        <td><span *ngIf="!row.editable">{{ row.excelenginedisplacement }}</span>
                             <input *ngIf="row.editable" [(ngModel)]="row.excelenginedisplacement"
-                                value="{{row.excelenginedisplacement}}" class="editable-input"  #excelenginedisplacementInput required/>
+                                value="{{row.excelenginedisplacement}}" class="editable-input"
+                                #excelenginedisplacementInput required />
                         </td>
                         <td>
                             <span *ngIf="!row.editable">{{ row.excelitemcount }}</span>
                             <input *ngIf="row.editable" [(ngModel)]="row.excelitemcount" value="{{row.excelitemcount}}"
-                                class="editable-input" #excelitemcountInput required/>
+                                class="editable-input" #excelitemcountInput required />
                         </td>
                         <td [hidden]="Ishide1"><span *ngIf="!row.editable">{{ row.excelPlatform}}</span>
-                            <input *ngIf="row.editable" [(ngModel)]="row.excelPlatform"
-                                value="{{row.excelPlatform}}" class="editable-input" #excelPlatformInput required/>
+                            <input *ngIf="row.editable" [(ngModel)]="row.excelPlatform" value="{{row.excelPlatform}}"
+                                class="editable-input" #excelPlatformInput required />
                         </td>
                         <td [hidden]="Ishide1">
                             <span *ngIf="!row.editable">{{ row.excelpartno }}</span>
                             <input *ngIf="row.editable" [(ngModel)]="row.excelpartno" value="{{row.excelpartno}}"
-                                class="editable-input" #excelpartnoInput required/>
+                                class="editable-input" #excelpartnoInput required />
                         </td>
                         <td [hidden]="Ishide1">
                             <span *ngIf="!row.editable">{{ row.excelcurrentprogram}}</span>
                             <input *ngIf="row.editable" [(ngModel)]="row.excelcurrentprogram"
-                                value="{{row.excelcurrentprogram}}" class="editable-input" #excelcurrentprogramInput required/>
+                                value="{{row.excelcurrentprogram}}" class="editable-input" #excelcurrentprogramInput
+                                required />
                         </td>
-                        
+
                         <td [hidden]="Ishide1">
                             <span *ngIf="!row.editable">{{ row.excelparentprogram}}</span>
                             <input *ngIf="row.editable" [(ngModel)]="row.excelparentprogram"
@@ -245,9 +372,9 @@
                             <input *ngIf="row.editable" [(ngModel)]="row.excelparentpartid"
                                 value="{{row.excelparentpartid}}" class="editable-input" />
                         </td>
-                        
-                        
-                        
+
+
+
 
                         <td [hidden]="Ishide1">
                             <span *ngIf="!row.editable">{{ row.excelmeterial }}</span>
@@ -266,15 +393,15 @@
                                 value="{{row.excelcostregion}}" class="editable-input" />
                         </td>
 
-                        
+
                         <!-- <td [hidden]="Ishide1">
                             <span *ngIf="!row.editable">{{ row.excelcosttype }}</span>
                             <input *ngIf="row.editable" [(ngModel)]="row.excelcosttype" value="{{row.excelcosttype}}"
                                 class="editable-input" />
                         </td> -->
-                        
-                        
-                        
+
+
+
 
 
 
@@ -289,20 +416,23 @@
                         <td [hidden]="Ishide2" *ngIf="row.ucost <= 0">
                             <!-- <span *ngIf="!row.editable">{{row.scost}}</span>
                             <input *ngIf="row.editable" [(ngModel)]="row.scost" value="{{row.scost}}" /> -->
-                        {{row.scost}}
+                            {{row.scost}}
                         </td>
                         <td [hidden]="Ishide2" *ngIf="row.ucost > 0">{{row.ucost}}</td>
                         <td [hidden]="Ishide2">{{row.totalCost}}</td>
 
 
 
-                        <td [hidden]="Ishide3" *ngIf="row.ucost <= 0 ">Original</td>
+                        <td [hidden]="Ishide3" *ngIf="row.ucost <= 0 && row.categoryId>0">Original</td>
+                        <td [hidden]="Ishide3" *ngIf="row.ucost <= 0 && row.categoryId<=0"></td>
                         <td [hidden]="Ishide3" *ngIf="row.ucost > 0">Simulated</td>
                         <!--<td [hidden]="Ishide3">{{row.partNumber}} X {{row.name}} X {{row.engineDisplacement}}</td>-->
                         <td [hidden]="Ishide3" *ngIf="row.height > 0; else templateName">
-                        {{row.height| number:'1.0-0'}} X {{row.length|number:'1.0-0'}} X {{row.width| number:'1.0-0'}}
+                            {{row.height| number:'1.0-0'}} X {{row.length|number:'1.0-0'}} X {{row.width|
+                            number:'1.0-0'}}
                         </td>
-                        <td>{{row.weight * 2.20462 | number:'1.2-2' }} lbs</td>
+                        <td *ngIf="row.weight > 0">{{row.weight * 2.20462 | number:'1.2-2' }} lbs</td>
+                        <td *ngIf="row.weight <=0"></td>
                         <td title="{{row.rowmaterial}}">{{row.rowmaterial}}</td>
                         <td [hidden]="Ishide3">{{row.invoice}}</td>
                         <td [hidden]="Ishide3">{{row.engineDisplacement}}</td>
@@ -314,32 +444,43 @@
 
 
                         <td class="sticky-col" style="position: sticky;">
-                           
-                            <i class="bi bi-pencil-fill" style="color: #da291c; font-size: medium;" *ngIf="!row.editable" (click)="editRow(row)" ngbTooltip="Edit" container="body"></i>
-                            
-                            
-                            <i class="bi bi-repeat" style="color: #da291c; font-size: medium; padding: 0 10px;" *ngIf="row.editable && !row.isNew" (click)="matchconfirmnew=false" (click)="openMatchModal(row)" ngbTooltip="Re-Run" container="body"></i>
-                            <i class="bi bi-repeat" style="color: #da291c; font-size: medium; padding-right:10px;" *ngIf="row.isNew" (click)="matchconfirm=false" (click)="openMatchModalnew(row)" ngbTooltip="Re-Run" container="body"></i>
-                            <i class="bi bi-x-circle-fill" style="color: #da291c; font-size: medium;"  *ngIf="row.editable" (click)="cancelEdit(row)" ngbTooltip="Cancel" container="body"></i>
-                            <i class="bi bi-trash-fill" style="color: #da291c; font-size: medium;" *ngIf="row.isNew" (click)="cancelRow(row)" ngbTooltip="Delete" container="body"></i>
-                            <i class="bi bi-layers-fill" style="color: #da291c; font-size: medium; padding: 0 10px;" (click)="matchconfirmnew=false" (click)="matchconfirm=false"  (click)="Override(row)" ngbTooltip="Override" container="body"></i>
-                            <i class="bi bi-trash-fill" style="color: #da291c; font-size: medium;" (click)="deletepop(row.bomId)" *ngIf="!row.isNew" ngbTooltip="Delete" container="body"></i>
 
-                        </td> 
+                            <i class="bi bi-pencil-fill" style="color: #da291c; font-size: medium;"
+                                *ngIf="!row.editable" (click)="editRow(row)" ngbTooltip="Edit" container="body"></i>
+
+
+                            <i class="bi bi-repeat" style="color: #da291c; font-size: medium; padding: 0 10px;"
+                                *ngIf="row.editable && !row.isNew" (click)="matchconfirmnew=false"
+                                (click)="openMatchModal(row)" ngbTooltip="Re-Run" container="body"></i>
+                            <i class="bi bi-repeat" style="color: #da291c; font-size: medium; padding-right:10px;"
+                                *ngIf="row.isNew" (click)="matchconfirm=false" (click)="openMatchModalnew(row)"
+                                ngbTooltip="Re-Run" container="body"></i>
+                            <i class="bi bi-x-circle-fill" style="color: #da291c; font-size: medium;"
+                                *ngIf="row.editable" (click)="cancelEdit(row)" ngbTooltip="Cancel" container="body"></i>
+                            <i class="bi bi-trash-fill" style="color: #da291c; font-size: medium;" *ngIf="row.isNew"
+                                (click)="cancelRow(row)" ngbTooltip="Delete" container="body"></i>
+                            <i class="bi bi-layers-fill" style="color: #da291c; font-size: medium; padding: 0 10px;"
+                                (click)="matchconfirmnew=false" (click)="matchconfirm=false" (click)="Override(row)"
+                                ngbTooltip="Override" container="body"></i>
+                            <i class="bi bi-trash-fill" style="color: #da291c; font-size: medium;"
+                                (click)="deletepop(row.bomId)" *ngIf="!row.isNew" ngbTooltip="Delete"
+                                container="body"></i>
+
+                        </td>
 
                         <!-- <td class="sticky-col" style="position: sticky;">
                           <button class="action-btn">Edit</button>
                         </td> -->
 
 
-                    
 
-                 
-                </tr>
-              </tbody>
+
+
+                    </tr>
+                </tbody>
             </table>
-          </div>
-          <div style="width: 100%; height: 50px;"></div>
+        </div>
+        <div style="width: 100%; height: 50px;"></div>
 
 
 
@@ -347,7 +488,7 @@
         <!-- -------------------------------- -->
 
 
-        
+
     </div>
 
     <!--Start cratdetails-->
@@ -368,7 +509,8 @@
                     <div class="modal-body">
                         <form>
                             <div class="form-group">
-                                <label for="cartName" class="default-lbl" style="font-size: 16px;">Simulation Name</label>
+                                <label for="cartName" class="default-lbl" style="font-size: 16px;">Simulation
+                                    Name</label>
                                 <input class="form-control form-control-sm" type="text" name="cartName" id="cartName"
                                     placeholder="Please enter Cart Name" [(ngModel)]='Cartcategory'>
                                 <div class="error-message" *ngIf="showError1" style="font-size: 10px;color: red;">
@@ -401,29 +543,34 @@
                     <div class="modal-body">
 
                         <div class="padding:inherit;">
-                            
-                             <label><strong>Match Type:</strong></label><br>
-                             <div class="row">
-                             <label >
-                        <input type="radio" name="matchType" [(ngModel)]="matchType" value="approximate" style="width: 25px;"> Approximate match (Match Part Name across displacements)
-                        </label></div>
+
+                            <label><strong>Match Type:</strong></label><br>
+                            <div class="row">
+                                <label>
+                                    <input type="radio" name="matchType" [(ngModel)]="matchType" value="approximate"
+                                        style="width: 25px;"> Approximate match (Match Part Name across displacements)
+                                </label>
+                            </div>
                             <div class="row"> <label>
-                        <input type="radio" name="matchType" [(ngModel)]="matchType" value="exact" style="width: 25px;"> Exact match (Must match Part Name & Displacement)
-                            </label></div>
-                        
+                                    <input type="radio" name="matchType" [(ngModel)]="matchType" value="exact"
+                                        style="width: 25px;"> Exact match (Must match Part Name & Displacement)
+                                </label></div>
+
                         </div>
                         <br>
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <label for="fileInput"
-                                   style="padding: 6px 12px; background-color: #4e54c8; color: white; border-radius: 4px; cursor: pointer; font-size: 14px;">
-                              Choose File
+                                style="padding: 6px 12px; background-color: #4e54c8; color: white; border-radius: 4px; cursor: pointer; font-size: 14px;">
+                                Choose File
                             </label>
-                         
+
                             <input type="file" id="fileInput" (change)="onFileSelected($event)" accept=".xlsx"
-                                   style="display: none;">
-                           
-                            <span style="font-size: 14px; color: #333;" *ngIf="selectedfilename">{{ selectedfilename }}</span>
-                          </div>                    </div>
+                                style="display: none;">
+
+                            <span style="font-size: 14px; color: #333;" *ngIf="selectedfilename">{{ selectedfilename
+                                }}</span>
+                        </div>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-sm btn-secondary" (click)="onCloseHandled()">Close</button>
                         <button type="button" class="btn btn-sm  btn-default default-btn_popup"
@@ -441,20 +588,23 @@
                     <div class="modal-body">
 
                         <div class="padding:inherit;">
-                            
-                             <label><strong>Match Type:</strong></label><br>
-                             <div class="row">
-                             <label >
-                        <input type="radio" name="matchType" [(ngModel)]="matchType" value="approximate" style="width: 25px;"> Approximate match (Match Part Name across displacements)
-                        </label></div>
+
+                            <label><strong>Match Type:</strong></label><br>
+                            <div class="row">
+                                <label>
+                                    <input type="radio" name="matchType" [(ngModel)]="matchType" value="approximate"
+                                        style="width: 25px;"> Approximate match (Match Part Name across displacements)
+                                </label>
+                            </div>
                             <div class="row"> <label>
-                        <input type="radio" name="matchType" [(ngModel)]="matchType" value="exact" style="width: 25px;"> Exact match (Must match Part Name & Displacement)
-                            </label></div>
-                        
+                                    <input type="radio" name="matchType" [(ngModel)]="matchType" value="exact"
+                                        style="width: 25px;"> Exact match (Must match Part Name & Displacement)
+                                </label></div>
+
                         </div>
-                        
-                                           </div>
-                                           <br>
+
+                    </div>
+                    <br>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-sm btn-secondary" (click)="onCloseHandled()">Close</button>
                         <button type="button" class="btn btn-sm  btn-default default-btn_popup"
@@ -472,18 +622,22 @@
                     <div class="modal-body">
 
                         <div class="padding:inherit;">
-                            
-                             <label><strong>Match Type:</strong></label><br>
-                             <div class="row">
-                             <label >
-                        <input type="radio" name="matchType" [(ngModel)]="matchType" value="approximate" style="width: 25px;"> Approximate match (Match Part Name across displacements)
-                        </label></div>
+
+                            <label><strong>Match Type:</strong></label><br>
+                            <div class="row">
+                                <label>
+                                    <input type="radio" name="matchType" [(ngModel)]="matchType" value="approximate"
+                                        style="width: 25px;"> Approximate match (Match Part Name across displacements)
+                                </label>
+                            </div>
                             <div class="row"> <label>
-                        <input type="radio" name="matchType" [(ngModel)]="matchType" value="exact" style="width: 25px;"> Exact match (Must match Part Name & Displacement)
-                            </label></div>
-                        
-                        </div></div>
-                        <br>
+                                    <input type="radio" name="matchType" [(ngModel)]="matchType" value="exact"
+                                        style="width: 25px;"> Exact match (Must match Part Name & Displacement)
+                                </label></div>
+
+                        </div>
+                    </div>
+                    <br>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-sm btn-secondary" (click)="onCloseHandled()">Close</button>
                         <button type="button" class="btn btn-sm  btn-default default-btn_popup"
@@ -501,25 +655,29 @@
                     <div class="modal-body">
 
                         <div class="padding:inherit;">
-                            
-                             <label><strong>What you want to delete?</strong></label><br>
-                             <div class="row">
-                             <label >
-                        <input type="radio" name="deleteType" [(ngModel)]="deleteType" value="all" style="width: 25px;"> Input & Simulated Result
-                        </label></div>
+
+                            <label><strong>What you want to delete?</strong></label><br>
+                            <div class="row">
+                                <label>
+                                    <input type="radio" name="deleteType" [(ngModel)]="deleteType" value="all"
+                                        style="width: 25px;"> Input & Simulated Result
+                                </label>
+                            </div>
                             <div class="row"> <label>
-                        <input type="radio" name="deleteType" [(ngModel)]="deleteType" value="output" style="width: 25px;">Simulated Result
-                            </label></div>
-                        
-                        </div></div>
-                        <br>
+                                    <input type="radio" name="deleteType" [(ngModel)]="deleteType" value="output"
+                                        style="width: 25px;">Simulated Result
+                                </label></div>
+
+                        </div>
+                    </div>
+                    <br>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-sm btn-secondary" (click)="onCloseHandled()">Close</button>
                         <button type="button" class="btn btn-sm  btn-default default-btn_popup"
                             (click)="confirmdelete()">Confirm</button>
                     </div>
                 </div>
-                
+
 
 
 
@@ -530,8 +688,8 @@
                             <div class="modal-header">
                                 <h4 class="modal-title">Suggested BOM</h4>
                                 <label class="close modal-close-icn" (click)="onCloseHandled()">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
-                                        viewBox="0 0 16 16">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000"
+                                        class="bi bi-x" viewBox="0 0 16 16">
                                         <path
                                             d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                                     </svg>
@@ -540,83 +698,89 @@
                             <div class="modal-body" style="padding: 0 2%;">
                                 <div class="modal-body">
                                     <div class="popup-table-container">
-                        <table class="table table-bordered table-striped" >
-                            <!-- <table class="styled-table" > -->
-                            <thead style="font-size: 11px;">
-                                <tr>
-                                    <th style="background-color:#da291c;position: sticky !important;right: 0;">Replace Original Record</th>
-                                    <th>Name</th>
-                                    <th>ModelMart Id</th>
-                                    <th>Representative Part Number</th>
-                                    <th>Representative Program</th>
-                                    <th>Representative Region</th>
-                                    <th>Representative SC</th>
-                                    <th>Representative Simulated Cost</th>
-                                    <th>Final.Cost</th>
-                                    <th>Extended Cost</th>
-                                    <th>Representative Invoice</th>
-                                    <th>Model.Type</th>
-                                    <!-- <th>Match.Type</th> -->
-                                    <th>Dimensions</th>
-                                    <th>Weight</th>
-                                    <th>Raw Material</th>
-                                    <th>Engine Displacement</th>
-                                    <th>Platform</th>
-                                    <th>Mfg Process </th>
-                                    <!-- <th>Utilization</th> -->
-                                    <th>Supplier Name</th>
-                                    <!-- <th>Cost Type</th> -->
-                                    <th>Debrief Date</th>
+                                        <table class="table table-bordered table-striped">
+                                            <!-- <table class="styled-table" > -->
+                                            <thead style="font-size: 11px;">
+                                                <tr>
+                                                    <th
+                                                        style="background-color:#da291c;position: sticky !important;right: 0;">
+                                                        Replace Original Record</th>
+                                                    <th>Name</th>
+                                                    <th>ModelMart Id</th>
+                                                    <th>Representative Part Number</th>
+                                                    <th>Representative Program</th>
+                                                    <th>Representative Region</th>
+                                                    <th>Representative SC</th>
+                                                    <th>Representative Simulated Cost</th>
+                                                    <th>Final.Cost</th>
+                                                    <th>Extended Cost</th>
+                                                    <th>Representative Invoice</th>
+                                                    <th>Model.Type</th>
+                                                    <!-- <th>Match.Type</th> -->
+                                                    <th>Dimensions</th>
+                                                    <th>Weight</th>
+                                                    <th>Raw Material</th>
+                                                    <th>Engine Displacement</th>
+                                                    <th>Platform</th>
+                                                    <th>Mfg Process </th>
+                                                    <!-- <th>Utilization</th> -->
+                                                    <th>Supplier Name</th>
+                                                    <!-- <th>Cost Type</th> -->
+                                                    <th>Debrief Date</th>
 
-                                    
-                                </tr>
 
-                            </thead>
-                            <tbody style="font-size: 11px;">
-                                <tr
-                                    *ngFor="let row of OverrideProductList | search: textsearch:filterMetadata | paginate: { itemsPerPage: 20, currentPage: page }  let i=index">
-                                    <!--<tr>-->
-                                    <td>
-                                        <button class="btndemo" (click)="Replace(row)">Replace</button>
-                                    </td>
-                                    <td title="{{row.partName}}">{{row.partName}}</td>
-                                    <td title={{row.categoryId}}>{{row.categoryId}}</td>
-                                    <td title="{{row.partNumber}}">{{row.partNumber}}</td>
-                                    <td title="{{row.projectName}}">{{row.projectName}}</td>
-                                    <td >{{row.mfgRegion}}</td>
-                                    <td >{{row.scost}}</td>
-                                    <td >{{row.ucost}}</td>
-                                    <td *ngIf="row.ucost <= 0">
-                                        <span *ngIf="!row.editable">{{row.scost}}</span>
-                                        <input *ngIf="row.editable" [(ngModel)]="row.scost" value="{{row.scost}}" />
-                                    </td>
-                                    <td *ngIf="row.ucost > 0">{{row.ucost}}</td>
-                                    <td>{{row.totalCost}}</td>
-                                    <td>{{row.invoice}}</td>
-                                    <td *ngIf="row.ucost <= 0">Original</td>
-                                    <td *ngIf="row.ucost > 0">Simulated</td>
-                                    <!-- <td>{{row.partNumber}}/{{row.name}}-{{row.engineDisplacement}}</td> -->
-                                    <td *ngIf="row.width > 0; else templateName1">{{row.height| number:'1.0-0'}} X {{row.length|number:'1.0-0'}} X {{row.width| number:'1.0-0'}}</td>
-                                    
-                                    
-                                    <td>{{row.weight * 2.20462 | number:'1.2-2' }} lbs</td>
-                                    <td title={{row.rowmaterial}}>{{row.rowmaterial}}</td>
-                                    <td>{{row.engineDisplacement}}</td>
-                                    <td>{{row.platform}}</td>
-                                    <td title={{row.mfgProcess}}>{{row.mfgProcess}}</td>
-                                    <!-- <td>{{row.utilization}}</td> -->
-                                    <td>{{row.supplierName}}</td>
-                                    <!-- <td>{{row.costType}}</td> -->
-                                    <td>{{row.dbdate | date:'dd/MM/yyyy'}}</td>
-                                    <!-- <td style="position: sticky; right: 5%; background:white;z-index: 2;"> -->
-                                    
+                                                </tr>
 
-                                </tr>
-                            </tbody>
-                        </table></div>
-                    </div>
+                                            </thead>
+                                            <tbody style="font-size: 11px;">
+                                                <tr
+                                                    *ngFor="let row of OverrideProductList | search: textsearch:filterMetadata | paginate: { itemsPerPage: 20, currentPage: page }  let i=index">
+                                                    <!--<tr>-->
+                                                    <td>
+                                                        <button class="btndemo" (click)="Replace(row)">Replace</button>
+                                                    </td>
+                                                    <td title="{{row.partName}}">{{row.partName}}</td>
+                                                    <td title={{row.categoryId}}>{{row.categoryId}}</td>
+                                                    <td title="{{row.partNumber}}">{{row.partNumber}}</td>
+                                                    <td title="{{row.projectName}}">{{row.projectName}}</td>
+                                                    <td>{{row.mfgRegion}}</td>
+                                                    <td>{{row.scost}}</td>
+                                                    <td>{{row.ucost}}</td>
+                                                    <td *ngIf="row.ucost <= 0">
+                                                        <span *ngIf="!row.editable">{{row.scost}}</span>
+                                                        <input *ngIf="row.editable" [(ngModel)]="row.scost"
+                                                            value="{{row.scost}}" />
+                                                    </td>
+                                                    <td *ngIf="row.ucost > 0">{{row.ucost}}</td>
+                                                    <td>{{row.totalCost}}</td>
+                                                    <td>{{row.invoice}}</td>
+                                                    <td *ngIf="row.ucost <= 0">Original</td>
+                                                    <td *ngIf="row.ucost > 0">Simulated</td>
+                                                    <!-- <td>{{row.partNumber}}/{{row.name}}-{{row.engineDisplacement}}</td> -->
+                                                    <td *ngIf="row.width > 0; else templateName1">{{row.height|
+                                                        number:'1.0-0'}} X {{row.length|number:'1.0-0'}} X {{row.width|
+                                                        number:'1.0-0'}}</td>
+
+
+                                                    <td>{{row.weight * 2.20462 | number:'1.2-2' }} lbs</td>
+                                                    <td title={{row.rowmaterial}}>{{row.rowmaterial}}</td>
+                                                    <td>{{row.engineDisplacement}}</td>
+                                                    <td>{{row.platform}}</td>
+                                                    <td title={{row.mfgProcess}}>{{row.mfgProcess}}</td>
+                                                    <!-- <td>{{row.utilization}}</td> -->
+                                                    <td>{{row.supplierName}}</td>
+                                                    <!-- <td>{{row.costType}}</td> -->
+                                                    <td>{{row.dbdate | date:'dd/MM/yyyy'}}</td>
+                                                    <!-- <td style="position: sticky; right: 5%; background:white;z-index: 2;"> -->
+
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>

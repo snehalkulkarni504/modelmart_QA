@@ -106,6 +106,7 @@ export class DesigntocostStep4Component {
 
     this.CSHeaderId = localStorage.getItem("DTCComapredId"); // ---  CSHeaderId 
     this.SCReportId = localStorage.getItem("DTCSCReportId");
+
     this.ProjectName = localStorage.getItem("DTCProjectName");
     this.ProjectTitle = localStorage.getItem("DTCProjecttitle");
     this.UniqueId = localStorage.getItem("DTCUniqueId");
@@ -135,6 +136,18 @@ export class DesigntocostStep4Component {
       this.NonManufacturingCost = data.nonManufacturingCost;
       this.TierData = data.tierData;
       this.Tier2Data = data.tierDataT2;
+
+      if (this.ProductDetail[0].hasParentValue == 1) {
+        const pd = this.ProductDetail[0];
+
+        this.ProjectTitle =
+          (pd.projectType != null ? pd.projectType : pd.par_ProjectType) + '-' +
+          (pd.businessUnit != null ? pd.businessUnit : pd.par_BusinessUnit) + '-' +
+          (pd.programName != null ? pd.programName : pd.par_ProgramName) + '-' +
+          pd.mfgRegion + '-' +
+          (pd.partName != null ? pd.partName : pd.par_PartName) + '-' +
+          (pd.partNumber != null ? pd.partNumber : pd.par_PartNumber);
+      }
 
 
       try {
@@ -366,6 +379,8 @@ export class DesigntocostStep4Component {
     }
   }
 
+  projectRows: any = [];
+
   newPDF() {
     debugger;
 
@@ -407,8 +422,8 @@ export class DesigntocostStep4Component {
         }
         else {
           //const partImgNew = '../.../../../assets/2021000001/ISO.jpg';
-          //const partImg = '../../../../assets/No-Image.png';
-          const partImg = this.hh;
+          const partImg = '../../../../assets/No-Image.png';
+          // const partImg = this.hh;
           doc.addImage(partImg, 70, 120, 70, 70);
         }
 
@@ -445,42 +460,116 @@ export class DesigntocostStep4Component {
 
     debugger;
 
-    const projectRows = [
-      [
-        ['Model Edited By : ' + this.userFullName],
-        ['Model Edit Date : ' + this.CurruntDate],
-        ['Model Created Date : ' + this.DebriefDateFormated]
-      ],
-      [
-        ['Part Name : ' + this.ProductDetail[0].partName],
-        ['Part Number : ' + this.ProductDetail[0].partNumber],
-        ['Location : ' + this.ProductDetail[0].mfgRegion]
-      ],
-      [
-        ['Annual Volume : ' + new Intl.NumberFormat('en-US').format(Number(this.ProductDetail[0].annualVolume))],
-        ['Old Forex : ' + this.ProductDetail[0].forex.toFixed(2)],
-        ['Current Year Forex : ' + this.ProductDetail[0].currentYearForex.toFixed(2)]
-      ],
-      [
-        ['Batch Size : ' + new Intl.NumberFormat('en-US').format(Number(this.ProductDetail[0].batchSize))],
-        ['Supplier Quote / Invoice Price : ' + this.ChekNull(this.ProductDetail[0].supplier)],
-      ]
-    ];
+
+    var forex = this.ProductDetail[0].forex.toFixed(2);
+    var currentForex = this.ProductDetail[0].currentYearForex.toFixed(2);
+    var businessunit = this.ProductDetail[0].businessUnit == null ? "" : this.ProductDetail[0].businessUnit;
+    var Per_businessunit = this.ProductDetail[0].par_BusinessUnit == null ? "" : this.ProductDetail[0].par_BusinessUnit;
+    var engineDispalcement = this.ProductDetail[0].engineDisplacement == null ? " " : this.ProductDetail[0].engineDisplacement;
+    var Per_engineDispalcement = this.ProductDetail[0].par_EngineDisplacement == null ? " " : this.ProductDetail[0].par_EngineDisplacement;
+
+    if (this.ProductDetail[0].hasParentValue == 1) {
+      this.projectRows = [
+        [
+          ['Model Edited By : ' + this.userFullName],
+          ['Part Name : ' + this.ProductDetail[0].partName],
+          ['Supplier Quote/Invoice Price : ' + this.ProductDetail[0].supplier],
+          ['Base Model Details']
+
+        ],
+        [
+          ['Model Edit Date : ' + this.CurruntDate],
+          ['Part Number : ' + this.ProductDetail[0].partNumber],
+          ['Business Unit : ' + businessunit],
+          ['Model Mart ID : ' + this.ProductDetail[0].uniqueId],
+        ],
+        [
+          ['Model Created Date : ' + this.DebriefDateFormated],
+          ['Annual Volume : ' + this.ProductDetail[0].annualVolume],
+          ['Engine Displacement : ' + engineDispalcement],
+          ['Part Number : ' + this.ProductDetail[0].par_PartNumber],
+        ],
+        [
+          ['Location : ' + this.ProductDetail[0].mfgRegion],
+          ['Project Type : ' + this.ProductDetail[0].projectType],
+          [],
+          ['Program Name  : ' + this.ProductDetail[0].par_ProgramName],
+        ],
+        [
+          ['Old Forex : ' + forex],
+          ['Current Year Forex : ' + currentForex],
+          [],
+          ['Engine Displacement : ' + Per_engineDispalcement],
+        ],
+        [
+          [],
+          [],
+          [],
+          ['Business Unit : ' + Per_businessunit],
+        ]
+      ];
+    }
+    else {
+      this.projectRows = [
+        [
+          ['Model Edited By : ' + this.userFullName],
+          ['Part Name : ' + this.ProductDetail[0].partName],
+          ['Supplier Quote/Invoice Price : ' + this.ProductDetail[0].supplier],
+        ],
+        [
+          ['Model Edit Date : ' + this.CurruntDate],
+          ['Part Number : ' + this.ProductDetail[0].partNumber],
+          ['Business Unit : ' + this.ProductDetail[0].businessUnit],
+        ],
+        [
+          ['Model Created Date : ' + this.DebriefDateFormated],
+          ['Annual Volume : ' + this.ProductDetail[0].annualVolume],
+          ['Engine Displacement : ' + this.ProductDetail[0].engineDisplacement],
+        ],
+        [
+          ['Location : ' + this.ProductDetail[0].mfgRegion],
+          ['Batch Size : ' + this.ProductDetail[0].batchSize],
+          ['Project Type : ' + this.ProductDetail[0].projectType],
+        ],
+        [
+          ['Old Forex : ' + forex],
+          ['Current Year Forex : ' + currentForex],
+          [],
+        ]
+      ];
+    }
 
     autoTable(doc, {
       head: [],
-      body: projectRows,
+      body: this.projectRows,
       startY: finalYDetails + 1,
       theme: 'grid',
-      headStyles: { fontSize: 7, fillColor: [179, 179, 179], textColor: [0, 0, 0], },
-      bodyStyles: { fontSize: 7, fontStyle: 'bold', textColor: [0, 0, 0] },
-      margin: 10,
-      columnStyles: {
-        0: { cellWidth: 78 },
-        1: { cellWidth: 60 },
-        2: { cellWidth: 52 },
+      headStyles: { fontSize: 6, fillColor: [179, 179, 179], textColor: [0, 0, 0], },
+      bodyStyles: { fontSize: 6, fontStyle: 'bold', textColor: [0, 0, 0], },
+      margin: 5,
+      styles: {
+        cellPadding: 0.5,   // Add padding to increase vertical spacing
       },
+      willDrawCell: function (data: any) {
+        debugger;
+        var rows = data.table.body;
+
+        if (rows.length > 5) {
+          if (rows[0].cells[3].text == "Base Model Details") {
+            rows[0].cells[3].styles.halign = 'center';
+            rows[0].cells[3].styles.fontSize = 7;
+          }
+        }
+      }
+
+      // columnStyles: {
+      //   0: { cellWidth: 50 },
+      //   1: { cellWidth: 50 },
+      //   2: { cellWidth: 50 },
+      //   3: { cellWidth: 50 },
+      // },
     });
+
 
 
     let finalY0 = (doc as any).lastAutoTable.finalY;
@@ -607,50 +696,58 @@ export class DesigntocostStep4Component {
 
 
     ////  Material Greade
-    const Materialheaders = [['Sr. No.', 'Material Grade', 'Current Rate', 'Updated Rate']];
+    const headersMaterial = [['Sr. No.', 'Supply Level', 'Material Grade', 'Current Net Weight (kg)', 'Updated Net Weight (kg)', 'Current Rate ($)', 'Updated Rate($)']];
 
     // Map your data to match the headers
     var MaterailGradedata = [];
 
     for (var i = 0; i < this.MaterailGrade.length; i++) {
-      MaterailGradedata.push([i + 1, this.MaterailGrade[i].materialType, this.MaterailGrade[i].unitMaterialRate, this.MaterailGrade[i].updateMaterialRate])
+      MaterailGradedata.push([i + 1, this.MaterailGrade[i].supplyLevel, this.MaterailGrade[i].materialType, this.MaterailGrade[i].netWeightKG, this.MaterailGrade[i].updatenetWeightKG, this.MaterailGrade[i].unitMaterialRate, this.MaterailGrade[i].updateMaterialRate])
     }
 
     if (this.MaterailGrade.length <= 0) {
       MaterailGradedata.push(['', "Material grade are not available", '', '']);
     }
 
-
     autoTable(doc, {
-      head: Materialheaders,
+      head: headersMaterial,
       startY: finalY1 + 5,
-      theme: 'grid',
       body: MaterailGradedata,
+      theme: 'grid',
       headStyles: { fontSize: 7, fillColor: [179, 179, 179], textColor: [0, 0, 0] },
       bodyStyles: { fontSize: 7, fontStyle: 'bold', textColor: [0, 0, 0] },
       //html: "#printsectionMaterial",
-      columnStyles: {
-        0: { cellWidth: 14 },
-        1: { cellWidth: 110 },
-        2: { cellWidth: 33 },
-        3: { cellWidth: 33 },
-      },
+      // columnStyles: {
+      //   0: { cellWidth: 14 },
+      //   1: { cellWidth: 110 },
+      //   2: { cellWidth: 33 },
+      //   3: { cellWidth: 33 },
+      // },
       margin: 10,
+      styles: {
+        cellPadding: 1,   // Add padding to increase vertical spacing
+      },
       willDrawCell: function (data: any) {
         var rows = data.table.body;
         for (let i = 0; i < rows.length; i++) {
-          if (rows[0].raw[2] < rows[0].raw[3]) {
-            rows[i].cells[3].styles.fillColor = Greaterthan;
+          if (rows[i].raw[3] < rows[i].raw[4]) {
+            rows[i].cells[4].styles.fillColor = Greaterthan;
           }
-          if (rows[0].raw[2] > rows[0].raw[3]) {
-            rows[i].cells[3].styles.fillColor = Lessthan;
+          if (rows[i].raw[3] > rows[i].raw[4]) {
+            rows[i].cells[4].styles.fillColor = Lessthan;
           }
-          // if (rows[i].cells[3].raw.className.includes('UpdateValueGreaterThan')) {
-          //   rows[i].cells[3].styles.fillColor = Greaterthan;
-          // }
-          // if (rows[i].cells[3].raw.className.includes('UpdateValueLessThan')) {
-          //   rows[i].cells[3].styles.fillColor = Lessthan;
-          // }
+          if (rows[i].raw[5] < rows[i].raw[6]) {
+            rows[i].cells[6].styles.fillColor = Greaterthan;
+          }
+          if (rows[i].raw[5] > rows[i].raw[6]) {
+            rows[i].cells[6].styles.fillColor = Lessthan;
+          }
+          // // if (rows[i].cells[3].raw.className.includes('UpdateValueGreaterThan')) {
+          // //   rows[i].cells[3].styles.fillColor = Greaterthan;
+          // // }
+          // // if (rows[i].cells[3].raw.className.includes('UpdateValueLessThan')) {
+          // //   rows[i].cells[3].styles.fillColor = Lessthan;
+          // // }
         }
       }
 
@@ -963,21 +1060,24 @@ export class DesigntocostStep4Component {
       vavelist.push({ CSHeaderId: this.CSHeaderId, IdeaId: 0, PSavings: 0, CreatedBy: this.userId })
     }
 
-    this.reportservice.insertDPVavedetails(vavelist).subscribe({
-      next: async (_res: any) => {
-        debugger
-        this.IsVAVEDataInsert = true;
-        this.toastr.success("Vave Data Inserted Successfully.");
-        const data = await this.searchservice.downloadUpdatedShouldeCost(this.CSHeaderId, this.userId).toPromise();
 
-        this.newPDF();
-        localStorage.setItem("DTCSCReportId", _res.Result);
-      },
-      error: (error: any) => {
-        this.IsVAVEDataInsert = false;
-        console.error('Inserting API call error:', error);
-      },
-    });
+    if (this.SCReportId > 0) {
+      this.reportservice.insertDPVavedetails(vavelist, this.SCReportId).subscribe({
+        next: async (_res: any) => {
+          debugger
+          this.IsVAVEDataInsert = true;
+          //this.toastr.success("Vave Data Inserted Successfully.");
+          const data = await this.searchservice.downloadUpdatedShouldeCost(this.CSHeaderId, this.userId).toPromise();
+
+          this.newPDF();
+          //localStorage.setItem("DTCSCReportId", _res.Result);
+        },
+        error: (error: any) => {
+          this.IsVAVEDataInsert = false;
+          console.error('Inserting API call error:', error);
+        },
+      });
+    }
 
   }
 
@@ -993,6 +1093,12 @@ export class DesigntocostStep4Component {
       this.shouldcostreport = true;
       this.shouldcostrequets = false;
       this.showthankyou = true;
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // For smooth scrolling animation
+      });
+
     }, 500);
 
   }
@@ -1096,16 +1202,15 @@ export class DesigntocostStep4Component {
   cmd: any;
   async upload() {
     debugger;
-
     var flag = false;
-    console.log("Select File " + this.selectedFiles.length);
-    if (this.Status != 'Rejected') {
-      if (this.selectedFiles.length <= 0) {
-        this.toastr.warning("Please Select File");
-        this.renderer.selectRootElement('#myFile').focus();
-        return
-      }
-    }
+    // console.log("Select File " + this.selectedFiles.length);
+    // if (this.Status != 'Rejected') {
+    //   if (this.selectedFiles.length <= 0) {
+    //     this.toastr.warning("Please Select File");
+    //     this.renderer.selectRootElement('#myFile').focus();
+    //     return
+    //   }
+    // }
     if (this.Comments == '' || this.Comments == undefined) {
       this.toastr.warning("Please Enter Comments");
       this.renderer.selectRootElement('#floatingTextarea').focus();
@@ -1122,7 +1227,7 @@ export class DesigntocostStep4Component {
 
       this.SpinnerService.show('spinner');
       debugger;
-      const data = await this.adminservice.SendShouldCostRequest(this.selectedFiles, this.userId, this.cmd, this.FolderLink, MMID, localStorage.getItem('DTCSCReportId'), this.Origin).toPromise();
+      const data = await this.adminservice.SendShouldCostRequest(this.selectedFiles, this.userId, this.cmd, this.FolderLink, MMID, this.SCReportId, this.Origin).toPromise();
 
       if (data == true) {
         this.toastr.success("Should Cost Request Sent successfully");
@@ -1192,6 +1297,12 @@ export class DesigntocostStep4Component {
       this.shouldcostreport = true;
       this.shouldcostrequets = true;
       this.showthankyou = false;
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // For smooth scrolling animation
+      });
+
     }
     else {
       this.fixsubheader = true;

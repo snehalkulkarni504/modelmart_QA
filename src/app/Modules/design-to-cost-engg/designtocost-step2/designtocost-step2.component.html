@@ -24,7 +24,7 @@
                         <i class="bi bi-arrow-right gradient-icon2"></i>
                     </span>
                     <p class="DTO_step3"><span> Step 3 </span> <br>
-                        Pickup or Add VAVE Ideas to Optimize the cost
+                        Pick up or Add VAVE Ideas to Optimize the cost
                     </p>
                     <span class="DTO_connect1_2">
                         <i class="bi bi-arrow-right gradient-icon3"></i>
@@ -47,7 +47,7 @@
         </div>
     </div>
     <div [hidden]="!IsCESmodel" class="ModelTypeNote">
-         <label  class="text-center">"{{ModelwiseNote}}"</label>
+        <label class="text-center">"{{ModelwiseNote}}"</label>
     </div>
 
 
@@ -82,7 +82,8 @@
                             <fieldset class="border rounded-3 p-3  ">
 
 
-                                <legend class="w-auto labelDetailsheader" style="margin-top:0px;">Project Details </legend>
+                                <legend class="w-auto labelDetailsheader" style="margin-top:0px;">Project Details
+                                </legend>
 
                                 <div class="row">
                                     <label class="labelDetails" style="margin-top: 0px !important;">Part Details</label>
@@ -151,6 +152,37 @@
                                                 <td> <label for="EngineDisplacement"
                                                         class="default-lblvalue">{{ChekNull(EngineDisplacement)}}</label>
                                                 </td>
+
+                                                <td [hidden]="!IsPlatform"> <label for="Platform"
+                                                        class="default-lbl">Platform :</label></td>
+                                                <td [hidden]="!IsPlatform"> <label for="Platform"
+                                                        class="default-lblvalue">{{ChekNull(Plat_form)}}</label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+
+                                                <td [hidden]="!IsGensetOuputPower"> <label for="Gensetoutputpower"
+                                                        class="default-lbl">Genset Output Power :</label></td>
+                                                <td [hidden]="!IsGensetOuputPower"> <label for="Gensetoutputpower"
+                                                        class="default-lblvalue">{{ChekNull(Gensetoutputpower)}}</label>
+                                                </td>
+
+                                                <td [hidden]="!IsFrameSize"> <label for="FrameSize"
+                                                        class="default-lbl">Model :</label></td>
+                                                <td [hidden]="!IsFrameSize"> <label for="FrameSize"
+                                                        class="default-lblvalue">{{ChekNull(FrameSize)}}</label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+
+                                                <td [hidden]="!IsSizeofAftertreatment"> <label
+                                                        for="SizeOfAfterTreatment" class="default-lbl">Substrate Size
+                                                        :</label></td>
+                                                <td [hidden]="!IsSizeofAftertreatment"> <label
+                                                        for="SizeOfAfterTreatment"
+                                                        class="default-lblvalue">{{ChekNull(SizeOfAfterTreatment)}}</label>
+                                                </td>
+
                                             </tr>
 
 
@@ -502,14 +534,14 @@
                                 *ngIf="groupedMainT1.length > 0 || groupedMainT2.length > 0">
                                 <legend class="w-auto labelDetailsheader d-flex align-items-center">
                                     Manufacturing Process Cost Details
-                                     <button type="button" class="btn btn-sm btn-link p-0 ms-2"
+                                    <button type="button" class="btn btn-sm btn-link p-0 ms-2"
                                         (click)="isExpandedMfgProcessCost = !isExpandedMfgProcessCost"
                                         [ngbTooltip]="isExpandedMfgProcessCost ? 'Collapse' : 'Expand'">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#da291c"
                                             class="bi bi-caret-down-square-fill"
                                             [style.transform]="'rotate(' + rotationAngleMfgProcessCost + 'deg)'"
-                                            style="transition: transform 0.3s ease;" (click)="rotateIconMfgProcessCost()"
-                                            viewBox="0 0 16 16">
+                                            style="transition: transform 0.3s ease;"
+                                            (click)="rotateIconMfgProcessCost()" viewBox="0 0 16 16">
                                             <path
                                                 d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm4 4a.5.5 0 0 0-.374.832l4 4.5a.5.5 0 0 0 .748 0l4-4.5A.5.5 0 0 0 12 6z" />
                                         </svg>
@@ -540,7 +572,8 @@
                                                                 {{ part.partNumber }}</td>
                                                             <td *ngIf="i === 0" [attr.rowspan]="part.processes.length">
                                                                 {{ part.subpartName }}</td>
-                                                            <td>{{ process.manufacturingProcessName.split('/')[0].trim() }}</td>
+                                                            <td>{{ process.manufacturingProcessName.split('/')[0].trim()
+                                                                }}</td>
                                                             <td>$ {{ process.manufacturingCost | number:'1.2-2' }}</td>
                                                         </tr>
                                                     </ng-container>
@@ -570,7 +603,8 @@
                                                                 {{ part.partNumber }}</td>
                                                             <td *ngIf="i === 0" [attr.rowspan]="part.processes.length">
                                                                 {{ part.subpartName }}</td>
-                                                            <td>{{ process.manufacturingProcessName.split('/')[0].trim()  }}</td>
+                                                            <td>{{ process.manufacturingProcessName.split('/')[0].trim()
+                                                                }}</td>
                                                             <td>$ {{ process.manufacturingCost | number:'1.2-2' }}</td>
                                                         </tr>
                                                     </ng-container>
@@ -734,9 +768,10 @@
                             </fieldset>
                             <br>
                             <fieldset class="border rounded-3 p-3"
-                             *ngIf="ManufacturingProcess.length > 0">
+                                *ngIf="groupedMainT1.length > 0 || groupedMainT2.length > 0">
                                 <legend
                                     class="w-auto labelDetailsheader d-flex align-items-center justify-content-between">
+                                    <span class="title-corner-badge">NEW</span>
                                     <span>Manufacturing Process</span>
                                     <button type="button" class="btn btn-sm btn-link p-0 ms-2"
                                         (click)="isExpanded = !isExpanded"
@@ -751,23 +786,70 @@
                                         </svg>
                                     </button>
                                 </legend>
+
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="mfg-process-container" [ngClass]="{ collapsed: !isExpanded }">
-                                            <ng-container *ngFor="let val of ManufacturingProcess">
-                                                <div class="manufacturingProcessName-container">
-                                                    <div class="manufacturingProcessName-tail"></div>
-                                                    <div class="manufacturingProcessName-box">
-                                                        <span
-                                                            class="manufacturingProcessName-text">{{val.manufacturingProcessName.split('/')[0].trim() }}</span>
+                                        <div class="mfg-process-container" [ngClass]="{ collapsed: !isExpanded }"
+                                            style="display: flex; flex-direction: column; gap: 2rem;">
+                                            <ng-container *ngFor="let part of groupedMainT1">
+                                                <div class="part-block"
+                                                    style="display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;">
+                                                    <div class="manufacturingProcessName-container">
+                                                        <div class="partNumber-tail"></div>
+                                                        <div class="partNumber-box">
+                                                            <span style="color: white; font-weight: bold;">
+                                                                {{ part.partNumber }}
+                                                            </span>
+                                                        </div>
                                                     </div>
+                                                    <ng-container *ngFor="let process of part.processes">
+                                                        <div class="manufacturingProcessName-container">
+                                                            <div class="manufacturingProcessName-tail"></div>
+                                                            <div class="manufacturingProcessName-box">
+                                                                <span class="manufacturingProcessName-text">
+                                                                    {{
+                                                                    process.manufacturingProcessName.split('/')[0].trim()
+                                                                    }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </ng-container>
                                                 </div>
                                             </ng-container>
+
+
+                                            <ng-container *ngFor="let part of groupedMainT2">
+                                                <div class="part-block"
+                                                    style="display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;">
+
+                                                    <div class="manufacturingProcessName-container">
+                                                        <div class="partNumber-tail"></div>
+                                                        <div class="partNumber-box">
+                                                            <span style="color: white; font-weight: bold;">
+                                                                {{ part.partNumber }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <ng-container *ngFor="let process of part.processes">
+                                                        <div class="manufacturingProcessName-container">
+                                                            <div class="manufacturingProcessName-tail"></div>
+                                                            <div class="manufacturingProcessName-box">
+                                                                <span class="manufacturingProcessName-text">
+                                                                    {{
+                                                                    process.manufacturingProcessName.split('/')[0].trim()
+                                                                    }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+
                                         </div>
                                     </div>
                                 </div>
                             </fieldset>
-                            
+
                             <div class="text-start RemarkSection">
                                 <b>Remarks : </b>
                                 <ol type="1">
@@ -798,8 +880,9 @@
                             Name="Refresh Model⁴" (click)="SendNewRequest()"> -->
                         <input [hidden]="modelTypes_Id == 5" type="button" class="btn btn-primary btnDownload"
                             value="Download Model" Name="Download Model" (click)="DownloadReport()">
-                        <input [hidden]="YellowModel_MarketBenchmark"  type="button" class="btn btn-primary btnDownload"
-                            value="Go to next Step³" Name="Go to next Step³" (click)="UpdateReport()">
+                        <!-- [hidden]="YellowModel_MarketBenchmark" -->
+                        <input type="button" class="btn btn-primary btnDownload" value="Go to next Step³"
+                            Name="Go to next Step³" (click)="UpdateReport()">
                         <!-- <input [hidden]="IsYellowModel" type="button" class="btn btn-primary btnDownload"
                             value="Go to Next" Name="Go to Next" (click)="GotoNext()"> -->
                     </div>
@@ -807,5 +890,39 @@
                 <br>
             </div>
         </form>
+
+        <!-- ------ YellowModel_MarketBenchmark  start ------------ -->
+
+        <div [hidden]="IsMarketBenchmark" class="popup-overlay">
+            <div class="popup-box">
+                <div class="popup-header">
+                    <div class="popup-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#da291c"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="#da291c" stroke-width="2" fill="none" />
+                            <line x1="12" y1="7" x2="12" y2="13" stroke="#da291c" stroke-width="2"
+                                stroke-linecap="round" />
+                            <circle cx="12" cy="17" r="1.5" fill="#da291c" />
+                        </svg>
+                    </div>
+                    <h3 class="popup-title">Important Message</h3>
+                </div>
+
+                <p class="design-warning-msg">
+                   This is Market Benchmark cost model, Material, Process and other cost details can not be updated on this model.
+                    <br><br>
+
+                    Do you want to skip this step and continue to add VAVE Ideas
+                </p>
+
+
+                <div class="popup-actions">
+                    <button class="confirm-btn" (click)="confirm()">Confirm & Proceed</button>
+                    <button class="cancel-btn" (click)="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <!-- ------ YellowModel_MarketBenchmark  end ------------ -->
+
     </div>
 </div>

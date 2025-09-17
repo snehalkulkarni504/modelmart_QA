@@ -84,6 +84,7 @@
                                 <th style="width: 100px !important;">Request Date</th>
                                 <th style="width: 50%;">File</th>
                                 <th style="width: 10%;">Status</th>
+                                <th style="width: 10%;">Request Type</th>
                                 <th>COE Comments</th>
                                 <th>Requester Comments</th>
                                 <th *ngIf="this.RoleID == 8">Update Status</th>
@@ -95,23 +96,39 @@
                         <tbody class="text-center">
                             <tr
                                 *ngFor="let data of Reportdata | search: textsearch:filterMetadata | paginate: { itemsPerPage: 10, currentPage: page };let i = index ">
-                                <td [class.set_trcolor]="data.IsRefresh == true" [class.set_trcolorDesign]="data.IsDfMAC == true">{{ (page - 1) * pageSize + i + 1 }}</td> <!-- Serial No. Calculation -->
-                                <td [class.set_trcolor]="data.IsRefresh == true" [class.set_trcolorDesign]="data.IsDfMAC == true"  class="text-end">
+                                <td [class.set_trcolor]="data.IsRefresh == true"
+                                    [class.set_trcolorDesign]="data.IsDfMAC == true">{{ (page - 1) * pageSize + i + 1 }}
+                                </td> <!-- Serial No. Calculation -->
+                                <td [class.set_trcolor]="data.IsRefresh == true"
+                                    [class.set_trcolorDesign]="data.IsDfMAC == true" class="text-end">
                                     {{data.RequestHeaderId}}</td>
-                                <td [class.set_trcolor]="data.IsRefresh == true"  [class.set_trcolorDesign]="data.IsDfMAC == true" class="text-start">{{data.UserName}}
+                                <td [class.set_trcolor]="data.IsRefresh == true"
+                                    [class.set_trcolorDesign]="data.IsDfMAC == true" class="text-start">
+                                    {{data.UserName}}
                                 </td>
-                                <td [class.set_trcolor]="data.IsRefresh == true"  [class.set_trcolorDesign]="data.IsDfMAC == true">{{data.CreatedOn | date:
+                                <td [class.set_trcolor]="data.IsRefresh == true"
+                                    [class.set_trcolorDesign]="data.IsDfMAC == true">{{data.CreatedOn | date:
                                     'dd-MMM-YYYY'}}</td>
-                                <td [class.set_trcolor]="data.IsRefresh == true"  [class.set_trcolorDesign]="data.IsDfMAC == true" class="text-start">
+                                <td [class.set_trcolor]="data.IsRefresh == true"
+                                    [class.set_trcolorDesign]="data.IsDfMAC == true" class="text-start">
                                     <a class="DownloadExcel" (click)="DownloadExcel(data)"
                                         target="_blank">{{data.ExcelFileNameNew}}</a>
                                 </td>
-                                <td [class.set_trcolor]="data.IsRefresh == true"  [class.set_trcolorDesign]="data.IsDfMAC == true" class="text-start">{{data.Status}}</td>
-                                <td [class.set_trcolor]="data.IsRefresh == true"  [class.set_trcolorDesign]="data.IsDfMAC == true"><span
+                                <td [class.set_trcolor]="data.IsRefresh == true"
+                                    [class.set_trcolorDesign]="data.IsDfMAC == true" class="text-start">{{data.Status}}
+                                </td>
+                                 <td [class.set_trcolor]="data.IsRefresh == true"
+                                    [class.set_trcolorDesign]="data.IsDfMAC == true" class="text-start">
+                                    {{data.RequestType}}
+                                </td>
+                                <td [class.set_trcolor]="data.IsRefresh == true"
+                                    [class.set_trcolorDesign]="data.IsDfMAC == true"><span
                                         ngbTooltip={{data.SCTeamComments}}>{{data.SCTeamComments_new}}</span> </td>
-                                <td [class.set_trcolor]="data.IsRefresh == true"  [class.set_trcolorDesign]="data.IsDfMAC == true"><span
+                                <td [class.set_trcolor]="data.IsRefresh == true"
+                                    [class.set_trcolorDesign]="data.IsDfMAC == true"><span
                                         ngbTooltip={{data.SMComments}}>{{data.SMComments_new}}</span> </td>
-                                <td [class.set_trcolor]="data.IsRefresh == true"  [class.set_trcolorDesign]="data.IsDfMAC == true" *ngIf="this.RoleID == 8">
+                                <td [class.set_trcolor]="data.IsRefresh == true"
+                                    [class.set_trcolorDesign]="data.IsDfMAC == true" *ngIf="this.RoleID == 8">
                                     <button class="btn outline-none" style="padding: 0px;"
                                         [routerLink]="['/home/shouldcostview',data.RequestHeaderId]"><i
                                             class="bi bi-chevron-right"></i>
@@ -120,7 +137,8 @@
                                     <!-- <i *ngIf="data.Status == 'Submitted' || data.Status == 'Rejected' || data.Status == 'Returned'" class="bi bi-pencil-fill" style="color: #da291c; 
                                             font-size:larger;"(click)="UpdateRequest(data.UserName,data.RequestHeaderId,data.Status,data.CreatedOn)" ngbTooltip="Update Model"></i> -->
                                 </td>
-                                <td [class.set_trcolor]="data.IsRefresh == true"  [class.set_trcolorDesign]="data.IsDfMAC == true" *ngIf="this.RoleID != 8">
+                                <td [class.set_trcolor]="data.IsRefresh == true"
+                                    [class.set_trcolorDesign]="data.IsDfMAC == true" *ngIf="this.RoleID != 8">
 
                                     <i *ngIf="data.Status == 'Submitted' || data.Status == 'Rejected' || data.Status == 'Returned'"
                                         class="bi bi-pencil-fill" style="color: #da291c; 
@@ -143,7 +161,7 @@
                 </ngb-pagination>
                 <br>
                 <div style=" width: 400px;">
-                    
+
                     <div style="display: flex; align-items: center; ">
                         <input type="radio" class="remark_radiobtn1" id="color1" name="Refresh Request" checked="true">
                         <label for="color1" style="vertical-align: middle; margin-left:5px ; width: 100%;"> Refresh

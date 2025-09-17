@@ -349,6 +349,11 @@ export class AdminService {
     return this.httpClient.get(this.apiUrl + `GetDesignArbitarge?CategoryID=${CategoryID}`);
   }
 
+  GetAttributeRulesByCategory(CategoryID:any){
+    debugger;
+     return this.httpClient.get(this.apiUrl + `GetAttributeRulesByCategory?CategoryID=${CategoryID}`);
+  }
+
   GetMgfProcessArtibageComparison(CategoryID: any) {
     debugger;
     return this.httpClient.get(this.apiUrl + `GetMgfProcessArtibageComparison?CategoryID=${CategoryID}`);

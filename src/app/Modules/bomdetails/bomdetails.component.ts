@@ -58,9 +58,12 @@ export class BomdetailsComponent {
   allprogramdata:any;
   programdata:any;
   cartname:any
+  totalprice:any
   modalcart = false;
   programdelete=false;
   programid:any;
+  cartidtotal:any;
+  
 async addnewprogram()
 {
   debugger;
@@ -131,6 +134,11 @@ closeModal2()
 
 }
 
+closeModel12(){
+  this.opentotalprice=false;
+  this.cartname='';
+}
+
 async fetchprogramnames()
 {
   debugger;
@@ -184,7 +192,7 @@ selectprogram(event:any)
 async addcartname()
 {
   debugger;
-  const data= await this.bomservice.addcartame(this.programdata.programid,this.cartname,parseInt(this.userId)).toPromise();
+  const data= await this.bomservice.addcartname(this.programdata.programid,this.cartname,parseInt(this.userId),parseFloat(this.totalprice)).toPromise();
   if(data==1)
   {
     this.modalcart=false;
@@ -199,10 +207,33 @@ async addcartname()
   {
     this.toastr.error("Failed to add Cart");
   }
-
+ 
   this.cartname='';
-
+  this.totalprice='';
+ 
 }
+
+async updatetotalcost()
+{
+  debugger;
+  const data= await this.bomservice.updatetotalcost(parseInt(this.userId),parseFloat(this.totalprice),this.cartidtotal).toPromise();
+  if(data==1)
+  {
+    this.opentotalprice=false;
+    this.toastr.success("Target Cost Updated Successfully");
+    this.getcartname(this.programdata.programid);
+  }
+  
+  else
+  {
+    this.toastr.error("Failed to Target Cost Updated");
+  }
+ 
+  this.cartname='';
+  this.totalprice='';
+ 
+}
+ 
 
 //---------------------------------------------------------------------------
 
@@ -250,7 +281,8 @@ async getcartname(programId: string) {
 copycartmodal=false;
 copycartlist:any;
 fromcopycartid:any
-tocopycartid:any
+tocopycartid:any;
+opentotalprice=false;
 async copycart()
 {
   debugger;
@@ -289,6 +321,13 @@ opencopycart(cartIdToExclude: string | number,cartname:any) {
   console.log("opencopycart:-", this.copycartlist);
 }
 
+updatecost(cartIdToExclude: string | number,cartname:any) {
+this.cartidtotal=0;
+this.cartidtotal=cartIdToExclude;
+this.opentotalprice=true;
+  console.log("updatecost:-", this.cartidtotal);
+}
+
 
 closecopycart()
 {
@@ -303,7 +342,6 @@ closeprogrammodel(){
 
 
 onroute(cart:any) {
-  debugger;
   const Params = {
     progname: this.selectedprogramname,
     programid:this.selectedprogramidparam,

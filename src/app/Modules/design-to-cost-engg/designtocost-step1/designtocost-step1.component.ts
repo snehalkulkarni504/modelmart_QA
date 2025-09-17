@@ -119,10 +119,14 @@ export class DesigntocostStep1Component implements OnInit {
     PartNumber: "",
     PartName: "",
     ProgramName: "",
-    MaterialGrade: "",
+    MaterialForm: "",
     HighProcess: "",
     Platform: "",
+    UniqueId: "",
     like: "",
+    Gensetoutputpower: "",
+    FrameSize: "",
+    sizeOfAfterTreatment: ""
   };
 
   ComapredcheckedboxIds = {
@@ -163,10 +167,28 @@ export class DesigntocostStep1Component implements OnInit {
   HighLevelProcessList: any;
   selectedPartName: any;
 
+  BusinessUnit_DTC: any;
+  Gensetoutputpower_DTC: any;
+  FrameSize_DTC: any;
+  SizeOfAfterTreatment_DTC: any;
+
+  IsPlatform = false;
+  IsEngineDisplacement = false;
+  IsGensetOuputPower = false;
+  IsFrameSize = false;
+  IsSizeofAftertreatment = false;
 
   ModelFound = true;
   ModelCount = 0;
   radiobtn: any;
+
+  selectedPlatform: any;
+  selectedEngineDisplacement: any;
+  selectedMaterialForm: any;
+  selectedHighProcess: any;
+  selectedGensetoutputpower: any;
+  selectedFrameSize: any;
+  selectedsizeOfAfterTreatment: any;
 
   async ngOnInit(): Promise<void> {
     //debugger;
@@ -272,20 +294,59 @@ export class DesigntocostStep1Component implements OnInit {
   }
 
 
+
   async GetAdditionfilters(partname: any) {
     debugger;
 
+    // -- EBU   --  Platform, Engine Displacement 
+    // -- PSBU  -- Engine Displacement, Genset Ouput Power (KVA)
+    // -- CTT -- Platform, Model
+    // -- CES -- Substrate size
+
+
+    this.IsPlatform = false;
+    this.IsEngineDisplacement = false;
+    this.IsGensetOuputPower = false;
+    this.IsFrameSize = false;
+    this.IsSizeofAftertreatment = false;
+
     const data = await this.designtocost.GetAdditionfilters(partname).toPromise();
+    this.BusinessUnit_DTC = data.businessUnit_DTC[0].businessUnit;
     this.PlatformList = data.plat_form_DTC;
     this.EngineDisplacementList = data.engineDisplacement_DTC;
     this.EngineDisplacementListmain = data.engineDisplacement_DTC;
+    this.Gensetoutputpower_DTC = data.gensetoutputpower_DTC;
+    this.FrameSize_DTC = data.frameSize_DTC;
+    this.SizeOfAfterTreatment_DTC = data.sizeOfAfterTreatment_DTC;
     this.MaterialGradeList = data.materialGrade_DTC;
     this.HighLevelProcessList = data.highLevelProcess_DTC;
+
+    for (var i = 0; i < data.businessUnit_DTC.length; i++) {
+      switch (data.businessUnit_DTC[i].businessUnit) {
+        case 'EBU':
+          this.IsPlatform = true; this.IsEngineDisplacement = true;
+          break;
+        case 'PSBU':
+          this.IsEngineDisplacement = true; this.IsGensetOuputPower = true;
+          break;
+        case 'CBU-CTT':
+          this.IsPlatform = true; this.IsFrameSize = true;
+          break;
+        case 'CBU-CES':
+          this.IsSizeofAftertreatment = true;
+          break;
+        default:
+          this.IsPlatform = true; this.IsEngineDisplacement = true;
+      }
+    }
+
 
   }
 
   async GetEngineBaseOnPlatform() {
     debugger;
+
+    console.log(this.selectedGensetoutputpower);
     this.EngineDisplacementList = [];
     if (this.selectedPlatform == null) {
       this.EngineDisplacementList = this.EngineDisplacementListmain;
@@ -310,8 +371,12 @@ export class DesigntocostStep1Component implements OnInit {
 
     this.selectedPlatform = null;
     this.selectedEngineDisplacement = null;
-    this.selectedMaterialGrade = null;
+    this.selectedMaterialForm = null;
     this.selectedHighProcess = null;
+    this.selectedGensetoutputpower = null;
+    this.selectedFrameSize = null;
+    this.selectedsizeOfAfterTreatment = null;
+
 
     if (this.selectedPartName == null) {
       this.IsDatahidden = true;
@@ -330,7 +395,7 @@ export class DesigntocostStep1Component implements OnInit {
     else {
       myElement?.classList.remove("additionalconstraint_remove");
       myElement?.classList.add("additionalconstraint");
-      hi.style.height = '300px';
+      hi.style.height = '330px';
 
       localStorage.setItem("DTCselectedPartName", this.selectedPartName);
       this.GetAdditionfilters(this.selectedPartName.trim());
@@ -356,11 +421,6 @@ export class DesigntocostStep1Component implements OnInit {
 
   }
 
-  selectedPlatform: any;
-  selectedEngineDisplacement: any;
-  selectedMaterialGrade: any;
-  selectedHighProcess: any;
-
   async ViewDataOnSelection() {
     debugger;
 
@@ -378,24 +438,51 @@ export class DesigntocostStep1Component implements OnInit {
       this.filters.PartName = '';
     }
 
+    // if (this.selectedEngineDisplacement != null) {
+    //   let param_value = "";
+    //   for (var i = 0; i < this.selectedEngineDisplacement.length; i++) {
+    //     param_value += this.selectedEngineDisplacement[i] + ",";
+    //   }
+    //   param_value = param_value.substring(0, param_value.length - 1);
+    //   this.filters.engine = param_value;
+    // }
+    // else {
+    //   this.filters.engine = '';
+    // }
 
-    if (this.selectedEngineDisplacement != null) {
-      let param_value = "";
-      for (var i = 0; i < this.selectedEngineDisplacement.length; i++) {
-        param_value += this.selectedEngineDisplacement[i] + ",";
-      }
-      param_value = param_value.substring(0, param_value.length - 1);
-      this.filters.engine = param_value;
+    if (this.selectedEngineDisplacement != null || this.selectedEngineDisplacement != undefined) {
+      this.filters.engine = this.selectedEngineDisplacement;
     }
     else {
       this.filters.engine = '';
     }
 
-    if (this.selectedPlatform != null) {
+    if (this.selectedPlatform != null || this.selectedPlatform != undefined) {
       this.filters.Platform = this.selectedPlatform.trim();
     }
     else {
       this.filters.Platform = '';
+    }
+
+    if (this.selectedGensetoutputpower != null || this.selectedGensetoutputpower != undefined) {
+      this.filters.Gensetoutputpower = this.selectedGensetoutputpower;
+    }
+    else {
+      this.filters.Gensetoutputpower = '';
+    }
+
+    if (this.selectedFrameSize != null || this.selectedFrameSize != undefined) {
+      this.filters.FrameSize = this.selectedFrameSize.trim();
+    }
+    else {
+      this.filters.FrameSize = '';
+    }
+
+    if (this.selectedsizeOfAfterTreatment != null || this.selectedsizeOfAfterTreatment != undefined) {
+      this.filters.sizeOfAfterTreatment = this.selectedsizeOfAfterTreatment;
+    }
+    else {
+      this.filters.sizeOfAfterTreatment = '';
     }
 
     // if (this.selectedPlatform != null) {
@@ -410,11 +497,11 @@ export class DesigntocostStep1Component implements OnInit {
     //   this.filters.Platform = '';
     // }
 
-    if (this.selectedMaterialGrade != null) {
-      this.filters.MaterialGrade = this.selectedMaterialGrade.trim();
+    if (this.selectedMaterialForm != null) {
+      this.filters.MaterialForm = this.selectedMaterialForm.trim();
     }
     else {
-      this.filters.MaterialGrade = '';
+      this.filters.MaterialForm = '';
     }
 
     if (this.selectedHighProcess != null) {
@@ -427,7 +514,7 @@ export class DesigntocostStep1Component implements OnInit {
     // this.filters.PartName = 'MANIFOLD,EXHAUST';
     // this.filters.engine = '23';
     // this.filters.Platform = 'B';
-    // this.filters.MaterialGrade = '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)';
+    // this.filters.MaterialForm = '41081 IRON,FERRITIC DUCTILE (SILICON-MOLYBDENUM)';
     // this.filters.HighProcess = 'Polishing';
 
 
@@ -1337,7 +1424,7 @@ export class DesigntocostStep1Component implements OnInit {
 
   async GetSearchdata(filters_list: any) {
     try {
-      // debugger;
+      debugger;
       this.SpinnerService.show('spinner');
       this.SortSearchData = 0;
       this.checkcount = 0;
@@ -1349,7 +1436,7 @@ export class DesigntocostStep1Component implements OnInit {
       //console.log('search Userid function' + this.userId);
 
       const data = await this.searchservice.SearchFilters(filters_list, this.userId).toPromise();
-
+      debugger;
       //console.log(data);
       this.SearchList = data;
       this.flag = false;

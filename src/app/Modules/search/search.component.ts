@@ -123,6 +123,7 @@ export class SearchComponent implements OnInit {
     PartNumber: "",
     PartName: "",
     ProgramName: "",
+    UniqueId: "",
     like: "",
   };
 
@@ -346,6 +347,7 @@ export class SearchComponent implements OnInit {
 
 
   setvalue(v: any) {
+    debugger;
     this.setvalueFlag = false;
     localStorage.removeItem("childCategory");
 
@@ -380,7 +382,13 @@ export class SearchComponent implements OnInit {
       } case "ProgramName": {
         this.filters.ProgramName = "'" + v.id + "'";
         break;
+      } case "ModelMartId": {
+        this.filters.UniqueId = "'" + v.id + "'";
+        break;
       }
+
+
+
     }
 
     localStorage.setItem("Historywildcardsearch", v.name);
@@ -653,8 +661,9 @@ export class SearchComponent implements OnInit {
       this.filters.T_TotalCost = "";
       this.filters.T_FinishWeight = "";
       this.filters.F_FinishWeight = "";
+      this.filters.UniqueId = '',
 
-      this.flag = true;
+        this.flag = true;
       this.DebriefFrom_Date = "";
       this.DebriefTo_Date = "";
       this.FromShouldCost = "";
@@ -1416,7 +1425,7 @@ export class SearchComponent implements OnInit {
     }
 
     this.Productvalue = [];
-    this.SimulatedProductvalue= [];
+    this.SimulatedProductvalue = [];
     for (let i = 0; i < this.compareIdArray.length; i++) {
       if (this.compareIdArray[i].scReportId == '0') {
         this.Productvalue.push(this.compareIdArray[i].csHeaderId);
@@ -1448,9 +1457,21 @@ export class SearchComponent implements OnInit {
   displaySimulatedPopup = "none";
   compareIdArray: any = [];
   compareIdArraylength = 0;
+  comparePartName = "";
 
   getPartId(e: any, model: any, event: any) {
     debugger;
+    if (this.comparePartName == "" || this.compareIdArraylength == 0 ) {
+      this.comparePartName = e.partName;
+    }
+    else {
+      if (this.comparePartName.trim().toUpperCase() != e.partName.trim().toUpperCase()) {
+        this.toastr.warning("Please select same noun name for comparison");
+        event.target.checked = false;
+        return;
+      }
+    }
+
 
     const myElement = document.getElementById("compareBottomPanel");
     myElement?.classList.remove("compareBottomPanelhide");
@@ -1513,7 +1534,7 @@ export class SearchComponent implements OnInit {
         event.target.checked = false;
       }
     }
- 
+
   }
 
 

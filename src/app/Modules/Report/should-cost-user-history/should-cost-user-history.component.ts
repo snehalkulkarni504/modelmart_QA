@@ -344,6 +344,7 @@ export class ShouldCostUserHistoryComponent {
     }
   }
 
+    projectRows: any = [];
 
   newPDF() {
     debugger;
@@ -365,7 +366,7 @@ export class ShouldCostUserHistoryComponent {
     var fileWidth = 210;
     //doc.addPage();
 
-   // var pagecount = doc.getNumberOfPages();
+    // var pagecount = doc.getNumberOfPages();
 
     // for (let i = 1; i <= totalPages; i++) {
     //doc.addPage();// page 1
@@ -418,8 +419,8 @@ export class ShouldCostUserHistoryComponent {
 
     //  }
 
-     doc.addPage(); // page 2
-      /// header
+    doc.addPage(); // page 2
+    /// header
     const headerlogo3 = '../../../assets/welcome/Model Mart_Final Logo_130325.png';
     doc.addImage(headerlogo3, 4, 3, 34, 20);
     const headerlogo4 = '../../../assets/newCumminslogo.jpg';
@@ -440,43 +441,107 @@ export class ShouldCostUserHistoryComponent {
 
     let finalYDetails = (doc as any).lastAutoTable.finalY;
 
-    const projectRows = [
-      [
-        ['Model Edited By : ' + this.ProjectData[0].FullName],
-        ['Model Edit Date : ' + this.CurruntDate],
-        ['Model Created Date : ' + this.DebriefDateFormated]
-      ],
-      [
-        ['Part Name : ' + this.ProductDetail[0].PartName],
-        ['Part Number : ' + this.ProductDetail[0].PartNumber],
-        ['Location : ' + this.ProductDetail[0].MfgRegion]
-      ],
-      [
-        ['Annual Volume : ' + this.ProductDetail[0].AnnualVolume],
-        ['Old Forex : ' + this.ProductDetail[0].Forex],
-        ['Current Year Forex : ' + this.ProjectData[0].CurrentYearForex]
-      ],
-      [
-        ['Batch Size : ' + this.ProductDetail[0].BatchSize],
-        ['Supplier Quote / Invoice Price : ' + this.ProductDetail[0].Supplier],
-      ]
-    ];
-
-    autoTable(doc, {
-      head: [],
-      body: projectRows,
-      startY: finalYDetails + 1,
-      theme: 'grid',
-      headStyles: { fontSize: 7, fillColor: [179, 179, 179], textColor: [0, 0, 0], },
-      bodyStyles: { fontSize: 7, fontStyle: 'bold', textColor: [0, 0, 0] },
-      margin: 10,
-      columnStyles: {
-        0: { cellWidth: 78 },
-        1: { cellWidth: 60 },
-        2: { cellWidth: 52 },
-      },
-    });
-
+    var forex = this.ProductDetail[0].Forex.toFixed(2);
+       var currentForex = this.ProjectData[0].CurrentYearForex.toFixed(2);
+       var businessunit= this.ProductDetail[0].BusinessUnit  == null ? "" : this.ProductDetail[0].BusinessUnit;
+       var Per_businessunit = this.ProductDetail[0].Par_BusinessUnit == null ? "" : this.ProductDetail[0].Par_BusinessUnit ;
+       var engineDispalcement  = this.ProductDetail[0].EngineDisplacement == null ? " " : this.ProductDetail[0].EngineDisplacement ;
+       var Per_engineDispalcement  = this.ProductDetail[0].Par_EngineDisplacement == null ? " " : this.ProductDetail[0].Par_EngineDisplacement ;
+   
+       if (this.ProductDetail[0].HasParentValue == 1) {
+         this.projectRows = [
+           [
+             ['Model Edited By : ' + this.ProjectData[0].FullName],
+             ['Part Name : ' + this.ProductDetail[0].PartName],
+             ['Supplier Quote/Invoice Price : ' + this.ProductDetail[0].Supplier],
+             ['Base Model Details']
+   
+           ],
+           [
+             ['Model Edit Date : ' + this.ProjectData[0].CreatedOn],
+             ['Part Number : ' + this.ProductDetail[0].PartNumber],
+             ['Business Unit : ' + businessunit],
+             ['Model Mart ID : ' + this.ProductDetail[0].UniqueId],
+           ],
+           [
+             ['Model Created Date : ' + this.ProjectData[0].DebriefDate],
+             ['Annual Volume : ' + this.ProductDetail[0].AnnualVolume],
+             ['Engine Displacement : ' + engineDispalcement],
+             ['Part Number : ' + this.ProductDetail[0].Par_PartNumber],
+           ],
+           [
+             ['Location : ' + this.ProductDetail[0].MfgRegion],
+             ['Project Type : ' + this.ProductDetail[0].ProjectType],
+             [],
+             ['Program Name  : ' + this.ProductDetail[0].Par_ProgramName],
+           ],
+           [
+             ['Old Forex : ' + forex],
+             ['Current Year Forex : ' + currentForex],
+             [],
+             ['Engine Displacement : ' + Per_engineDispalcement],
+           ],
+           [
+             [],
+             [],
+             [],
+             ['Business Unit : ' + Per_businessunit],
+           ]
+         ];
+       }
+       else {
+         this.projectRows = [
+           [
+             ['Model Edited By : ' + this.ProjectData[0].FullName],
+             ['Part Name : ' + this.ProductDetail[0].PartName],
+             ['Supplier Quote/Invoice Price : ' + this.ProductDetail[0].Supplier],
+           ],
+           [
+             ['Model Edit Date : ' + this.ProjectData[0].CreatedOn],
+             ['Part Number : ' + this.ProductDetail[0].PartNumber],
+             ['Business Unit : ' + this.ProductDetail[0].businessUnit],
+           ],
+           [
+             ['Model Created Date : ' + this.ProjectData[0].DebriefDate],
+             ['Annual Volume : ' + this.ProductDetail[0].AnnualVolume],
+             ['Engine Displacement : ' + this.ProductDetail[0].engineDisplacement],
+           ],
+           [
+             ['Location : ' + this.ProductDetail[0].MfgRegion],
+             ['Batch Size : ' + this.ProductDetail[0].batchSize],
+             ['Project Type : ' + this.ProductDetail[0].ProjectType],
+           ],
+           [
+             ['Old Forex : ' + forex],
+             ['Current Year Forex : ' + currentForex],
+             [],
+           ]
+         ];
+       }
+   
+       autoTable(doc, {
+         head: [],
+         body: this.projectRows,
+         startY: finalYDetails + 1,
+         theme: 'grid',
+         headStyles: { fontSize: 6, fillColor: [179, 179, 179], textColor: [0, 0, 0], },
+         bodyStyles: { fontSize: 6, fontStyle: 'bold', textColor: [0, 0, 0], },
+         margin: 5,
+         styles: {
+           cellPadding: 0.5,   // Add padding to increase vertical spacing
+         },
+         willDrawCell: function (data: any) {
+           debugger;
+           var rows = data.table.body;
+   
+           if (rows.length > 5) {
+             if (rows[0].cells[3].text == "Base Model Details") {
+               rows[0].cells[3].styles.halign = 'center';
+               rows[0].cells[3].styles.fontSize = 7;
+             }
+           }
+         }
+       });
 
     let finalY0 = (doc as any).lastAutoTable.finalY;
     ////  Tier1 SGA  Detail
@@ -603,13 +668,13 @@ export class ShouldCostUserHistoryComponent {
 
 
     ////  Material Greade
-    const headers = [['Sr. No.', 'Material Grade', 'Current Rate', 'Updated Rate']];
+    const headers = [['Sr. No.', 'Supply Level', 'Material Grade', 'Current Net Weight (kg)', 'Updated Net Weight (kg)', 'Current Rate ($)', 'Updated Rate($)']];
 
     // Map your data to match the headers
     var MaterailGradedata = [];
-    debugger;
+
     for (var i = 0; i < this.MaterailGrade.length; i++) {
-      MaterailGradedata.push([i + 1, this.MaterailGrade[i].materialType, this.MaterailGrade[i].unitMaterialRate, this.MaterailGrade[i].UpdateMaterialRate])
+      MaterailGradedata.push([i + 1, this.MaterailGrade[i].SupplyLevel, this.MaterailGrade[i].materialType, this.MaterailGrade[i].netWeightKG, this.MaterailGrade[i].UpdatenetWeightKG, this.MaterailGrade[i].unitMaterialRate, this.MaterailGrade[i].UpdateMaterialRate])
     }
 
     if (this.MaterailGrade.length <= 0) {
@@ -624,35 +689,45 @@ export class ShouldCostUserHistoryComponent {
       headStyles: { fontSize: 7, fillColor: [179, 179, 179], textColor: [0, 0, 0] },
       bodyStyles: { fontSize: 7, fontStyle: 'bold', textColor: [0, 0, 0] },
       //html: "#printsectionMaterial",
-      columnStyles: {
-        0: { cellWidth: 14 },
-        1: { cellWidth: 110 },
-        2: { cellWidth: 33 },
-        3: { cellWidth: 33 },
-      },
+      // columnStyles: {
+      //   0: { cellWidth: 14 },
+      //   1: { cellWidth: 110 },
+      //   2: { cellWidth: 33 },
+      //   3: { cellWidth: 33 },
+      // },
       margin: 10,
+      styles: {
+        cellPadding: 1,   // Add padding to increase vertical spacing
+      },
       willDrawCell: function (data: any) {
         var rows = data.table.body;
         for (let i = 0; i < rows.length; i++) {
-          if (rows[0].raw[2] < rows[0].raw[3]) {
-            rows[i].cells[3].styles.fillColor = Greaterthan;
+          if (rows[i].raw[3] < rows[i].raw[4]) {
+            rows[i].cells[4].styles.fillColor = Greaterthan;
           }
-          if (rows[0].raw[2] > rows[0].raw[3]) {
-            rows[i].cells[3].styles.fillColor = Lessthan;
+          if (rows[i].raw[3] > rows[i].raw[4]) {
+            rows[i].cells[4].styles.fillColor = Lessthan;
           }
-
-          // if (rows[i].cells[3].raw.className.includes('UpdateValueGreaterThan')) {
-          //   rows[i].cells[3].styles.fillColor = Greaterthan;
-          // }
-          // if (rows[i].cells[3].raw.className.includes('UpdateValueLessThan')) {
-          //   rows[i].cells[3].styles.fillColor = Lessthan;
-          // }
+          if (rows[i].raw[5] < rows[i].raw[6]) {
+            rows[i].cells[6].styles.fillColor = Greaterthan;
+          }
+          if (rows[i].raw[5] > rows[i].raw[6]) {
+            rows[i].cells[6].styles.fillColor = Lessthan;
+          }
+          // // if (rows[i].cells[3].raw.className.includes('UpdateValueGreaterThan')) {
+          // //   rows[i].cells[3].styles.fillColor = Greaterthan;
+          // // }
+          // // if (rows[i].cells[3].raw.className.includes('UpdateValueLessThan')) {
+          // //   rows[i].cells[3].styles.fillColor = Lessthan;
+          // // }
         }
       }
 
     });
 
-     //fotter
+
+
+    //fotter
     doc.setTextColor("#da291c");
     doc.setFontSize(10);
     doc.text('This report is an electronically generated simulation by Model Mart based on user inputs.', fileWidth / 2, doc.internal.pageSize.getHeight() - 10, { align: 'center' });

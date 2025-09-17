@@ -36,7 +36,7 @@ export class RequestFileUploadService {
   //   return this.http.post(this.apiUrl+'uploadSendRequestFile',formData);
   // }
 
-  upload(file: File[], id: any, selectedUniqueID: string, userId: any): Observable<any> {
+  upload(file: File[], id: any, selectedUniqueID: string, userId: any, sheetType: any): Observable<any> {
     const formData = new FormData();
     formData.append('id', id);
     formData.append('uniqueID', selectedUniqueID);
@@ -44,6 +44,8 @@ export class RequestFileUploadService {
     for (const Dfile of file) {
       formData.append('files', Dfile, Dfile.name);
     }
+    formData.append('sheetType', sheetType);
+
     return this.http.post<FormData>(this.apiUrl + 'uploadSendRequestFiletest', formData);
   }
 
@@ -81,8 +83,8 @@ export class RequestFileUploadService {
     return this.http.get<any[]>(this.apiUrl + `AddUploadDataValidation?DebriefDate=${DebriefDate}&Region=${Region}&PartName=${PartName}&PartNumber=${PartNumber}`);
   }
 
-  getBulkUpload(userId: any, modelTypesID: any): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl + `BulkUpload?userId=${userId}&modelTypesID=${modelTypesID}`);
+  getBulkUpload(userId: any, modelTypesID: any, sheetType: any): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl + `BulkUpload?userId=${userId}&modelTypesID=${modelTypesID}&sheetType=${sheetType}`);
   }
 
   // UpdateLWHandPW(CSHeaderId:number,Length:number, Width:number, Height:number, PartWeight:number): Observable<any>{

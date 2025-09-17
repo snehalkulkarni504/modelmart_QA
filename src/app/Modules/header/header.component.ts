@@ -1,3 +1,4 @@
+import { style } from '@angular/animations';
 import { display } from 'html2canvas/dist/types/css/property-descriptors/display';
 import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -6,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { SearchService } from 'src/app/SharedServices/search.service';
 import { AppComponent } from 'src/app/app.component';
 import { AdminService } from 'src/app/SharedServices/admin.service';
+import { zIndex } from 'html2canvas/dist/types/css/property-descriptors/z-index';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +17,7 @@ import { AdminService } from 'src/app/SharedServices/admin.service';
 export class HeaderComponent implements OnInit {
 
   idleState = "Not Started";
-  
+
   private warningTimeout: any;
   private logoutTimeout: any;
   warningDuration = 10 * 60 * 1000; // 10 minutes
@@ -35,6 +37,7 @@ export class HeaderComponent implements OnInit {
   usernm: any;
   userFullname: any;
   Ismenuload = true;
+  IsShouldeCostRequest = false;
 
   async ngOnInit() {
     this.resetTimers();
@@ -128,6 +131,16 @@ export class HeaderComponent implements OnInit {
     this.router.navigate([event]);
   }
 
+  NavigateSubmenu(event: any) {
+    debugger;
+    if (event == "/home/shouldcostrequest/:request") {
+      this.IsShouldeCostRequest = true;
+      return;
+    }
+
+    this.router.navigate([event]);
+  }
+
   gotohome() {
 
     if (this.router.url == "/home") {
@@ -172,6 +185,14 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/welcomeuser']);
   }
 
+  handlePopupClose(shouldNavigate: boolean) {
+    this.IsShouldeCostRequest = false; // Hide popup
+
+    if (shouldNavigate) {
+      this.router.navigate(['/home/shouldcostrequest/:request']);
+    }
+  }
+
   //  autologout - ----------------------------------------------------------------------
   // Reset timers on all kinds of user activity
   @HostListener('window:mousemove')
@@ -212,5 +233,12 @@ export class HeaderComponent implements OnInit {
     this.startMonitoring();
   }
 
+  showLogoutMenu(){
+    // const d = document.getElementById('dropdown-content') as HTMLElement;
+    // d.style.display = "block";
+    // d.style.zIndex = "999";
+  }
+
+  
 
 }

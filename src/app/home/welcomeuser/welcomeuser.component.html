@@ -36,12 +36,12 @@
     </div>
   </div>
 
-
-
   <div [hidden]="!showMainMenus" class="menu-container">
     <div *ngFor="let menu of mainmenulist" class="mainmenu-container">
-      <div (click)="menu.id === 11 ? showSubMenu('Masters') : (menu.Navigate_Url ? mainnavigate(menu.Navigate_Url) : showSubMenu(menu.menu))"
-        class="mainmenu-card" [style.border-color]="menu.ColourCode"[ngClass]="{'newRibbonCard': menu.id === 4 || menu.id === 5 || menu.id === 8}">
+      <div
+        (click)="menu.id === 11 ? showSubMenu('Masters') : (menu.Navigate_Url ? mainnavigate(menu.Navigate_Url) : showSubMenu(menu.menu))"
+        class="mainmenu-card" [style.border-color]="menu.ColourCode"
+        [ngClass]="{'newRibbonCard': menu.id === 4 || menu.id === 5 || menu.id === 8}">
         <div *ngIf="menu.id === 4 || menu.id === 5 || menu.id === 8" class="red-ribbon"></div>
         <div class="main-menucard-upper" [style.background-color]="menu.ColourCode">
           <span class="mainmenu-tab" [style.background-color]="menu.ColourCode"></span>
@@ -57,7 +57,7 @@
 
       </div>
     </div>
-   
+
   </div>
 
 
@@ -96,3 +96,6 @@
   </div>
 
 </div>
+
+<app-send-req-confirmation *ngIf="IsShouldeCostRequest"
+    (closePopup)="handlePopupClose($event)"></app-send-req-confirmation>

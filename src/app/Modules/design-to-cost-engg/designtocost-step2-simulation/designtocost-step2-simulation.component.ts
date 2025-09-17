@@ -5,9 +5,10 @@ import { SearchService } from 'src/app/SharedServices/search.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FormControl, FormGroup } from '@angular/forms';
-import { SaveMatetialCost, SaveMatetialCostDetails, SaveMatetialCostHeader, SaveProcessDetails } from 'src/app/Model/save-matetial-cost';
+import { SaveMatetialCost, SaveMatetialCostDetails, SaveMatetialCostHeader, SaveProcessDetails, updatemodeldata } from 'src/app/Model/save-matetial-cost';
 import { environment } from 'src/environments/environments';
 import { ReportServiceService } from 'src/app/SharedServices/report-service.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -61,6 +62,8 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
   MatetialTierUpdate: SaveMatetialCostHeader[] = [];
   SaveProcessDetails: SaveProcessDetails[] = [];
   saveMatetialCost: SaveMatetialCost[] = [];
+  updatemodeldata: updatemodeldata[] = [];
+
   ForexDetails: any;
   AluminiumCastingGrade: any;
 
@@ -72,6 +75,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
   };
 
   PartName: any; PartNumber: any; ProjectName: any; DebriefDate: any
+  BusinessUnit: any; ProjectType: any; EngineDisplacement: any; TargetQuote: any; AnnualVolume: any; Supplier: any;
 
   IsHiddenT1: boolean = true;
   IsHiddenT2: boolean = true;
@@ -103,6 +107,8 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
 
   FrequentlyUsedMaterialsData: any;
   Frequentlyusedmaterialgrade!: FormGroup;
+  YellowModel_MarketBenchmark: boolean = true;
+  btnsaveandgotonext_value = 'Save & Go to Next Step';
 
   ngOnInit(): void {
 
@@ -127,6 +133,8 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
     });
 
   }
+
+
 
   async GetTierCostData() {
     try {
@@ -169,6 +177,19 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
         this.IsCESmodel = false;
         this.ModelwiseNote = "";
       }
+
+      debugger;
+      if (localStorage.getItem("YellowModel_MarketBenchmark") == "true") {
+        this.YellowModel_MarketBenchmark = true;
+        this.IsCESmodel = true;
+        this.ModelwiseNote = "This is Market Benchmark cost model, Material, Process and other cost details can not be updated on this model."
+        this.btnsaveandgotonext_value = 'Go to Next Step';
+      }
+      else {
+        this.YellowModel_MarketBenchmark = false;
+        this.btnsaveandgotonext_value = 'Save & Go to Next Step';
+      }
+
 
 
       this.findsum(data.tier_1_CostReportBreakdown, data.tier_1_CostReportBreakdownNon);
@@ -290,6 +311,25 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
     else {
       return true;
     }
+  }
+
+  keyPressDecimal_4decimal(event: any) {
+    const reg = /^-?\d*(\.\d{0,4})?$/;
+    let input = event.target.value + String.fromCharCode(event.charCode);
+    if (!reg.test(input)) {
+      event.preventDefault();
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
+
+  keyPressInt(e: any) {
+    var keyCode = e.which ? e.which : e.keyCode
+    var ret = (keyCode >= 48 && keyCode <= 57);
+    return ret;
   }
 
 
@@ -758,7 +798,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
 
   async openModal(t: string, value: any, id: any) {
 
-    //debugger;;
+    debugger;;
     this.UpdateCostfromPopup_id = id;
     this.ModelPopUpheaderLable = '';
     this.DirectMaterialCostT1 = 0;
@@ -818,6 +858,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
 
     //debugger;;
     if (t == "T1") {
+      debugger;
       this.IsHiddenT1_DirectCost = false;
       this.IsHiddenT1 = false;
       this.IsCastingSheet = false;
@@ -985,24 +1026,33 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
 
     if (t == "T1") {
       if (this.MaterialGridT1.length > 0) {
+        console.log(this.MaterialGridT1);
         this.MaterialGrade = this.MaterialGridT1;
-        this.CalculateTotalMaterialRate(0);
+        setTimeout(() => {
+          this.CalculateTotalMaterialRate(0);
+        }, 100);
+        //this.CalculateTotalMaterialRate(0);
         return
       }
     }
     else {
       if (this.MaterialGridT2.length > 0) {
         this.MaterialGrade = this.MaterialGridT2;
-        this.CalculateTotalMaterialRate(0);
+        setTimeout(() => {
+          this.CalculateTotalMaterialRate(0);
+        }, 100);
+        //this.CalculateTotalMaterialRate(0);
         return
       }
     }
 
 
     if (value.particular == 'Direct Material Cost') {
-      //debugger;;
+      debugger;
       const data = await this.searchservice.GetMatetialCostForUpdate(this.CSHeaderId, t, this.IsCastingSheet).toPromise();
+
       this.MaterialGrade = data;
+
       if (this.MaterialGrade.length <= 0) {
         if (t == "T1") {
           alert("Tier T1 Record Not Found");
@@ -1012,11 +1062,15 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
         }
       }
       else {
-
         //debugger;;
         //// aluminum reverse logic
         // this.AluminiumCastingGrade
         for (var i = 0; i < this.MaterialGrade.length; i++) {
+          this.MaterialGrade[i]['updatedNetWeight'] = '';
+          this.MaterialGrade[i].grossNetWeightKG = parseFloat(this.MaterialGrade[i].grossNetWeightKG.toFixed(4));
+
+          //console.log(this.MaterialGrade);
+
           for (var j = 0; j < this.AluminiumCastingGrade.length; j++) {
             var rr = this.AluminiumCastingGrade[j].materialName.toLowerCase();
             // if (this.MaterialGrade[i].materialType.toLowerCase().includes(rr) && this.MaterialGrade[i].supplyLevel == 'T2') {
@@ -1046,6 +1100,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
     }
 
   }
+
 
 
   CalculatePercentNon_DirectCost() {
@@ -1268,7 +1323,8 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
   //// old code
   CalculateMaterialRate(e: any, val: any, index: any) {
 
-    //debugger;;
+    debugger;
+    let IsreverseCasting = false;
     for (var j = 0; j < this.AluminiumCastingGrade.length; j++) {
       var rr = this.AluminiumCastingGrade[j].materialName.toLowerCase();
       if (val.materialType.toLowerCase().includes(rr)) {
@@ -1277,11 +1333,17 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
       }
     }
 
+    const updateNetweight = document.getElementsByClassName("form-control PopupText RMTextNetweight") as any;
+    const updateNewRate = document.getElementsByClassName("form-control PopupText RMText") as any;
+
+    var Utilization = '';
+    Utilization = (val.grossNetWeightKG / val.grossWeightKG).toFixed(4);
+
     if (this.IsCastingSheet) {
       const updated_Rate = document.getElementsByClassName("form-control PopupText RMUpdateRate disabled") as any;
       const existing_Cost = document.getElementsByClassName("form-control PopupText disabled Existing") as any;
 
-      var e_currentTarget_value = e.currentTarget.value;
+      var e_currentTarget_value = updateNewRate[index].value;
       var unit_Material_Rate = val.unitMaterialRate;
 
       if (e_currentTarget_value == "" || e_currentTarget_value == 0) {
@@ -1303,12 +1365,13 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
         var rr = this.AluminiumCastingGrade[j].materialName.toLowerCase();
         if (val.materialType.toLowerCase().includes(rr)) {
           //  ((F6*(1+5%)*100%-(1-D6)*(F6*0.9))) 
-
-          var Utilization = (val.netWeightKG / val.partFinishWeight).toFixed(2);
+          IsreverseCasting = true;
+          //var Utilization = (val.netWeightKG / val.partFinishWeight).toFixed(2);
           e_currentTarget_value = ((parseFloat(e_currentTarget_value) * (1 + 0.05) * 1 - (1 - parseFloat(Utilization)) * (parseFloat(e_currentTarget_value) * 0.9)));
           console.log(e_currentTarget_value);
 
-          var Utilization = (val.netWeightKG / val.partFinishWeight).toFixed(2);
+          //var Utilization = (val.netWeightKG / val.partFinishWeight).toFixed(2);
+          //var Utilization = (updateNetweight[index].value / val.partFinishWeight).toFixed(2);
           unit_Material_Rate = ((parseFloat(val.unitMaterialRate) * (1 + 0.05) * 1 - (1 - parseFloat(Utilization)) * (parseFloat(val.unitMaterialRate) * 0.9)));
           console.log(e_currentTarget_value);
           break;
@@ -1341,15 +1404,20 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
       ////////// old rate //////////
       //let t1_existing = val.grossWeightKG * val.unitMaterialRate;
       let t1_existing = val.grossWeightKG * unit_Material_Rate;
-      let t2_existing = (val.grossWeightKG - val.grossNetWeightKG) * parseFloat(val.unitScrapRate);
+      // let t2_existing = (val.grossWeightKG - val.grossNetWeightKG) * parseFloat(val.unitScrapRate);
+      let t2_existing = (val.grossWeightKG - updateNetweight[index].value) * parseFloat(val.unitScrapRate);
       this.new_Rate_existing = t1_existing - t2_existing;
-      /////////////  new rate /////////////
 
+
+      /////////////  new rate /////////////
       // if (this.IsCastingSheet) {
+      var UpdatedgrossWeightKG = updateNetweight[index].value / parseFloat(Utilization);
+
       let new_unitScrapRate = (e_currentTarget_value * parseFloat(scrapPercent)).toFixed(4);
-      let t1 = val.grossWeightKG * e_currentTarget_value;
+      // let t1 = val.grossWeightKG * e_currentTarget_value;
       //let t2 = (val.grossWeightKG - val.grossNetWeightKG) * parseFloat(val.unitScrapRate);
-      let t2 = (val.grossWeightKG - val.grossNetWeightKG) * parseFloat(new_unitScrapRate);
+      let t1 = UpdatedgrossWeightKG * e_currentTarget_value;
+      let t2 = (UpdatedgrossWeightKG - updateNetweight[index].value) * parseFloat(new_unitScrapRate);
       this.new_Rate = t1 - t2;
       //}
       // else {
@@ -1380,14 +1448,15 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
       //   unitMaterialRate_Aluminium = val.unitMaterialRate; 
       // }
 
-
       for (let i = 0; i < this.MaterialGrade.length; i++) {
-        if (this.MaterialGrade[i].materialType === val.materialType && this.MaterialGrade[i].unitMaterialRate == null) {
 
+        if (this.MaterialGrade[i].materialType === val.materialType && this.MaterialGrade[i].unitMaterialRate == null) {
+          debugger;
           ////////// old rate //////////
           let t1_existing = this.MaterialGrade[i].grossWeightKG * this.MaterialGrade[i].unitMaterialRate;
           let t2_existing = (this.MaterialGrade[i].grossWeightKG - this.MaterialGrade[i].grossNetWeightKG) * parseFloat(this.MaterialGrade[i].unitScrapRate);
           this.new_Rate_existing_casting = t1_existing - t2_existing;
+
           /////////////  new rate /////////////
           // let new_unitScrapRate = (e_currentTarget_value * parseFloat(scrapPercent)).toFixed(4);
           // let t1 = val.grossWeightKG * e_currentTarget_value;
@@ -1397,14 +1466,51 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
           //let scrapPercent_casting = (this.MaterialGrade[i].unitScrapRate / parseFloat(unitMaterialRate_Aluminium)).toFixed(4);
           let scrapPercent_casting = (this.MaterialGrade[i].unitScrapRate / unit_Material_Rate).toFixed(4);
           let new_unitScrapRate_casting = (e_currentTarget_value * parseFloat(scrapPercent_casting)).toFixed(4);
-          let t1 = this.MaterialGrade[i].grossWeightKG * this.MaterialGrade[i].unitMaterialRate;
-          let t2 = (this.MaterialGrade[i].grossWeightKG - this.MaterialGrade[i].grossNetWeightKG) * parseFloat(new_unitScrapRate_casting);
+          //let t1 = this.MaterialGrade[i].grossWeightKG * this.MaterialGrade[i].unitMaterialRate;
+          //let t2 = (this.MaterialGrade[i].grossWeightKG - this.MaterialGrade[i].grossNetWeightKG) * parseFloat(new_unitScrapRate_casting);
+          let t1 = updateNetweight[index].value * this.MaterialGrade[i].unitMaterialRate;
+          let t2 = (updateNetweight[index].value - this.MaterialGrade[i].grossNetWeightKG) * parseFloat(new_unitScrapRate_casting);
           this.new_Rate_casting = t1 - t2;
           // if (this.MaterialGrade[i].supplyLevel == 'T1') {
           const updated_Rate_casting = document.getElementById("PopUpResult" + [i]) as any;
           updated_Rate_casting.value = this.new_Rate_casting.toFixed(4);
           existing_Cost[i].value = this.new_Rate_existing_casting.toFixed(4);
           //}
+        }
+        else if (index == i) {
+          debugger;
+          ////////// old rate //////////
+          console.log(unit_Material_Rate);
+          console.log(e_currentTarget_value);
+
+          if (IsreverseCasting) {
+            let t1_existing = this.MaterialGrade[i].grossWeightKG * unit_Material_Rate;
+            let t2_existing = (this.MaterialGrade[i].grossWeightKG - this.MaterialGrade[i].grossNetWeightKG) * parseFloat(this.MaterialGrade[i].unitScrapRate);
+            this.new_Rate_existing_casting = t1_existing - t2_existing;
+          }
+          else {
+
+            //let t1_existing = this.MaterialGrade[i].grossWeightKG * this.MaterialGrade[i].materialCost;
+            let t1_existing = this.MaterialGrade[i].grossWeightKG * this.MaterialGrade[i].unitMaterialRate;
+            let t2_existing = (this.MaterialGrade[i].grossWeightKG - this.MaterialGrade[i].grossNetWeightKG) * parseFloat(this.MaterialGrade[i].unitScrapRate);
+            this.new_Rate_existing_casting = t1_existing - t2_existing;
+          }
+          /////////////  new rate /////////////
+          var Utilization = (this.MaterialGrade[i].grossNetWeightKG / val.partFinishWeight).toFixed(2);
+          var UpdatedgrossWeightKG = updateNetweight[index].value / parseFloat(Utilization);
+
+          //let scrapPercent_casting = (this.MaterialGrade[i].unitScrapRate / parseFloat(unitMaterialRate_Aluminium)).toFixed(4);
+          let scrapPercent_casting = (this.MaterialGrade[i].unitScrapRate / unit_Material_Rate).toFixed(4);
+          let new_unitScrapRate_casting = (e_currentTarget_value * parseFloat(scrapPercent_casting)).toFixed(4);
+          //let t1 = this.MaterialGrade[i].grossWeightKG * this.MaterialGrade[i].unitMaterialRate;
+          //let t2 = (this.MaterialGrade[i].grossWeightKG - this.MaterialGrade[i].grossNetWeightKG) * parseFloat(new_unitScrapRate_casting);
+          let t1 = UpdatedgrossWeightKG * e_currentTarget_value;
+          let t2 = (UpdatedgrossWeightKG - updateNetweight[index].value) * parseFloat(new_unitScrapRate_casting);
+          this.new_Rate_casting = t1 - t2;
+          // if (this.MaterialGrade[i].supplyLevel == 'T1') {
+          const updated_Rate_casting = document.getElementById("PopUpResult" + [i]) as any;
+          updated_Rate_casting.value = this.new_Rate_casting.toFixed(4);
+          existing_Cost[i].value = this.new_Rate_existing_casting.toFixed(4);
         }
       }
 
@@ -1415,7 +1521,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
       const updated_Rate = document.getElementsByClassName("form-control PopupText RMUpdateRate disabled") as any;
       const existing_Cost = document.getElementsByClassName("form-control PopupText disabled Existing") as any;
 
-      if (e.currentTarget.value == "" || e.currentTarget.value == 0) {
+      if (updateNewRate[index].value == "" || updateNewRate[index].value == 0) {
         // updated_Rate[index].value = 0;
         // existing_Cost[index].value = 0;
         for (let i = 0; i < this.MaterialGrade.length; i++) {
@@ -1442,13 +1548,15 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
         scrapPercent = (val.unitScrapRate / val.unitMaterialRate).toFixed(4);
       }
 
+
       ////////// old rate //////////
       let t1_existing = val.grossWeightKG * val.unitMaterialRate;
       let t2_existing = (val.grossWeightKG - val.grossNetWeightKG) * parseFloat(val.unitScrapRate);
+      // let t2_existing = (val.grossWeightKG - updateNetweight[index].value) * parseFloat(val.unitScrapRate);
       this.new_Rate_existing = t1_existing - t2_existing;
 
       if (val.casting == 1) { ///  check casting in material type
-        var e_currentTarget_value = e.currentTarget.value;
+        var e_currentTarget_value = updateNewRate[index].value;
         //// aluminum reverse logic
 
         for (var j = 0; j < this.AluminiumCastingGrade.length; j++) {
@@ -1456,7 +1564,8 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
           if (val.materialType.toLowerCase().includes(rr)) {
             //  ((F6*(1+5%)*100%-(1-D6)*(F6*0.9))) 
 
-            var Utilization = (val.netWeightKG / val.partFinishWeight).toFixed(2);
+            // var Utilization = (val.netWeightKG / val.partFinishWeight).toFixed(2);
+            // var Utilization = (updateNetweight[index].value / val.partFinishWeight).toFixed(2);
             e_currentTarget_value = ((parseFloat(e_currentTarget_value) * (1 + 0.05) * 1 - (1 - parseFloat(Utilization)) * (parseFloat(e_currentTarget_value) * 0.9)));
             console.log(e_currentTarget_value);
 
@@ -1481,7 +1590,9 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
         // if (this.IsCastingSheet) {
         let new_unitScrapRate = (e_currentTarget_value * parseFloat(scrapPercent)).toFixed(4);
         let t1 = val.grossWeightKG * e_currentTarget_value;
-        let t2 = (val.grossWeightKG - val.grossNetWeightKG) * parseFloat(new_unitScrapRate);
+        //let t2 = (val.grossWeightKG - val.grossNetWeightKG) * parseFloat(new_unitScrapRate);
+        let t2 = (val.grossWeightKG - updateNetweight[index].value) * parseFloat(new_unitScrapRate);
+
         this.new_Rate = t1 - t2;
         //}
         // else {
@@ -1518,6 +1629,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
             let new_unitScrapRate_casting = (e_currentTarget_value * parseFloat(scrapPercent_casting)).toFixed(4);
             let t1 = this.MaterialGrade[i].grossWeightKG * this.MaterialGrade[i].unitMaterialRate;
             let t2 = (this.MaterialGrade[i].grossWeightKG - this.MaterialGrade[i].grossNetWeightKG) * parseFloat(new_unitScrapRate_casting);
+            //let t2 = (updateNetweight[index].value - this.MaterialGrade[i].grossNetWeightKG) * parseFloat(new_unitScrapRate_casting);
             this.new_Rate_casting = t1 - t2;
             // if (this.MaterialGrade[i].supplyLevel == 'T1') {
             const updated_Rate_casting = document.getElementById("PopUpResult" + [i]) as any;
@@ -1562,7 +1674,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
         // this.new_Rate_existing = t1_existing - t2_existing;
 
 
-        var e_currentTarget_value = e.currentTarget.value;
+        //var e_currentTarget_value = updateNewRate[index].value;
         //// aluminum reverse logic
 
         for (var j = 0; j < this.AluminiumCastingGrade.length; j++) {
@@ -1570,17 +1682,26 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
           if (val.materialType.toLowerCase().includes(rr)) {
             //  ((F6*(1+5%)*100%-(1-D6)*(F6*0.9))) 
 
-            var Utilization = (val.netWeightKG / val.partFinishWeight).toFixed(2);
-            e_currentTarget_value = ((parseFloat(e_currentTarget_value) * (1 + 0.05) * 1 - (1 - parseFloat(Utilization)) * (parseFloat(e_currentTarget_value) * 0.9)));
+            // var Utilization = (val.netWeightKG / val.partFinishWeight).toFixed(2);
+            var Utilization = (updateNetweight[index].value / val.partFinishWeight).toFixed(2);
+
+            updateNewRate[index].value = ((parseFloat(updateNewRate[index].value) * (1 + 0.05) * 1 - (1 - parseFloat(Utilization)) * (parseFloat(updateNewRate[index].value) * 0.9)));
             console.log(e_currentTarget_value);
 
             break;
           }
         }
         /////////////  new rate /////////////
-        let new_unitScrapRate = (e_currentTarget_value * parseFloat(scrapPercent)).toFixed(4);
-        let t1 = val.grossWeightKG * e_currentTarget_value;
-        let t2 = (val.grossWeightKG - val.grossNetWeightKG) * parseFloat(new_unitScrapRate);
+
+        var UpdatedgrossWeightKG = updateNetweight[index].value / parseFloat(Utilization);
+
+        // let new_unitScrapRate = (updateNewRate[index].value * parseFloat(scrapPercent)).toFixed(4);
+        // let t1 = val.grossWeightKG * updateNewRate[index].value;
+        // let t2 = (val.grossWeightKG - val.grossNetWeightKG) * parseFloat(new_unitScrapRate);
+        let new_unitScrapRate = (updateNewRate[index].value * parseFloat(scrapPercent)).toFixed(4);
+        let t1 = UpdatedgrossWeightKG * updateNewRate[index].value;
+        let t2 = (UpdatedgrossWeightKG - updateNetweight[index].value) * parseFloat(new_unitScrapRate);
+
         this.new_Rate = t1 - t2;
 
 
@@ -1596,9 +1717,10 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
     }
   }
 
+
   CalculateTotalMaterialRate(IsMaterialTypeCast: any) {
     ///  IsMaterialTypeCast   --  check casting in material type
-
+    debugger;
     this.TotalMaterialRate_Update = 0;
     this.TotalMaterialRate_Existing = 0;
 
@@ -1656,8 +1778,9 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
 
   }
 
+
   GetMaterialData(t: string) {
-    //debugger;;
+    debugger;;
 
     this.MaterialGridUpdated = [];
     if (t == 'T1') {
@@ -1676,11 +1799,12 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
   MaterialGridT2: any = [];
 
   GetMaterialDataTier1() {
-
+    debugger;
     this.MaterialGridT1 = [];
     const updated_Rate = document.getElementsByClassName("form-control PopupText RMText") as any;
     const updated_Cost = document.getElementsByClassName("form-control PopupText RMUpdateRate disabled") as any;
     const updated_Cost_Existing = document.getElementsByClassName("form-control PopupText disabled Existing") as any;
+    const updatedNetWeight = document.getElementsByClassName("form-control PopupText RMTextNetweight") as any;
 
     for (const key in this.MaterialGrade) {
       this.MaterialGridT1.push(
@@ -1700,6 +1824,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
           'updateMaterialCostExisting': updated_Cost_Existing[key].value,
           'supplyLevel': this.MaterialGrade[key].supplyLevel,
           'casting': this.MaterialGrade[key].casting,
+          'updatedNetWeight': updatedNetWeight[key].value,
         });
     }
 
@@ -1754,6 +1879,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
 
 
   }
+
 
 
   GetTotalSGA_Profit() {
@@ -1819,13 +1945,15 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
   }
 
   GetMaterialDataTier2() {
-    //debugger;;
+    debugger;
     this.MaterialGridT2 = [];
     const updated_Rate = document.getElementsByClassName("form-control PopupText RMText") as any;
     const updated_Cost = document.getElementsByClassName("form-control PopupText RMUpdateRate disabled") as any;
     const updated_Cost_Existing = document.getElementsByClassName("form-control PopupText disabled Existing") as any;
+    const updatedNetWeight = document.getElementsByClassName("form-control PopupText RMTextNetweight") as any;
 
     for (const key in this.MaterialGrade) {
+      // if (this.MaterialGrade[key].casting == 0) {
       this.MaterialGridT2.push(
         {
           'materialType': this.MaterialGrade[key].materialType,
@@ -1843,7 +1971,9 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
           'updateMaterialCostExisting': updated_Cost_Existing[key].value,
           'supplyLevel': this.MaterialGrade[key].supplyLevel,
           'casting': this.MaterialGrade[key].casting,
+          'updatedNetWeight': updatedNetWeight[key].value,
         });
+      // }
     }
 
 
@@ -1921,6 +2051,69 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
     this.findsumPercentT2();
   }
 
+
+  displaymodal = 'none';
+  header = 'Update Model Details';
+  txt_btn = 'Update';
+
+  updatemodeldatavalidation =
+    {
+      csheaderid: '',
+      partnumber: '',
+      programname: '',
+      projecttype: '',
+      potentialsupplier: '',
+      businessunit: '',
+      annualvolume: '',
+      enginedisplacement: '',
+      supplierquote: ''
+    }
+
+  hasAnyUpdateData(): boolean {
+    return Object.values(this.updatemodeldatavalidation).some(val => val && val.trim() !== '');
+  }
+
+
+
+  async openupdatemodal() {
+    debugger;
+    if (this.YellowModel_MarketBenchmark != true) {
+      const result = await Swal.fire({
+        title: 'Do you want to update Model Details?',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+        allowOutsideClick: true,
+        customClass: {
+          popup: 'custom-swal-popup',
+        },
+      });
+
+      if (result.isConfirmed) {
+        this.displaymodal = "block";
+      }
+      else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.GetReport();
+      }
+      else if (result.dismiss === Swal.DismissReason.backdrop) {
+      }
+    }
+    else {
+      this.GetReport();
+    }
+
+  };
+
+  closeopenupdatemodal() {
+    this.displaymodal = "none";
+  }
+
+  updatemodeldetails() {
+    this.GetReport();
+  }
+
   async GetReport() {
     debugger;
 
@@ -1945,7 +2138,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
 
     this.MatetialTierUpdate = [];
     this.MaterialGridUpdated = [];
-
+    this.updatemodeldata = [];
 
     //////  Material Grade
     for (const key in this.MaterialGridT1) {
@@ -1967,10 +2160,12 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
           Created_By: this.userId,
           SupplyLevel: this.MaterialGridT1[key].supplyLevel,
           Casting: this.MaterialGridT1[key].casting,
-          UpdatenetWeightKG: 0,
+          UpdatenetWeightKG: this.MaterialGridT1[key].updatedNetWeight,
         });
     }
 
+    console.log(this.MaterialGridT1);
+    console.log(this.MaterialGridUpdated);
 
     for (const key in this.MaterialGridT2) {
       this.MaterialGridUpdated.push(
@@ -1991,7 +2186,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
           Created_By: this.userId,
           SupplyLevel: this.MaterialGridT2[key].supplyLevel,
           Casting: this.MaterialGridT2[key].casting,
-          UpdatenetWeightKG: 0,
+          UpdatenetWeightKG: this.MaterialGridT2[key].updatedNetWeight,
         });
     }
 
@@ -2021,18 +2216,37 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
       )
     }
 
+    this.updatemodeldata.push(
+      {
+        csheaderid: this.CSHeaderId,
+        partnumber: this.updatemodeldatavalidation.partnumber,
+        programname: this.updatemodeldatavalidation.programname,
+        projecttype: this.updatemodeldatavalidation.projecttype,
+        potentialsupplier: this.updatemodeldatavalidation.potentialsupplier,
+        businessunit: this.updatemodeldatavalidation.businessunit,
+        annualvolume: this.updatemodeldatavalidation.annualvolume,
+        enginedisplacement: this.updatemodeldatavalidation.enginedisplacement,
+        supplierquote: this.updatemodeldatavalidation.supplierquote
+      }
+    )
+
+
     this.GetUpdateReocrdForTier('T1');
     //if (this.T2count) {
     this.GetUpdateReocrdForTier('T2');
     //}
 
+    debugger;
+
     this.saveMatetialCost.push({
       "SaveMatetialCostHeader": this.MatetialTierUpdate,
       "SaveMatetialCostDetails": this.MaterialGridUpdated,
-      "SaveProcessDetails": this.SaveProcessDetails
+      "SaveProcessDetails": this.SaveProcessDetails,
+      "updatemodeldata": this.updatemodeldata
     });
 
 
+    debugger;
     const data = await this.searchservice.SaveMatetialCost(this.saveMatetialCost, this.userId, this.IsCastingSheet).toPromise();
 
     if (data == 0) {
@@ -2041,8 +2255,11 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
       return
     }
     else {
+      localStorage.setItem("DTCSCReportId", data);
       this.SpinnerService.hide('spinner');
-      alert("Should Cost Updated !!!");
+      if (!this.YellowModel_MarketBenchmark) {
+        alert("Should Cost Updated !!!");
+      }
     }
 
     this.SpinnerService.hide('spinner');
@@ -2357,12 +2574,12 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
               const txt = document.getElementById("PopUpProcess" + i) as any;
               if (this.userAddedCostList[i].csHeaderId > 0) {
                 if (!this.userAddedCostList[i].processStatus) {
-                  this.userAddedCostList[i].updatedCost = 0;
+                  this.userAddedCostList[i].updatedCost = "0.00";
                   this.userAddedCostList[i].processStatus = 0;
                   txt.readOnly = true;
                   txt.style.backgroundColor = "#8080801a";
                 } else {
-                  this.userAddedCostList[i].updatedCost = this.userAddedCostList[i].manufacturingCost;
+                  this.userAddedCostList[i].updatedCost = this.userAddedCostList[i].manufacturingCost.toFixed(2);
                   this.userAddedCostList[i].processStatus = 1;
                   txt.readOnly = false;
                   txt.style.backgroundColor = "#fff";
@@ -2370,7 +2587,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
               }
 
             }
-          }, 150);
+          }, 500);
 
           return;
         }
@@ -2390,12 +2607,12 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
               const txt = document.getElementById("PopUpProcess" + i) as any;
               if (this.userAddedCostList[i].csHeaderId > 0) {
                 if (!this.userAddedCostList[i].processStatus && this.userAddedCostList[i].csHeaderId > 0) {
-                  this.userAddedCostList[i].updatedCost = 0;
+                  this.userAddedCostList[i].updatedCost = "0.00";
                   this.userAddedCostList[i].processStatus = 0;
                   txt.readOnly = true;
                   txt.style.backgroundColor = "#8080801a";
                 } else {
-                  this.userAddedCostList[i].updatedCost = this.userAddedCostList[i].manufacturingCost;
+                  this.userAddedCostList[i].updatedCost = this.userAddedCostList[i].manufacturingCost.toFixed(2);
                   this.userAddedCostList[i].processStatus = 1;
                   txt.readOnly = false;
                   txt.style.backgroundColor = "#fff";
@@ -2403,7 +2620,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
               }
 
             }
-          }, 150);
+          }, 500);
 
           return;
         }
@@ -2413,7 +2630,7 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
       const filteredSubPartDetails = await this.searchservice.GetSubpartProcessData(Supplierlevel, this.CSHeaderId).toPromise();
       this.userAddedCostList = filteredSubPartDetails.map((item: { manufacturingCost: any }) => ({
         ...item,
-        updatedCost: item.manufacturingCost,
+        updatedCost: item.manufacturingCost.toFixed(2),
       }));
       this.togglestates = this.userAddedCostList.map(() => true);
     }
@@ -2440,12 +2657,12 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
     const txt = document.getElementById("PopUpProcess" + index) as any;
 
     if (!this.togglestates[index]) {
-      this.userAddedCostList[index].updatedCost = 0;
+      this.userAddedCostList[index].updatedCost = "0.00";
       this.userAddedCostList[index].processStatus = 0;
       txt.readOnly = true;
       txt.style.backgroundColor = "#8080801a";
     } else {
-      this.userAddedCostList[index].updatedCost = this.userAddedCostList[index].manufacturingCost;
+      this.userAddedCostList[index].updatedCost = this.userAddedCostList[index].manufacturingCost.toFixed(2);
       this.userAddedCostList[index].processStatus = 1;
       txt.readOnly = false;
       txt.style.backgroundColor = "#fff";
@@ -2557,8 +2774,8 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
 
       // localStorage.setItem('savedUserAddedCostList', JSON.stringify(this.userAddedCostList));
 
-      var manufacturingCost = this.userAddedCostList.reduce((sum: any, item: { manufacturingCost: any; }) => sum + (item.manufacturingCost || 0), 0);
-      var updatedCost = this.userAddedCostList.reduce((sum: any, item: { updatedCost: any; }) => sum + (item.updatedCost || 0), 0);
+      var manufacturingCost = this.userAddedCostList.reduce((sum: any, item: { manufacturingCost: any; }) => sum + (parseFloat(item.manufacturingCost) || 0), 0);
+      var updatedCost = this.userAddedCostList.reduce((sum: any, item: { updatedCost: any; }) => sum + (parseFloat(item.updatedCost) || 0), 0);
 
       this.costDifference = parseFloat(updatedCost) - parseFloat(manufacturingCost);
       this.Cal_totalInitialCost = manufacturingCost;
@@ -2597,8 +2814,8 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
 
       // localStorage.setItem('savedUserAddedCostList', JSON.stringify(this.userAddedCostList));
 
-      var manufacturingCost = this.userAddedCostList.reduce((sum: any, item: { manufacturingCost: any; }) => sum + (item.manufacturingCost || 0), 0);
-      var updatedCost = this.userAddedCostList.reduce((sum: any, item: { updatedCost: any; }) => sum + (item.updatedCost || 0), 0);
+      var manufacturingCost = this.userAddedCostList.reduce((sum: any, item: { manufacturingCost: any; }) => sum + (parseFloat(item.manufacturingCost) || 0), 0);
+      var updatedCost = this.userAddedCostList.reduce((sum: any, item: { updatedCost: any; }) => sum + (parseFloat(item.updatedCost) || 0), 0);
 
       this.costDifferenceT2 = parseFloat(updatedCost) - parseFloat(manufacturingCost);
       this.Cal_totalInitialCostT2 = manufacturingCost;
@@ -2624,17 +2841,17 @@ export class DesigntocostStep2SimulationComponent implements OnInit {
     debugger;
 
     this.totalInitialCost = this.userAddedCostList.reduce(
-      (sum: any, item: { manufacturingCost: any; }) => sum + (item.manufacturingCost || 0),
+      (sum: any, item: { manufacturingCost: any; }) => sum + (parseFloat(item.manufacturingCost) || 0),
       0
     );
 
 
     this.totalUpdatedCost = this.userAddedCostList
       .filter((_: any, i: number) => this.isEnabled(i)) // Only sum enabled items
-      .reduce((sum: any, item: { updatedCost: any; }) => sum + (item.updatedCost || 0), 0);
+      .reduce((sum: any, item: { updatedCost: any; }) => sum + (parseFloat(item.updatedCost) || 0), 0);
 
     this.totalUpdatedCost = this.userAddedCostList
-      .reduce((sum: any, item: { updatedCost: any; }) => sum + (item.updatedCost || 0), 0);
+      .reduce((sum: any, item: { updatedCost: any; }) => sum + (parseFloat(item.updatedCost) || 0), 0);
 
     this.costDifference1 = this.totalUpdatedCost - this.totalInitialCost;
 

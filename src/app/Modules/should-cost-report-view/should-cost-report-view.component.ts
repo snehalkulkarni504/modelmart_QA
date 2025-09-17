@@ -116,6 +116,26 @@ export class ShouldCostReportViewComponent {
       this.TierData = data.tierData;
       this.Tier2Data = data.tierDataT2;
 
+      // if (this.ProductDetail[0].hasParentValue == 0) {
+      //   this.ProjectName = this.ProductDetail[0].projectType + '-' + this.ProductDetail[0].businessUnit + '-' + this.ProductDetail[0].programName + '-' + this.ProductDetail[0].mfgRegion + '-' + this.ProductDetail[0].partName + '-' + this.ProductDetail[0].partNumber;
+      // }
+
+      if (this.ProductDetail[0].hasParentValue == 1) {
+        const pd = this.ProductDetail[0];
+
+        this.ProjectName =
+          (pd.projectType != null ? pd.projectType : pd.par_ProjectType) + '-' +
+          (pd.businessUnit != null ? pd.businessUnit : pd.par_BusinessUnit) + '-' +
+          (pd.programName != null ? pd.programName : pd.par_ProgramName) + '-' +
+          pd.mfgRegion + '-' +
+          (pd.partName != null ? pd.partName : pd.par_PartName) + '-' +
+          (pd.partNumber != null ? pd.partNumber : pd.par_PartNumber);
+      }
+
+      this.ProductDetail[0].annualVolume = new Intl.NumberFormat('en-US').format(Number(this.ProductDetail[0].annualVolume));
+      this.ProductDetail[0].supplier = new Intl.NumberFormat('en-US').format(Number(this.ProductDetail[0].supplier));
+
+
       this.ContributionInTotal(data.tierData);
 
       setTimeout(() => {
@@ -349,7 +369,7 @@ export class ShouldCostReportViewComponent {
     }
   }
 
-
+  projectRows: any = [];
   newPDF() {
 
     debugger;
@@ -420,47 +440,119 @@ export class ShouldCostReportViewComponent {
       theme: 'grid',
       headStyles: { fontSize: 9, fillColor: [217, 217, 217], textColor: [0, 0, 0], halign: 'center' },
       bodyStyles: { fillColor: [255, 255, 255] },
-      margin: 10,
+      margin: 5,
 
     });
 
     let finalYDetails = (doc as any).lastAutoTable.finalY;
+    
+    var forex = this.ProductDetail[0].forex.toFixed(2);
+    var currentForex = this.ProductDetail[0].currentYearForex.toFixed(2);
+    var businessunit= this.ProductDetail[0].businessUnit  == null ? "" : this.ProductDetail[0].businessUnit;
+    var Per_businessunit = this.ProductDetail[0].par_BusinessUnit == null ? "" : this.ProductDetail[0].par_BusinessUnit ;
+    var engineDispalcement  = this.ProductDetail[0].engineDisplacement == null ? " " : this.ProductDetail[0].engineDisplacement ;
+    var Per_engineDispalcement  = this.ProductDetail[0].par_EngineDisplacement == null ? " " : this.ProductDetail[0].par_EngineDisplacement ;
 
-    const projectRows = [
-      [
-        ['Model Edited By : ' + this.userFullName],
-        ['Model Edit Date : ' + this.CurruntDate],
-        ['Model Created Date : ' + this.DebriefDateFormated]
-      ],
-      [
-        ['Part Name : ' + this.ProductDetail[0].partName],
-        ['Part Number : ' + this.ProductDetail[0].partNumber],
-        ['Location : ' + this.ProductDetail[0].mfgRegion]
-      ],
-      [
-        ['Annual Volume : ' + this.ProductDetail[0].annualVolume],
-        ['Old Forex : ' + this.ProductDetail[0].forex],
-        ['Current Year Forex : ' + this.ProductDetail[0].currentYearForex]
-      ],
-      [
-        ['Batch Size : ' + this.ProductDetail[0].batchSize],
-        ['Supplier Quote / Invoice Price : ' + this.ProductDetail[0].supplier],
-      ]
-    ];
+    if (this.ProductDetail[0].hasParentValue == 1) {
+      this.projectRows = [
+        [
+          ['Model Edited By : ' + this.userFullName],
+          ['Part Name : ' + this.ProductDetail[0].partName],
+          ['Supplier Quote/Invoice Price : ' + this.ProductDetail[0].supplier],
+          ['Base Model Details']
+
+        ],
+        [
+          ['Model Edit Date : ' + this.CurruntDate],
+          ['Part Number : ' + this.ProductDetail[0].partNumber],
+          ['Business Unit : ' + businessunit],
+          ['Model Mart ID : ' + this.ProductDetail[0].uniqueId],
+        ],
+        [
+          ['Model Created Date : ' + this.DebriefDateFormated],
+          ['Annual Volume : ' + this.ProductDetail[0].annualVolume],
+          ['Engine Displacement : ' + engineDispalcement],
+          ['Part Number : ' + this.ProductDetail[0].par_PartNumber],
+        ],
+        [
+          ['Location : ' + this.ProductDetail[0].mfgRegion],
+          ['Project Type : ' + this.ProductDetail[0].projectType],
+          [],
+          ['Program Name  : ' + this.ProductDetail[0].par_ProgramName],
+        ],
+        [
+          ['Old Forex : ' + forex],
+          ['Current Year Forex : ' + currentForex],
+          [],
+          ['Engine Displacement : ' + Per_engineDispalcement],
+        ],
+        [
+          [],
+          [],
+          [],
+          ['Business Unit : ' + Per_businessunit],
+        ]
+      ];
+    }
+    else {
+      this.projectRows = [
+        [
+          ['Model Edited By : ' + this.userFullName],
+          ['Part Name : ' + this.ProductDetail[0].partName],
+          ['Supplier Quote/Invoice Price : ' + this.ProductDetail[0].supplier],
+        ],
+        [
+          ['Model Edit Date : ' + this.CurruntDate],
+          ['Part Number : ' + this.ProductDetail[0].partNumber],
+          ['Business Unit : ' + this.ProductDetail[0].businessUnit],
+        ],
+        [
+          ['Model Created Date : ' + this.DebriefDateFormated],
+          ['Annual Volume : ' + this.ProductDetail[0].annualVolume],
+          ['Engine Displacement : ' + this.ProductDetail[0].engineDisplacement],
+        ],
+        [
+          ['Location : ' + this.ProductDetail[0].mfgRegion],
+          ['Batch Size : ' + this.ProductDetail[0].batchSize],
+          ['Project Type : ' + this.ProductDetail[0].projectType],
+        ],
+        [
+          ['Old Forex : ' + forex],
+          ['Current Year Forex : ' + currentForex],
+          [],
+        ]
+      ];
+    }
 
     autoTable(doc, {
       head: [],
-      body: projectRows,
+      body: this.projectRows,
       startY: finalYDetails + 1,
       theme: 'grid',
-      headStyles: { fontSize: 7, fillColor: [179, 179, 179], textColor: [0, 0, 0], },
-      bodyStyles: { fontSize: 7, fontStyle: 'bold', textColor: [0, 0, 0] },
-      margin: 10,
-      columnStyles: {
-        0: { cellWidth: 78 },
-        1: { cellWidth: 60 },
-        2: { cellWidth: 52 },
+      headStyles: { fontSize: 6, fillColor: [179, 179, 179], textColor: [0, 0, 0], },
+      bodyStyles: { fontSize: 6, fontStyle: 'bold', textColor: [0, 0, 0], },
+      margin: 5,
+      styles: {
+        cellPadding: 0.5,   // Add padding to increase vertical spacing
       },
+      willDrawCell: function (data: any) {
+        debugger;
+        var rows = data.table.body;
+
+        if (rows.length > 5) {
+          if (rows[0].cells[3].text == "Base Model Details") {
+            rows[0].cells[3].styles.halign = 'center';
+            rows[0].cells[3].styles.fontSize = 7;
+          }
+        }
+      }
+
+      // columnStyles: {
+      //   0: { cellWidth: 50 },
+      //   1: { cellWidth: 50 },
+      //   2: { cellWidth: 50 },
+      //   3: { cellWidth: 50 },
+      // },
     });
 
 
@@ -484,6 +576,9 @@ export class ShouldCostReportViewComponent {
       headStyles: { fontSize: 6, fillColor: [179, 179, 179], textColor: [0, 0, 0], },
       bodyStyles: { fontSize: 6, fontStyle: 'bold', textColor: [0, 0, 0] },
       margin: 5,
+      styles: {
+        cellPadding: 1,   // Add padding to increase vertical spacing
+      },
       willDrawCell: function (data: any) {
         var rows = data.table.body;
 
@@ -544,6 +639,9 @@ export class ShouldCostReportViewComponent {
         headStyles: { fontSize: 6, fillColor: [179, 179, 179], textColor: [0, 0, 0], },
         bodyStyles: { fontSize: 6, fontStyle: 'bold', textColor: [0, 0, 0] },
         margin: 5,
+        styles: {
+          cellPadding: 1,   // Add padding to increase vertical spacing
+        },
         willDrawCell: function (data: any) {
           var rows = data.table.body;
 
@@ -591,7 +689,7 @@ export class ShouldCostReportViewComponent {
     debugger;
     ////  Material Greade
 
-    const headers = [['Sr. No.','Supply Level', 'Material Grade', 'Current Net Weight (kg)', 'Updated Net Weight (kg)', 'Current Rate ($)', 'Updated Rate($)']];
+    const headers = [['Sr. No.', 'Supply Level', 'Material Grade', 'Current Net Weight (kg)', 'Updated Net Weight (kg)', 'Current Rate ($)', 'Updated Rate($)']];
 
     // Map your data to match the headers
     var MaterailGradedata = [];
@@ -619,6 +717,9 @@ export class ShouldCostReportViewComponent {
       //   3: { cellWidth: 33 },
       // },
       margin: 10,
+      styles: {
+        cellPadding: 1,   // Add padding to increase vertical spacing
+      },
       willDrawCell: function (data: any) {
         var rows = data.table.body;
         for (let i = 0; i < rows.length; i++) {

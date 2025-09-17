@@ -77,12 +77,12 @@
 }
 
 .DTO_step1 {
-    background-color: #1b9a85;
+    background-color: #267eb8;
     opacity: 0.5;
 }
 
 .DTO_step2 {
-    background-color: #f19c0c;
+    background-color: #1b9a85;
     opacity: 0.5;
 }
 
@@ -92,10 +92,9 @@
 }
 
 .DTO_step4 {
-    background-color: #267eb8;
+    background-color: #f19c0c;
     color: #fff;
-    font-size: 11px;
-    font-weight: 500;
+    box-shadow: 0px 0px 10px #9ebe5b;
 }
 
 
@@ -195,8 +194,8 @@
 }
 
 .tabledata {
-    width: 60%;
-    margin-left: 20%;
+    width: 80%;
+    margin-left: 10%;
 }
 
 .tabledata thead th {

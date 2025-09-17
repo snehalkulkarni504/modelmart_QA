@@ -44,7 +44,7 @@
                         <i class="bi bi-arrow-right gradient-icon2"></i>
                     </span>
                     <p class="DTO_step3" [routerLink]="['/home/designtocost/step3']"><span> Step 3 </span> <br>
-                        Pickup or Add VAVE Ideas to Optimize the cost
+                        Pick up or Add VAVE Ideas to Optimize the cost
                     </p>
                     <span class="DTO_connect1_2">
                         <i class="bi bi-arrow-right gradient-icon3"></i>
@@ -70,430 +70,529 @@
         <div>
             <div class="container" style="padding-bottom: 10px; border-bottom: 1px solid #da291c;">
                 <div class="row" style="padding-top: 10px;">
-                    <div class="col-md-4 text-start">
+                    <div class="col-md-3 text-start">
                         <label for="RequesterName" class="default-lbl"
                             style="font-size: 12px !important; font-weight: 600 !important;"> Model Edited By : </label>
                         <label for="RequesterName" class="default-lbl"
                             style="padding-left: 10px;">{{userFullName}}</label>
-                    </div>
-                    <div class="col-md-4  text-start">
+                        <br>
                         <label for="RequesterName" class="default-lbl"
                             style="font-size: 12px !important; font-weight: 600 !important;"> Model Edit Date :</label>
                         <label for="RequesterName" class="default-lbl"
                             style="padding-left: 10px;">{{CurruntDate}}</label>
-                    </div>
-                    <div class="col-md-4  text-start">
+                        <br>
                         <label for="RequesterName" class="default-lbl"
                             style="font-size: 12px !important; font-weight: 600 !important;">Model Created Date :
                         </label>
                         <label for="RequesterName" class="default-lbl"
                             style="padding-left: 10px;">{{DebriefDateFormated}}</label>
-                    </div>
-                </div>
-                <div class="row" style="padding-top: 10px;">
-                    <div class="col-md-4 text-start">
-                        <label for="RequesterName" class="default-lbl"
-                            style="font-size: 12px !important; font-weight: 600 !important;">Part Name : </label>
-                        <label for="RequesterName" class="default-lbl"
-                            style="padding-left: 10px;">{{ProductDetail[0].partName}}</label>
-                    </div>
-                    <div class="col-md-4  text-start">
-                        <label for="RequesterName" class="default-lbl"
-                            style="font-size: 12px !important; font-weight: 600 !important;"> Part Number :</label>
-                        <label for="RequesterName" class="default-lbl"
-                            style="padding-left: 10px;">{{ProductDetail[0].partNumber}}</label>
-                    </div>
-                    <div class="col-md-4  text-start">
+                        <br>
                         <label for="RequesterName" class="default-lbl"
                             style="font-size: 12px !important; font-weight: 600 !important;"> Location :</label>
                         <label for="RequesterName" class="default-lbl"
                             style="padding-left: 10px;">{{ProductDetail[0].mfgRegion}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;"> Old Forex : </label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProductDetail[0].forex | number:'1.2-2'}}</label>
+
                     </div>
-                </div>
-                <div class="row" style="padding-top: 10px;">
-                    <div class="col-md-4 text-start">
+
+                    <div class="col-md-3  text-start">
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;">Part Name : </label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProductDetail[0].partName}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;"> Part Number :</label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProductDetail[0].partNumber}}</label>
+                        <br>
                         <label for="RequesterName" class="default-lbl"
                             style="font-size: 12px !important; font-weight: 600 !important;"> Annual Volume : </label>
                         <label for="RequesterName" class="default-lbl"
-                            style="padding-left: 10px;">{{ProductDetail[0].annualVolume | number:
-                            '1.0-0':'en-US'}}</label>
-                    </div>
-                    <div class="col-md-4  text-start">
-                        <label for="RequesterName" class="default-lbl"
-                            style="font-size: 12px !important; font-weight: 600 !important;">
-                            Old Forex : </label>
-                        <label for="RequesterName" class="default-lbl"
-                            style="padding-left: 10px;">{{ProductDetail[0].forex | number : '0.0-2'}}</label>
-                    </div>
-                    <div class="col-md-4  text-start">
-                        <label for="RequesterName" class="default-lbl"
-                            style="font-size: 12px !important; font-weight: 600 !important;">
-                            Current Year Forex : </label>
-                        <label for="RequesterName" class="default-lbl"
-                            style="padding-left: 10px;">{{ProductDetail[0].currentYearForex | number : '0.0-2'}}</label>
-                    </div>
-                </div>
-                <div class="row" style="padding-top: 10px;">
-                    <div class="col-md-4  text-start">
-                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProductDetail[0].annualVolume}}</label>
+                        <br>
+                        <!-- <label for="RequesterName" class="default-lbl"
                             style="font-size: 12px !important; font-weight: 600 !important;"> Batch Size : </label>
                         <label for="RequesterName" class="default-lbl"
-                            style="padding-left: 10px;">{{ProductDetail[0].batchSize | number: '1.0-0':'en-US'}}</label>
-                    </div>
-                    <div class="col-md-4 text-start">
+                            style="padding-left: 10px;">{{ProductDetail[0].batchSize}}</label> -->
                         <label for="RequesterName" class="default-lbl"
-                            style="font-size: 12px !important; font-weight: 600 !important;"> Supplier Quote/
-                            Invoice Price :</label>
+                            style="font-size: 12px !important; font-weight: 600 !important;"> Project Type :</label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProductDetail[0].projectType}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;">Current Year Forex :
+                        </label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProductDetail[0].currentYearForex | number:'1.2-2'}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;"> &nbsp;</label>
+                        <label for="RequesterName" class="default-lbl" style="padding-left: 10px;">&nbsp;</label>
+                    </div>
+
+                    <div class="col-md-3  text-start">
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;"> Supplier Quote (USD)
+                            :</label>
                         <label for="RequesterName" class="default-lbl"
                             style="padding-left: 10px;">{{ProductDetail[0].supplier}}</label>
+
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;">Business Unit : </label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProductDetail[0].businessUnit}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;"> Engine Displacement
+                            :</label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProductDetail[0].engineDisplacement}}</label>
+                        <br>
+
+
+                    </div>
+
+                    <div *ngIf="ProductDetail[0].hasParentValue==1" class="col-md-3  text-start">
+                        <label for="RequesterName" class="default-lbl" style="font-size: 12px !important;  font-weight: bolder !important; 
+                               text-decoration-line: underline; text-decoration-color: red;">
+                            Base Model Details
+                        </label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: bolder !important; ">Model Mart ID :</label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;font-weight: bolder !important;">{{ProductDetail[0].uniqueId}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: bolder !important; ">Part Number :</label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;font-weight: bolder !important;">{{ProductDetail[0].par_PartNumber}}</label>
+                        <!-- <label for="RequesterName" class="default-lbl" style="font-size: 12px !important; font-weight: 600 !important;">Old Annual Volume : </label>
+                        <label for="RequesterName" class="default-lbl" style="padding-left: 10px;">{{ProductDetail[0].par_AnnualVolume}}</label> -->
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: bolder !important;"> Program Name : </label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;font-weight: bolder !important;">{{ProductDetail[0].par_ProgramName}}</label>
+                        <!-- <label for="RequesterName" class="default-lbl" style="font-size: 12px !important; font-weight: 600 !important;"> Old Supplier Quote/Invoice Price :</label>
+                        <label for="RequesterName" class="default-lbl" style="padding-left: 10px;">{{ProductDetail[0].par_TargetQuote}}</label> -->
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: bolder !important;"> Engine Displacement
+                            :</label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;font-weight: bolder !important;">{{ProductDetail[0].par_EngineDisplacement}}</label>
+                        <br>
+                        <!-- <label for="RequesterName" class="default-lbl" style="font-size: 12px !important; font-weight: 600 !important;"> Base Project Type :</label>
+                        <label for="RequesterName" class="default-lbl" style="padding-left: 10px;">{{ProductDetail[0].projectType}}</label>
+                        <br> -->
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: bolder !important;">Business Unit
+                            :</label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;font-weight: bolder !important;">{{ProductDetail[0].par_BusinessUnit}}</label>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="datapanal">
+
+                <div class="datapanalPercenteage">
+                    <div class="row tableHead">
+                        <table class="table table-bordered " id="printsectionProductDetail">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center; border: 2px solid  #a8a7a7; background-color: rgb(253,244,243);"
+                                        colspan="10">Finish Part</th>
+                                </tr>
+                            </thead>
+
+                            <thead>
+                                <tr>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> SG & A (%)
+                                    </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> SG & A Updated
+                                        (%)
+                                    </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> Profit (%)
+                                    </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> Profit Updated
+                                        (%)
+                                    </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> Packaging (%)
+                                    </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> Packaging
+                                        Updated
+                                        (%)
+                                    </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> Freight /
+                                        Logistics
+                                        (%) </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> Freight /
+                                        Logistics
+                                        Update (%) </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> Tariff (%)
+                                    </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> Tariff Updated
+                                        (%)
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr *ngFor="let val of ProductDetail; let i=index" class="ShouldCostBreakdowntabletr">
+
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"> {{ val.sgA_T1
+                                        }}
+                                    </td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"
+                                        [ngClass]="{'UpdateValueLessThan': val.sgA_T1 >SGA_per,'UpdateValueGreaterThan': val.sgA_T1< SGA_per}">
+                                        {{ SGA_per }} </td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"> {{
+                                        val.profit_T1}}
+                                    </td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"
+                                        [ngClass]="{'UpdateValueLessThan': val.profit_T1 >Profit_per,'UpdateValueGreaterThan': val.profit_T1< Profit_per}">
+                                        {{ Profit_per }} </td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"> {{
+                                        val.packaging_T1}}
+                                    </td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"
+                                        [ngClass]="{'UpdateValueLessThan': val.packaging_T1 >Packaging_per,'UpdateValueGreaterThan': val.packaging_T1< Packaging_per}">
+                                        {{ Packaging_per}} </td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"> {{
+                                        val.freight_T1
+                                        }}
+                                    </td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"
+                                        [ngClass]="{'UpdateValueLessThan': val.freight_T1 >FreightLogistics_per,'UpdateValueGreaterThan': val.freight_T1< FreightLogistics_per}">
+                                        {{ FreightLogistics_per }}</td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"> 0 </td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"
+                                        [ngClass]="{'UpdateValueLessThan': 0 > Tariff_Per,'UpdateValueGreaterThan': 0 < Tariff_Per}">
+                                        {{ Tariff_Per }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- T2 startedddddd -->
+
+                        <table [hidden]="T2NotPresent" class="table table-bordered " id="printsectionProductDetail">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center; border: 2px solid  #a8a7a7; background-color: rgb(253,244,243);"
+                                        colspan="10"> Tier#2 Cost or Rough Part Cost or Casting
+                                        Cost or Forging Cost</th>
+                                </tr>
+                            </thead>
+
+                            <thead>
+                                <tr>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> SG & A (%)
+                                    </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> SG & A Updated
+                                        (%)
+                                    </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> Profit (%)
+                                    </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> Profit Updated
+                                        (%)
+                                    </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> Packaging (%)
+                                    </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> Packaging
+                                        Updated
+                                        (%)
+                                    </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> Freight /
+                                        Logistics
+                                        (%) </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> Freight /
+                                        Logistics
+                                        Update (%) </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> Tariff (%)
+                                    </th>
+                                    <th style="font-size: 11px !important; font-weight: 600 !important;"> Tariff Updated
+                                        (%)
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr *ngFor="let val of ProductDetail; let i=index" class="ShouldCostBreakdowntabletr">
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"> {{ val.sgA_T2
+                                        }}
+                                    </td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"
+                                        [ngClass]="{'UpdateValueLessThan': val.sgA_T2 >SGA_per_T2,'UpdateValueGreaterThan': val.sgA_T2 < SGA_per_T2}">
+                                        {{ SGA_per_T2 }} </td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"> {{
+                                        val.profit_T2}}
+                                    </td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"
+                                        [ngClass]="{'UpdateValueLessThan': val.profit_T2 >Profit_per_T2,'UpdateValueGreaterThan': val.profit_T2 < Profit_per_T2}">
+                                        {{ Profit_per_T2 }} </td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"> {{
+                                        val.packaging_T2}}
+                                    </td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"
+                                        [ngClass]="{'UpdateValueLessThan': val.packaging_T2 >Packaging_per_T2,'UpdateValueGreaterThan': val.packaging_T2 < Packaging_per_T2}">
+                                        {{ Packaging_per_T2}} </td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"> {{
+                                        val.freight_T2
+                                        }}
+                                    </td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"
+                                        [ngClass]="{'UpdateValueLessThan': val.freight_T2 >FreightLogistics_per_T2,'UpdateValueGreaterThan': val.freight_T2 < FreightLogistics_per_T2}">
+                                        {{ FreightLogistics_per_T2 }}</td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"> 0 </td>
+                                    <td style="font-size: 11px !important; font-weight: 600 !important;"
+                                        [ngClass]="{'UpdateValueLessThan': 0 > Tariff_Per_T2,'UpdateValueGreaterThan': 0 < Tariff_Per_T2}">
+                                        {{ Tariff_Per_T2 }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-            </div>
-        </div>
-
-        <div class="datapanal">
-
-             <div class="datapanalPercenteage">
-                <div class="row tableHead">
-                    <table class="table table-bordered " id="printsectionProductDetail">
+                <div class="row tabledata datapanalMaterial">
+                    <table class="table table-bordered " id="printsectionMaterial">
                         <thead>
                             <tr>
-                                <th style="text-align:center; border: 2px solid  #a8a7a7; background-color: rgb(253,244,243);"
-                                    colspan="10">Finish Part</th>
-                            </tr>
-                        </thead>
-
-                        <thead>
-                            <tr>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> SG & A (%)</th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> SG & A Updated (%)
+                                <th style="font-size: 12px !important; font-weight: 600 !important;"> Sr. No. </th>
+                                <th style="font-size: 12px !important; font-weight: 600 !important;"> Supply Level </th>
+                                <th style="font-size: 12px !important; font-weight: 600 !important;"> Material Grade
                                 </th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> Profit (%)</th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> Profit Updated (%)
+                                <th style="font-size: 12px !important; font-weight: 600 !important;"> Current Net Weight
+                                    (kg)</th>
+                                <th style="font-size: 12px !important; font-weight: 600 !important;"> Updated Net Weight
+                                    (kg)</th>
+                                <th style="font-size: 12px !important; font-weight: 600 !important;"> Current Rate ($)
                                 </th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> Packaging (%)</th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> Packaging Updated
-                                    (%)
-                                </th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> Freight /
-                                    Logistics
-                                    (%) </th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> Freight /
-                                    Logistics
-                                    Update (%) </th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> Tariff (%)</th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> Tariff Updated (%)
+                                <th style="font-size: 12px !important; font-weight: 600 !important;"> Updated Rate ($)
                                 </th>
                             </tr>
                         </thead>
-
                         <tbody>
-                            <tr *ngFor="let val of ProductDetail; let i=index" class="ShouldCostBreakdowntabletr">
-
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"> {{ val.sgA_T1 }}
+                            <tr *ngFor="let val of MaterailGrade; let i=index" class="ShouldCostBreakdowntabletr">
+                                <td style="font-size: 12px !important; font-weight: 600 !important;"> {{ i + 1}}</td>
+                                <td style="font-size: 12px !important; font-weight: 600 !important;"> {{
+                                    val.supplyLevel}}
                                 </td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"
-                                    [ngClass]="{'UpdateValueLessThan': val.sgA_T1 >SGA_per,'UpdateValueGreaterThan': val.sgA_T1< SGA_per}">
-                                    {{ SGA_per }} </td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"> {{ val.profit_T1}}
+                                <td style="font-size: 12px !important; font-weight: 600 !important;"> {{
+                                    val.materialType}}
                                 </td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"
-                                    [ngClass]="{'UpdateValueLessThan': val.profit_T1 >Profit_per,'UpdateValueGreaterThan': val.profit_T1< Profit_per}">
-                                    {{ Profit_per }} </td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"> {{
-                                    val.packaging_T1}}
-                                </td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"
-                                    [ngClass]="{'UpdateValueLessThan': val.packaging_T1 >Packaging_per,'UpdateValueGreaterThan': val.packaging_T1< Packaging_per}">
-                                    {{ Packaging_per}} </td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"> {{ val.freight_T1
-                                    }}
-                                </td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"
-                                    [ngClass]="{'UpdateValueLessThan': val.freight_T1 >FreightLogistics_per,'UpdateValueGreaterThan': val.freight_T1< FreightLogistics_per}">
-                                    {{ FreightLogistics_per }}</td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"> 0 </td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"
-                                    [ngClass]="{'UpdateValueLessThan': 0 > Tariff_Per,'UpdateValueGreaterThan': 0 < Tariff_Per}">
-                                    {{ Tariff_Per }}</td>
+                                <td style="font-size: 12px !important; font-weight: 600 !important;"> {{
+                                    val.netWeightKG | number:'1.2-2'}}</td>
+                                <td style="font-size: 12px !important; font-weight: 600 !important;"
+                                    [ngClass]="{'UpdateValueLessThan': val.netWeightKG > val.updatenetWeightKG,'UpdateValueGreaterThan': val.netWeightKG < val.updatenetWeightKG}">
+                                    {{ val.updatenetWeightKG | number:'1.2-2'}}</td>
+                                <td style="font-size: 12px !important; font-weight: 600 !important;"> {{
+                                    val.unitMaterialRate | number:'1.2-2'}}</td>
+                                <td style="font-size: 12px !important; font-weight: 600 !important;"
+                                    [ngClass]="{'UpdateValueLessThan': val.unitMaterialRate > val.updateMaterialRate,'UpdateValueGreaterThan': val.unitMaterialRate < val.updateMaterialRate}">
+                                    {{ val.updateMaterialRate | number:'1.2-2'}}</td>
                             </tr>
-                        </tbody>
-                    </table>
-                    <!-- T2 startedddddd -->
-                     
-                    <table [hidden]="T2NotPresent" class="table table-bordered " id="printsectionProductDetail">
-                        <thead>
-                            <tr>
-                                <th style="text-align:center; border: 2px solid  #a8a7a7; background-color: rgb(253,244,243);"
-                                    colspan="10"> Tier#2 Cost or Rough Part Cost or Casting
-                                    Cost or Forging Cost</th>
-                            </tr>
-                        </thead>
-
-                        <thead>
-                            <tr>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> SG & A (%)</th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> SG & A Updated (%)
-                                </th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> Profit (%)</th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> Profit Updated (%)
-                                </th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> Packaging (%)</th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> Packaging Updated
-                                    (%)
-                                </th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> Freight /
-                                    Logistics
-                                    (%) </th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> Freight /
-                                    Logistics
-                                    Update (%) </th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> Tariff (%)</th>
-                                <th style="font-size: 11px !important; font-weight: 600 !important;"> Tariff Updated (%)
-                                </th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr *ngFor="let val of ProductDetail; let i=index" class="ShouldCostBreakdowntabletr">
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"> {{ val.sgA_T2 }}
-                                </td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"
-                                    [ngClass]="{'UpdateValueLessThan': val.sgA_T2 >SGA_per_T2,'UpdateValueGreaterThan': val.sgA_T2 < SGA_per_T2}">
-                                    {{ SGA_per_T2 }} </td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"> {{ val.profit_T2}}
-                                </td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"
-                                    [ngClass]="{'UpdateValueLessThan': val.profit_T2 >Profit_per_T2,'UpdateValueGreaterThan': val.profit_T2 < Profit_per_T2}">
-                                    {{ Profit_per_T2 }} </td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"> {{
-                                    val.packaging_T2}}
-                                </td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"
-                                    [ngClass]="{'UpdateValueLessThan': val.packaging_T2 >Packaging_per_T2,'UpdateValueGreaterThan': val.packaging_T2 < Packaging_per_T2}">
-                                    {{ Packaging_per_T2}} </td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"> {{ val.freight_T2
-                                    }}
-                                </td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"
-                                    [ngClass]="{'UpdateValueLessThan': val.freight_T2 >FreightLogistics_per_T2,'UpdateValueGreaterThan': val.freight_T2 < FreightLogistics_per_T2}">
-                                    {{ FreightLogistics_per_T2 }}</td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"> 0 </td>
-                                <td style="font-size: 11px !important; font-weight: 600 !important;"
-                                    [ngClass]="{'UpdateValueLessThan': 0 > Tariff_Per_T2,'UpdateValueGreaterThan': 0 < Tariff_Per_T2}">
-                                    {{ Tariff_Per_T2 }}</td>
+                            <tr *ngIf="MaterailGrade.length <= 0">
+                                <td colspan="6" style="padding: 10px 10px; font-size: 12px !important;"> Material grade
+                                    are
+                                    not available</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-            </div>
-
-            <div class="row tabledata">
-                <table class="table table-bordered " id="printsectionMaterial">
-                    <thead>
-                        <tr>
-                            <th style="font-size: 12px !important; font-weight: 600 !important;"> Sr. No. </th>
-                            <th style="font-size: 12px !important; font-weight: 600 !important;"> Material Grade</th>
-                            <th style="font-size: 12px !important; font-weight: 600 !important;"> Current Rate</th>
-                            <th style="font-size: 12px !important; font-weight: 600 !important;"> Updated Rate</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let val of MaterailGrade; let i=index" class="ShouldCostBreakdowntabletr">
-                            <td style="font-size: 12px !important; font-weight: 600 !important;"> {{ i + 1}}</td>
-                            <td style="font-size: 12px !important; font-weight: 600 !important;"> {{ val.materialType}}
-                            </td>
-                            <td style="font-size: 12px !important; font-weight: 600 !important;"> {{
-                                val.unitMaterialRate | number:'1.2-2'}}</td>
-                            <td style="font-size: 12px !important; font-weight: 600 !important;"
-                                [ngClass]="{'UpdateValueLessThan': val.unitMaterialRate > val.updateMaterialRate,'UpdateValueGreaterThan': val.unitMaterialRate < val.updateMaterialRate}">
-                                {{ val.updateMaterialRate | number:'1.2-2'}}</td>
-                        </tr>
-                        <tr *ngIf="MaterailGrade.length <= 0">
-                            <td colspan="4" style="padding: 10px 10px; font-size: 12px !important;"> Material grade are
-                                not available</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
 
 
-            <div class="Tiercostdata">
-                <div class="row Tier2tabledata">
-                    <table class="table table-bordered " id="printsectionHead">
+                <div class="Tiercostdata">
+                    <div class="row Tier2tabledata">
+                        <table class="table table-bordered " id="printsectionHead">
+                            <thead>
+                                <tr class="text-center">
+                                    <th colspan="4"
+                                        style="border: 1px solid #80808048; background-color: rgb(253,244,243); font-size: 12px !important; font-weight: 600 !important;">
+                                        Should Cost
+                                        By Should Costing Team</th>
+                                </tr>
+                                <tr>
+                                    <th style="font-size: 12px !important; font-weight: 600 !important;"> Cost Header
+                                    </th>
+                                    <th style="font-size: 12px !important; font-weight: 600 !important;"> In USD ($)
+                                    </th>
+                                    <th style="font-size: 12px !important; font-weight: 600 !important;"> In Local
+                                        Currency
+                                        ({{ForexRegion}}) </th>
+                                    <th style="width: 120px; font-size: 12px !important; font-weight: 600 !important;">
+                                        Contribution in Total Cost (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let val of TierData; let i=index" class="ShouldCostBreakdowntabletr">
+                                    <td style="padding: 10px 10px; font-size: 12px !important;"
+                                        [class.footer-color-tfoot]="val.particular == 'Part Cost' || val.particular == 'Total Cost'"
+                                        [class.footer-color]="val.particular == 'Total Manufacturing Cost'">
+                                        {{val.particular}}</td>
+                                    <td style="font-size: 12px !important; font-weight: 600 !important;"
+                                        [class.footer-color-tfoot]="val.particular == 'Part Cost' || val.particular == 'Total Cost'"
+                                        [class.footer-color]="val.particular == 'Total Manufacturing Cost'">$
+                                        {{val.usdValue
+                                        | number:'1.2-2' }}</td>
+                                    <td style="font-size: 12px !important; font-weight: 600 !important;"
+                                        [class.footer-color-tfoot]="val.particular == 'Part Cost' || val.particular == 'Total Cost'"
+                                        [class.footer-color]="val.particular == 'Total Manufacturing Cost'">
+                                        {{ForexRegion}}
+                                        {{val.localValue | number:'1.2-2'}}</td>
+                                    <td
+                                        style="position: relative; padding-left: 0px; padding-top: 5px; font-size: 12px !important;">
+                                        <div *ngIf=" val.usdValue > 0" [style.width.%]="val.totalCostPer"
+                                            class="TotalInPer">
+                                            <img src="../../../assets/report_img.png" style="width: 100%;height: 100%;">
+                                        </div>
+                                        <span class="text-center"
+                                            style=" position: absolute; width: 100%;  z-index: 10;padding-top: 5px; font-size: 12px !important;">
+                                            {{val.totalCostPer | number:'1.0-0'}}
+                                        </span>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="row tabledataManager">
+                        <div class="watermark">
+                            <h1> User simulation, not a Cost Model </h1>
+                        </div>
+
+                        <table class="table table-bordered " id="printsectionHead2">
+                            <thead>
+                                <tr class="text-center">
+                                    <th colspan="3"
+                                        style=" border: 1px solid #80808048; background-color: rgb(253,244,243);font-size: 12px !important; font-weight: 600 !important;">
+                                        User Simulation</th>
+
+                                </tr>
+                                <tr>
+                                    <th style="font-size: 12px !important; font-weight: 600 !important;"> In USD ($)
+                                    </th>
+                                    <th style="font-size: 12px !important; font-weight: 600 !important;"> In Local
+                                        Currency
+                                        ({{ForexRegion}})</th>
+                                    <th style="width: 120px; font-size: 12px !important; font-weight: 600 !important;">
+                                        Contribution in Total Cost (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let val of TierData; let i=index" class="ShouldCostBreakdowntabletr">
+                                    <td style="font-size: 12px !important; font-weight: 600 !important;"
+                                        [class.footer-color-tfoot]="val.particular == 'Part Cost' || val.particular == 'Total Cost'"
+                                        [class.footer-color]="val.particular == 'Total Manufacturing Cost'"
+                                        [ngClass]="{'UpdateValueGreaterThan': val.updateStatus === 1,'UpdateValueLessThan': val.updateStatus === 0 }">
+                                        $ {{val.smUSDValue |
+                                        number:'1.2-2' }}
+                                    </td>
+                                    <td [class.footer-color-tfoot]="val.particular == 'Part Cost' || val.particular == 'Total Cost'"
+                                        [class.footer-color]="val.particular == 'Total Manufacturing Cost'"
+                                        style="font-size: 12px !important; font-weight: 600 !important;">{{ForexRegion}}
+                                        {{val.smlocalValue | number:'1.2-2'}}</td>
+                                    <td style="position: relative; padding-left: 0px; padding-top: 5px; ">
+                                        <div *ngIf=" val.smUSDValue > 0" [style.width.%]="val.totalCostPerSM"
+                                            class="TotalInPer">
+                                            <img src="../../../assets/report_img.png" style="width: 100%;height: 100%;">
+                                        </div>
+                                        <span class="text-center"
+                                            style=" position: absolute; width: 100%;  z-index: 10; padding-top: 5px; font-size: 12px !important; font-weight: 600 !important;">
+                                            {{val.totalCostPerSM | number:'1.0-0'}}
+                                        </span>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row Marks">
+                    <div style=" display: inline-flex;">
+                        <label class="marksColor1"></label>Greater than Existing Cost
+                        <div style=" display: inline-flex;margin-left: 20px; ">
+                            <label class="marksColor2"></label>Less than Existing Cost
+                        </div>
+                    </div>
+                </div>
+                <div class="row vavetabledata" style="margin-top: 2%;">
+                    <table class="table table-bordered " id="printsectionVave" style="width: 70%;margin-left: 15%;">
                         <thead>
                             <tr class="text-center">
                                 <th colspan="4"
                                     style="border: 1px solid #80808048; background-color: rgb(253,244,243); font-size: 12px !important; font-weight: 600 !important;">
-                                    Should Cost
-                                    By Should Costing Team</th>
+                                    VAVE Changes</th>
                             </tr>
                             <tr>
-                                <th style="font-size: 12px !important; font-weight: 600 !important;"> Cost Header </th>
-                                <th style="font-size: 12px !important; font-weight: 600 !important;"> In USD ($) </th>
-                                <th style="font-size: 12px !important; font-weight: 600 !important;"> In Local Currency
-                                    ({{ForexRegion}}) </th>
-                                <th style="width: 120px; font-size: 12px !important; font-weight: 600 !important;">
-                                    Contribution in Total Cost (%)</th>
+                                <th
+                                    style="width: 60px; background-color: #ccc;font-size: 12px !important; font-weight: 600 !important;">
+                                    Sr. No. </th>
+                                <th
+                                    style="background-color: #ccc;font-size: 12px !important; font-weight: 600 !important;">
+                                    Idea </th>
+                                <th
+                                    style="background-color: #ccc;font-size: 12px !important; font-weight: 600 !important; width: 150px;">
+                                    Potential Savings PP
+                                    ($) </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let val of TierData; let i=index" class="ShouldCostBreakdowntabletr">
-                                <td style="padding: 10px 10px; font-size: 12px !important;"
-                                    [class.footer-color-tfoot]="val.particular == 'Part Cost' || val.particular == 'Total Cost'"
-                                    [class.footer-color]="val.particular == 'Total Manufacturing Cost'">
-                                    {{val.particular}}</td>
-                                <td style="font-size: 12px !important; font-weight: 600 !important;"
-                                    [class.footer-color-tfoot]="val.particular == 'Part Cost' || val.particular == 'Total Cost'"
-                                    [class.footer-color]="val.particular == 'Total Manufacturing Cost'">$ {{val.usdValue
-                                    | number:'1.2-2' }}</td>
-                                <td style="font-size: 12px !important; font-weight: 600 !important;"
-                                    [class.footer-color-tfoot]="val.particular == 'Part Cost' || val.particular == 'Total Cost'"
-                                    [class.footer-color]="val.particular == 'Total Manufacturing Cost'">{{ForexRegion}}
-                                    {{val.localValue | number:'1.2-2'}}</td>
-                                <td
-                                    style="position: relative; padding-left: 0px; padding-top: 5px; font-size: 12px !important;">
-                                    <div *ngIf=" val.usdValue > 0" [style.width.%]="val.totalCostPer"
-                                        class="TotalInPer">
-                                        <img src="../../../assets/report_img.png" style="width: 100%;height: 100%;">
-                                    </div>
-                                    <span class="text-center"
-                                        style=" position: absolute; width: 100%;  z-index: 10;padding-top: 5px; font-size: 12px !important;">
-                                        {{val.totalCostPer | number:'1.0-0'}}
-                                    </span>
+                            <tr *ngFor="let val of Vavedetails; let i=index" class="ShouldCostBreakdowntabletr">
+                                <td style="width: 60px; padding: 10px 10px; font-size: 12px !important;">
+                                    <!-- {{val.id}} -->
+                                    {{ i + 1 }}
+                                </td>
+                                <td style="padding: 10px 10px; font-size: 12px !important;">{{val.Idea}}</td>
+                                <td style="font-size: 12px !important; font-weight: 600 !important;">
+                                    <input type="text" class="form-control vavePercentText" maxlength="10"
+                                        (keypress)="keyPressDecimal($event)"
+                                        value="{{val.PotentialSavingsPerPieceMDO | number : '0.0-2'}}"
+                                        (keyup)="onvaveChange()" id="vaveIdea{{val}}">
+                                    <!-- [(ngModel)]="val.PotentialSavingsPerPieceMDO" -->
                                 </td>
                             </tr>
-
+                            <tr *ngIf="Vavedetails.length <= 0">
+                                <td colspan="3" style="padding: 10px 10px; font-size: 12px !important;"> VAVE Ideas not
+                                    selected </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
-
-                <div class="row tabledataManager">
-                    <div class="watermark">
-                        <h1> User simulation, not a Cost Model </h1>
+                <div class="row">
+                    <div class="col-md-3 text-end"></div>
+                    <div class="col-md-3 text-end" style="background-color: #ccc;">
+                        <h5 for="myTextbox" class="TotalTextlbl">Total Cost :</h5>
                     </div>
-
-                    <table class="table table-bordered " id="printsectionHead2">
-                        <thead>
-                            <tr class="text-center">
-                                <th colspan="3"
-                                    style=" border: 1px solid #80808048; background-color: rgb(253,244,243);font-size: 12px !important; font-weight: 600 !important;">
-                                    User Simulation</th>
-
-                            </tr>
-                            <tr>
-                                <th style="font-size: 12px !important; font-weight: 600 !important;"> In USD ($) </th>
-                                <th style="font-size: 12px !important; font-weight: 600 !important;"> In Local Currency
-                                    ({{ForexRegion}})</th>
-                                <th style="width: 120px; font-size: 12px !important; font-weight: 600 !important;">
-                                    Contribution in Total Cost (%)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let val of TierData; let i=index" class="ShouldCostBreakdowntabletr">
-                                <td style="font-size: 12px !important; font-weight: 600 !important;"
-                                    [class.footer-color-tfoot]="val.particular == 'Part Cost' || val.particular == 'Total Cost'"
-                                    [class.footer-color]="val.particular == 'Total Manufacturing Cost'"
-                                    [ngClass]="{'UpdateValueGreaterThan': val.updateStatus === 1,'UpdateValueLessThan': val.updateStatus === 0 }">
-                                    $ {{val.smUSDValue |
-                                    number:'1.2-2' }}
-                                </td>
-                                <td [class.footer-color-tfoot]="val.particular == 'Part Cost' || val.particular == 'Total Cost'"
-                                    [class.footer-color]="val.particular == 'Total Manufacturing Cost'"
-                                    style="font-size: 12px !important; font-weight: 600 !important;">{{ForexRegion}}
-                                    {{val.smlocalValue | number:'1.2-2'}}</td>
-                                <td style="position: relative; padding-left: 0px; padding-top: 5px; ">
-                                    <div *ngIf=" val.smUSDValue > 0" [style.width.%]="val.totalCostPerSM"
-                                        class="TotalInPer">
-                                        <img src="../../../assets/report_img.png" style="width: 100%;height: 100%;">
-                                    </div>
-                                    <span class="text-center"
-                                        style=" position: absolute; width: 100%;  z-index: 10; padding-top: 5px; font-size: 12px !important; font-weight: 600 !important;">
-                                        {{val.totalCostPerSM | number:'1.0-0'}}
-                                    </span>
-                                </td>
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-                </div>
-            </div>
-
-            <div class="row Marks">
-                <div style=" display: inline-flex;">
-                    <label class="marksColor1"></label>Greater than Existing Cost
-                    <div style=" display: inline-flex;margin-left: 20px; ">
-                        <label class="marksColor2"></label>Less than Existing Cost
+                    <div class="col-md-3 text-start" style="background-color: #ccc;">
+                        <!-- <input class="form-control TotalText" type="text" id="myTextbox" [(ngModel)]="this.totalvavecost" readonly> -->
+                        <h5 for="myTextbox" class="TotalTextlbl" id="myTextbox">$ {{totalvavecost}}</h5>
                     </div>
                 </div>
-            </div>
-            <div class="row vavetabledata" style="margin-top: 2%;">
-                <table class="table table-bordered " id="printsectionVave" style="width: 70%;margin-left: 15%;">
-                    <thead>
-                        <tr class="text-center">
-                            <th colspan="4"
-                                style="border: 1px solid #80808048; background-color: rgb(253,244,243); font-size: 12px !important; font-weight: 600 !important;">
-                                VAVE Changes</th>
-                        </tr>
-                        <tr>
-                            <th
-                                style="width: 60px; background-color: #ccc;font-size: 12px !important; font-weight: 600 !important;">
-                                Sr. No. </th>
-                            <th style="background-color: #ccc;font-size: 12px !important; font-weight: 600 !important;">
-                                Idea </th>
-                            <th
-                                style="background-color: #ccc;font-size: 12px !important; font-weight: 600 !important; width: 150px;">
-                                Potential Savings PP
-                                ($) </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let val of Vavedetails; let i=index" class="ShouldCostBreakdowntabletr">
-                            <td style="width: 60px; padding: 10px 10px; font-size: 12px !important;">
-                                <!-- {{val.id}} -->
-                                {{ i + 1 }}
-                            </td>
-                            <td style="padding: 10px 10px; font-size: 12px !important;">{{val.Idea}}</td>
-                            <td style="font-size: 12px !important; font-weight: 600 !important;">
-                                <input type="text" class="form-control vavePercentText" maxlength="10"
-                                    (keypress)="keyPressDecimal($event)"
-                                    value="{{val.PotentialSavingsPerPieceMDO | number : '0.0-2'}}"
-                                    (keyup)="onvaveChange()" id="vaveIdea{{val}}">
-                                <!-- [(ngModel)]="val.PotentialSavingsPerPieceMDO" -->
-                            </td>
-                        </tr>
-                        <tr *ngIf="Vavedetails.length <= 0">
-                            <td colspan="3" style="padding: 10px 10px; font-size: 12px !important;"> VAVE Ideas not
-                                selected </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="row">
-                <div class="col-md-3 text-end"></div>
-                <div class="col-md-3 text-end" style="background-color: #ccc;">
-                    <h5 for="myTextbox" class="TotalTextlbl">Total Cost :</h5>
+
+                <br>
+                <div class="totalcost">
+                    <button type="button" class="btn btn-sm btn-outline-danger btnview" data-bs-dismis="modal"
+                        style="margin-left: 27%;" (click)="SaveVavedetails()">Save/Publish Simulation</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger btnview" data-bs-dismis="modal"
+                        style="margin-left: 2%;" (click)="GoToRefreshRequest()">Send for Cost Expert Review</button>
                 </div>
-                <div class="col-md-3 text-start" style="background-color: #ccc;">
-                    <!-- <input class="form-control TotalText" type="text" id="myTextbox" [(ngModel)]="this.totalvavecost" readonly> -->
-                    <h5 for="myTextbox" class="TotalTextlbl" id="myTextbox">$ {{totalvavecost}}</h5>
-                </div>
+
             </div>
 
-            <br>
-            <div class="totalcost">
-                <button type="button" class="btn btn-sm btn-outline-danger btnview" data-bs-dismis="modal"
-                    style="margin-left: 27%;" (click)="SaveVavedetails()">Save/Publish Simulation</button>
-                <button type="button" class="btn btn-sm btn-outline-danger btnview" data-bs-dismis="modal"
-                    style="margin-left: 2%;" (click)="GoToRefreshRequest()">Send for Cost Expert Review</button>
-            </div>
+            <br><br><br>
 
         </div>
-
-        <br><br><br>
-
     </div>
 
     <!-- ----------------- should cost request send  start ---------  -->
@@ -512,7 +611,7 @@
                 </div>
                 <div class="col-md-6">
                     <label>Requested Date :</label>
-                    <span style="margin-left: 10px;">{{RequesteDate | date: 'dd-MMM-YYYY HH:MM:SS' }}</span>
+                    <span style="margin-left: 10px;">{{RequesteDate | date: 'dd-MMM-YYYY' }}</span>
                 </div>
             </div>
         </div>
@@ -526,7 +625,7 @@
                 </div>
                 <div class="col-md-6">
                     <label>Requested Date :</label>
-                    <span style="margin-left: 10px;">{{CreatedDate | date: 'dd-MMM-YYYY HH:MM:SS'}}</span>
+                    <span style="margin-left: 10px;">{{CreatedDate | date: 'dd-MMM-YYYY'}}</span>
                 </div>
                 <div class="col-md-6">
                     <label>Request ID:</label>
@@ -545,8 +644,9 @@
             <div class="row">
                 <div class="col-md-10">
                     <br>
-                    <label for="floatingTextarea" class="default-lbl"><b style="color: #ff0000;">*</b>Attachment
-                        Request¹</label>
+                    <label for="floatingTextarea" class="default-lbl">
+                        <!-- <b style="color: #ff0000;">*</b> -->
+                        Attachment Request¹</label>
                     <input #myFile type="file" id="myFile" (change)="onChange($event)" class="form-control"
                         accept=".xlsx, .xls, .xlsm">
                     <span class="remark">{{UploadSheetcomments}}</span>
@@ -557,7 +657,8 @@
                 <div class="col-md-10" style="padding-left: 10px;">
                     <label for="floatingTextarea" class="default-lbl">Input Folder Link²</label>
                     <input type="text" class="form-control" [(ngModel)]="FolderLink" placeholder="Folder Path....">
-                    <span class="remark"> 2. 2D prints/3D CAD for all assembly and child parts are required - if they
+                    <span class="remark"> 2. 2D prints/3D CAD for all assembly and child parts are required - if
+                        they
                         are not
                         available on PLM, please load it in a OneDrive folder and provide the link above with folder
                         access to wwid
@@ -586,7 +687,8 @@
             <br>
             <div class="row " [hidden]="ResubmitRequest">
                 <div class="col-md-12">
-                    <h6 style="color: #ff0000; font-family: Helvetica, Arial;">Please update the request based on COE
+                    <h6 style="color: #ff0000; font-family: Helvetica, Arial;">Please update the request based on
+                        COE
                         team suggestion and resubmit the form for
                         further processing by COE team.</h6>
                 </div>
@@ -596,5 +698,3 @@
     </div>
 
     <!-- ----------------- should cost request send  end ---------  -->
-
-</div>

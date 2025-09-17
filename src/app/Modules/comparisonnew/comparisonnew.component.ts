@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { SearchService } from 'src/app/SharedServices/search.service';
 import { ReportServiceService } from 'src/app/SharedServices/report-service.service';
@@ -22,7 +22,7 @@ export class ComparisonnewComponent implements OnInit {
 
 
   constructor(public searchservice: SearchService, public router: Router, private location: Location, private SpinnerService: NgxSpinnerService,
-    public reportservice: ReportServiceService,) {
+    public reportservice: ReportServiceService) {
 
   }
 
@@ -43,6 +43,13 @@ export class ComparisonnewComponent implements OnInit {
 
   Manu_TotalInUSD: number = 0;
   TotalInUSD: number = 0;
+
+  IsPlatform = false;
+  IsEngineDisplacement = false;
+  IsGensetOuputPower = false;
+  IsFrameSize = false;
+  IsSizeofAftertreatment = false;
+  TechnicalParametersrowspan = 7;
 
   ngOnInit(): void {
     //debugger;
@@ -73,9 +80,19 @@ export class ComparisonnewComponent implements OnInit {
 
 
   getComparison(e: any) {
+    debugger;
+    if (e.scReportId > 0) {
+      const Params = {
+        param_CSHeaderId: e.csHeaderId,
+        param_SCReportId: e.scReportId
+      };
 
-    localStorage.setItem("ComapredId", e);
-    this.router.navigate(['/home/shouldcost']);
+      this.router.navigate(['/home/shouldcostuserhistory/:data'], { queryParams: Params });
+    }
+    else {
+      localStorage.setItem("ComapredId", e.csHeaderId);
+      this.router.navigate(['/home/shouldcost']);
+    }
   }
 
   partDetails: any;
@@ -105,7 +122,7 @@ export class ComparisonnewComponent implements OnInit {
 
 
   async GetData() {
-    debugger;
+    //debugger;
     this.TechnicalParameterDetailed = [];
     const data = await this.searchservice.getComparisonDataNew(this.compare_Ids).toPromise();
     this.partDetails = data.partDetails;
@@ -137,6 +154,49 @@ export class ComparisonnewComponent implements OnInit {
     }
 
 
+    this.IsPlatform = false;
+    this.IsEngineDisplacement = false;
+    this.IsGensetOuputPower = false;
+    this.IsFrameSize = false;
+    this.IsSizeofAftertreatment = false;
+
+    for (var i = 0; i < data.partDetails.length; i++) {
+      switch (data.partDetails[i].businessUnit) {
+        case 'EBU':
+          this.IsPlatform = true; this.IsEngineDisplacement = true;
+          break;
+        case 'PSBU':
+          this.IsEngineDisplacement = true; this.IsGensetOuputPower = true;
+          break;
+        case 'CBU-CTT':
+          this.IsPlatform = true; this.IsFrameSize = true;
+          break;
+        case 'CBU-CES':
+          this.IsSizeofAftertreatment = true;
+          break;
+        default:
+          this.IsPlatform = true; this.IsEngineDisplacement = true;
+
+      }
+    }
+
+    if (this.IsPlatform) {
+      this.TechnicalParametersrowspan = Number(this.TechnicalParametersrowspan) + 1;
+    }
+    if (this.IsEngineDisplacement) {
+      this.TechnicalParametersrowspan = Number(this.TechnicalParametersrowspan) + 1;
+    }
+    if (this.IsGensetOuputPower) {
+      this.TechnicalParametersrowspan = Number(this.TechnicalParametersrowspan) + 1;
+    }
+    if (this.IsFrameSize) {
+      this.TechnicalParametersrowspan = Number(this.TechnicalParametersrowspan) + 1;
+    }
+    if (this.IsSizeofAftertreatment) {
+      this.TechnicalParametersrowspan = Number(this.TechnicalParametersrowspan) + 1;
+    }
+
+
 
 
     this.SpinnerService.hide('spinner');
@@ -160,7 +220,7 @@ export class ComparisonnewComponent implements OnInit {
   }
 
   async GetDataTier2() {
-    debugger;
+    //debugger;
     const data = await this.searchservice.getComparisonDataNewTier2(this.ids).toPromise();
     this.commericalDetailsTier2 = data;
 
@@ -199,6 +259,7 @@ export class ComparisonnewComponent implements OnInit {
     this.ShoudeCostInfo = [];
     this.TotalComparePart = [];
 
+    var minimum = 0;
     for (var i = 0; i < this.compardata.length; i++) {
       if (this.compardata[i].id >= 4 && this.compardata[i].id <= 22) {
         this.TotalComparePart = [];
@@ -207,24 +268,31 @@ export class ComparisonnewComponent implements OnInit {
         if (this.compardata[i].id != 12 && this.compardata[i].id != 21) {
           if (this.compardata[i].details1 != null) {
             this.TotalComparePart.push(
-              { y: Number(this.compardata[i].details1), label: this.compardata[1].details1 + ' - ' + this.compardata[2].details1 },
+              { y: Number(this.compardata[i].details1), originalY: Number(this.compardata[i].details1), label: this.compardata[1].details1 + ' - ' + this.compardata[2].details1 },
             );
           }
           if (this.compardata[i].details2 != null) {
             this.TotalComparePart.push(
-              { y: Number(this.compardata[i].details2), label: this.compardata[1].details2 + ' - ' + this.compardata[2].details2 },
+              { y: Number(this.compardata[i].details2), originalY: Number(this.compardata[i].details2), label: this.compardata[1].details2 + ' - ' + this.compardata[2].details2 },
             );
           }
           if (this.compardata[i].details3 != null) {
             this.TotalComparePart.push(
-              { y: Number(this.compardata[i].details3), label: this.compardata[1].details3 + ' - ' + this.compardata[2].details3 },
+              { y: Number(this.compardata[i].details3), originalY: Number(this.compardata[i].details3), label: this.compardata[1].details3 + ' - ' + this.compardata[2].details3 },
             );
           }
           if (this.compardata[i].details4 != null) {
             this.TotalComparePart.push(
-              { y: Number(this.compardata[i].details4), label: this.compardata[1].details4 + ' - ' + this.compardata[2].details4 },
+              { y: Number(this.compardata[i].details4), originalY: Number(this.compardata[i].details4), label: this.compardata[1].details4 + ' - ' + this.compardata[2].details4 },
             );
           }
+        }
+
+        if (this.compardata[i].id == 5) {
+          minimum += Number(this.compardata[i].details1);
+          minimum += Number(this.compardata[i].details2);
+          minimum += Number(this.compardata[i].details3);
+          minimum += Number(this.compardata[i].details4);
         }
 
         if (this.compardata[i].id == 22) {
@@ -255,7 +323,11 @@ export class ComparisonnewComponent implements OnInit {
 
     }
 
+    if (minimum < 0) {
+      minimum += 5;
+    }
 
+    debugger;
     this.chartOptions = {
 
       animationEnabled: true,
@@ -272,10 +344,19 @@ export class ComparisonnewComponent implements OnInit {
       },
       axisY: {
         title: "Cost in USD($)",
+        minimum: minimum,
         valueFormatString: "#0.#",
       },
       toolTip: {
-        shared: true
+        shared: true,
+        // contentFormatter: function (e: any) {
+        //   let content = "";
+        //   for (let i = 0; i < e.entries.length; i++) {
+        //     let dataPoint = e.entries[i].dataPoint;
+        //      content += "<span style='color:" +e.entries[i].dataSeries.color + "'>" + e.entries[i].dataSeries.name+ "</span>: " + dataPoint.originalY +  "<br/>";
+        //   }
+        //   return content;
+        // }
       },
       legend: {
         horizontalAlign: "right",
@@ -283,8 +364,6 @@ export class ComparisonnewComponent implements OnInit {
         reversed: true
       },
       data: this.ShoudeCostInfo,
-
-
     }
 
   }
@@ -621,6 +700,7 @@ export class ComparisonnewComponent implements OnInit {
 
     this.ShoudeCostInfo = [];
     this.TotalComparePart = [];
+    var minimum = 0;
 
     for (var i = 0; i < this.CommericalDetailsSupplierCost.length; i++) {
       if (this.CommericalDetailsSupplierCost[i].id >= 6 && this.CommericalDetailsSupplierCost[i].id <= 21) {
@@ -646,6 +726,13 @@ export class ComparisonnewComponent implements OnInit {
               { y: Number(this.CommericalDetailsSupplierCost[i].details4), label: this.CommericalDetailsSupplierCost[1].details4 + ' - ' + this.CommericalDetailsSupplierCost[2].details4 + ' - ' + this.CommericalDetailsSupplierCost[3].details4 + ' - ' + this.CommericalDetailsSupplierCost[4].details4 },
             );
           }
+        }
+
+        if (this.compardata[i].id == 5) {
+          minimum += Number(this.compardata[i].details1);
+          minimum += Number(this.compardata[i].details2);
+          minimum += Number(this.compardata[i].details3);
+          minimum += Number(this.compardata[i].details4);
         }
 
         if (this.CommericalDetailsSupplierCost[i].id == 21) {
@@ -693,6 +780,7 @@ export class ComparisonnewComponent implements OnInit {
       },
       axisY: {
         title: "Cost in USD($)",
+        minimum: minimum,
         valueFormatString: "#0.#",
       },
       toolTip: {
@@ -740,5 +828,42 @@ export class ComparisonnewComponent implements OnInit {
   }
 
 
+
+  // ------------------fixed header -
+  @ViewChild('tablePartDetails') tablePartDetails!: ElementRef;
+
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll(event: UIEvent) {
+    const myElement = document.getElementById("tablePartDetails");
+    const myElementimg = document.getElementById("tablePartDetailsImg");
+    const myElementVolume = document.getElementById("tableShouldCostVolume") as HTMLElement;
+
+    // Access the scroll position or other event details from the 'event' object
+    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    console.log('Window scrolled!', scrollPosition);
+
+    // You can implement your logic here based on the scroll position
+    if (scrollPosition >= 520) {
+
+      const rect = this.tablePartDetails.nativeElement.getBoundingClientRect();
+
+      myElement?.classList.add("no-scroll");
+      myElementimg?.classList.add("no-scrollimg");
+      myElementVolume.style.marginTop = Number(rect.bottom) + 150 + 'px';
+    }
+    else {
+      myElement?.classList.remove("no-scroll");
+      myElementimg?.classList.remove("no-scrollimg");
+      myElementVolume.style.marginTop = '';
+    }
+  }
+
+
 }
+
+
+
+
+
+
 

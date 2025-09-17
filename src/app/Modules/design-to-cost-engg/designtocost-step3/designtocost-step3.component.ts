@@ -23,6 +23,7 @@ interface TableRow {
   created: Date | null;
   ideaSelected?: boolean;
   createdBy: string;
+  businessUnit:string;
 }
 
 @Component({
@@ -48,6 +49,7 @@ export class DesigntocostStep3Component {
     id: 0,
     created: null,
     createdBy: '',
+    businessUnit:''
 
   };
 
@@ -389,8 +391,51 @@ export class DesigntocostStep3Component {
   }
   //LINE NUM 281 IS COMMENTED 
 
-  OpenVBD() {
-    window.open(environment.VBDLinkHopper);
+  // OpenVBD() {
+  //   window.open(environment.VBDLinkHopper);
+  // }
+  OpenVBD(BusinessUnit: string): void {
+    debugger;
+    let link = '';
+  
+    switch (BusinessUnit) {
+      case 'EBU':
+        link = environment.VBDLink_EBU;
+        break;
+      case 'PSBU':
+        link = environment.VBDLink_PSBU;
+        break;
+      case 'Accelera':
+        link = environment.VBDLink_Accelera;
+        break;
+       case 'CBU-CTT':
+        link = environment.VBDLink_CBUCTT;
+        break;
+      case 'CBU-CES':
+        link = environment.VBDLink_CES;
+        break;
+      case 'CBU-CE':
+        link = environment.VBDLink_CE;
+        break;
+      case 'CBU-CEC':
+        link = environment.VBDLink_CEC;
+        break;
+      case null:
+        link = environment.VBDLinkHopper; // Optional fallback for null or blank
+        break;
+      case '':
+        link = environment.VBDLinkHopper; // Optional fallback for null or blank
+        break;
+      default:
+        link = environment.VBDLinkHopper; // Catch-all fallback
+        break;
+    }
+  
+    if (link) {
+      window.open(link, '_blank');
+    } else {
+      console.warn('No link found for BusinessUnit:', BusinessUnit);
+    }
   }
 
 
@@ -440,6 +485,7 @@ export class DesigntocostStep3Component {
       id: 0, // default value
       created: null,
       createdBy: '',
+      businessUnit:''
     };
 
     this.display = "block";

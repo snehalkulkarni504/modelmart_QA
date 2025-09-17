@@ -64,6 +64,12 @@
                 <div class="header-line"></div>
               </div>
             </th>
+            <th class="header-box header-box-selection">
+              <div class="header-content">
+                Feasibility
+                <div class="header-line"></div>
+              </div>
+            </th>
           </tr>
 
           <!-- Search Filters Row -->
@@ -92,6 +98,10 @@
               <input type="text" class="column-search" placeholder="Owner..." title="Search Owner..."
                 [(ngModel)]="searchFilters.ideaOwner" (input)="applyFilter()">
             </td>
+            <td>
+              <input type="text" class="column-search" placeholder="Feasibility..." title="Search feasibility..."
+                [(ngModel)]="searchFilters.feasibility" (input)="applyFilter()" />
+            </td>
           </tr>
 
         </thead>
@@ -99,7 +109,8 @@
 
           <tr *ngFor="let row of filteredData | paginate: {itemsPerPage:itemonperpage, currentPage: page}">
             <td id="freeze"> {{ row.idea }}</td>
-            <td class="id1" (click)="OpenVBD()" title="{{row.sharepoint_ID}}" *ngIf="row.sharepoint_ID > 0; else noData">{{row.sharepoint_ID}}
+            <td class="id1" (click)="OpenVBD(row.businessUnit)" title="{{row.sharepoint_ID}}"
+              *ngIf="row.sharepoint_ID > 0; else noData">{{row.sharepoint_ID}}
             </td>
             <ng-template #noData>
               <td class="idNA"> NA</td>
@@ -110,6 +121,9 @@
             <td style="text-align: center;" title="{{row.potentialSavingsPerPieceMDO}}">
               {{row.potentialSavingsPerPieceMDO | number:'0.0-2' }}</td>
             <td style="text-align: start;" title="{{row.ideaOwner}}">{{ row.ideaOwner }}</td>
+            <td style="text-align: center" title="{{ row.feasibility }}">
+              {{ row.feasibility }}
+            </td>
             <!-- <td style="text-align: center;"> <i class="bi bi-arrow-up-right" style="cursor: pointer;"></i> </td> -->
           </tr>
         </tbody>

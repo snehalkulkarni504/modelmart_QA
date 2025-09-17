@@ -40,7 +40,8 @@
 
                     <table style="width: 100%;">
                         <tr>
-                            <td style="width: 18%;" class="align-baseline"><label for="ProjectName" class="default-lbl">Requester Name
+                            <td style="width: 18%;" class="align-baseline"><label for="ProjectName"
+                                    class="default-lbl">Requester Name
                                     :</label></td>
                             <td><label for="ProjectName" class="default-lblvalue">{{data[0].userName}}</label></td>
                         </tr>
@@ -48,44 +49,53 @@
 
                     <table style="width: 100%;">
                         <tr>
-                            <td style="width: 18%;" class="align-baseline"><label for="ProjectName" class="default-lbl">Request Date :</label>
+                            <td style="width: 18%;" class="align-baseline"><label for="ProjectName"
+                                    class="default-lbl">Request Date :</label>
                             </td>
                             <td><label for="ProjectName" class="default-lblvalue">{{data[0].createdOn | date:
-                                    'dd-MMM-YYYY  - HH:MM:SS' }}</label></td>
+                                    'dd-MMM-YYYY - HH:MM:SS' }}</label></td>
                         </tr>
                     </table>
 
                     <table style="width: 100%;">
                         <tr>
-                            <td style="width: 18%;" class="align-baseline"><label for="ProjectName" class="default-lbl">Previous Status
+                            <td style="width: 18%;" class="align-baseline"><label for="ProjectName"
+                                    class="default-lbl">Previous Status
                                     :</label></td>
                             <td><label for="ProjectName" class="default-lblvalue">{{data[0].status}}</label></td>
                         </tr>
                     </table>
                     <table style="width: 100%;">
                         <tr>
-                            <td style="width: 18%;" class="align-baseline"><label for="ProjectName" class="default-lbl">COE Comments
+                            <td style="width: 18%;" class="align-baseline"><label for="ProjectName"
+                                    class="default-lbl">COE Comments
                                     :</label></td>
-                            <td><label for="ProjectName" class="default-lblvalue">{{data[0].scTeamComments}}</label></td>
+                            <td><label for="ProjectName" class="default-lblvalue">{{data[0].scTeamComments}}</label>
+                            </td>
                         </tr>
                     </table>
                     <table style="width: 100%;">
                         <tr>
-                            <td style="width: 18%;" class="align-baseline"><label for="ProjectName" class="default-lbl" >Requester Comments
+                            <td style="width: 18%;" class="align-baseline"><label for="ProjectName"
+                                    class="default-lbl">Requester Comments
                                     :</label></td>
-                            <td><label for="ProjectName" class="default-lblvalue" >{{data[0].smComments}}</label></td>
+                            <td><label for="ProjectName" class="default-lblvalue">{{data[0].smComments}}</label></td>
                         </tr>
                     </table>
                     <table style="width: 100%;" *ngIf="Origin==2">
                         <tr>
-                            <td style="width: 18%;" class="align-baseline"><label for="ProjectName" class="default-lbl" >Design to Cost Report URL
+                            <td style="width: 18%;" class="align-baseline"><label for="ProjectName"
+                                    class="default-lbl">Design to Cost Report link
                                     :</label></td>
-                            <td><a [routerLink]="['/home/DTCRequestReport']" [queryParams]="{csHeaderID:CSHeaderId,screportID:SCReportId}" routerLinkActive="active">URL</a></td>
+                            <td><a [routerLink]="['/home/shouldcostuserhistory/:data']"
+                                    [queryParams]="{param_CSHeaderId:CSHeaderId,param_SCReportId:SCReportId}"
+                                    routerLinkActive="active">View Report</a></td>
+
+                            <!-- <td><a [routerLink]="['/home/DTCRequestReport']" [queryParams]="{csHeaderID:CSHeaderId,screportID:SCReportId}" routerLinkActive="active">URL</a></td> -->
                         </tr>
                     </table>
                 </div>
             </div>
-
             <br>
 
             <div class="row pb-2">
@@ -93,7 +103,7 @@
                     <label for="dropdown" class="default-lbl"><b>Status</b></label>
                     <span>
                         <select #selectStatus id="dropdown1" class="form-select form-select-sm custom-dropdown"
-                            (change)="GetStatus($event)" >
+                            (change)="GetStatus($event)">
                             <option value="">Please Select Status</option>
                             <option value="Submitted">Submitted</option>
                             <option value="Under Review">Under Review</option>

@@ -20,18 +20,34 @@
 
             <div class="container">
 
-                <div class="row" id="panleborder">
+                <div class="row" id="panleborder" style="width: 111%; margin-left: -6%;">
                     <div class="row">
                         <div class="col-md-3">
-                            <label for="dropdown0" class="default-lbl">Request ID <span
+                            <label for="dropdown0" class="default-lbl">Sheet Type <span
+                                    style="color: red;">*</span></label>
+                            <ng-select #ngSelectSheet [ngModelOptions]="{standalone: true}" [searchable]="true"
+                                placeholder="Please select" [(ngModel)]="selectedSheet"
+                                (ngModelChange)="onSheetTypeChange($event)">
+                                <ng-option [value]="1">Old Sheet</ng-option>
+                                <ng-option [value]="2">New Sheet</ng-option>
+                            </ng-select>
+
+                            <div class="error-message" *ngIf="showError2">
+                                Please select Sheet Type
+                            </div>
+
+                        </div>
+
+                        <!-- <div class="col-md-3">
+                            <label for="dropdown0" class="default-lbl">Sheet Type <span
                                     style="color: red;">*</span></label>
                             <ng-select #ngSelectRequestID [ngModelOptions]="{standalone: true}" [searchable]="true"
                                 placeholder="Please select" [(ngModel)]='selectedID'><ng-option
-                                    *ngFor="let item of getID"
-                                    [value]="item.requestHeaderID">{{item.requestHeaderID}}</ng-option>
+                                    
+                                ></ng-option>
                             </ng-select>
                             <div class="error-message" *ngIf="showError0"> Please select Request ID.</div>
-                        </div>
+                        </div> -->
 
                         <div class="col-md-3">
                             <label for="dropdown1" class="default-lbl">Model Mart ID <span
@@ -56,10 +72,10 @@
                         </div>
 
                         <div class="col-md-3">
-                            <button   type="button" class="btn  btn-view" (click)="onSelected();"
-                                style="margin-top: 15px;" data-bs-dismis="modal">View</button>  
-                                <button type="button" class="btn btn-bulkupload" (click)="BulkUpload()" style="margin-top: 15px;"
-                                data-bs-dismis="modal">Bulk Upload</button>                           
+                            <button type="button" class="btn  btn-view" (click)="onSelected();"
+                                style="margin-top: 15px;" data-bs-dismis="modal">View</button>
+                            <button type="button" class="btn btn-bulkupload" (click)="BulkUpload()"
+                                style="margin-top: 15px;" data-bs-dismis="modal">Bulk Upload</button>
                         </div>
                         <!-- <div class="col-md-2 ">
                             <button type="button" class="btn btn-bulkupload" (click)="BulkUpload()" style="margin-top: 15px;"
@@ -69,42 +85,49 @@
 
                 </div>
 
-                <div *ngIf="modelTypesID!=2 && modelTypesID!=5" class="row" id="panleborder"> 
+                <div *ngIf="selectedSheet == 1 && modelTypesID != 2 && modelTypesID != 5" class="row" id="panleborder"
+                    style="width: 111%; margin-left: -6%;">
                     <div class="row">
                         <div class="col-md-2">
                             <label for="dropdown6" class="default-lbl">Length (mm)<span
                                     style="color: red;">*</span></label>
                             <input class="form-control form-control-sm" type="number" placeholder="Length"
-                                (blur)="onBlurLength($event)" [(ngModel)]="length"
-                                [ngModelOptions]="{standalone: true}">
-                            <div class="error-message" *ngIf="showError9"> Please enter Length.</div>
+                                [(ngModel)]="length" [ngModelOptions]="{standalone: true}" (input)="onLengthInput()" />
+                            <div class="error-message" *ngIf="showError9">Please enter Length.</div>
+
                         </div>
                         <div class="col-md-2">
                             <label for="dropdown6" class="default-lbl">Width (mm)<span
                                     style="color: red;">*</span></label>
                             <input class="form-control form-control-sm" type="number" placeholder="Width"
-                                (blur)="onBlurWidth($event)" [(ngModel)]="width" [ngModelOptions]="{standalone: true}">
+                                [(ngModel)]="width" [ngModelOptions]="{standalone: true}" (input)="onWidthInput()">
                             <div class="error-message" *ngIf="showError10"> Please enter Length.</div>
                         </div>
                         <div class="col-md-2">
                             <label for="dropdown6" class="default-lbl">Height (mm)<span
                                     style="color: red;">*</span></label>
                             <input class="form-control form-control-sm" type="number" placeholder="Height"
-                                (blur)="onBlurHeight($event)" [(ngModel)]="height"
-                                [ngModelOptions]="{standalone: true}">
+                                [(ngModel)]="height" [ngModelOptions]="{standalone: true}" (input)="onHeightInput()">
                             <div class="error-message" *ngIf="showError12"> Please enter Height.</div>
                         </div>
                         <div class="col-md-2">
                             <label for="dropdown6" class="default-lbl">Part Weight (kg)<span
                                     style="color: red;">*</span></label>
                             <input class="form-control form-control-sm" type="number" placeholder="Part Weight"
-                                (blur)="onBlurPartWeight($event)" [(ngModel)]="partWeight"
-                                [ngModelOptions]="{standalone: true}">
+                                [(ngModel)]="partWeight" [ngModelOptions]="{standalone: true}"
+                                (input)="onPartWeightInput()">
                             <div class="error-message" *ngIf="showError13"> Please enter Part Weight.</div>
                         </div>
-                        <div class="col-md-3">
+                        <!-- <div class="col-md-3"> -->
+                        <!-- <a href="#" (click)="openTechnicalParameterModal()">Technical Parameter</a> -->
+                        <!-- <button (click)="openTechnicalParameterModal()">Technical Parameter</button> -->
+                        <!-- <a href="#" (click)="$event.preventDefault(); openTechnicalParameterModal()">Technical Parameter</a>
+</div> -->
+
+
+                        <!-- <div class="col-md-3">
                             <label for="dropdown6" class="default-lbl">Cat 4 </label>
-                            <!-- <span style="color: red;">*</span> -->
+                          
                             <ng-select #ngSelectCat4 [ngModelOptions]="{standalone: true}" [searchable]="true"
                                 placeholder="Please select" [(ngModel)]="selectedCat4"
                                 (ngModelChange)="getCategoryIdcat4()">
@@ -112,25 +135,29 @@
                                     [value]="item.categoryId">{{item.childCategory}}</ng-option>
                             </ng-select>
                             <div class="error-message" *ngIf="showError8"> Please select Category 4.</div>
-                        </div>
+                        </div> -->
                     </div>
-                    <div class="row" style="margin-top: 20px;">
+                    <!-- <div class="row" style="margin-top: 20px;">
                         <div class="col-md-3">
                             <label for="dropdown6" class="default-lbl">Part Secification </label>
-                            <!-- <span style="color: red;">*</span> -->
                             <ngx-treeview #partspecific [config]="config" [items]="PartSpecific"
                                 (selectedChange)="onSelectedChangePartSpec($event)">
                             </ngx-treeview>
                             <div class="error-message" *ngIf="showError8"> Please select Part Secification</div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
+                <!-- Technical Parameter Modal -->
+
+
                 <br>
-                <div class="d-flex" style="overflow-x: auto;">
+                <div class="d-flex" style="overflow-x: auto;  width: 111%;margin-left: -6%;">
                     <table class="table table-bordered table-striped " style="width: 100%;">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>Sr. No</th>
+                                <th>Request ID</th>
+                                <th>Model Mart ID</th>
                                 <th>Part Name</th>
                                 <th>Part Number</th>
                                 <th>Business Unit</th>
@@ -144,7 +171,7 @@
                                 <th>Tooling Should Cost</th>
                                 <th>Cost Type</th>
                                 <th hidden>CSHeaderID</th>
-                                <th>Model Mart ID</th>
+
                                 <th>Iterations</th>
                                 <th *ngIf="IsHopperValide">Action</th>
                             </tr>
@@ -153,6 +180,8 @@
                             <tr *ngFor="let data of getArr; let i=index" style="font-size: 12px !important;">
                                 <td hidden></td>
                                 <td>{{i+1}}</td>
+                                <td>{{data.requestID}}</td>
+                                <td>{{data.uniqueID}}</td>
                                 <td>{{data.partName}}</td>
                                 <td>{{data.partNumber}}</td>
                                 <td>{{data.businessUnit}}</td>
@@ -163,43 +192,49 @@
                                 <td>{{data.debriefDate | date :'dd-MMM-yyyy'}}</td>
                                 <td>{{data.shouldCostModeller}}</td>
                                 <td>{{data.suppManuLoc}}</td>
-                                <td>{{data.toolingShouldCost}}</td>
+                                <td>{{data.toolingShouldCost  | number:'1.4-4'}}</td>
                                 <td>{{data.costType}}</td>
                                 <td hidden *ngIf="getUArr[i]">{{ getUArr[i].csHeaderID }}</td>
                                 <td hidden *ngIf="!getUArr[i]"></td>
-                                <td>{{data.uniqueID}}</td>
+
                                 <td>{{data.iterationsCount}}</td>
-                                <td *ngIf=" IsHopperValide && getUArr[i] && (getUArr[i].iterationCount == data.iterationsCount)">
-                                    <i class="bi bi-pencil-fill" style="color: #da291c;
-                                            font-size:larger;" (click)="editModalMethod(i)"
-                                        ngbTooltip="Update Model"></i>
-                                    <i class="bi bi-trash-fill" style="color: #da291c; padding-left:4px;
-                                            font-size:larger;" (click)="deleteUploadedData(i)"
-                                        ngbTooltip="Delete Model"></i>
- 
+                                <td
+                                    *ngIf="IsHopperValide && getUArr[i] && (getUArr[i].iterationCount == data.iterationsCount)">
+                                    <div style="display: flex; gap: 5px;">
+                                        <button class="btnModel" (click)="editModalMethod(i)"
+                                            ngbTooltip="Update Model">Edit</button>
+                                        <button class="btnModel" (click)="deleteUploadedData(i)"
+                                            ngbTooltip="Delete Model">Delete</button>
+                                    </div>
                                 </td>
-                                <td  *ngIf="IsHopperValide && ( !getUArr[i] || getUArr[i].iterationCount < data.iterationsCount)"><i class="bi bi-plus-lg"
+
+
+                                <td
+                                    *ngIf="IsHopperValide && ( !getUArr[i] || getUArr[i].iterationCount < data.iterationsCount)">
+                                    <!-- <i class="bi bi-plus-lg"
                                         style="color: #da291c; font-size:larger;" id="plus-icon"
-                                        (click)="addModalMethod(i)" ngbTooltip="Add new Model"></i>
- 
+                                        (click)="addModalMethod(i)" ngbTooltip="Add new Model"></i> -->
+                                    <button class="btnModel " id="plus-icon" (click)="addModalMethod(i)"
+                                        ngbTooltip="Add new Model">add</button>
                                 </td>
 
                             </tr>
                         </tbody>
-                    </table>                    
+                    </table>
                 </div>
 
                 <div class="error-message" *ngIf="IsNullDebriefDate"> Debrief Date should not be blank</div>
                 <div class="error-message" *ngIf="IsNullCostType"> Cost Type should not be blank</div>
-                <div class="error-message" *ngIf="IsNullShouldCostModeller"> Should Cost Modeller should not be blank</div>
+                <div class="error-message" *ngIf="IsNullShouldCostModeller"> Should Cost Modeller should not be blank
+                </div>
 
                 <br><br>
                 <div class="row">
                     <div class="col-md-3 text-start">
                         <div class="input-group custom-file-button">
-                            <label  class="input-group-text" for="inputGroupFile" id="excelFile_lbl">Excel File</label>
-                            <input #takeInputExcel  type="file" class="form-control" (change)="onChange($event,'excel')" id="excelFile"
-                                accept=".xlsx, .xls, .xlsm">
+                            <label class="input-group-text" for="inputGroupFile" id="excelFile_lbl">Excel File</label>
+                            <input #takeInputExcel type="file" class="form-control" (change)="onChange($event,'excel')"
+                                id="excelFile" accept=".xlsx, .xls, .xlsm">
                         </div>
                         <!-- <input class="form-control" type="file" (change)="onChange($event,'excel')" id="excelFile" accept=".xlsx, .xls, .xlsm"> -->
                     </div>
@@ -207,8 +242,8 @@
                         <!-- <input class="form-control" type="file" (change)="onChange($event,'pdf')" id="pdfFile" accept=".pdf"> -->
                         <div class="input-group custom-file-button">
                             <label class="input-group-text" for="inputGroupFile">PDF File</label>
-                            <input #takeInputPDF type="file" class="form-control" (change)="onChange($event,'pdf')" id="pdfFile"
-                                accept=".pdf" multiple>
+                            <input #takeInputPDF type="file" class="form-control" (change)="onChange($event,'pdf')"
+                                id="pdfFile" accept=".pdf" multiple>
                         </div>
                     </div>
                     <div class="col-md-3 text-start">
@@ -216,23 +251,85 @@
                         <!-- <input class="form-control" type="file" (change)="onChange($event,'image')" id="imageFiles" accept=".jpg, .jpeg, .png" multiple> -->
                         <div class="input-group custom-file-button">
                             <label class="input-group-text" for="inputGroupFile">Image File</label>
-                            <input #takeInputImage type="file" class="form-control" (change)="onChange($event,'image')" id="imageFiles"
-                                accept=".jpg, .jpeg, .png" multiple>
+                            <input #takeInputImage type="file" class="form-control" (change)="onChange($event,'image')"
+                                id="imageFiles" accept=".jpg, .jpeg, .png" multiple>
                         </div>
                     </div>
-                    <div class="col-md-3 text-end">
-                        <button type="button" class="btn btn-lg btn-upload" (click)="onUpload();" data-bs-dismis="modal"
+                    <div class="col-md-3 text-start">
+                        <button type="button" class="btn btn-md btn-upload" (click)="onUpload();" data-bs-dismis="modal"
                             [disabled]="!enableupload || !addSuccess">Upload</button>
 
-                            <button type="button" id="testbtn" (click)="ngSelectRequestID.clearModel(); ngSelectUniqueID.clearModel(); " style="visibility: hidden;">
-                            </button>
-                            <!-- ngSelectCat4.clearModel() -->
+                        <button type="button" id="testbtn" (click)=" ngSelectUniqueID.clearModel(); "
+                            style="visibility: hidden;">
+                        </button>
+                        <!-- ngSelectRequestID.clearModel(); -->
+                        <!-- ngSelectCat4.clearModel() -->
 
                     </div>
                 </div>
             </div>
         </form>
     </div>
+    <!-- <div *ngIf="isTechnicalParameterModalOpen" class="modal">
+        <div class="modal-content">
+            <span class="close" (click)="closeTechnicalParameterModal()">&times;</span>
+            <h4>Enter Technical Parameters</h4>
+            <label>Parameter:</label>
+            <input type="text" [(ngModel)]="parameter" placeholder="Enter parameter">
+            <label>Name:</label>
+            <input type="text" [(ngModel)]="name" placeholder="Enter name">
+            <button (click)="addTechnicalParameter()">Add</button>
+        </div>
+    </div> -->
+
+    <div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': isTechnicalParameterModalOpen}"
+        style="display: block;" *ngIf="isTechnicalParameterModalOpen">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Techinical Parameters </h5>
+                    <label class="close modal-close-icn" (click)="closeTechnicalParameterModal()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                        </svg>
+                    </label>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Parameter Desc</th>
+                                <th>Parameter Desc Value </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of technicalParameters; let i = index">
+                                <td *ngIf="item.parameter; else inputParameter">{{ item.parameter }}</td>
+                                <ng-template #inputParameter>
+                                    <input type="text" [(ngModel)]="item.parameter" placeholder="Enter parameter">
+                                </ng-template>
+
+                                <td *ngIf="item.name; else inputName">{{ item.name }}</td>
+                                <ng-template #inputName>
+                                    <input type="text" [(ngModel)]="item.name" placeholder="Enter name">
+                                </ng-template>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn btn-bulkupload" (click)="addTechnicalParameter()">Add Row</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- </div> -->
 </div>
+
+<!-- (blur)="onBlurLength($event)" 
+  (blur)="onBlurWidth($event)" 
+    (blur)="onBlurHeight($event)"
+      (blur)="onBlurPartWeight($event)" 
+ -->

@@ -79,6 +79,7 @@
     background-color: #267eb8;
     color: #fff;
     font-size: 12px;
+    box-shadow: 0px 0px 10px #267eb8;
 }
 
 .DTO_step2 {
@@ -173,7 +174,7 @@
 
 
 .userfullname {
-    font-weight: bold;
+    /* font-weight: bold; */
     font-style: italic;
 }
 

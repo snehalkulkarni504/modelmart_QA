@@ -576,3 +576,61 @@ input[type=text]:focus {
     rotate: 90deg;
     cursor: pointer;
 }
+
+ /* ---- update model data popup start --------- */
+
+ 
+.update-modal-backdrop
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    
+}
+
+.update-modal
+{
+    background: #fff;
+    padding: 10px 10px;
+    width: 80%;
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .3);
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+}
+
+.update-button
+{
+    width: 50%;
+    border: 1px solid gray;
+    border-radius: 5px;
+    background-color: unset;
+    font-size: 15px !important;
+}
+.update-button:hover
+{
+    background-color: green;
+    color: #ffffff;
+}
+
+.update-button1:hover
+{
+    background-color: gray;
+    color: #ffffff;
+}
+
+.default-btn_popup
+{
+    background-color: #da291c;
+    color: #ffffff;
+}
+
+ /* ---- update model data popup end --------- */

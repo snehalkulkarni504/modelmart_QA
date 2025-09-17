@@ -20,6 +20,8 @@ import { GetMgfProcessArtibage } from 'src/app/Model/GetMgfProcessArtibage';
 import { TcoUploadComponent } from '../Request/tco-upload/tco-upload.component';
 import { utils, writeFileXLSX } from 'xlsx';
 import { SearchPipe } from "../../pipe/search.pipe";
+import { CanvasJS } from '@canvasjs/angular-charts';
+import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 
 @Component({
   selector: 'app-cost-reduction',
@@ -36,7 +38,7 @@ export class CostReductionComponent implements OnInit {
   showModal: any;
   selectedComment: any;
   selectedFiles: File[] = [];
-  selectedFilesRegional: File[]=[];
+  selectedFilesRegional: File[] = [];
   showTcoUploadModal: boolean = false;
   showDocumentUploadModal: boolean = false;
   showcostinsights: boolean = false;
@@ -48,7 +50,7 @@ export class CostReductionComponent implements OnInit {
   Cat3: any;
   showdesign = false;
   CategoryId: any;
-  
+
   filters = {
     year: null
   };
@@ -115,8 +117,8 @@ export class CostReductionComponent implements OnInit {
   showContent: boolean = false;
   showmgfprocess: boolean = false;
   CategoryID: any;
-  sessionflag:any;
-  sessionCategoryID:any;
+  sessionflag: any;
+  sessionCategoryID: any;
   Regional: any[] = [];
   opportunities: any[] = [];
   data: any = [];
@@ -133,7 +135,7 @@ export class CostReductionComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     // debugger
     const shouldToggle = sessionStorage.getItem('toggleViewTrigger');
-    
+
     const shouldToggle1 = sessionStorage.getItem('toggleViewTrigger1');
     if (shouldToggle === 'true') {
       const stored = sessionStorage.getItem('costinsightvalues');
@@ -142,8 +144,8 @@ export class CostReductionComponent implements OnInit {
       if (stored) {
         this.test = JSON.parse(stored); // Restores full object
       }
-      if(storedproductlist){
-        this.SearchProductList=JSON.parse(storedproductlist);
+      if (storedproductlist) {
+        this.SearchProductList = JSON.parse(storedproductlist);
       }
       this.showArbitrage = true;
       this.showCat3Management = !this.showCat3Management;
@@ -160,7 +162,8 @@ export class CostReductionComponent implements OnInit {
       await this.GetRegionalArbitrage();
       await this.GetMgfProcessArtibage();
       await this.GetDesignArbitrage();
-      await  this.GetMgfProcessArtibageComparison();
+      await this.GetMgfProcessArtibageComparison();
+      await this.GetAttributeRulesByCategory();
 
       this.ShowCagetory3();
       this.SpinnerService.hide('spinner');
@@ -177,8 +180,8 @@ export class CostReductionComponent implements OnInit {
       if (vavestored) {
         this.test = JSON.parse(vavestored); // Restores full object
       }
-      if(vavestoredproductlist){
-        this.SearchProductList=JSON.parse(vavestoredproductlist);
+      if (vavestoredproductlist) {
+        this.SearchProductList = JSON.parse(vavestoredproductlist);
       }
       this.showArbitrage = true;
       this.showCat3Management = !this.showCat3Management;
@@ -195,7 +198,8 @@ export class CostReductionComponent implements OnInit {
       await this.GetRegionalArbitrage();
       await this.GetMgfProcessArtibage();
       await this.GetDesignArbitrage();
-      await  this.GetMgfProcessArtibageComparison();
+      await this.GetMgfProcessArtibageComparison();
+      await this.GetAttributeRulesByCategory();
 
       this.ShowCagetory3();
       this.SpinnerService.hide('spinner');
@@ -205,7 +209,7 @@ export class CostReductionComponent implements OnInit {
       sessionStorage.removeItem('vaveSearchProductList');
 
     }
-     else {
+    else {
       // Regular init logic only if NOT coming from TCO
       this.SearchboxForm = new FormGroup({
         Cat2List: new FormControl(),
@@ -350,6 +354,7 @@ export class CostReductionComponent implements OnInit {
       'Part Number': opp.PartNumber,
       'Part Name': opp.PartName,
       'MMID': opp.MMID,
+      'Program Name': opp.ProgramName,
       'CAT4': opp.CAT4,
       'Supplier Name': opp.SupplierName,
       'Supp Mfg Location': opp.SupplierMfgRegion,
@@ -569,6 +574,7 @@ export class CostReductionComponent implements OnInit {
 
   backToCat3() {
     debugger
+
     this.showCat3Management = true;
     this.showcostinsights = false;
     this.showContent = false;
@@ -583,12 +589,45 @@ export class CostReductionComponent implements OnInit {
     this.totalAttainment = null;
     this.totaluserAttainment = null;
     this.selectAllText = 'Select All';
+    this.showDesignWarning = false;
 
   }
 
-  async setActiveButton(buttonName: string) {
+  // async setActiveButton(buttonName: string) {
+  //   this.SpinnerService.show('spinner');
+  //   this.activeButton = buttonName;
+  //   // Reset visibility for all sections
+  //   this.showContent = buttonName === 'commercial';
+  //   this.showRegionalContent = buttonName === 'regional';
+  //   this.showmgfprocess = buttonName === 'manufacturing';
+  //   this.showdesign = buttonName === 'design';
+
+  //   switch (this.activeButton) {
+
+  //     case 'regional':
+  //       this.totalVariation = this.getTotalRegionalOppurtunity();
+  //       this.totalAttainment = this.RegionalSCAttainment();
+  //       break;
+  //     case 'manufacturing':
+  //       this.totalVariation = this.getTotalMfgOppurtunity();
+  //       this.totalAttainment = this.ManufacturingSCAttainment();
+  //       break;
+  //     case 'design':
+
+  //     // this.showCategoryDropdown = true;
+  //     // this.SpinnerService.hide('spinner');
+  //       this.totalVariation = this.gettotaloppurtunity();
+  //       this.totalAttainment = this.RegionalSCAttainment();
+  //       break;
+  //     default:
+  //       this.totalVariation = this.gettotaloppurtunity();
+  //       this.totalAttainment = this.calculateWeightedSCAttainment();
+  //       this.totaluserAttainment = this.calculateWeightedUserSCAttainment();
+  //   }
+  async setActiveButton(buttonName: string = 'commercial') {
     this.SpinnerService.show('spinner');
     this.activeButton = buttonName;
+
     // Reset visibility for all sections
     this.showContent = buttonName === 'commercial';
     this.showRegionalContent = buttonName === 'regional';
@@ -601,12 +640,20 @@ export class CostReductionComponent implements OnInit {
         this.totalAttainment = this.RegionalSCAttainment();
         break;
       case 'manufacturing':
-        this.totalVariation = this.getTotalMfgOppurtunity();
-        this.totalAttainment = this.ManufacturingSCAttainment();
+        // this.totalVariation = this.getTotalMfgOppurtunity();
+        // this.totalAttainment = this.ManufacturingSCAttainment();
         break;
       case 'design':
-        this.totalVariation = this.gettotaloppurtunity();
-        this.totalAttainment = this.RegionalSCAttainment();
+        // this.totalVariation = this.gettotaloppurtunity();
+        // this.totalAttainment = this.RegionalSCAttainment();
+        const selectedCategories = this.test; // already loaded from sessionStorage in ngOnInit
+
+        if (selectedCategories && selectedCategories.length > 1) {
+          this.showDesignWarning = true;
+          this.showdesign = false;
+          this.SpinnerService.hide('spinner');
+          return; // stop further execution until user responds
+        }
         break;
       default:
         this.totalVariation = this.gettotaloppurtunity();
@@ -641,12 +688,12 @@ export class CostReductionComponent implements OnInit {
     if (opportunity.UpdatedAnnualVolume === null || opportunity.UpdatedAnnualVolume === undefined || opportunity.UpdatedAnnualVolume === '') {
       opportunity.UpdatedAnnualVolume = String(opportunity.AnnualVolume || 0); // default we are sending orginal annualvaloume
     }
-    
+
     if (opportunity.UserCalculatedCost === null || opportunity.UserCalculatedCost === undefined || opportunity.UserCalculatedCost === '') {
       opportunity.UserCalculatedCost = String(opportunity.ShouldCost || 0);  // default we are sending orginal shouldcost
     }
-    
-    opportunity.UserSimulatedCostAttainment = this.calculatePercentage(opportunity) 
+
+    opportunity.UserSimulatedCostAttainment = this.calculatePercentage(opportunity)
     opportunity.UserSimulatedArbitrage = this.calculateOpportunityValue(opportunity) || "0.00";
     opportunity.ModifiedBy = (localStorage.getItem("userFullName"))
 
@@ -735,9 +782,12 @@ export class CostReductionComponent implements OnInit {
     let totalWeightedSCAttainment = 0;
     let totalSupplierQuoted = 0;
 
+
     this.orginalopportunities.forEach((opportunity: any) => {
+
       const quoted = Number(opportunity.SupplierQuoted) || 0;
-      const cost = Number(opportunity.UserCalculatedCost) || 0;
+      // const cost = Number(opportunity.UserCalculatedCost) || 0;
+      const cost = Number(opportunity.UserCalculatedCost) || Number(opportunity.ShouldCost) || 0;
 
       let percentage = 0;
       if (quoted > 0 && cost > 0) {
@@ -769,14 +819,20 @@ export class CostReductionComponent implements OnInit {
       event.target.value = value.slice(0, -1);
     }
   }
+
+
   gettotaloppurtunity(): string {
     let total = 0;
-    // Iterate over the opportunities array and sum up the UserCalculatedCost values
-    this.orginalopportunities.forEach((opportunity: { CommercialArbitrage: any; }) => {
+    // Sum up the CommercialArbitrage values
+    this.orginalopportunities.forEach((opportunity: { CommercialArbitrage: any }) => {
       total += opportunity.CommercialArbitrage || 0;
     });
-    return `$${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    // Convert to millions with precision (e.g., 4.56M)
+    const totalInMillions = total / 1_000_000;
+
+    return `${totalInMillions.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}M$`;
   }
+
 
   calculatePercentage(opportunity: any): string {
     if (opportunity.SupplierQuoted && opportunity.UserCalculatedCost > 0 && opportunity.SupplierQuoted > 0) {
@@ -795,7 +851,7 @@ export class CostReductionComponent implements OnInit {
   }
 
   formatToMillions(value: any): string {
-    if (value > 0) {
+    if (value > 0 || value < 0) {
       return (value / 1000000).toFixed(2) + ' M$';
     }
     return value.toString();
@@ -902,11 +958,11 @@ export class CostReductionComponent implements OnInit {
   downloadFolderAsZip(CommericalArtibageID: string, PartNumber: any): void {
 
     if (CommericalArtibageID == null) {
-      this.toastr.warning("Please update the record then download a file");
+      this.toastr.warning("No Documents Available");
       return;
     }
     const formattedFileName = `${PartNumber}_CommercialArbitrage_${CommericalArtibageID}.zip`;
-  
+
     this.AdminService.downloadZipFile(CommericalArtibageID).subscribe(
       (response: Blob) => {
         const url = window.URL.createObjectURL(response); // Create a blob URL
@@ -919,7 +975,7 @@ export class CostReductionComponent implements OnInit {
       },
       (error) => {
         console.error('Error downloading ZIP file:', error);
-        this.toastr.error('Error downloading ZIP file');
+        this.toastr.error('No Documents Available');
       }
     );
   }
@@ -927,8 +983,8 @@ export class CostReductionComponent implements OnInit {
   async ShowLandingPage(flag: number, CategoryID: string) {
     debugger
     try {
-      this.sessionCategoryID=CategoryID;
-      this.sessionflag=flag;
+      this.sessionCategoryID = CategoryID;
+      this.sessionflag = flag;
       this.SpinnerService.show('spinner');
       const data = await this.Searchservice.GetLandingPage(flag, CategoryID).toPromise();
       this.SearchProductList = data;
@@ -946,17 +1002,36 @@ export class CostReductionComponent implements OnInit {
     }
   }
 
+  toggleSelection(item: any): void {
+    item.selected = !item.selected;
+    this.onCheckboxChange(item); // Reuse your existing logic
+  }
+
+
   selectAll(): void {
-    const allSelected = this.SearchProductList.every((group: { selected: boolean }) => group.selected);
+    const isMaxSelected = this.selectedCategoryIds.length === 20;
 
-    this.SearchProductList.forEach((group: { selected: boolean }) => {
-      group.selected = !allSelected;
-    });
+    if (!isMaxSelected) {
+      let count = 0;
+      this.SearchProductList.forEach((group: { selected: boolean }) => {
+        group.selected = count < 20;
+        if (count < 20) count++;
+      });
 
-    if (!allSelected) {
-      this.selectedCategoryIds = this.SearchProductList.map((group: { categoryId: any }) => group.categoryId);
+      this.selectedCategoryIds = this.SearchProductList
+        .filter((group: { selected: boolean }) => group.selected)
+        .map((group: { categoryId: any }) => group.categoryId);
+
       this.selectAllText = 'Unselect All';
+
+      if (this.SearchProductList.length > 20) {
+        this.toastr.warning('Only 20 categories can be selected at a time.', 'Limit Exceeded');
+      }
     } else {
+      this.SearchProductList.forEach((group: { selected: boolean }) => {
+        group.selected = false;
+      });
+
       this.selectedCategoryIds = [];
       this.selectAllText = 'Select All';
     }
@@ -965,16 +1040,42 @@ export class CostReductionComponent implements OnInit {
   }
 
   onCheckboxChange(item: any) {
+    const selectedCount = this.selectedCategoryIds.length;
+
     if (item.selected) {
+      if (selectedCount >= 20) {
+        item.selected = false;
+        this.toastr.warning('You can select up to 20 categories only.', 'Limit Exceeded');
+        return;
+      }
+
       if (!this.selectedCategoryIds.includes(item.categoryId)) {
         this.selectedCategoryIds.push(item.categoryId);
       }
     } else {
       this.selectedCategoryIds = this.selectedCategoryIds.filter(id => id !== item.categoryId);
     }
-    this.test = this.selectedCategoryIds
 
+    this.test = this.selectedCategoryIds;
+    this.selectAllText = this.selectedCategoryIds.length === 20 ? 'Unselect All' : 'Select All';
   }
+
+
+  handleCheckboxClick(event: Event, item: any): void {
+    const selectedCount = this.selectedCategoryIds.length;
+
+    // If trying to select and limit is reached
+    if (!item.selected && selectedCount >= 20) {
+      event.preventDefault(); // ✅ Prevent checkbox from toggling
+      this.toastr.warning('You can select up to 20 categories only.', 'Limit Exceeded');
+      return;
+    }
+
+    // Toggle selection manually
+    item.selected = !item.selected;
+    this.onCheckboxChange(item);
+  }
+
 
 
   navigateToCostInsight(CategoryID: number) {
@@ -1016,30 +1117,39 @@ export class CostReductionComponent implements OnInit {
 
   async toggleView() {
     debugger;
-   
+
     if (!this.test || this.test.length === 0) {
       // this.selectAll();
       this.toastr.warning("Please select atleast one Category");
       return;
 
     }
-    else{
+    if (this.test.length > 20) {
+      // this.selectAll();
+      this.toastr.warning("Please select 20 Categories");
+      return;
+
+    }
+    else {
       this.SpinnerService.show('spinner');
       this.showcostinsights = true;
 
-    await this.GetCommericalArtibage();
-    await this.GetRegionalArbitrage();
-    await this.GetMgfProcessArtibage();
-    await this.GetDesignArbitrage();
-     await  this.GetMgfProcessArtibageComparison();
+      await this.GetCommericalArtibage();
+      await this.GetRegionalArbitrage();
+      await this.GetMgfProcessArtibage();
+      await this.GetDesignArbitrage();
+      await this.GetMgfProcessArtibageComparison();
+      await this.GetAttributeRulesByCategory();
 
-    this.showArbitrage = true;
-    this.showCat3Management = !this.showCat3Management;
-    this.showContent = false;
-    this.showRegionalContent = false;
-    this.showmgfprocess = false;
-    this.showdesign = false;
-    this.SpinnerService.hide('spinner');
+      this.showArbitrage = true;
+      this.showCat3Management = !this.showCat3Management;
+      ;
+      await this.setActiveButton();
+
+      this.showRegionalContent = false;
+      this.showmgfprocess = false;
+      this.showdesign = false;
+      this.SpinnerService.hide('spinner');
     }
 
   }
@@ -1111,6 +1221,8 @@ export class CostReductionComponent implements OnInit {
       'Part Number': region.PartNumber,
       'Part Name': region.PartName,
       'CAT4': region.CAT4,
+      'MMID': region.MMID,
+      'Program Name': region.ProgramName,
       'Supplier Mfg Location': region.MainRegion,
       'Annual Volume': region.AnnualVolume,
       'Supplier Quoted / Invoice Price': region.TotalCost,
@@ -1133,14 +1245,20 @@ export class CostReductionComponent implements OnInit {
 
 
   getTotalRegionalOppurtunity(): string {
-    debugger
     let total = 0;
-    this.orgibnalRegional.forEach((Region: { RegionalArbitrage: any; }) => {
+
+    this.orgibnalRegional.forEach((Region: { RegionalArbitrage: any }) => {
       total += parseFloat(Region.RegionalArbitrage) || 0;
     });
-    return `$${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
+    if (total >= 100_000) {
+      const totalInMillions = total / 1_000_000;
+      return `${totalInMillions.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}M$`;
+    } else {
+      return `${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}$`;
+    }
   }
+
 
   getChartStyles() {
     //debugger
@@ -1292,7 +1410,7 @@ export class CostReductionComponent implements OnInit {
 
   RegionFileDownloadAsZip(PartNumber: any, Regional_ArtibageID: string): void {
     if (Regional_ArtibageID == null) {
-      this.toastr.warning("Please update the record then download a file");
+      this.toastr.warning("No Documents Available");
       return;
     }
     //debugger
@@ -1309,7 +1427,7 @@ export class CostReductionComponent implements OnInit {
       },
       (error) => {
         console.error('Error downloading ZIP file:', error);
-        this.toastr.error('Error downloading ZIP file');
+        this.toastr.warning('No Documents Available');
       }
     );
   }
@@ -1479,7 +1597,7 @@ export class CostReductionComponent implements OnInit {
       const encryptedRequestId = btoa(this.selectedRegionalRequestId); // Base64 encoding
       sessionStorage.setItem('costinsightvalues', JSON.stringify(this.test));
       sessionStorage.setItem('SearchProductList', JSON.stringify(this.SearchProductList));
-      
+
       this.router.navigate(['/home/tcoupload'], {
         queryParams: {
           UniqueId: encryptedUniqueId,
@@ -1489,18 +1607,36 @@ export class CostReductionComponent implements OnInit {
     }
   }
 
+  // RegionalSCAttainment(): string {
+  //   debugger;
+  //   let totalShouldCost = 0;
+  //   let totalSupplierQuoted = 0;
+
+  //   this.orgibnalRegional.forEach((Region: { ShouldCost: any; TargetQuote: any }) => {
+  //     totalShouldCost += Number(Region.ShouldCost) || 0;
+  //     totalSupplierQuoted += Number(Region.TargetQuote) || 0;
+  //   });
+  //   let percentage = (totalShouldCost / totalSupplierQuoted) * 100;
+  //   return percentage.toFixed(2) + '%'; // Ensuring two decimal places in the output
+  // }
   RegionalSCAttainment(): string {
     debugger;
     let totalShouldCost = 0;
     let totalSupplierQuoted = 0;
-
+  
     this.orgibnalRegional.forEach((Region: { ShouldCost: any; TargetQuote: any }) => {
       totalShouldCost += Number(Region.ShouldCost) || 0;
       totalSupplierQuoted += Number(Region.TargetQuote) || 0;
     });
-    let percentage = (totalShouldCost / totalSupplierQuoted) * 100;
-    return percentage.toFixed(2) + '%'; // Ensuring two decimal places in the output
+  
+    let percentage = 0;
+    if (totalSupplierQuoted > 0) {
+      percentage = (totalShouldCost / totalSupplierQuoted) * 100;
+    }
+  
+    return percentage.toFixed(2) + '%'; // Always returns a valid percentage
   }
+  
 
   RegionalFileSelection(event: any): void {
     const files: FileList = event.target.files; // Get selected files
@@ -1547,9 +1683,9 @@ export class CostReductionComponent implements OnInit {
   showFileUploadMfg: boolean = false;
   mgfprocessComparison: any[] = [];
   pageComparison = 1;
-pageSizeComparison = 25;
-data2:any = [];
- 
+  pageSizeComparison = 25;
+  data2: any = [];
+
 
 
   getAbsoluteDifference(col2First: number, col2Second: number): number {
@@ -1571,92 +1707,302 @@ data2:any = [];
 
 
   getTotalMfgOppurtunity(): string {
-    const total = this.orginalmfg.reduce((sum: number, data: { Col2_First: number; Col2_Second: number; }) => {
+    const total = this.orginalmfg.reduce((sum: number, data: { Col2_First: number; Col2_Second: number }) => {
       const diff = Math.abs(data.Col2_First - data.Col2_Second);
       return sum + diff;
     }, 0);
 
-    return `$${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if (total >= 100_000) {
+      const totalInMillions = total / 1_000_000;
+      return `${totalInMillions.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}M$`;
+    } else {
+      return `${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}$`;
+    }
   }
 
 
+
+  // async GetMgfProcessArtibage() {
+  //   debugger;
+  //   //  Refer This
+  //   this.mgfprocess = [];
+  //   this.orginalmfg = [];
+  //   this.AdminService.GetMgfProcess(this.test).subscribe(
+  //     (response: any) => {
+  //       debugger
+  //       this.data1 = response;
+  //       this.mgfprocess = this.data1;
+  //       this.orginalmfg = this.data1;
+
+  //       this.mgfprocess.forEach((data) => {
+  //         if (!data.ProjectStatus) {
+  //           data.ProjectStatus = 'Open'; // Default to "Open" if no value exists
+  //         }
+  //       });
+  //       // Process the data for chart
+  //       this.MfgchartOptions.data[0].dataPoints = this.mgfprocess.map(data => ({
+  //         label: data.PartNumber,
+  //         y: Number(data.Col2_First.toFixed(2))
+  //       }));
+
+  //       this.MfgchartOptions.data[1].dataPoints = this.mgfprocess
+  //         .map(data => ({
+  //           label: data.PartNumber,
+  //           y: Number(data.Col2_Second.toFixed(2))
+  //         }));
+
+  //       this.mgfprocess.sort((a, b) => {
+  //         if (a.ProjectStatus === 'Close' && b.ProjectStatus !== 'Close') return 1;
+  //         if (a.ProjectStatus !== 'Close' && b.ProjectStatus === 'Close') return -1;
+  //         return 0;
+  //       });
+  //       this.getGraphstyleMfg();
+
+  //     },
+
+  //     (error: any) => {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   );
+
+  // }
+
+  // async GetMgfProcessArtibage() {
+  //   debugger;
+  //   this.mgfprocess = [];
+  //   this.orginalmfg = [];
+
+  //   this.AdminService.GetMgfProcess(this.test).subscribe(
+  //     (response: any) => {
+  //       debugger;
+  //       this.data1 = response;
+  //       this.mgfprocess = this.data1;
+  //       this.orginalmfg = this.data1;
+
+  //       // Default ProjectStatus if missing
+  //       this.mgfprocess.forEach((data) => {
+  //         if (!data.ProjectStatus) {
+  //           data.ProjectStatus = 'Open';
+  //         }
+  //       });
+
+  //       // Sort by ProjectStatus (Open first)
+  //       this.mgfprocess.sort((a, b) => {
+  //         if (a.ProjectStatus === 'Close' && b.ProjectStatus !== 'Close') return 1;
+  //         if (a.ProjectStatus !== 'Close' && b.ProjectStatus === 'Close') return -1;
+  //         return 0;
+  //       });
+
+  //       // Extract unique regions and map to numeric X-axis values
+  //       this.regionMap.clear();
+  //       const uniqueRegions = [...new Set(this.mgfprocess.map(data => data.MfgRegion))];
+  //       uniqueRegions.forEach((MfgRegion, index) => this.regionMap.set(MfgRegion, index + 1));
+
+  //       // Build scatter data points
+  //       this.MfgchartOptions.data[0].dataPoints = this.mgfprocess.map(data => ({
+  //         x: this.regionMap.get(data.Region) ?? 0,
+  //         y: Number(data.CostPerKgDifference?.toFixed(2)) || 0,
+  //         label: data.PartNumber
+  //       }));
+
+  //       this.getGraphstyleMfg();
+  //     },
+
+  //     (error: any) => {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   );
+  // }
+
+
+
+  // regionMap = new Map<string, number>();
+
+  // MfgchartOptions = {
+  //   animationEnabled: true,
+  //   axisX: {
+  //     title: "Region",
+  //     labelFontSize: 10,
+  //     labelAngle: -45,
+  //     interval: 1,
+  //     labelFormatter: (e: any) => {
+  //       for (let [MfgRegion, index] of this.regionMap.entries()) {
+  //         if (index === e.value) return MfgRegion;
+  //       }
+  //       return e.value;
+  //     }
+  //   },
+  //   axisY: {
+  //     title: "Cost Per Kg Difference ($)",
+  //     labelFormatter: (e: any) => `${e.value.toFixed(2)} $`
+  //   },
+  //   data: [
+  //     {
+  //       type: "scatter",
+  //       name: "Cost Arbitrage",
+  //       showInLegend: true,
+  //       markerType: "circle",
+  //       markerSize: 8,
+  //       toolTipContent: "{label} ({x}) : {y}$",
+  //       dataPoints: [] as { x: number; y: number; label: string }[],
+  //     }
+  //   ]
+  // };
+
   async GetMgfProcessArtibage() {
-    debugger;
-    //  Refer This
     this.mgfprocess = [];
     this.orginalmfg = [];
+
     this.AdminService.GetMgfProcess(this.test).subscribe(
       (response: any) => {
-        debugger
         this.data1 = response;
         this.mgfprocess = this.data1;
         this.orginalmfg = this.data1;
 
         this.mgfprocess.forEach((data) => {
           if (!data.ProjectStatus) {
-            data.ProjectStatus = 'Open'; // Default to "Open" if no value exists
+            data.ProjectStatus = 'Open';
           }
         });
-        // Process the data for chart
-        this.MfgchartOptions.data[0].dataPoints = this.mgfprocess.map(data => ({
-          label: data.PartNumber,
-          y: Number(data.Col2_First.toFixed(2))
-        }));
-
-        this.MfgchartOptions.data[1].dataPoints = this.mgfprocess
-          .map(data => ({
-            label: data.PartNumber,
-            y: Number(data.Col2_Second.toFixed(2))
-          }));
 
         this.mgfprocess.sort((a, b) => {
           if (a.ProjectStatus === 'Close' && b.ProjectStatus !== 'Close') return 1;
           if (a.ProjectStatus !== 'Close' && b.ProjectStatus === 'Close') return -1;
           return 0;
         });
+
+        // Map regions to spaced numeric values
+        const uniqueRegions = [...new Set(this.mgfprocess.map(data => data.MfgRegion))];
+        this.regionMap.clear();
+        this.labelMap1 = {};
+        uniqueRegions.forEach((MfgRegion, index) => this.regionMap.set(MfgRegion, (index + 1) * 10));
+        // uniqueRegions.forEach((MfgRegion, index) => this.regionMap.set(MfgRegion,10));
+
+        // Build scatter points with color coding
+        this.MfgchartOptions.data[0].dataPoints = this.mgfprocess.map(data => ({
+          x: this.regionMap.get(data.MfgRegion) ?? 0,
+          y: Number(data.CostPerKgDifference?.toFixed(2)) || 0,
+          label: data.PartNumber,
+          label2: data.ProcessFlow,
+          markerColor: this.regionColors[data.MfgRegion] ?? "#000"
+        }));
+        uniqueRegions.forEach((MfgRegion, index) => {
+          const mappedValue = (index + 1) * 10;
+          this.regionMap.set(MfgRegion, mappedValue);
+          this.labelMap1[mappedValue] = MfgRegion;
+        });
+
         this.getGraphstyleMfg();
-
       },
-
       (error: any) => {
         console.error('Error fetching data:', error);
       }
     );
-
   }
- 
-exportMfgTableToExcel(): void {
-  const exportData = this.mgfprocess.map((item, index) => ({
-    'Sr No': index + 1,
-    'Part Number': item.PartNumber,
-    'Part Name': item.PartName,
-    'Supplier Mfg Location': item.MfgRegion,
-    'Process1 Tooling Cost (USD)': item.Process1_ToolingCost ? this.roundToTwoDecimalPlaces(item.Process1_ToolingCost) : '',
-    'Process2 Tooling Cost (USD)': item.Process2_ToolingCost ? this.roundToTwoDecimalPlaces(item.Process2_ToolingCost) : '',
-    'Process1 Invoice Cost (USD)': item.Process1_InvoiceCost ? this.roundToTwoDecimalPlaces(item.Process1_InvoiceCost) : '',
-    'Process2 Invoice Cost (USD)': item.Process2_InvoiceCost ? this.roundToTwoDecimalPlaces(item.Process2_InvoiceCost) : '',
-    'Process1 Annual Volume': item.Process1_AnnualVolume ? this.roundToTwoDecimalPlaces(item.Process1_AnnualVolume) : '',
-    'Process2 Annual Volume': item.Process2_AnnualVolume ? this.roundToTwoDecimalPlaces(item.Process2_AnnualVolume) : '',
-    'Debrief Date': item.DebriefDate ? item.DebriefDate.split('T')[0] : '',
-    'Process1 Quote / Should Cost (USD)': item.Col2_First.toFixed(2),
-    'Process1 Name': item.HighLevelProcess_First,
-    'Process2 Quote / Should Cost (USD)': item.Col2_Second.toFixed(2),
-    'Process2 Name': item.HighLevelProcess_Second,
-    'Should Cost Variation (USD)': this.getAbsoluteDifferenceMfg(item.Col2_First, item.Col2_Second).toFixed(2),
-    'Invoice Cost Variation (USD)': this.getInvoiceCostVariation(item),
-    'High Level Process Flow': `${item.Col2_First > item.Col2_Second ? item.HighLevelProcess_First : item.HighLevelProcess_Second} → ${item.Col2_First > item.Col2_Second ? item.HighLevelProcess_Second : item.HighLevelProcess_First}`,
-    'Comments': item.Comments,
-    'Submitted By': item.ModifiedBy,
-    'Project Status': item.ProjectStatus
-  }));
 
-  // Use your existing Excel export utility
-  const worksheet = utils.json_to_sheet(exportData);
+  regionMap = new Map<string, number>();
+  regionColors: { [key: string]: string } = {
+    USA: "#6e1017",       // red
+    BRAZIL: "#d52e2a",    // green
+    Eastern_Europe: "#242d4f",   // blue
+    INDIA: "#003b3f",     // orange
+    CHINA: "#52a0d5",
+    MEXICO: "#ef7659",  // purple
+    Unknown: "#2fa365"    // fallback gray
+  };
+
+  MfgchartOptions = {
+    animationEnabled: true,
+    // axisX: {
+    //   title: "Region",
+    //   // labelFontSize: 10,
+    //   labelAngle: -45,
+    //   // interval: 10,
+    //   labelFormatter: (e: any) => {
+    //     for (let [MfgRegion, index] of this.regionMap.entries()) {
+    //       if (index === e.value) return MfgRegion;
+    //     }
+    //     return "";
+    //   }
+    // },
+    axisX: {
+      title: "Region",
+      interval: 10,
+      labelFontSize: 12,
+      valueFormatString: "#",
+      labelFormatter: (e: any) => {
+        return this.labelMap1[e.value] ?? "";
+      }
+    },
+
+    axisY: {
+      title: "Cost Per Kg Difference ($)",
+      labelFormatter: (e: any) => `${e.value.toFixed(2)} $`
+    },
+    data: [
+      {
+        type: "scatter",
+        // name: "Cost Arbitrage",
+        // showInLegend: true,
+        markerType: "circle",
+        markerSize: 12,
+        toolTipContent: "{label} {label2} : {y}$",
+        dataPoints: [] as {
+          x: number;
+          y: number;
+          label: string;
+          markerColor?: string;
+        }[],
+      }
+    ]
+  };
+
+
+
+
+  exportMfgTableToExcel(): void {
+    const exportData = this.mgfprocess.map((item, index) => ({
+      'Sr No': index + 1,
+      'Part Number1': item.PartNumber,
+      'Part Number2': item.Part2,
+      'Part Name': item.PartName,
+      'MMID': item.UniqueId,
+      'Program Name': item.ProgramName,
+      'CAT4': item.CAT4,
+      'Supplier Mfg Location(Part1)': item.MfgRegion,
+      'Supplier Mfg Location(Part2)': item.Part2_region,
+      'Process1 Tooling Cost (USD)': item.Process1_ToolingCost ? this.roundToTwoDecimalPlaces(item.Process1_ToolingCost) : '',
+      'Process2 Tooling Cost (USD)': item.Process2_ToolingCost ? this.roundToTwoDecimalPlaces(item.Process2_ToolingCost) : '',
+      'Process1 Invoice Cost (USD)': item.Process1_InvoiceCost ? this.roundToTwoDecimalPlaces(item.Process1_InvoiceCost) : '',
+      'Process2 Invoice Cost (USD)': item.Process2_InvoiceCost ? this.roundToTwoDecimalPlaces(item.Process2_InvoiceCost) : '',
+      'Process1 Annual Volume': item.Process1_AnnualVolume ? this.roundToTwoDecimalPlaces(item.Process1_AnnualVolume) : '',
+      'Process2 Annual Volume': item.Process2_AnnualVolume ? this.roundToTwoDecimalPlaces(item.Process2_AnnualVolume) : '',
+      'Debrief Date': item.DebriefDate ? item.DebriefDate.split('T')[0] : '',
+      'Process1 Quote / Should Cost (USD)': item.Col2_First ? item.Col2_First.toFixed(2) : '',
+      'Process1 Name': item.HighLevelProcess_First,
+      'Process2 Quote / Should Cost (USD)': item.Col2_Second ? item.Col2_Second.toFixed(2) : '',
+      'Process2 Name': item.HighLevelProcess_Second,
+      'Should Cost Variation in the Process (USD)': item.Col2_First && item.Col2_Second ? this.getAbsoluteDifferenceMfg(item.Col2_First, item.Col2_Second).toFixed(2) : '',
+      'Invoice Cost Variation (USD)': this.getInvoiceCostVariation(item),
+      'High Level Process': item.ProcessFlow,
+      'Weight(Part1)': item.Part1_weight,
+      'Weight(Part2)': item.Part2_weight,
+      'Cost Per Kg(Part1)': item.FromCostPerKg,
+      'Cost Per Kg(Part2)': item.ToCostPerKg,
+      'Cost Per Kg Diff': item.CostPerKgDifference,
+      'User Activity': 'Uploaded/Downloaded', // You can customize this based on actual activity tracking
+      'Comments': item.Comments,
+      'Submitted By': item.ModifiedBy,
+      'Project Status': item.ProjectStatus
+    }));
+  
+    const worksheet = utils.json_to_sheet(exportData);
     const workbook = utils.book_new();
     utils.book_append_sheet(workbook, worksheet, 'Manufacturing');
- 
+  
     writeFileXLSX(workbook, `ManufacturingArbitrage_${new Date().toISOString().slice(0, 10)}.xlsx`);
-}
+  }
+  
 
   saveComment(): void {
     debugger;
@@ -1734,21 +2080,21 @@ exportMfgTableToExcel(): void {
   }
   GetMgfProcessArtibageComparison() {
     const categoryID = this.test;
-   debugger;
-   
- this.mgfprocessComparison = [];
- this.AdminService.GetMgfProcessArtibageComparison(categoryID).subscribe(
-   (response: any) => {
-     this.data2 = response;
-     this.mgfprocessComparison = this.data2;
-      this.pageComparison = 1; // Reset page on data load
-  
-   },
-   (error: any) => {
-     console.error('Error fetching comparison data:', error);
-   }
- );
-}
+    debugger;
+
+    this.mgfprocessComparison = [];
+    this.AdminService.GetMgfProcessArtibageComparison(categoryID).subscribe(
+      (response: any) => {
+        this.data2 = response;
+        this.mgfprocessComparison = this.data2;
+        this.pageComparison = 1; // Reset page on data load
+
+      },
+      (error: any) => {
+        console.error('Error fetching comparison data:', error);
+      }
+    );
+  }
 
   onDateRangeChangeMfg(): void {
     debugger;
@@ -1786,50 +2132,50 @@ exportMfgTableToExcel(): void {
     }
 
   }
-  MfgchartOptions = {
+  // MfgchartOptions = {
 
-    animationEnabled: true,
-    axisX: {
-      title: "Part Number",
-      interval: 1,
-      labelFontSize: 9,
-      showInLegend: true,
-      indexLabelFontColor: "#000",
+  //   animationEnabled: true,
+  //   axisX: {
+  //     title: "Part Number",
+  //     interval: 1,
+  //     labelFontSize: 9,
+  //     showInLegend: true,
+  //     indexLabelFontColor: "#000",
 
-      labelAngle: -240,
+  //     labelAngle: -240,
 
-    },
-    axisY: {
+  //   },
+  //   axisY: {
 
-      title: "Manufacturing Arbitrage",
-      labelFormatter: function (e: any) {
-        return `${e.value} $`;
-      }
-    },
-    dataPointWidth: 20,
-    data: [
-      {
-        type: "column",
-        color: "#da291c",
-        indexLabelFontColor: "#000",
-        toolTipContent: "{label} : {y}$",
-        name: "HighLevel Process1",
-        showInLegend: true,
-        dataPoints: [] as { label: string; y: any }[],
-      },
-      {
-        type: "column",
-        color: "#2fa365",
-        indexLabelFontColor: "#000",
-        toolTipContent: "{label} : {y}$",
-        name: "HighLevel Process2",
-        showInLegend: true,
-        dataPoints: [] as { label: string; y: any }[],
-      },
-    ],
+  //     title: "Manufacturing Arbitrage",
+  //     labelFormatter: function (e: any) {
+  //       return `${e.value} $`;
+  //     }
+  //   },
+  //   dataPointWidth: 20,
+  //   data: [
+  //     {
+  //       type: "column",
+  //       color: "#da291c",
+  //       indexLabelFontColor: "#000",
+  //       toolTipContent: "{label} : {y}$",
+  //       name: "HighLevel Process1",
+  //       showInLegend: true,
+  //       dataPoints: [] as { label: string; y: any }[],
+  //     },
+  //     {
+  //       type: "column",
+  //       color: "#2fa365",
+  //       indexLabelFontColor: "#000",
+  //       toolTipContent: "{label} : {y}$",
+  //       name: "HighLevel Process2",
+  //       showInLegend: true,
+  //       dataPoints: [] as { label: string; y: any }[],
+  //     },
+  //   ],
 
 
-  }
+  // }
 
   onViewClickMfg() {
     debugger;
@@ -1845,17 +2191,37 @@ exportMfgTableToExcel(): void {
 
       this.MfgchartOptions = { ...this.MfgchartOptions };
 
+      const uniqueRegions = [...new Set(this.mgfprocess.map(data => data.MfgRegion))];
+      this.regionMap.clear();
+      this.labelMap1 = {};
+      uniqueRegions.forEach((MfgRegion, index) => this.regionMap.set(MfgRegion, (index + 1) * 10));
+      // uniqueRegions.forEach((MfgRegion, index) => this.regionMap.set(MfgRegion,10));
+
+      // Build scatter points with color coding
       this.MfgchartOptions.data[0].dataPoints = this.mgfprocess.map(data => ({
+        x: this.regionMap.get(data.MfgRegion) ?? 0,
+        y: Number(data.CostPerKgDifference?.toFixed(2)) || 0,
         label: data.PartNumber,
-        y: Number(data.Col2_First),
-
+        label2: data.ProcessFlow,
+        markerColor: this.regionColors[data.MfgRegion] ?? "#000"
       }));
+      uniqueRegions.forEach((MfgRegion, index) => {
+        const mappedValue = (index + 1) * 10;
+        this.regionMap.set(MfgRegion, mappedValue);
+        this.labelMap1[mappedValue] = MfgRegion;
+      });
 
-      this.MfgchartOptions.data[1].dataPoints = this.mgfprocess
-        .map(data => ({
-          label: data.PartNumber,
-          y: data.Col2_Second
-        }));
+      // this.MfgchartOptions.data[0].dataPoints = this.mgfprocess.map(data => ({
+      //   label: data.PartNumber,
+      //   y: Number(data.Col2_First),
+
+      // }));
+
+      // this.MfgchartOptions.data[1].dataPoints = this.mgfprocess
+      //   .map(data => ({
+      //     label: data.PartNumber,
+      //     y: data.Col2_Second
+      //   }));
     }
 
     else if (this.fromDateMfg && this.toDateMfg) {
@@ -1889,15 +2255,34 @@ exportMfgTableToExcel(): void {
       // Update chart data points based on filtered data
       this.MfgchartOptions = { ...this.MfgchartOptions };
 
-      this.MfgchartOptions.data[0].dataPoints = this.filteredDataMfg.map(data => ({
-        label: data.PartNumber,
-        y: Number(data.Col2_First)
-      }));
+      // this.MfgchartOptions.data[0].dataPoints = this.filteredDataMfg.map(data => ({
+      //   label: data.PartNumber,
+      //   y: Number(data.Col2_First)
+      // }));
 
-      this.MfgchartOptions.data[1].dataPoints = this.filteredDataMfg.map(data => ({
+      // this.MfgchartOptions.data[1].dataPoints = this.filteredDataMfg.map(data => ({
+      //   label: data.PartNumber,
+      //   y: data.Col2_Second
+      // }));
+      const uniqueRegions = [...new Set(this.mgfprocess.map(data => data.MfgRegion))];
+      this.regionMap.clear();
+      this.labelMap1 = {};
+      uniqueRegions.forEach((MfgRegion, index) => this.regionMap.set(MfgRegion, (index + 1) * 10));
+      // uniqueRegions.forEach((MfgRegion, index) => this.regionMap.set(MfgRegion,10));
+
+      // Build scatter points with color coding
+      this.MfgchartOptions.data[0].dataPoints = this.mgfprocess.map(data => ({
+        x: this.regionMap.get(data.MfgRegion) ?? 0,
+        y: Number(data.CostPerKgDifference?.toFixed(2)) || 0,
         label: data.PartNumber,
-        y: data.Col2_Second
+        label2: data.ProcessFlow,
+        markerColor: this.regionColors[data.MfgRegion] ?? "#000"
       }));
+      uniqueRegions.forEach((MfgRegion, index) => {
+        const mappedValue = (index + 1) * 10;
+        this.regionMap.set(MfgRegion, mappedValue);
+        this.labelMap1[mappedValue] = MfgRegion;
+      });
 
       console.log('Updated Chart Data:', this.MfgchartOptions);
     } else {
@@ -1919,17 +2304,37 @@ exportMfgTableToExcel(): void {
     // Process the data for chart
     this.MfgchartOptions = { ...this.MfgchartOptions };
 
+    // this.MfgchartOptions.data[0].dataPoints = this.mgfprocess.map(data => ({
+    //   label: data.PartNumber,
+    //   y: Number(data.Col2_First),
+
+    // }));
+
+    // this.MfgchartOptions.data[1].dataPoints = this.mgfprocess
+    //   .map(data => ({
+    //     label: data.PartNumber,
+    //     y: data.Col2_Second
+    //   }));
+
+    const uniqueRegions = [...new Set(this.mgfprocess.map(data => data.MfgRegion))];
+    this.regionMap.clear();
+    this.labelMap1 = {};
+    uniqueRegions.forEach((MfgRegion, index) => this.regionMap.set(MfgRegion, (index + 1) * 10));
+    // uniqueRegions.forEach((MfgRegion, index) => this.regionMap.set(MfgRegion,10));
+
+    // Build scatter points with color coding
     this.MfgchartOptions.data[0].dataPoints = this.mgfprocess.map(data => ({
+      x: this.regionMap.get(data.MfgRegion) ?? 0,
+      y: Number(data.CostPerKgDifference?.toFixed(2)) || 0,
       label: data.PartNumber,
-      y: Number(data.Col2_First),
-
+      label2: data.ProcessFlow,
+      markerColor: this.regionColors[data.MfgRegion] ?? "#000"
     }));
-
-    this.MfgchartOptions.data[1].dataPoints = this.mgfprocess
-      .map(data => ({
-        label: data.PartNumber,
-        y: data.Col2_Second
-      }));
+    uniqueRegions.forEach((MfgRegion, index) => {
+      const mappedValue = (index + 1) * 10;
+      this.regionMap.set(MfgRegion, mappedValue);
+      this.labelMap1[mappedValue] = MfgRegion;
+    });
   }
 
   getAbsoluteDifferenceMfg(col2First: number, col2Second: number): number {
@@ -1940,7 +2345,7 @@ exportMfgTableToExcel(): void {
     //debugger
 
     if (Mfg_ArtibageID == null) {
-      this.toastr.warning("Please update the record then upload a file");
+      this.toastr.warning("No Documents Available");
       return;
     }
     const formattedFileName = `${PartNumber}_RegionalArbitrage_${Mfg_ArtibageID}.zip`;
@@ -1956,7 +2361,7 @@ exportMfgTableToExcel(): void {
       },
       (error: any) => {
         console.error('Error downloading ZIP file:', error);
-        this.toastr.error("Error Downloading ZIP file");
+        this.toastr.warning("No Documents Available");
       }
     );
   }
@@ -2061,20 +2466,20 @@ exportMfgTableToExcel(): void {
   }
 
 
-  GetMfgGraphStyle() {
+  // GetMfgGraphStyle() {
 
-    const baseBarWidth = 50; // pixels per bar
-    const minWidth = '100%';
+  //   const baseBarWidth = 50; // pixels per bar
+  //   const minWidth = '100%';
 
-    if (!this.data1 || this.data1.length <= 20) {
-      return { height: '375px', width: minWidth };
-    }
+  //   if (!this.data1 || this.data1.length <= 20) {
+  //     return { height: '375px', width: minWidth };
+  //   }
 
-    return {
-      height: '375px',
-      width: `${this.data1.length * baseBarWidth}px`
-    };
-  }
+  //   return {
+  //     height: '375px',
+  //     width: `${this.data1.length * baseBarWidth}px`
+  //   };
+  // }
   MfgSortBy(column: string, event: Event) {
     // Toggle sorting direction
     if (this.currentSortColumn === column) {
@@ -2121,27 +2526,27 @@ exportMfgTableToExcel(): void {
     }
     return (data.Process1_ToolingCost / data.Process1_AnnualVolume) + data.Col2_First;
   }
-  
+
   getInvoiceCostProcess2(data: any): number {
     if (!data.Process2_ToolingCost || !data.Process2_AnnualVolume) {
       return 0;
     }
     return (data.Process2_ToolingCost / data.Process2_AnnualVolume) + data.Col2_Second;
   }
-  
+
   getInvoiceCostVariation(data: any): string {
     // Check for missing or invalid values
     if (!data.Process1_ToolingCost || !data.Process2_ToolingCost ||
-        !data.Process1_InvoiceCost || !data.Process2_InvoiceCost) {
+      !data.Process1_InvoiceCost || !data.Process2_InvoiceCost) {
       return 'NA';
     }
-   
+
     const annualVolume1 = data.Process1_AnnualVolume || 1;
     const annualVolume2 = data.Process2_AnnualVolume || 1;
-   
+
     const process1 = (data.Process1_ToolingCost / annualVolume1) + data.Process1_InvoiceCost;
     const process2 = (data.Process2_ToolingCost / annualVolume2) + data.Process2_InvoiceCost;
-   
+
     return '$' + Math.abs(process1 - process2).toFixed(2);
   }
 
@@ -2150,119 +2555,437 @@ exportMfgTableToExcel(): void {
   //------------------------------------------- start of Design Arbitrage--------------------------------------//
 
 
+  // try {
+  //   const categoryID = this.test;
+  //   this.design = [];
+  //   this.orginaldesign = [];
+  //   this.maxParams = 0;
+
+  //   const Design_data = await this.AdminService.GetDesignArbitrage(categoryID).toPromise();
+
+  //   if (Design_data && Array.isArray(Design_data)) {
+  //     this.designdata = Design_data;
+
+  //     // Process each item to extract dynamic parameters
+  //     this.design = this.designdata.map((item: { [x: string]: any; }) => {
+  //       const newItem = { ...item };
+  //       let paramCount = 0;
+
+  //       // for (let i = 1; i <= 50; i++) { // Adjust upper limit as needed
+  //       //   const nameKey = `p${i}name`;
+  //       //   const valueKey = `p${i}value`;
+
+  //       //   if (item[nameKey] && item[valueKey]) {
+  //       //     newItem[nameKey] = item[nameKey];
+  //       //     newItem[valueKey] = item[valueKey];
+  //       //     paramCount++;
+  //       //   }
+  //       // }
+  //       for (let i = 1; i <= 50; i++) {
+  //         const nameKey = `p${i}name`;
+  //         const valueKey = `p${i}value`;
+
+  //         if (item.hasOwnProperty(nameKey) || item.hasOwnProperty(valueKey)) {
+  //           newItem[nameKey] = item[nameKey] ?? null;
+  //           newItem[valueKey] = item[valueKey] ?? null;
+  //           paramCount++;
+  //         }
+  //       }
+
+
+  //       this.maxParams = Math.max(this.maxParams, paramCount);
+  //       return newItem;
+  //     });
+
+
   designdata: any = [];
   design: any[] = [];
   orginaldesign: any = [];
+  parameterHeaders: any = [];
+  paramHeaders1 :any=[];
+  designtestdata: any = [];
+  attributeRules: any = [];
+  maxParams: any;
+  NA: any = 'NA*';
+  labelMap: { [key: number]: string } = {};
+  showDesignWarning: boolean = false;
+
+
+  regionColorMap: { [key: string]: string } = {
+    USA: "#6e1017",       // red
+    BRAZIL: "#d52e2a",    // green
+    Eastern_Europe: "#242d4f",   // blue
+    INDIA: "#003b3f",     // orange
+    CHINA: "#52a0d5",
+    MEXICO: "#ef7659",  // purple
+    Unknown: "#2fa365"    // fallback gray
+  }
+
+  exportDesignTableToExcel(): void {
+    const exportData = this.design.map((item, index) => {
+      const row: any = {
+        'Sr No': index + 1,
+        'Part Name': item.PartName,
+        'Part Number': item.PartNumber,
+        'Should Cost': item.ArbitrageValue?.toFixed(2),
+        'Cost Per Kg': item.FromCostPerKg?.toFixed(2),
+        'Weight': item.FromPartWeight,
+        'Platform': item.Plat_form,
+        'Type Code': item.Type_Code,
+        'Length': item.Length,
+        'Width': item.Width,
+        'Height': item.Height,
+        'Cluster ID': item.ClusterId,
+        'Engine Displacement': item.EngineDisplacement,
+        'Program Name': item.ProgramName,
+        'Supp Mfg Location': item.MfgRegion,
+        'Debrief Date': item.DebriefDate ? item.DebriefDate.split('T')[0] : ''
+      };
+  
+      // Include all dynamic parameter headers
+      this.parameterHeaders.forEach((header:any) => {
+        row[header || '-'] = item.paramMap?.[header] ?? '-';
+      });
+  
+      return row;
+    });
+  
+    const worksheet = utils.json_to_sheet(exportData);
+    const workbook = utils.book_new();
+    utils.book_append_sheet(workbook, worksheet, 'Design');
+  
+    writeFileXLSX(workbook, `DesignArbitrage_${new Date().toISOString().slice(0, 10)}.xlsx`);
+  }
+  
 
 
   async GetDesignArbitrage() {
-    debugger
     try {
       const categoryID = this.test;
       this.design = [];
       this.orginaldesign = [];
+      this.parameterHeaders = [];
 
-      const Design_data = await this.AdminService.GetDesignArbitrage(categoryID).toPromise();
-      debugger;
-      this.designdata = Design_data;
-      this.design = this.designdata;
-      this.orginaldesign = this.data;
+      const designData = await this.AdminService.GetDesignArbitrage(categoryID).toPromise();
 
-      this.design.forEach(designarbitragedata => {
-        if (!designarbitragedata.ProjectStatus) {
-          designarbitragedata.ProjectStatus = 'Open'; // Default to "Open" if no value exists
+      if (Array.isArray(designData)) {
+        // Step 1: Process parameters
+        this.design = designData.map((item: { [key: string]: any }) => {
+          const newItem = { ...item };
+          newItem['paramMap'] = {};
 
-        } designarbitragedata.DesignWeight = Number(designarbitragedata.DesignWeight) || 0; // Convert to number
-        designarbitragedata.MainWeight = Number(designarbitragedata.MainWeight) || 0;
-      });
-      // Process the data for chart
-      debugger;
-      this.Designchartoptions.data[0].dataPoints = this.design.map(designarbitragedata => ({
+          for (let i = 1; i <= 50; i++) {
+            const nameKey = `p${i}name`;
+            const valueKey = `p${i}value`;
 
-        label: designarbitragedata.PartNumber,
-        y: designarbitragedata.DesignWeight,
-      }));
-      this.Designchartoptions.data[1].dataPoints = this.design.map(designarbitragedata => ({
-        label: designarbitragedata.PartNumber,
-        y: designarbitragedata.MainWeight,
-      }));
+            const rawName = item[nameKey];
+            const paramName = typeof rawName === 'string' ? rawName.trim() : null;
+            const paramValue = item[valueKey] ?? '-';
 
-      this.DesignGraphStyle();
+            newItem[nameKey] = paramName;
+            newItem[valueKey] = paramValue;
 
-    }
-    catch (error) {
-      console.error("Error in GetDesignArbitrage ", error);
-      alert("Failed to fetch Design Arbitrage data. Please try again later.");
-    }
-  }
+            if (paramName && !this.parameterHeaders.includes(paramName)) {
+              this.parameterHeaders.push(paramName);
+            }
+
+            if (paramName) {
+              newItem['paramMap'][paramName] = paramValue;
+            }
+          }
+
+          return newItem;
+        });
+
+        this.orginaldesign = [...this.design];
+        const uniqueClusters = Array.from(
+          new Set(designData.map((item: any) => item.ClusterId ?? 'Unknown'))
+        );
+
+        const clusterMap: { [key: string]: number } = {};
+        uniqueClusters.forEach((cluster, index) => {
+          clusterMap[cluster] = index + 1;
+        });
+
+        this.labelMap = Object.entries(clusterMap).reduce((acc, [key, val]) => {
+          acc[val] = key;
+          return acc;
+        }, {} as { [key: number]: string });
+
+        // Step 3: Populate chart data
+        this.Designchartoptions.data[0].dataPoints = [];
+
+        designData.forEach((item: any) => {
+          const cluster = item.ClusterId ?? 'Unknown';
+          const region1 = item.MfgRegion?.trim() ?? 'Unknown';
+          const partnumber =item.FromPart;
+          const partname =item.PartName;
+
+          const region = region1.toUpperCase().replace(/\s+/g, '_');
+          const fromCost = parseFloat(item.FromCostPerKg) || 0;
+          const xValue = clusterMap[cluster];
+          const markerColor = this.regionColorMap[region] ?? this.regionColorMap['Unknown'];
+
+          this.Designchartoptions.data[0].dataPoints.push({
+            label: `${partname} - ${partnumber} - ${region}`,
+            x: xValue,
+            y: fromCost,
+            markerColor: markerColor
+          });
+        });
 
 
-
-
-
-  Designchartoptions = {
-
-    animationEnabled: true,
-
-    title: {
-      text: "Part Number vs Design Arbitrage ($)",
-      fontFamily: "Trebuchet MS, Helvetica, sans-serif",
-
-    },
-    axisX: {
-      title: "Part Number",
-      interval: 1,
-      labelFontSize: 9,
-      showInLegend: true,
-      indexLabelFontColor: "#000",
-
-      labelAngle: -240,
-
-    },
-    axisY: {
-
-      title: "Design Arbitrage",
-    },
-    toolTip: {
-      shared: false,
-      contentFormatter: function (e: any) {
-        let content = "";
-        for (let i = 0; i < e.entries.length; i++) {
-          const dp = e.entries[i].dataPoint;
-          const seriesName = e.entries[i].dataSeries.name;
-          const millions = (dp.y / 1000000).toFixed(2);
-          content += `${dp.label}: ${millions}M$<br/>`;
-        }
-        return content;
+        // Step 4: Render chart
+        const chart = new CanvasJS.Chart("designChartContainer", this.Designchartoptions);
+        chart.render();
+      } else {
+        console.warn('Design data is not an array or is undefined');
       }
-    },
-    dataPointWidth: 20,
-    data: [
-      {
-        type: "column",
-        color: "#da291c",
-        indexLabelFontColor: "#000",
-        // toolTipContent: "{label} : {y}$",
-        name: "Design Weight",
-        showInLegend: true,
-        dataPoints: [] as { label: string; y: any }[],
-      },
-      {
-        type: "column",
-        color: "#2fa365",
-        indexLabelFontColor: "#000",
-        // toolTipContent: "{label} : {y}$",
-        name: "Main Weight",
-        showInLegend: true,
-        dataPoints: [] as { label: string; y: any }[],
-      },
-    ],
+    } catch (error) {
+      console.error('Error fetching design arbitrage data:', error);
+    }
   }
+
+
+
+  // async GetAttributeRulesByCategory() {
+  //   debugger;
+  //   try {
+  //     const categoryID = this.test; // dynamically passed from component property
+  //     const response = await this.AdminService.GetAttributeRulesByCategory(categoryID).toPromise();
+  //     this.attributeRules = response;
+  //   } catch (err) {
+  //     console.error('Error fetching attribute rules:', err);
+  //     alert("Failed to fetch attribute rules. Please try again later.");
+  //   }
+  // }
+
+  // async GetAttributeRulesByCategory() {
+  //   try {
+  //     const categoryID = this.test;
+  //     console.log('Category ID:', categoryID);
+  
+  //     const response = await firstValueFrom(
+  //       this.AdminService.GetAttributeRulesByCategory(categoryID)
+  //     );
+  
+  //     console.log('Fetched response:', response);
+  
+  //     if (Array.isArray(response) && response.length > 0) {
+  //       this.attributeRules = response.map(item => {
+  //         const newItem: any = {
+  //           ...item,
+  //           paramMap: {}
+  //         };
+  
+  //         const fixedFields:any = [];
+  
+  //         fixedFields.forEach((field: any) => {
+  //           newItem.paramMap[field] = item[field] ?? '-';
+  //         });
+  
+  //         for (let i = 1; i <= 30; i++) {
+  //           const nameKey = `p${i}name`;
+  //           const valueKey = `p${i}value`;
+  
+  //           const paramName = item[nameKey];
+  //           const paramValue = item[valueKey];
+  
+  //           if (paramName?.trim()) {
+  //             newItem.paramMap[paramName] = paramValue ?? '-';
+  //           }
+  //         }
+  
+  //         return newItem;
+  //       });
+  
+      
+  //       const firstRule = this.attributeRules[0];
+  //       this.parameterHeaders1 = Object.keys(firstRule.paramMap);
+  //       console.log('Extracted parameterHeaders:', this.parameterHeaders1);
+  //     } else {
+  //       console.warn('Attribute rules data is not an array or is empty');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching attribute rules:', error);
+  //     alert('Failed to fetch attribute rules. Please try again later.');
+  //   }
+  // }
+  // async GetAttributeRulesByCategory() {
+  //   try {
+  //     const categoryID = this.test;
+  //     console.log('Category ID:', categoryID);
+  
+  //     const response = await firstValueFrom(
+  //       this.AdminService.GetAttributeRulesByCategory(categoryID)
+  //     );
+  
+  //     console.log('Fetched response:', response);
+  
+  //     if (Array.isArray(response) && response.length > 0) {
+  //       this.attributeRules = response.map(item => {
+  //         const newItem: any = {
+  //           ...item,
+  //           paramMap: {},
+  //           paramHeaders1: []
+  //         };
+  
+  //         // Add fixed fields if needed (optional)
+  //         // You can include TypeCode here if you want it in paramMap
+  //         // newItem.paramMap['TypeCode'] = item.TypeCode ?? '-';
+  
+  //         // Extract dynamic parameters
+  //         for (let i = 1; i <= 30; i++) {
+  //           const nameKey = `p${i}name`;
+  //           const valueKey = `p${i}value`;
+  
+  //           const paramName = item[nameKey];
+  //           const paramValue = item[valueKey];
+  
+  //           if (paramName?.trim()) {
+  //             newItem.paramMap[paramName] = paramValue ?? '-';
+  //             // newItem.paramHeaders1.push(paramName);
+  //             newItem.paramHeaders1 = Object.keys(newItem.paramMap);
+
+  //           }
+  //         }
+  
+  //         return newItem;
+  //       });
+  
+  //     } else {
+  //       console.warn('Attribute rules data is not an array or is empty');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching attribute rules:', error);
+  //     alert('Failed to fetch attribute rules. Please try again later.');
+  //   }
+  // }
+
+  async GetAttributeRulesByCategory() {
+    try {
+      const categoryID = this.test;
+      console.log('Category ID:', categoryID);
+  
+      const response = await firstValueFrom(
+        this.AdminService.GetAttributeRulesByCategory(categoryID)
+      );
+  
+      console.log('Fetched response:', response);
+  
+      if (Array.isArray(response) && response.length > 0) {
+        this.attributeRules = response.map(item => {
+          const newItem: any = {
+            ...item,
+            paramMap: {},
+            paramHeaders1: []
+          };
+  
+          // Extract dynamic parameters from p1name to p30name
+          for (let i = 1; i <= 30; i++) {
+            const nameKey = `p${i}name`;
+            const valueKey = `p${i}value`;
+  
+            const paramName = item[nameKey];
+            const paramValue = item[valueKey];
+  
+            if (paramName?.trim()) {
+              newItem.paramMap[paramName] = paramValue ?? '-';
+            }
+          }
+  
+          // Assign headers once after collecting all parameters
+          newItem.paramHeaders1 = Object.keys(newItem.paramMap);
+  
+          return newItem;
+        });
+  
+      } else {
+        console.warn('Attribute rules data is not an array or is empty');
+      }
+    } catch (error) {
+      console.error('Error fetching attribute rules:', error);
+      alert('Failed to fetch attribute rules. Please try again later.');
+    }
+  }
+  
+  
+
+    
+SafeValue(value: any): string {
+  return value !== null && value !== undefined ? value : '-';
+}
+ 
+
+  ChekNull(v: any): any {
+    if (v == null || v == undefined || v <= 0) {
+      return this.NA;
+    } else {
+      return v;
+    }
+  }
+
+
+  showCategoryDropdown: boolean = false;
+  selectedCategoryId: any;
+
+  async onCategoryChange() {
+    this.test = this.selectedCategoryId; // Store selected ID
+    this.showCategoryDropdown = true;
+    this.showdesign = true;
+    await this.GetDesignArbitrage(); // Fetch data
+  }
+
+  getSelectedCategoryName(): string {
+    const selected = this.SearchProductList.find((item: { categoryId: any; }) => item.categoryId === this.selectedCategoryId);
+    return selected ? selected.childCategory : '';
+  }
+
+  // labelMap1: { [key: number]: string } = {};
+
+  labelMap1: { [key: number]: string } = {};
+
+Designchartoptions = {
+  animationEnabled: true,
+  title: {
+    text: "Cluster vs Cost Per Kg($)",
+    fontFamily: "Trebuchet MS, Helvetica, sans-serif",
+    fontSize: 20
+  },
+  axisX: {
+    title: "Cluster",
+    interval: 1,
+    labelFontSize: 12,
+    valueFormatString: "#",
+    labelFormatter: (e: any) => {
+      return this.labelMap1[e.value] ?? e.value.toString(); // fallback to raw value
+    }
+  },
+  axisY: {
+    title: "Cost Per Kg($)",
+    labelFontSize: 12
+  },
+  toolTip: {
+    shared: false,
+    content: "{label}: {y}"
+  },
+  data: [
+    {
+      type: "scatter",
+      name: "From Cost Per Kg",
+      showInLegend: false,
+      markerType: "circle",
+      markerSize: 14,
+      dataPoints: [] as { label: string; x: number; y: number; markerColor?: string }[]
+    }
+  ]
+};
+
 
   DesignGraphStyle() {
     const baseBarWidth = 70; // pixels per bar
     const minWidth = '100%';
-    if (!this.designdata || this.designdata.length <= 20) {
+    if (!this.orginaldesign || this.orginaldesign.length <= 20) {
       return { height: '375px', width: minWidth };
     }
     return {
@@ -2272,14 +2995,14 @@ exportMfgTableToExcel(): void {
   }
 
 
-  downloadArbitrageZip( arbitrageID: string, partNumber: string ,type: 'commercial' | 'regional' | 'mfg'): void {
+  downloadArbitrageZip(arbitrageID: string, partNumber: string, type: 'commercial' | 'regional' | 'mfg'): void {
     if (!arbitrageID) {
-      this.toastr.warning("Please update the record then download a file");
+      this.toastr.warning("No Documents Available");
       return;
     }
-  
+
     let label = '';
-  
+
     switch (type) {
       case 'commercial':
         label = 'CommercialArbitrage';
@@ -2294,9 +3017,9 @@ exportMfgTableToExcel(): void {
         this.toastr.error("Invalid arbitrage type");
         return;
     }
-  
+
     const formattedFileName = `${partNumber}_${label}_${arbitrageID}.zip`;
-  
+
     this.AdminService.downloadArbitrageZipFile(type, arbitrageID).subscribe(
       (response: Blob) => {
         const url = window.URL.createObjectURL(response);
@@ -2309,13 +3032,13 @@ exportMfgTableToExcel(): void {
       },
       (error) => {
         console.error(`Error downloading ${label} ZIP file:`, error);
-        this.toastr.error(`Error downloading ${label} ZIP file`);
+        this.toastr.warning(`No Documents Available`);
       }
     );
   }
   handleUpload(type: 'commercial' | 'mfg' | 'regional', arbitrageId: string): void {
     let files: File[] = [];
-  
+
     switch (type) {
       case 'commercial':
         files = this.selectedFiles;
@@ -2330,19 +3053,19 @@ exportMfgTableToExcel(): void {
         this.toastr.error('Invalid arbitrage type.');
         return;
     }
-  
+
     if (!files || files.length === 0) {
       this.toastr.warning('Please select files to upload');
       alert('Please select files to upload.');
       return;
     }
-  
+
     this.AdminService.uploadArbitrageFiles(type, arbitrageId, files).subscribe({
       next: (response) => {
         console.log(`${type} files uploaded:`, response);
         this.toastr.success('Files uploaded successfully!');
         alert('Files uploaded successfully!');
-  
+
         // Clear the selected files based on type
         switch (type) {
           case 'commercial':
@@ -2366,9 +3089,9 @@ exportMfgTableToExcel(): void {
       }
     });
   }
-  
 
-  
+
+
 
 
 }

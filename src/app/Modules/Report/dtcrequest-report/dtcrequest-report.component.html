@@ -26,6 +26,121 @@
         <div>
             <div class="container" style="padding-bottom: 10px; border-bottom: 1px solid #da291c;">
                 <div class="row" style="padding-top: 10px;">
+                    <div class="col-md-3 text-start">
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;"> Model Edited By : </label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{userFullName}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;"> Model Edit Date :</label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{CurruntDate}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;">Model Created Date :
+                        </label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{DebriefDateFormated}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;"> Location :</label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProductDetail[0].MfgRegion}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;"> Old Forex : </label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProductDetail[0].Forex | number:'1.2-2'}}</label>
+                    </div>
+
+                    <div class="col-md-3  text-start">
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;">Part Name : </label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProductDetail[0].PartName}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;"> Part Number :</label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProductDetail[0].PartNumber}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;"> Annual Volume : </label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProductDetail[0].AnnualVolume}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;"> Project Type :</label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProductDetail[0].ProjectType}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;">Current Year Forex :
+                        </label>
+                        <!-- <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProjectData[0].CurrentYearForex | number:'1.2-2'}}</label> -->
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;"> &nbsp;</label>
+                        <label for="RequesterName" class="default-lbl" style="padding-left: 10px;">&nbsp;</label>
+                    </div>
+
+                    <div class="col-md-3  text-start">
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;"> Supplier Quote (USD)
+                            :</label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProductDetail[0].Supplier}}</label>
+
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;">Business Unit : </label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProductDetail[0].BusinessUnit}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: 600 !important;"> Engine Displacement
+                            :</label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;">{{ProductDetail[0].EngineDisplacement}}</label>
+                        <br>
+                    </div>
+
+                    <div *ngIf="ProductDetail[0].HasParentValue==1" class="col-md-3  text-start">
+                        <label for="RequesterName" class="default-lbl" style="font-size: 12px !important;  font-weight: bolder !important; 
+                               text-decoration-line: underline; text-decoration-color: red;">
+                            Base Model Details
+                        </label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: bolder !important; ">Model Mart ID :</label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;font-weight: bolder !important;">{{ProductDetail[0].UniqueId}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: bolder !important; ">Part Number :</label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;font-weight: bolder !important;">{{ProductDetail[0].Par_PartNumber}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: bolder !important;"> Program Name : </label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;font-weight: bolder !important;">{{ProductDetail[0].Par_ProgramName}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: bolder !important;"> Engine Displacement
+                            :</label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;font-weight: bolder !important;">{{ProductDetail[0].Par_EngineDisplacement}}</label>
+                        <br>
+                        <label for="RequesterName" class="default-lbl"
+                            style="font-size: 12px !important; font-weight: bolder !important;">Business Unit
+                            :</label>
+                        <label for="RequesterName" class="default-lbl"
+                            style="padding-left: 10px;font-weight: bolder !important;">{{ProductDetail[0].Par_BusinessUnit}}</label>
+                    </div>
+                <!-- <div class="row" style="padding-top: 10px;">
                     <div class="col-md-4 text-start">
                         <label for="RequesterName" class="default-lbl"
                             style="font-size: 12px !important; font-weight: 600 !important;"> Model Edited By : </label>
@@ -78,14 +193,14 @@
                             style="font-size: 12px !important; font-weight: 600 !important;">
                             Old Forex : </label>
                         <label for="RequesterName" class="default-lbl"
-                            style="padding-left: 10px;">{{ProductDetail[0].Forex}}</label>
+                            style="padding-left: 10px;">{{ProductDetail[0].Forex | number:'1.2-2'}}</label>
                     </div>
                     <div class="col-md-4  text-start">
                         <label for="RequesterName" class="default-lbl"
                             style="font-size: 12px !important; font-weight: 600 !important;">
                             Current Year Forex : </label>
                         <label for="RequesterName" class="default-lbl"
-                            style="padding-left: 10px;">{{ProductDetail[0].CurrentYearForex}}</label>
+                            style="padding-left: 10px;">{{ProductDetail[0].CurrentYearForex | number:'1.2-2'}}</label>
                     </div>
                 </div>
                 <div class="row" style="padding-top: 10px;">
@@ -102,7 +217,7 @@
                         <label for="RequesterName" class="default-lbl"
                             style="padding-left: 10px;">{{ProductDetail[0].Supplier}}</label>
                     </div>
-                </div>
+                </div> -->
 
             </div>
         </div>
@@ -344,7 +459,7 @@
                                 <td style="font-size: 12px !important; font-weight: 600 !important;"
                                     [class.footer-color-tfoot]="val.Particular == 'Part Cost' || val.Particular == 'Total Cost'"
                                     [class.footer-color]="val.Particular == 'Total Manufacturing Cost'"
-                                    [ngClass]="{'UpdateValueGreaterThan': val.updateStatus === 1,'UpdateValueLessThan': val.updateStatus === 0 }">
+                                    [ngClass]="{'UpdateValueGreaterThan': val.UpdateStatus === 1,'UpdateValueLessThan': val.updateStatus === 0 }">
                                     $ {{val.smUSDValue |
                                     number:'1.2-2' }}
                                 </td>

@@ -75,27 +75,28 @@
     font-weight: 600;
 }
 
+
 .DTO_step1 {
-    background-color: #1b9a85;
+    background-color: #267eb8;
     opacity: 0.5;
 }
 
 .DTO_step2 {
-    background-color: #9ebe5b;
+    background-color: #1b9a85;
     opacity: 0.5;
 }
 
 .DTO_step3 {
-    background-color: #267eb8;
+    background-color: #9ebe5b;
     color: #fff;
-    font-size: 11px;
-
+    box-shadow: 0px 0px 10px #9ebe5b;
 }
 
 .DTO_step4 {
     background-color: #f19c0c;
     opacity: 0.5;
 }
+
 
 
 .gradient-icon {
@@ -149,8 +150,8 @@
 
 
 .table-container {
-    width: 80%;
-    margin-left: 10%;
+    width: 86%;
+    margin-left: 7%;
     margin-top: 80px;
     overflow-x: auto;
 }
@@ -705,21 +706,22 @@ td.id1 {
 }
 
 .RemarkSection {
-   margin-top: 10px;
+    margin-top: 10px;
     font-size: 12px;
     padding-bottom: 5px;
     color: #da291c;
 }
 
 
-.MasterHeader2{
+.MasterHeader2 {
     width: 90%;
     margin-left: 5%;
     margin-right: 5%;
-    font-family: Helvetica, Arial  ;
+    color: #da291c !important;
+    font-family: Helvetica, Arial;
 }
- 
-.MasterHeader2 h2{
+
+.MasterHeader2 h2 {
     margin: 10px 0px;
-    font-size: 15px !important; 
+    font-size: 15px !important;
 }

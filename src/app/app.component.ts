@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { Route, Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { environment } from 'src/environments/environments';
 import { AdminService } from 'src/app/SharedServices/admin.service';
@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
 
   IsMaintenances = environment.IsMaintenance;
 
-  constructor(private router: Router, public admin: AdminService) { }
+  constructor(private router: Router, public admin: AdminService, private elementRef: ElementRef) { }
 
 
 
@@ -137,6 +137,19 @@ export class AppComponent implements OnInit {
     return ''
   }
 
+
+  // @HostListener('document:click', ['$event.target'])
+  // public onClick(targetElement: HTMLElement): void {
+  //   debugger;
+  //   const clickedInside = this.elementRef.nativeElement.contains(targetElement);
+  //   if (targetElement.innerHTML == "Sign Out") {
+  //     //this.clickOutside.emit();
+  //     const d = document.getElementById('dropdown-content') as HTMLElement;
+  //     d.style.display = "none";
+  //     d.style.zIndex = "0";
+  //   }
+
+  // }
 
 
 }

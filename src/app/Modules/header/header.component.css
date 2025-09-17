@@ -142,14 +142,14 @@
     background-color: #ddd;
     cursor: pointer;
   }
+
   
   .dropdown:hover .dropdown-content {
     display: block;
     z-index: 999;
   }
   
-  /* .dropdown:hover .dropbtn {background-color: #3e8e41;} */
-  
+    
   
   .UserDetails{
     height: 100%;

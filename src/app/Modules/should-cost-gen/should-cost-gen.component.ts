@@ -776,7 +776,7 @@ export class ShouldCostGenComponent implements OnInit {
     for (var i = 0; i < this.shouldCostBreakdownList.length; i++) {
       if (i <= 2) {
         this.TotalMaterailDetails.push(
-          { label: this.shouldCostBreakdownList[i].particular, y: Number(this.shouldCostBreakdownList[i].usdValue.toFixed(2)), color: "#78B3CE" },
+          { label: this.shouldCostBreakdownList[i].particular, y: Number(this.shouldCostBreakdownList[i].usdValue.toFixed(2)), origanlY:Number(this.shouldCostBreakdownList[i].usdValue.toFixed(2)), color: "#78B3CE" },
         );
       }
       if (i == 3) {
@@ -852,6 +852,7 @@ export class ShouldCostGenComponent implements OnInit {
       axisX: {
         interval: 1,
         labelFontSize: 8,
+        includeZero: true, 
       },
       axisY: {
         valueFormatString: "00.00",

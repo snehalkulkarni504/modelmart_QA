@@ -41,10 +41,6 @@ export class ShouldCostRequestStatusComponent {
   UserID: any;
   RoleID: any;
 
-  refreshmodel = 'Model refresh';
-  DfMAChmodel = 'Design for Manufacturing, Assembly & Cost';
-
-
   constructor(public adminservice: AdminService,
     public router: Router,
     private toastr: ToastrService,
@@ -106,12 +102,12 @@ export class ShouldCostRequestStatusComponent {
       return;
     }
 
-    for (var i = 0; i < this.Reportdata.length; i++) {
-      if (String(this.Reportdata[i].SMComments).includes(this.refreshmodel)) {
+     for (var i = 0; i < this.Reportdata.length; i++) {
+      if (this.Reportdata[i].RequestType == "Refresh") {
         this.Reportdata[i].IsRefresh = true;
       }
-      else if(String(this.Reportdata[i].SMComments).includes(this.DfMAChmodel)){
-         this.Reportdata[i].IsDfMAC = true;
+      else if (this.Reportdata[i].RequestType == "DfMAC") {
+        this.Reportdata[i].IsDfMAC = true;
       }
       else {
         this.Reportdata[i].IsRefresh = false;
@@ -204,7 +200,8 @@ export class ShouldCostRequestStatusComponent {
 
     debugger;
     // Mapping data to only include required columns
-    const modifiedData = this.Reportdata.map((item: any, index: number) => ({
+    const modifiedData = this.Reportdata.map((item: any, index: number) => (
+      {
       'S.No': index + 1,
       'Request ID': item.RequestHeaderId,
       'Requester Name': item.UserName,
@@ -212,7 +209,8 @@ export class ShouldCostRequestStatusComponent {
       'File': item.ExcelFileName,
       'Status': item.Status,
       'COE Comments': item.SCTeamComments,
-      'Requester Comments': item.SMComments
+      'Requester Comments': item.SMComments,
+      'Request Type': item.RequestType
     }));
 
     // Convert data to worksheet

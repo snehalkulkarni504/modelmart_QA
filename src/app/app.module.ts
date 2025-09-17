@@ -13,7 +13,7 @@ import { FooterComponent } from './Modules/footer/footer.component';
 import { DashBoardComponent } from './Modules/dash-board/dash-board.component';
 import { GroupByPipe } from './Modules/group-by.pipe';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { DatePipe, HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { DatePipe, HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { OrganizationChartModule } from 'primeng/organizationchart';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BusinessunitmasterComponent } from './Modules/Master/businessunitmaster/businessunitmaster.component';
@@ -84,6 +84,7 @@ import { DtcrequestReportComponent } from './Modules/Report/dtcrequest-report/dt
 import { TocreportComponent } from './Modules/Report/tocreport/tocreport.component';
 import { TcosheetComponent } from './Modules/Report/tocreport/tcosheet/tcosheet.component';
 import { Tcosheet2Component } from './Modules/Report/tocreport/tcosheet2/tcosheet2.component';
+import { SendReqConfirmationComponent } from './home/send-req-confirmation/send-req-confirmation.component';
  
 @NgModule({
   declarations: [
@@ -148,7 +149,8 @@ import { Tcosheet2Component } from './Modules/Report/tocreport/tcosheet2/tcoshee
     DtcrequestReportComponent,
     TocreportComponent,
     TcosheetComponent,
-    Tcosheet2Component
+    Tcosheet2Component,
+    SendReqConfirmationComponent
   ],
   imports: [
     TreeModule,

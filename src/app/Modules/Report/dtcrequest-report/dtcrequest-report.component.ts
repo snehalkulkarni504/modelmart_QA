@@ -121,7 +121,10 @@ export class DtcrequestReportComponent {
 
       debugger;
       this.SpinnerService.show('spinner');
-      const data = await this.reportservice.GetDTCRequestReport(this.CSHeaderId, this.SCReportId).toPromise();
+      //const data = await this.reportservice.GetDTCRequestReport(this.CSHeaderId, this.SCReportId).toPromise();
+      const data = await this.reportservice.GetSourcingManagerReportHistory(this.CSHeaderId, this.SCReportId).toPromise();
+
+      
 
       this.ProductDetail = data.ProductDetail;
       this.ProjectName = data.ProductDetail[0].ProjectName;
@@ -406,15 +409,15 @@ export class DtcrequestReportComponent {
           doc.text(splitText[j], fileWidth / 2, 80 + line, { align: 'center' });
           line = line + 10;
         }
-        
+
         //this.hh = undefined;
         if (this.hh == undefined || this.hh == '' || this.hh == null) {
           const partImg = '../../../assets/No-Image.png';
           doc.addImage(partImg, 70, 120, 70, 70);
         }
         else {
-          //const partImgNew = '.../../../assets/2021000001/ISO.jpg';
-          const partImg = this.hh;
+           const partImg = '../../../assets/No-Image.png';
+          //const partImg = this.hh;
           doc.addImage(partImg, 70, 120, 70, 70);
         }
 
@@ -449,6 +452,9 @@ export class DtcrequestReportComponent {
 
     let finalYDetails = (doc as any).lastAutoTable.finalY;
 
+    var forex = this.ProductDetail[0].Forex.toFixed(2);
+    var currentForex = this.ProductDetail[0].CurrentYearForex.toFixed(2);
+
     const projectRows = [
       [
         ['Model Edited By : ' + this.userFullName],
@@ -462,8 +468,8 @@ export class DtcrequestReportComponent {
       ],
       [
         ['Annual Volume : ' + this.ProductDetail[0].AnnualVolume],
-        ['Old Forex : ' + this.ProductDetail[0].Forex],
-        ['Current Year Forex : ' + this.ProductDetail[0].SurrentYearForex]
+        ['Old Forex : ' + forex],
+        ['Current Year Forex : ' + currentForex]
       ],
       [
         ['Batch Size : ' + this.ProductDetail[0].batchSize],
@@ -869,11 +875,11 @@ export class DtcrequestReportComponent {
     //const vavetextvalues = document.getElementsByClassName("vavePercentText") as any;
 
     for (var i = 0; i < this.Vavedetails.length; i++) {
-      vavedata.push([ this.Vavedetails[i].Idea, this.Vavedetails[i].PSavings])
+      vavedata.push([this.Vavedetails[i].Idea, this.Vavedetails[i].PSavings])
     }
 
     if (this.Vavedetails.length <= 0) {
-      vavedata.push([ "VAVE Ideas not selected", '']);
+      vavedata.push(["VAVE Ideas not selected", '']);
     }
     ////  Vave Greade
     autoTable(doc, {
@@ -886,7 +892,7 @@ export class DtcrequestReportComponent {
       //html: "#printsectionVave",
       columnStyles: {
         // 0: { cellWidth: 20 },
-         0: { cellWidth: 100 },
+        0: { cellWidth: 100 },
         1: { cellWidth: 40 }
       },
       margin: 35
@@ -942,7 +948,7 @@ export class DtcrequestReportComponent {
     for (let i = 0; i < this.Vavedetails.length; i++) {
       vavelist.push({ CSHeaderId: this.CSHeaderId, SCReportId: this.SCReportId, IdeaId: this.Vavedetails[i].ID, PSavings: this.Vavedetails[i].PotentialSavingsPerPieceMDO, CreatedBy: this.userId })
     }
-    this.reportservice.insertDPVavedetails(vavelist).subscribe({
+    this.reportservice.insertDPVavedetails(vavelist, 0).subscribe({
       next: (_res: any) => {
         this.toastr.success("Vave Data Inserted Successfully.");
         this.newPDF();

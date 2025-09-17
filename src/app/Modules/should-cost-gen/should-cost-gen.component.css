@@ -761,55 +761,88 @@ table td {
 .mfg-process-container.collapsed {
     max-height: 50px;
 }
- 
-.manufacturingProcessName-container {
+ .manufacturingProcessName-container {
     display: flex;
     align-items: center;
     justify-content: flex-start;
 }
 
-
 .manufacturingProcessName-box {
-    background-color: rgb(239, 118, 89);
+    background-color: #a9a8a6;
     color: white;
-    /* width: 140px;  */
-    height: auto;
-    margin-right: 8px;
     position: relative;
     text-align: center;
-    padding: 6px 8px;
+    padding: 4px 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    white-space: normal; 
+    white-space: normal;
     word-break: break-word;
     line-height: 1.2;
-    font-size: 11px;
-    text-align: center;
-    min-height: 40px;
+    font-size: 10px;
+    min-height: 24px;
+    font-weight: 500;
 }
 
 .manufacturingProcessName-box:before {
     content: "";
     position: absolute;
-    right: -20px;
+    right: -10px;
     top: 0;
-    border-top: 20px solid transparent;
-    border-left: 20px solid rgb(239, 118, 89);
-    border-bottom: 20px solid transparent;
+    border-top: 12px solid transparent;
+    border-left: 10px solid #a9a8a6;
+    border-bottom: 12px solid transparent;
 }
 
 .manufacturingProcessName-tail {
     position: relative;
-    border-top: 20px solid rgb(239, 118, 89);
-    border-left: 20px solid transparent;
-    border-bottom: 20px solid rgb(239, 118, 89);
+    border-top: 12px solid #a9a8a6;
+    border-left: 10px solid transparent;
+    border-bottom: 12px solid #a9a8a6;
     margin-right: -1px;
 }
 
 .manufacturingProcessName-text {
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 0.5px;
     text-align: center;
     word-break: break-word;
+    color: #000;
 }
+
+
+.partNumber-box {
+    background-color: #da291c;
+    color: white;
+    position: relative;
+    text-align: center;
+    padding: 4px 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.2;
+    font-size: 10px;
+    min-height: 24px;
+    font-weight: bold;
+}
+
+.partNumber-box:before {
+    content: "";
+    position: absolute;
+    right: -10px;
+    top: 0;
+    border-top: 12px solid transparent;
+    border-left: 10px solid #da291c;
+    border-bottom: 12px solid transparent;
+}
+
+.partNumber-tail {
+    position: relative;
+    border-top: 12px solid #da291c;
+    border-left: 10px solid transparent;
+    border-bottom: 12px solid #da291c;
+    margin-right: -1px;
+}
+ 

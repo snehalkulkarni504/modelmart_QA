@@ -33,43 +33,91 @@
 
                     <div class="col-md-12 " style="border-bottom: 1px solid #da291c; margin-bottom: 10px; ">
                         <div class="row">
-                            <div class="col-md-2"></div>
+                            <!-- <div class="col-md-2"></div>
                             <div class="col-md-8" style="padding: 10px 0px;">
                                 <table>
                                     <tr>
                                         <td style="width: 13%;"><label for="PartName" class="default-lbl">Part Name
                                                 :</label></td>
-                                        <td style="width: 32%;"><label for="PartName"
+                                        <td style="width: 20%; "><label for="PartName"
                                                 class="default-lblvalue">{{PartName}}</label></td>
                                         <td style="width: 13%;"> <label for="PartNumber" class="default-lbl">Part Number
                                                 :</label>
                                         </td>
-                                        <td style="width: 32%;"><label for="PartNumber"
+                                        <td style="width: 20%; "><label for="PartNumber"
                                                 class="default-lblvalue">{{PartNumber}}</label></td>
                                     </tr>
                                     <tr>
                                         <td style="width: 13%;"><label for="ProjectName" class="default-lbl">Program
                                                 Name
                                                 :</label></td>
-                                        <td style="width: 32%;"><label for="ProjectName"
+                                        <td style="width: 20%; "><label for="ProjectName"
                                                 class="default-lblvalue">{{ProjectName}}</label></td>
                                         <td style="width: 13%;"> <label for="DebriefDate" class="default-lbl">Debrief
                                                 Date
                                                 :</label></td>
-                                        <td style="width: 32%;"><label for="DebriefDate"
+                                        <td style="width: 20%; "><label for="DebriefDate"
                                                 class="default-lblvalue">{{DebriefDate}}</label></td>
 
+                                    </tr>
+                                </table>
+                            </div> -->
+                            <div class="col-md-10" style="padding: 10px 0px;">
+                                <table style="width: 100%;">
+                                    <tr>
+                                        <td style="width: 14%; "><label for="PartName" class="default-lbl">Part
+                                                Name:</label></td>
+                                        <td style="width: 22%; "><label for="PartName"
+                                                class="default-lblvalue">{{PartName}}</label></td>
+                                        <td style="width: 10%;"> <label for="PartNumber" class="default-lbl">Part
+                                                Number:</label></td>
+                                        <td style="width: 21%; "><label for="PartNumber"
+                                                class="default-lblvalue">{{PartNumber}}</label></td>
+                                        <td style="width: 11%; "><label for="PartName" class="default-lbl">Project
+                                                Type:</label></td>
+                                        <td style="width: 21%; "><label for="PartName"
+                                                class="default-lblvalue">{{ProjectType}}</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 14%; "><label for="ProjectName" class="default-lbl">Program
+                                                Name:</label></td>
+                                        <td style="width: 22%; "><label for="ProjectName"
+                                                class="default-lblvalue">{{ProjectName}}</label></td>
+                                        <td style="width: 10%; "> <label for="DebriefDate" class="default-lbl">Debrief
+                                                Date:</label></td>
+                                        <td style="width: 21%; "><label for="DebriefDate"
+                                                class="default-lblvalue">{{DebriefDate}}</label></td>
+                                        <td style="width: 11%; "><label for="PartName" class="default-lbl">Potential
+                                                Supplier:</label></td>
+                                        <td style="width: 21%; "><label for="PartName"
+                                                class="default-lblvalue">{{PartName}}</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 14%; "> <label for="PartNumber" class="default-lbl">Business
+                                                Unit:</label></td>
+                                        <td style="width: 22%; "><label for="PartNumber"
+                                                class="default-lblvalue">{{BusinessUnit}}</label></td>
+                                        <td style="width: 10%; "> <label for="DebriefDate" class="default-lbl">Annual
+                                                Volume:</label></td>
+                                        <td style="width: 21%; "><label for="DebriefDate"
+                                                class="default-lblvalue">{{AnnualVolume}}</label></td>
+                                        <td style="width: 11%; "><label for="PartName" class="default-lbl">Supplier
+                                                Quote:</label></td>
+                                        <td style="width: 21%; "><label for="PartName"
+                                                class="default-lblvalue">{{TargetQuote}}</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 14%;"> <label for="PartNumber" class="default-lbl">Engine
+                                                Displacement:</label></td>
+                                        <td style="width: 21%; "><label for="PartNumber"
+                                                class="default-lblvalue">{{EngineDisplacement}}</label></td>
                                     </tr>
                                 </table>
                             </div>
                             <div class="col-md-2">
                                 <input type="button" class="btn btn-outline-danger btn-GetReport" name="GetReport"
-                                    value="Update & Get Report" (click)="GetReport()">
+                                    value="Update & Get Report" (click)="openupdatemodal()">
                             </div>
-                            <!-- <div class="text-center">
-                                <label [hidden]="!IsCESmodel" class="text-center CSModelRemark"
-                                    style="margin-left: 0px;">{{ModelwiseNote}}</label>
-                            </div> -->
                             <div [hidden]="!IsCESmodel" class="ModelTypeNote">
                                 <label class="text-center">"{{ModelwiseNote}}"</label>
                             </div>
@@ -118,11 +166,12 @@
                                 <!-- ----- User Added Cost ------ -->
                                 <tr>
                                     <td style="padding: 10px 10px; padding-right: 0px" class="TierCostReportTextT1">
-                                         User Added Cost
+                                        User Added Cost
                                         <input [hidden]="IsExternalCostmodel" id="getdataUserAdded" type="button"
                                             class="btn btn-sm btn-outline-danger" name="GetData" value="Update"
                                             (click)="openModalProcess('T1')" />
-                                            <span class="title-corner-badge" style="margin: 0px !important;font-size: 8px !important ">NEW</span>
+                                        <span class="title-corner-badge"
+                                            style="margin: 0px !important;font-size: 8px !important ">NEW</span>
                                     </td>
                                     <td style="padding: 12px 8px 0px 0px" class="text-end TierCostReportListusdValueT1">
                                         <!-- {{ Cal_totalInitialCost | number : '1.2-2' }} --> 0.00
@@ -206,7 +255,8 @@
                                     <td colspan="1" class=""> Tariff
                                         <input id="getdataTierNon1" type="button" class="btn btn-sm btn-outline-danger"
                                             name="GetData" value="Update" (click)="openModalTariff('T1')">
-                                            <span class="title-corner-badge" style="margin: 0px !important;font-size: 8px !important ">NEW</span>
+                                        <span class="title-corner-badge"
+                                            style="margin: 0px !important;font-size: 8px !important ">NEW</span>
                                     </td>
                                     <td style="padding: 12px 8px 0px 0px;" class="text-end ">
                                         {{TotalTeriffPercentT1}}<span *ngIf="TotalTeriffPercentT1 > 0">%</span>
@@ -277,7 +327,8 @@
                                         <input [hidden]="IsExternalCostmodel" id="getdataUserAddedT2" type="button"
                                             class="btn btn-sm btn-outline-danger" name="GetData" value="Update"
                                             (click)="openModalProcess('T2')" />
-                                            <span class="title-corner-badge" style="margin: 0px !important;font-size: 8px !important ">NEW</span>
+                                        <span class="title-corner-badge"
+                                            style="margin: 0px !important;font-size: 8px !important ">NEW</span>
                                     </td>
                                     <td style="padding: 12px 8px 0px 0px" class="text-end TierCostReportListusdValueT2">
                                         <!-- {{ Cal_totalInitialCostT2 | number : '1.2-2' }} --> 0.00
@@ -363,7 +414,8 @@
                                     <td colspan="1" class=""> Tariff
                                         <input id="getdataTierNon1" type="button" class="btn btn-sm btn-outline-danger"
                                             name="GetData" value="Update" (click)="openModalTariff('T2')">
-                                            <span class="title-corner-badge" style="margin: 0px !important;font-size: 8px !important ">NEW</span>
+                                        <span class="title-corner-badge"
+                                            style="margin: 0px !important;font-size: 8px !important ">NEW</span>
                                     </td>
                                     <td style="padding: 12px 8px 0px 0px;" class="text-end ">
                                         {{TotalTeriffPercentT2}}<span *ngIf="TotalTeriffPercentT2 > 0">%</span>
@@ -432,7 +484,8 @@
                                     <th style="display: none" class="ShouldCostBreakdowntableth">Part Finish Weight
                                         (kg)
                                     </th>
-                                    <th style="display: none" class="ShouldCostBreakdowntableth">Gross Weight of Material
+                                    <th style="display: none" class="ShouldCostBreakdowntableth">Gross Weight of
+                                        Material
                                         used (kg)</th>
                                     <th style="display: none" class="ShouldCostBreakdowntableth">Current Material Rate
                                         ($)</th>
@@ -892,80 +945,201 @@
     </div>
 
     <!-- --------- Terrif end ------------- -->
-         <!-- --------- View latest rates for frequently used materials start ------------- -->
+    <!-- --------- View latest rates for frequently used materials start ------------- -->
 
-        <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display_frequentlyUsedMaterials}">
-            <form [formGroup]="Frequentlyusedmaterialgrade">
-                <div class="modelsize_UsedMateraial" role="document">
-                    <div class="modal-content">
-                       <div class="modal-header row">
-                            <div class="col-md-4">
-                                <h3 class="modal-title">Latest Rates for Frequently Used Materials</h3>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="searchDiv">
-                                    <div class="form-group has-search" style="width: 100%;">
-                                        <span class="bi bi-search form-control-feedback"></span>
-                                        <input type="text" class="form-control search-input" placeholder="Search"
-                                            formControlName="textsearch" [(ngModel)]="textsearch">
-                                    </div>
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display_frequentlyUsedMaterials}">
+        <form [formGroup]="Frequentlyusedmaterialgrade">
+            <div class="modelsize_UsedMateraial" role="document">
+                <div class="modal-content">
+                    <div class="modal-header row">
+                        <div class="col-md-4">
+                            <h3 class="modal-title">Latest Rates for Frequently Used Materials</h3>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="searchDiv">
+                                <div class="form-group has-search" style="width: 100%;">
+                                    <span class="bi bi-search form-control-feedback"></span>
+                                    <input type="text" class="form-control search-input" placeholder="Search"
+                                        formControlName="textsearch" [(ngModel)]="textsearch">
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <label class="close modal-close-icn-Material"
-                                    (click)="ClosefrequentlyUsedMaterialsPopup()">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000"
-                                        class="bi bi-x" viewBox="0 0 16 16">
-                                        <path
-                                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                                    </svg>
-                                </label>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="close modal-close-icn-Material" (click)="ClosefrequentlyUsedMaterialsPopup()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000"
+                                    class="bi bi-x" viewBox="0 0 16 16">
+                                    <path
+                                        d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="tableFixHead_UsedMateraial">
+
+                        <div class="d-flex justify-content-center" style="font-size: 12px !important;">
+                            <table class="table table-bordered table-striped ">
+                                <thead>
+                                    <tr>
+                                        <th class="ShouldCostBreakdowntableth">Sr. No.</th>
+                                        <th class="ShouldCostBreakdowntableth">Material Grade</th>
+                                        <th class="ShouldCostBreakdowntableth">Material Rate in USD/Kg ($)</th>
+                                        <th class="ShouldCostBreakdowntableth">Location Used</th>
+                                        <th class="ShouldCostBreakdowntableth">Last Used Date</th>
+                                        <th class="ShouldCostBreakdowntableth">Part Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        *ngFor="let val of FrequentlyUsedMaterialsData | search: textsearch:filterMetadata | paginate: { itemsPerPage: 10, currentPage: page }  let i=index">
+                                        <td style="text-align: right;">{{val.Sr_No}}</td>
+                                        <td style="text-align: left;">{{val.Material_Grade}}</td>
+                                        <td>{{val.Material_Rate_in_USD_Kg}}</td>
+                                        <td style="text-align: left; text-transform: uppercase;">
+                                            {{val.Location_Used}}</td>
+                                        <td>{{val.Last_Used_Date | date :'dd-MMM-yyyy'}}</td>
+                                        <td style="text-align: left;">{{val.Part_Description}}</td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between p-2 pagination">
+                        <ngb-pagination [collectionSize]="filterMetadata.count" [(page)]="page" [pageSize]="pageSize"
+                            [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm">
+                            <ng-template ngbPaginationPrevious>Prev</ng-template>
+                            <ng-template ngbPaginationNext>Next</ng-template>
+                        </ngb-pagination>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- --------- View latest rates for frequently used materials end ------------- -->
+
+    <!-- pop up on add user  start-->
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displaymodal}">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content modal-lg" style="width: 816px !important;">
+                <div class="modal-header">
+                    <h4 style="font-size:23px !important;margin-bottom: 0px;">{{header}}</h4>
+                    <label class="close modal-close-icn" (click)="closeopenupdatemodal()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                        </svg>
+                    </label>
+
+                </div>
+
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group" style="display: grid;">
+                                    <label for="updatemodeldatapartno" class="default-lbl">Part Number</label>
+                                    <input type="form-control form-control-sm" type="text"
+                                        [(ngModel)]="updatemodeldatavalidation.partnumber" placeholder="Please Enter Part Number"
+                                        name="updatemodeldata.partno">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group" style="display: grid;">
+                                    <label for="updatemodeldataprogramname" class="default-lbl">Program Name</label>
+                                    <input type="form-control form-control-sm" type="text"
+                                        [(ngModel)]="updatemodeldatavalidation.programname"
+                                        placeholder="Please Enter Program Name" name="updatemodeldataprogramname">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group" style="display: grid;">
+                                    <label for="updatemodeldataprojecttype" class="default-lbl">Project Type</label>
+                                    <input type="form-control form-control-sm" type="text"
+                                        [(ngModel)]="updatemodeldatavalidation.projecttype"
+                                        placeholder="Please Enter Project Type" name="updatemodeldataprojecttype">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12" style="height: 20px;"></div>
+
+                            <div class="col-md-4">
+                                <div class="form-group" style="display: grid;">
+                                    <label for="updatemodeldatapotentialsupplier" class="default-lbl">Potential
+                                        Supplier</label>
+                                    <input type="form-control form-control-sm" type="text"
+                                        [(ngModel)]="updatemodeldatavalidation.potentialsupplier"
+                                        placeholder="Please Enter Potential Supplier"
+                                        name="updatemodeldatapotentialsupplier">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group" style="display: grid;">
+                                    <label for="updatemodeldatabusinessunit" class="default-lbl">Business Unit</label>
+                                    <input type="form-control form-control-sm" type="text"
+                                        [(ngModel)]="updatemodeldatavalidation.businessunit"
+                                        placeholder="Please Enter Business Unit" name="updatemodeldatabusinessunit">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group" style="display: grid;">
+                                    <label for="updatemodeldataannualvol" class="default-lbl">Annual Volume</label>
+                                    <input type="form-control form-control-sm" type="text"
+                                        [(ngModel)]="updatemodeldatavalidation.annualvolume"
+                                        placeholder="Please Enter Annual Volume" name="updatemodeldataannualvol" (keypress)="keyPressInt($event)">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12" style="height: 20px;"></div>
+
+                            <div class="col-md-4">
+                                <div class="form-group" style="display: grid;">
+                                    <label for="updatemodeldataenginedisplacement" class="default-lbl">Engine
+                                        Displacement</label>
+                                    <input type="form-control form-control-sm" type="text"
+                                        [(ngModel)]="updatemodeldatavalidation.enginedisplacement"
+                                        placeholder="Please Enter Engine Displacement"
+                                        name="updatemodeldataenginedisplacement">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group" style="display: grid;">
+                                    <label for="updatemodeldatasupplierquote" class="default-lbl">Supplier Quote (USD)</label>
+                                    <input type="form-control form-control-sm" type="text"
+                                        [(ngModel)]="updatemodeldatavalidation.supplierquote"
+                                        placeholder="Please Enter Supplier Quote" name="updatemodeldatasupplierquote"  (keypress)="keyPressDecimal($event)">
+                                </div>
                             </div>
                         </div>
-                        <div class="tableFixHead_UsedMateraial">
+                    </form>
+                </div>
 
-                            <div class="d-flex justify-content-center" style="font-size: 12px !important;">
-                                <table class="table table-bordered table-striped ">
-                                    <thead>
-                                        <tr>
-                                            <th class="ShouldCostBreakdowntableth">Sr. No.</th>
-                                            <th class="ShouldCostBreakdowntableth">Material Grade</th>
-                                            <th class="ShouldCostBreakdowntableth">Material Rate in USD/Kg ($)</th>
-                                            <th class="ShouldCostBreakdowntableth">Location Used</th>
-                                            <th class="ShouldCostBreakdowntableth">Last Used Date</th>
-                                            <th class="ShouldCostBreakdowntableth">Part Description</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr
-                                            *ngFor="let val of FrequentlyUsedMaterialsData | search: textsearch:filterMetadata | paginate: { itemsPerPage: 10, currentPage: page }  let i=index">
-                                            <td style="text-align: right;">{{val.Sr_No}}</td>
-                                            <td style="text-align: left;">{{val.Material_Grade}}</td>
-                                            <td>{{val.Material_Rate_in_USD_Kg}}</td>
-                                            <td style="text-align: left; text-transform: uppercase;">
-                                                {{val.Location_Used}}</td>
-                                            <td>{{val.Last_Used_Date | date :'dd-MMM-yyyy'}}</td>
-                                            <td style="text-align: left;">{{val.Part_Description}}</td>
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                 <div class="modal-footer">
+                    <div class="row" style="width: 100%;">
+                        <div class="col-md-8 Remark_nopadding">
+                            <b>Remarks : </b>
+                            <ol type="1">
+                                <li>Annual Volume update is only for reference, should cost will not change unless user updates in user added cost.</li>
+                            </ol>
                         </div>
-                        <div class="d-flex justify-content-between p-2 pagination">
-                            <ngb-pagination [collectionSize]="filterMetadata.count" [(page)]="page"
-                                [pageSize]="pageSize" [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm">
-                                <ng-template ngbPaginationPrevious>Prev</ng-template>
-                                <ng-template ngbPaginationNext>Next</ng-template>
-                            </ngb-pagination>
-                            <br>
+                        <div class="col-md-4 text-center" >
+                            <button type="button" class="btn btn-sm btn-default default-btn_popup"
+                                (click)="updatemodeldetails()" [disabled]="!hasAnyUpdateData()"
+                                style="font-size: 16px !important;">
+                                {{txt_btn}}
+                            </button>
+                            <button type="button" class="btn btn-sm btn-secondary"  data-bs-dismis="modal"
+                                (click)="closeopenupdatemodal()" style="font-size: 16px !important; margin-left:30px; ">Close</button>
                         </div>
                     </div>
                 </div>
-            </form>
+
+            </div>
+
         </div>
-
-        <!-- --------- View latest rates for frequently used materials end ------------- -->
-
+    </div>
+    <!-- pop up on add user  end-->
 
 </div>

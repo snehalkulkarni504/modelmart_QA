@@ -92,6 +92,16 @@ export class DesigntocostStep2Component implements OnInit {
   isExpandedMfgProcessCost = false;
   YellowModel_MarketBenchmark = true;
 
+  Plat_form: any;
+  Gensetoutputpower: any;
+  FrameSize: any;
+  SizeOfAfterTreatment: any;
+
+  IsPlatform = false;
+  IsGensetOuputPower = false;
+  IsFrameSize = false;
+  IsSizeofAftertreatment = false;
+
   ngOnInit(): void {
 
     this.router.events.subscribe((event) => {
@@ -139,12 +149,12 @@ export class DesigntocostStep2Component implements OnInit {
 
       this.appexChart();
       // this.getPiedata();
-    }, 500);
+    }, 1000);
 
     setTimeout(() => {
       const r = document.getElementById("chartOptionsId") as any;
       r.getElementsByClassName('canvasjs-chart-credit')[0].style.display = "none";
-    }, 600);
+    }, 1000);
 
   }
 
@@ -193,13 +203,46 @@ export class DesigntocostStep2Component implements OnInit {
       this.modelTypes_Id = data.projectDetails[0].modelTypes_Id;
       this.ModelTypeName = data.projectDetails[0].modelTypes_Desc;
       this.additional_Information = data.projectDetails[0].additional_Information;
+      debugger;
+
+      this.Plat_form = data.projectDetails[0].plat_form;
+      this.Gensetoutputpower = data.projectDetails[0].gensetoutputpower;
+      this.FrameSize = data.projectDetails[0].frameSize;
+      this.SizeOfAfterTreatment = data.projectDetails[0].sizeOfAfterTreatment;
 
       this.manufacturing_mainT1 = data.manufacturingProcessMain.filter((item: any) => item.supplyLevel === 'T1');
       this.manufacturing_mainT2 = data.manufacturingProcessMain.filter((item: any) => item.supplyLevel === 'T2');
       this.groupedMainT1 = this.groupByPart(this.manufacturing_mainT1);
       this.groupedMainT2 = this.groupByPart(this.manufacturing_mainT2);
 
-      debugger;
+      // -- EBU   --  Platform, Engine Displacement 
+      // -- PSBU  -- Engine Displacement, Genset Ouput Power (KVA)
+      // -- CTT -- Platform, Model
+      // -- CES -- Substrate size
+      this.IsPlatform = false;
+      this.IsGensetOuputPower = false;
+      this.IsFrameSize = false;
+      this.IsSizeofAftertreatment = false;
+
+      if (this.BusinessUnit != null || this.BusinessUnit != undefined) {
+        switch (this.BusinessUnit) {
+          case 'EBU':
+            this.IsPlatform = true;
+            break;
+          case 'PSBU':
+            this.IsGensetOuputPower = true;
+            break;
+          case 'CBU-CTT':
+            this.IsPlatform = true; this.IsFrameSize = true;
+            break;
+          case 'CBU-CES':
+            this.IsSizeofAftertreatment = true;
+            break;
+          default:
+            this.IsPlatform = true;
+
+        }
+      }
 
       if (this.modelTypes_Id == 4) {
         this.IsCESmodel = true;
@@ -224,9 +267,12 @@ export class DesigntocostStep2Component implements OnInit {
 
       if (this.Costtype == environment.CostType_MarketBenchmark) {
         this.YellowModel_MarketBenchmark = true;
+        localStorage.setItem("YellowModel_MarketBenchmark", "true");
       }
       else {
         this.YellowModel_MarketBenchmark = false;
+        localStorage.setItem("YellowModel_MarketBenchmark", "false");
+
       }
 
 
@@ -782,7 +828,67 @@ export class DesigntocostStep2Component implements OnInit {
   //   this.router.navigate(['/home/tiercost']);
   // }
 
+  IsMarketBenchmark = true;
   UpdateReport() {
+    if (this.YellowModel_MarketBenchmark) {
+      this.IsMarketBenchmark = false;
+      return;
+    }
+    else {
+      this.IsMarketBenchmark = true;
+      this.SetLocalStorage();
+      this.router.navigate(['/home/designtocost/step2/simulation']);
+    }
+
+
+
+    // localStorage.setItem("DTCPartNumber", this.PartNumber);
+    // localStorage.setItem("DTCProgramName", this.ProjectName);
+    // localStorage.setItem("DTCNounName", this.PartName);
+
+    // localStorage.setItem("DTCForexRegion", this.ForexRegion);
+    // localStorage.setItem("DTCComapredId", this.ComapredId);  //--- CSHeaderId
+    // localStorage.setItem("DTCProjectName", this.ProjectName);
+    // localStorage.setItem("DTCDebriefDateFormated", this.DebriefDateFormated);
+    // localStorage.setItem("DTCimagePath", this.mainimg);
+    // localStorage.setItem("DTCUniqueId", this.UniqueId);
+    // localStorage.setItem("DTCProjecttitle", this.ChekNull(this.Projecttype) + '-' + this.ChekNull(this.BusinessUnit) + '-' + this.ChekNull(this.ProjectName) + '-' + this.Location + '-' + this.PartName + '-' + this.PartNumber);
+
+    // this.router.navigate(['/home/designtocost/step2/simulation']);
+  }
+
+
+
+  splitBySpecialCharacters(process: any): string[] {
+    return process.split(/[/]/)[0];
+  }
+
+  rotationAngle = 0;
+  rotationAngleMfgProcessCost = 0;
+  rotateIcon() {
+    this.rotationAngle += 180;
+  }
+
+  rotateIconMfgProcessCost() {
+    this.rotationAngleMfgProcessCost += 180;
+  }
+
+  async confirm() {
+    debugger;
+    this.SetLocalStorage();
+    const data = await this.searchservice.GetScreportId_SkipSimulationPorcess(this.ComapredId, this.userId).toPromise();
+    console.log(data);
+    if(data > 0){
+      localStorage.setItem("DTCSCReportId",data);
+       this.router.navigate(['/home/designtocost/step3']);
+    }
+  }
+  
+  cancel() {
+    this.IsMarketBenchmark = true;
+  }
+
+  SetLocalStorage() {
     localStorage.setItem("DTCPartNumber", this.PartNumber);
     localStorage.setItem("DTCProgramName", this.ProjectName);
     localStorage.setItem("DTCNounName", this.PartName);
@@ -796,33 +902,10 @@ export class DesigntocostStep2Component implements OnInit {
     localStorage.setItem("DTCProjecttitle", this.ChekNull(this.Projecttype) + '-' + this.ChekNull(this.BusinessUnit) + '-' + this.ChekNull(this.ProjectName) + '-' + this.Location + '-' + this.PartName + '-' + this.PartNumber);
 
 
-    // {{ChekNull(Projecttype)}}-{{ChekNull(BusinessUnit)}}-{{ChekNull(ProjectName)}}-{{Location}}-{{PartName}}-{{PartNumber}}
-
-    // this.SCReportId = localStorage.getItem("DTCSCReportId");
-
-    this.router.navigate(['/home/designtocost/step2/simulation']);
   }
-
-
-  splitBySpecialCharacters(process: any): string[] {
-    return process.split(/[/]/)[0];
-  }
-
-
-  rotationAngle = 0;
-  rotationAngleMfgProcessCost = 0;
-  rotateIcon() {
-    this.rotationAngle += 180;
-  }
-
-  rotateIconMfgProcessCost() {
-    this.rotationAngleMfgProcessCost += 180;
-  }
-
-
-
 
 }
+
 
 
 function reject() {

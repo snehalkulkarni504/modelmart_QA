@@ -24,7 +24,7 @@
                         <i class="bi bi-arrow-right gradient-icon2"></i>
                     </span>
                     <p class="DTO_step3"><span> Step 3 </span> <br>
-                        Pickup or Add VAVE Ideas to Optimize the cost
+                        Pick up or Add VAVE Ideas to Optimize the cost
                     </p>
                     <span class="DTO_connect1_2">
                         <i class="bi bi-arrow-right gradient-icon3"></i>
@@ -41,7 +41,7 @@
     </div>
 
     <div class="table-container">
-         <div class="MasterHeader2">
+        <div class="MasterHeader2">
             <div class="text-center" style="width: 100%;">
                 <h2>User Simulation for <b>{{ Projecttitle }}</b> </h2>
             </div>
@@ -101,6 +101,12 @@
                             </th>
                             <th class="header-box header-box-selection">
                                 <div class="header-content">
+                                    Feasibility
+                                    <div class="header-line"></div>
+                                </div>
+                            </th>
+                            <th class="header-box header-box-selection">
+                                <div class="header-content">
                                     Select
                                     <div class="header-line"></div>
                                 </div>
@@ -137,6 +143,11 @@
                                     [(ngModel)]="searchFilters.ideaOwner" (input)="applyFilter()">
                             </td>
                             <td>
+                                <input type="text" class="column-search" placeholder="Feasibility..."
+                                    title="Search feasibility..." [(ngModel)]="searchFilters.feasibility"
+                                    (input)="applyFilter()" />
+                            </td>
+                            <td>
                             </td>
                         </tr>
 
@@ -146,11 +157,10 @@
                         <tr
                             *ngFor="let row of filteredPartNumberTableData_original | paginate: {itemsPerPage:itemonperpage, currentPage: page}">
                             <td id="freeze"> {{ row.idea }}</td>
-                            <td class="id1" (click)="OpenVBD()" title="{{row.sharepoint_ID}}"
+                            <td class="id1" (click)="OpenVBD(row.businessUnit)" title="{{row.sharepoint_ID}}"
                                 *ngIf="row.sharepoint_ID > 0; else noData">
                                 {{row.sharepoint_ID}}
                             </td>
-
                             <ng-template #noData>
                                 <td class="idNA"> NA</td>
                             </ng-template>
@@ -160,6 +170,9 @@
                             <td style="text-align: start;" title="{{row.potentialSavingsPerPieceMDO}}">{{
                                 row.potentialSavingsPerPieceMDO | number:'0.0-2' }}</td>
                             <td style="text-align: center;" title="{{row.ideaOwner}}">{{row.ideaOwner}}</td>
+                            <td style="text-align: center" title="{{ row.feasibility }}">
+                                {{ row.feasibility }}
+                            </td>
 
                             <td style="text-align: center;" class="idSelection">
                                 <input type="checkbox" class="select-checkbox" [(ngModel)]="row.ideaSelected"
@@ -236,19 +249,19 @@
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label class="default-lbl">Part Number <span style="color: red;">*</span></label>
+                                    <label class="default-lbl">Part Number </label>
                                     <input class="form-control form-control-sm" type="text"
                                         [(ngModel)]="newIdea.partNumber" name="PartNumber"
-                                        placeholder="Enter Part Number" required #partNumber="ngModel">
-                                    <div class="error-message text-danger"
+                                        placeholder="Enter Part Number" #partNumber="ngModel">
+                                    <!-- <div class="error-message text-danger"
                                         *ngIf="partNumber.invalid && partNumber.touched" style="font-size: 12px;">
                                         Please enter a valid Part Number.
-                                    </div>
+                                    </div> -->
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label class="default-lbl">Potential Savings PP($) 
-                                        </label>
+                                    <label class="default-lbl">Potential Savings PP($)
+                                    </label>
                                     <input class="form-control form-control-sm" type="text"
                                         (keypress)="keyPressDecimal($event)"
                                         [(ngModel)]="newIdea.potentialSavingsPerPieceMDO" name="PotentialSavings"

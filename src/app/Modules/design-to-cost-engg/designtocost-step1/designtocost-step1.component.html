@@ -25,7 +25,7 @@
                             <i class="bi bi-arrow-right gradient-icon2"></i>
                         </span>
                         <p class="DTO_step3"><span> Step 3 </span> <br>
-                            Pickup or Add VAVE Ideas to Optimize the cost
+                            Pick up or Add VAVE Ideas to Optimize the cost
                         </p>
                         <span class="DTO_connect1_2">
                             <i class="bi bi-arrow-right gradient-icon3"></i>
@@ -47,11 +47,11 @@
 
             <div class="row hellouser text-center" id="hellouser">
                 <div class="row text-center " style="height: 50px !important; z-index: 15; ">
-                    <h4>Hello <span class="userfullname">{{userfullname}}</span>, what would you like to design today?
+                    <h4>Hello <span class="userfullname">{{userfullname}}</span>, what would you like to explore today?
                     </h4>
+
                     <div class="col-md-3"></div>
-                    <div class="col-md-6 text-start"
-                        style="height: 50px; margin-top: 0px; ">
+                    <div class="col-md-6 text-start" style="height: 50px; margin-top: 0px; ">
                         <label for="dropdown5" class="default-lbl">Part Name</label>
                         <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true" (change)="getPartName()"
                             [(ngModel)]='selectedPartName' placeholder="Please select">
@@ -62,90 +62,84 @@
                     </div>
                     <div class="col-md-3"></div>
                 </div>
-               <div class="text-start additionalconstraint_none" id="additionalconstraint">
-                    <div class="row" >
+                <div class="text-start additionalconstraint_none" id="additionalconstraint">
+                    <div class="row">
                         <h6>Please specify additional constraints</h6>
-                        <div class="col-md-3">
-                            <label for="dropdown5" class="default-lbl">Platform</label>
-                            <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"  
-                                [(ngModel)]='selectedPlatform' placeholder="Please select" (change)="GetEngineBaseOnPlatform()">
-                                <ng-option *ngFor="let item of PlatformList" style="font-size: 12px;"
-                                    [value]="item.plat_form">{{item.plat_form}}</ng-option>
-                            </ng-select>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div [hidden]="!IsPlatform" class="col-md-4">
+                                    <label for="dropdown5" class="default-lbl">Platform</label>
+                                    <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
+                                        [(ngModel)]='selectedPlatform' placeholder="Please select"
+                                        (change)="GetEngineBaseOnPlatform()">
+                                        <ng-option *ngFor="let item of PlatformList" style="font-size: 12px;"
+                                            [value]="item.plat_form">{{item.plat_form}}</ng-option>
+                                    </ng-select>
+                                </div>
+                                <div [hidden]="!IsEngineDisplacement" class="col-md-4">
+                                    <label for="dropdown5" class="default-lbl">Engine Displacement</label>
+                                    <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
+                                        [multiple]="false" [(ngModel)]='selectedEngineDisplacement'
+                                        placeholder="Please select">
+                                        <ng-option *ngFor="let item of EngineDisplacementList"
+                                            [value]="item.edId">{{item.engineDisplacement}}</ng-option>
+                                    </ng-select>
+                                </div>
+                                <div [hidden]="!IsGensetOuputPower" class="col-md-4">
+                                    <label for="dropdown5" class="default-lbl">Genset Ouput Power (KVA)</label>
+                                    <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
+                                        [multiple]="false" [(ngModel)]='selectedGensetoutputpower'  (change)="GetEngineBaseOnPlatform()"
+                                        placeholder="Please select">
+                                        <ng-option *ngFor="let item of Gensetoutputpower_DTC"
+                                            [value]="item.gensetoutputpower">{{item.gensetoutputpower}}</ng-option>
+                                    </ng-select>
+                                </div>
+                                <div [hidden]="!IsFrameSize" class="col-md-4">
+                                    <label for="dropdown5" class="default-lbl">Model</label>
+                                    <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
+                                        [multiple]="false" [(ngModel)]='selectedFrameSize' placeholder="Please select">
+                                        <ng-option *ngFor="let item of FrameSize_DTC"
+                                            [value]="item.frameSize">{{item.frameSize}}</ng-option>
+                                    </ng-select>
+                                </div>
+                                <div [hidden]="!IsSizeofAftertreatment" class="col-md-4">
+                                    <label for="dropdown5" class="default-lbl">Substrate Size</label>
+                                    <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
+                                        [multiple]="false" [(ngModel)]='selectedsizeOfAfterTreatment'
+                                        placeholder="Please select">
+                                        <ng-option *ngFor="let item of SizeOfAfterTreatment_DTC"
+                                            [value]="item.sizeOfAfterTreatment">{{item.sizeOfAfterTreatment}}</ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <label for="dropdown5" class="default-lbl">Engine Displacement</label>
-                            <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"  [multiple]="true"
-                                [(ngModel)]='selectedEngineDisplacement' placeholder="Please select">
-                                <ng-option *ngFor="let item of EngineDisplacementList"
-                                    [value]="item.edId">{{item.engineDisplacement}}</ng-option>
-                            </ng-select>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-5 mt-2">
+                                    <label for="dropdown5" class="default-lbl">Material Form</label>
+                                    <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
+                                        [(ngModel)]='selectedMaterialForm' placeholder="Please select">
+                                        <ng-option *ngFor="let item of MaterialGradeList"
+                                            [value]="item.materialForm">{{item.materialForm}}</ng-option>
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-5 mt-2">
+                                    <label for="dropdown5" class="default-lbl">Process Name</label>
+                                    <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
+                                        [(ngModel)]='selectedHighProcess' placeholder="Please select">
+                                        <ng-option *ngFor="let item of HighLevelProcessList"
+                                            [value]="item.highLevelProcess">{{item.highLevelProcess_Codes}}</ng-option>
+                                    </ng-select>
+                                </div>
+                                <div class="text-center col-md-2 mt-3">
+                                    <input type="button" class="btnview" value="View" Name="View"
+                                        (click)="ViewDataOnSelection()">
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3"></div>
-                        <div class="col-md-3"></div>
 
-                        <div class="col-md-5 mt-2">
-                            <label for="dropdown5" class="default-lbl">Material Name</label>
-                            <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
-                                [(ngModel)]='selectedMaterialGrade' placeholder="Please select">
-                                <ng-option *ngFor="let item of MaterialGradeList"
-                                    [value]="item.materialGrade">{{item.materialGrade}}</ng-option>
-                            </ng-select>
-                        </div>
-                        <div class="col-md-5 mt-2">
-                            <label for="dropdown5" class="default-lbl">Process Name</label>
-                            <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
-                                [(ngModel)]='selectedHighProcess' placeholder="Please select">
-                                <ng-option *ngFor="let item of HighLevelProcessList"
-                                    [value]="item.highLevelProcess">{{item.highLevelProcess}}</ng-option>
-                            </ng-select>
-                        </div>
-                        <div class="text-center col-md-2 mt-3">
-                            <input type="button" class="btnview" value="View" Name="View"
-                                (click)="ViewDataOnSelection()">
-                        </div>
                     </div>
-                </div>  
-
-
-                <!-- <h6>Please specify additional constraints</h6>
-                    <div class="col-md-3">
-                        <label for="dropdown5" class="default-lbl">Platform</label>
-                        <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true" [multiple]="true"
-                            [(ngModel)]='selectedPlatform' placeholder="Please select">
-                            <ng-option *ngFor="let item of PlatformList" style="font-size: 12px;"
-                                [value]="item.plat_form">{{item.plat_form}}</ng-option>
-                        </ng-select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="dropdown5" class="default-lbl">Engine Displacement</label>
-                        <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true" [multiple]="true"
-                            [(ngModel)]='selectedEngineDisplacement' placeholder="Please select">
-                            <ng-option *ngFor="let item of EngineDisplacementList"
-                                [value]="item.edId">{{item.engineDisplacement}}</ng-option>
-                        </ng-select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="dropdown5" class="default-lbl">Material Name</label>
-                        <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
-                            [(ngModel)]='selectedMaterialGrade' placeholder="Please select">
-                            <ng-option *ngFor="let item of MaterialGradeList"
-                                [value]="item.materialGrade">{{item.materialGrade}}</ng-option>
-                        </ng-select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="dropdown5" class="default-lbl">Process Name</label>
-                        <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
-                            [(ngModel)]='selectedHighProcess' placeholder="Please select">
-                            <ng-option *ngFor="let item of HighLevelProcessList"
-                                [value]="item.highLevelProcess">{{item.highLevelProcess}}</ng-option>
-                        </ng-select>
-                    </div>
-
-                    <div class="text-center">
-                        <input type="button" class="btnview" value="View" Name="View" (click)="ViewDataOnSelection()">
-                    </div> -->
-                <!-- </div> -->
+                </div>
             </div>
 
 
@@ -504,8 +498,7 @@
 
 
             <div class="row setOpacity" id="SearchFilters">
-                <div *ngFor="let t of SearchList  | paginate: { itemsPerPage: 100, currentPage: page }"
-                     [ngClass]="{'prodDetails': t.modelTypes_Id ===1 || t.modelTypes_Id ===4 ,
+                <div *ngFor="let t of SearchList  | paginate: { itemsPerPage: 100, currentPage: page }" [ngClass]="{'prodDetails': t.modelTypes_Id ===1 || t.modelTypes_Id ===4 ,
                     'prodDetailsYellow': t.modelTypes_Id ===2 || t.modelTypes_Id ===3|| t.modelTypes_Id ===5}">
                     <div class="prdImgDesc" (click)="getShouldeCost(t)">
 
@@ -540,7 +533,7 @@
                                 Tooling
                                 Cost ($)</label>
                         </div>
-                        <div class="prdDescription_div4">
+                        <!-- <div class="prdDescription_div4">
                             <label id="AnnualVolume"> <b>{{ChekNull('B-10L')}} </b> </label>
                         </div>
                         <div class="prdDescription_div5">
@@ -548,7 +541,7 @@
                         </div>
                         <div class="prdDescription_div6">
                             <label id="AnnualVolume"> <b>{{ChekNull('HPDC')}}</b> </label>
-                        </div>
+                        </div> -->
                     </div>
                     <!-- <div>
                         <input #Comparecheckbox class="form-check-input" type="checkbox" class="SearchCheckbox"

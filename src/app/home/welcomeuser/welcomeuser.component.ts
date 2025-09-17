@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { Location } from '@angular/common';
 import { AdminService } from 'src/app/SharedServices/admin.service';
- 
+
 @Component({
   selector: 'app-welcomeuser',
   templateUrl: './welcomeuser.component.html',
@@ -23,7 +22,7 @@ export class WelcomeuserComponent implements OnInit {
   submenu: any;
   idleState: any;
   userName: any;
-
+  IsShouldeCostRequest = false;
 
   constructor(
     public router: Router,
@@ -102,8 +101,15 @@ export class WelcomeuserComponent implements OnInit {
   //   console.log('Navigating to:', event);
 
   // }
+
   navigate(event: string): void {
     debugger
+
+    if (event == "/home/shouldcostrequest/:request") {
+      this.IsShouldeCostRequest = true;
+      return;
+    }
+
     sessionStorage.setItem('selectedSubMenu', JSON.stringify(this.submenu));
     // sessionStorage.setItem('selectedSubMenu', this.submenu);
     // sessionStorage.setItem('selectedSubMenu', this.submenu.SubMenu);
@@ -201,7 +207,7 @@ export class WelcomeuserComponent implements OnInit {
 
   showSubMenu(menu: any) {
     debugger;
-    if(menu  == "Should Cost Request"){
+    if (menu == "Should Cost Request") {
       menu = "Request"
     }
 
@@ -229,10 +235,14 @@ export class WelcomeuserComponent implements OnInit {
   }
 
 
+  handlePopupClose(shouldNavigate: any) {
+    debugger;
+    this.IsShouldeCostRequest = false; // Hide popup
 
-
-
-
+    if (shouldNavigate) {
+      this.router.navigate(['/home/shouldcostrequest/:request']);
+    }
+  }
 
 
 

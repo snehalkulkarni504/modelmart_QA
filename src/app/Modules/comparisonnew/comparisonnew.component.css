@@ -341,14 +341,14 @@
 
 .mainpart {
     width: 150px !important;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
 .particular {
     width: 200px !important;
 }
 
-    
+
 .TotalCostData {
     font-weight: 600 !important;
 }
@@ -418,7 +418,7 @@
     margin-left: 10% !important;
     height: 300px;
 }
- 
+
 .img1:hover {
     box-shadow: 0px 0px 5px #8e959c;
     transition: all .5s ease-in-out;
@@ -426,3 +426,26 @@
     cursor: pointer !important;
 }
 
+
+.ng-star-inserted {
+    padding: 0px;
+    margin: 0px;
+}
+
+.cartDetailsfixed {
+    position: fixed;
+}
+
+
+  /* // ------------------fixed header - */
+.no-scroll {
+    position: fixed !important;
+    top: 0px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #808080;
+    box-shadow: 0px 2px 10px #808080;
+}
+
+.no-scrollimg {
+    display: none;
+}

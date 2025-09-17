@@ -24,7 +24,7 @@
                         <i class="bi bi-arrow-right gradient-icon2"></i>
                     </span>
                     <p class="DTO_step3"><span> Step 3 </span> <br>
-                        Pickup or Add VAVE Ideas to Optimize the cost
+                        Pick up or Add VAVE Ideas to Optimize the cost
                     </p>
                     <span class="DTO_connect1_2">
                         <i class="bi bi-arrow-right gradient-icon3"></i>
@@ -43,7 +43,7 @@
 
     <div style="margin-top: 95px; font-size: 12px !important; ">
         <div class="MasterHeader2">
-            <div class="text-center" style="width: 100%;">
+            <div class="text-center" style="width: 100%; color: #da291c;">
                 <h2>User Simulation for <b>{{ Projecttitle }}</b> </h2>
             </div>
         </div>
@@ -55,41 +55,62 @@
 
                         <div class="col-md-12 " style="border-bottom: 1px solid #da291c; margin-bottom: 10px; ">
                             <div class="row">
-                                <div class="col-md-2"></div>
-                                <div class="col-md-10" style="padding: 10px 0px;">
-                                    <table>
+                                <div class="col-md-12" style="padding: 10px 0px;">
+                                    <table style="width: 100%;">
                                         <tr>
-                                            <td style="width: 13%;"><label for="PartName" class="default-lbl">Part Name
-                                                    :</label></td>
-                                            <td style="width: 32%;"><label for="PartName"
+                                            <td style="width: 14%; "><label for="PartName" class="default-lbl">Part
+                                                    Name:</label></td>
+                                            <td style="width: 22%; "><label for="PartName"
                                                     class="default-lblvalue">{{PartName}}</label></td>
-                                            <td style="width: 13%;"> <label for="PartNumber" class="default-lbl">Part
-                                                    Number
-                                                    :</label>
-                                            </td>
-                                            <td style="width: 32%;"><label for="PartNumber"
+                                            <td style="width: 10%;"> <label for="PartNumber" class="default-lbl">Part
+                                                    Number:</label></td>
+                                            <td style="width: 21%; "><label for="PartNumber"
                                                     class="default-lblvalue">{{PartNumber}}</label></td>
+                                            <td style="width: 11%; "><label for="PartName" class="default-lbl">Project
+                                                    Type:</label></td>
+                                            <td style="width: 21%; "><label for="PartName"
+                                                    class="default-lblvalue">{{ProjectType}}</label></td>
                                         </tr>
                                         <tr>
-                                            <td style="width: 13%;"><label for="ProjectName" class="default-lbl">Program
-                                                    Name
-                                                    :</label></td>
-                                            <td style="width: 32%;"><label for="ProjectName"
+                                            <td style="width: 14%; "><label for="ProjectName"
+                                                    class="default-lbl">Program
+                                                    Name:</label></td>
+                                            <td style="width: 22%; "><label for="ProjectName"
                                                     class="default-lblvalue">{{ProjectName}}</label></td>
-                                            <td style="width: 13%;"> <label for="DebriefDate"
+                                            <td style="width: 10%; "> <label for="DebriefDate"
                                                     class="default-lbl">Debrief
-                                                    Date
-                                                    :</label></td>
-                                            <td style="width: 32%;"><label for="DebriefDate"
+                                                    Date:</label></td>
+                                            <td style="width: 21%; "><label for="DebriefDate"
                                                     class="default-lblvalue">{{DebriefDate}}</label></td>
-
+                                            <td style="width: 11%; "><label for="PartName" class="default-lbl">Potential
+                                                    Supplier:</label></td>
+                                            <td style="width: 21%; "><label for="PartName"
+                                                    class="default-lblvalue">{{PartName}}</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 14%; "> <label for="PartNumber"
+                                                    class="default-lbl">Business
+                                                    Unit:</label></td>
+                                            <td style="width: 22%; "><label for="PartNumber"
+                                                    class="default-lblvalue">{{BusinessUnit}}</label></td>
+                                            <td style="width: 10%; "> <label for="DebriefDate"
+                                                    class="default-lbl">Annual
+                                                    Volume:</label></td>
+                                            <td style="width: 21%; "><label for="DebriefDate"
+                                                    class="default-lblvalue">{{AnnualVolume}}</label></td>
+                                            <td style="width: 11%; "><label for="PartName" class="default-lbl">Supplier
+                                                    Quote:</label></td>
+                                            <td style="width: 21%; "><label for="PartName"
+                                                    class="default-lblvalue">{{TargetQuote}}</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 14%;"> <label for="PartNumber" class="default-lbl">Engine
+                                                    Displacement:</label></td>
+                                            <td style="width: 21%; "><label for="PartNumber"
+                                                    class="default-lblvalue">{{EngineDisplacement}}</label></td>
                                         </tr>
                                     </table>
                                 </div>
-                                <!-- <div class="text-center">
-                                    <label [hidden]="!IsCESmodel" class="text-center CSModelRemark"
-                                        style="margin-left: 0px;">{{ModelwiseNote}}</label>
-                                </div> -->
                                 <div [hidden]="!IsCESmodel" class="ModelTypeNote">
                                     <label class="text-center">"{{ModelwiseNote}}"</label>
                                 </div>
@@ -116,7 +137,7 @@
                                             class="TierCostReportTextT1">
                                             {{val.particular}}
                                             <input [class.hideTextBox]="val.updateValue == 0"
-                                                [hidden]="IsExternalCostmodel && val.particular != 'Direct Labour Cost' "
+                                                [hidden]="(IsExternalCostmodel && val.particular != 'Direct Labour Cost') || YellowModel_MarketBenchmark "
                                                 id="getdataTier1" type="button" class="btn btn-sm btn-outline-danger"
                                                 name="GetData" value="Update" (click)="openModal('T1',val,i)">
                                         </td>
@@ -142,7 +163,7 @@
                                     <tr>
                                         <td style="padding: 10px 10px; padding-right: 0px" class="TierCostReportTextT1">
                                             User Added Cost
-                                            <input [hidden]="IsExternalCostmodel" id="getdataUserAdded" type="button"
+                                            <input [hidden]="IsExternalCostmodel || YellowModel_MarketBenchmark" id="getdataUserAdded" type="button"
                                                 class="btn btn-sm btn-outline-danger" name="GetData" value="Update"
                                                 (click)="openModalProcess('T1')" />
                                         </td>
@@ -183,7 +204,7 @@
                                             <span style="display: none;" *ngIf="val.perValue > 0"> ({{val.perValue |
                                                 number:'1.2-2'}} %) </span>
                                             <span style="display: none;">{{val.perValue}}</span>
-                                            <input [class.hideTextBox]="val.updateValue == 0" id="getdataTierNon1"
+                                            <input [hidden]="YellowModel_MarketBenchmark" [class.hideTextBox]="val.updateValue == 0" id="getdataTierNon1"
                                                 type="button" class="btn btn-sm btn-outline-danger" name="GetData"
                                                 value="Update" (click)="openModal('T1',val,i)">
                                         </td>
@@ -229,7 +250,7 @@
                                     <!-- ----- Terif Cost ------ -->
                                     <tr>
                                         <td colspan="1" class=""> Tariff
-                                            <input id="getdataTierNon1" type="button"
+                                            <input [hidden]="YellowModel_MarketBenchmark" id="getdataTierNon1" type="button"
                                                 class="btn btn-sm btn-outline-danger" name="GetData" value="Update"
                                                 (click)="openModalTariff('T1')">
                                         </td>
@@ -260,7 +281,7 @@
                         <div class="row" [hidden]="Istier_1_CostReportBreakdown">
                             <div class="col-md-12 text-end">
                                 <input type="button" class="btn btn-outline-danger btn-GetReport" name="GetReport"
-                                    value="Save & Go to Next Step" (click)="GetReport()">
+                                    value="{{btnsaveandgotonext_value}}" (click)="openupdatemodal()">
                             </div>
                         </div>
 
@@ -283,7 +304,7 @@
                                         class="ShouldCostBreakdowntabletr">
                                         <td style="padding: 10px 10px;" class="TierCostReportTextT2">{{val.particular}}
                                             <input [class.hideTextBox]="val.updateValue == 0"
-                                                [hidden]="IsExternalCostmodel && val.particular != 'Direct Labour Cost' "
+                                                [hidden]="(IsExternalCostmodel && val.particular != 'Direct Labour Cost') || YellowModel_MarketBenchmark "
                                                 id="getdataTier2" type="button" class="btn btn-sm btn-outline-danger"
                                                 name="GetData" value="Update" (click)="openModal('T2',val,i)">
                                         </td>
@@ -306,7 +327,7 @@
                                     <tr>
                                         <td style="padding: 10px 10px; padding-right: 0px" class="TierCostReportTextT2">
                                             User Added Cost
-                                            <input [hidden]="IsExternalCostmodel" id="getdataUserAddedT2" type="button"
+                                            <input [hidden]="IsExternalCostmodel || YellowModel_MarketBenchmark" id="getdataUserAddedT2" type="button"
                                                 class="btn btn-sm btn-outline-danger" name="GetData" value="Update"
                                                 (click)="openModalProcess('T2')" />
                                         </td>
@@ -345,7 +366,7 @@
                                             <span style="display: none;" *ngIf="val.perValue > 0"> ({{val.perValue |
                                                 number:'1.2-2'}} %) </span>
                                             <span style="display: none;">{{val.perValue}}</span>
-                                            <input [class.hideTextBox]="val.updateValue == 0" id="getdataTierNon1"
+                                            <input [hidden]="YellowModel_MarketBenchmark" [class.hideTextBox]="val.updateValue == 0" id="getdataTierNon1"
                                                 type="button" class="btn btn-sm btn-outline-danger" name="GetData"
                                                 value="Update" (click)="openModal('T2',val,i)">
                                         </td>
@@ -394,7 +415,7 @@
                                     <!-- ----- Terif Cost ------ -->
                                     <tr>
                                         <td colspan="1" class=""> Tariff
-                                            <input id="getdataTierNon1" type="button"
+                                            <input [hidden]="YellowModel_MarketBenchmark" id="getdataTierNon1" type="button"
                                                 class="btn btn-sm btn-outline-danger" name="GetData" value="Update"
                                                 (click)="openModalTariff('T2')">
                                         </td>
@@ -426,7 +447,7 @@
                     <div class="row" [hidden]="Istier_2_CostReportBreakdown">
                         <div class="col-md-12 text-end">
                             <input type="button" class="btn btn-outline-danger btn-GetReport" name="GetReport"
-                                value="Save & Go to Next Step" (click)="GetReport()">
+                                value="{{btnsaveandgotonext_value}}" (click)="openupdatemodal()">
                         </div>
                     </div>
                 </div>
@@ -465,7 +486,7 @@
                                         <th style="display: none" class="ShouldCostBreakdowntableth">Part Finish Weight
                                             (kg)
                                         </th>
-                                        <th style="width: 15%;" class="ShouldCostBreakdowntableth">Gross Weight of
+                                        <th style="display: none" class="ShouldCostBreakdowntableth">Gross Weight of
                                             Material
                                             used (kg)</th>
                                         <th style="display: none" class="ShouldCostBreakdowntableth">Current Material
@@ -488,8 +509,8 @@
                                             /
                                             kg)
                                             <div (click)="FrequentlyUsedMaterialGrade()"
-                                                class="FrequentlyUsed_Material"> View latest rates for frequently used
-                                                materials</div>
+                                                class="FrequentlyUsed_Material">
+                                                View latest rates for frequently used materials</div>
                                         </th>
                                         <th style="width: 10%;" class="ShouldCostBreakdowntableth">Updated Material Cost
                                             ($)
@@ -525,7 +546,8 @@
                                             {{val.partFinishWeight | number:'1.4-4' }}</td>
                                         <td class="HideRow"
                                             [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
-                                            class="ShouldCostBreakdowntabletr" style="text-align: right;">
+                                            class="ShouldCostBreakdowntabletr"
+                                            style="text-align: right; display: none ">
                                             {{val.grossWeightKG | number:'1.4-4' }}
 
                                             <!-- <input type="text" class="form-control PopupText RMText" id="PopUpGross{{i}}"
@@ -546,13 +568,13 @@
                                         <td class="HideRow"
                                             [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
                                             class="ShouldCostBreakdowntabletr" style="text-align: right; ">
-                                            {{val.grossNetWeightKG | number:'1.4-4' }}
+                                            <!-- {{val.grossNetWeightKG | number:'1.4-4' }} -->
 
-                                            <!-- <input type="text" class="form-control PopupText RMText" id="PopUpNet{{i}}"
-                                        name="PopUpGross{{i}}" (keypress)="keyPressDecimal($event)"
-                                        value="{{val.grossNetWeightKG}}"
-                                        (keyup)="CalculateMaterialRate($event, val, i)" maxlength="8"> -->
-
+                                            <input type="text" class="form-control PopupText RMTextNetweight"
+                                                id="PopUpNet{{i}}" name="PopUpGross{{i}}"
+                                                (keypress)="keyPressDecimal_4decimal($event)"
+                                                [value]="val.updatedNetWeight == '' ?  val.grossNetWeightKG   :  val.updatedNetWeight  "
+                                                (keyup)="CalculateMaterialRate($event, val, i)" maxlength="8">
                                         </td>
                                         <td class="HideRow"
                                             [class.HideRow]="val.casting == 1 && val.unitMaterialRate == null"
@@ -588,7 +610,7 @@
 
                                     </tr>
                                     <tr>
-                                        <td colspan="5" class="footer-color tfoot text-end"><b>Total Material cost</b>
+                                        <td colspan="4" class="footer-color tfoot text-end"><b>Total Material cost</b>
                                         </td>
                                         <td colspan="1" class="footer-color tfoot text-center">
                                             <b>{{TotalMaterialRate_Update
@@ -1046,6 +1068,136 @@
         </div>
 
         <!-- --------- View latest rates for frequently used materials end ------------- -->
+
+
+        <!-- pop up on add user  start-->
+        <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displaymodal}">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content modal-lg" style="width: 816px !important;">
+                    <div class="modal-header">
+                        <h4 style="font-size:23px !important;margin-bottom: 0px;">{{header}}</h4>
+                        <label class="close modal-close-icn" (click)="closeopenupdatemodal()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
+                                viewBox="0 0 16 16">
+                                <path
+                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                        </label>
+
+                    </div>
+
+                    <div class="modal-body">
+                        <form>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group" style="display: grid;">
+                                        <label for="updatemodeldatapartno" class="default-lbl">Part Number</label>
+                                        <input type="form-control form-control-sm" type="text"
+                                            [(ngModel)]="updatemodeldatavalidation.partnumber"
+                                            placeholder="Please Enter Part Number" name="updatemodeldata.partno">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group" style="display: grid;">
+                                        <label for="updatemodeldataprogramname" class="default-lbl">Program Name</label>
+                                        <input type="form-control form-control-sm" type="text"
+                                            [(ngModel)]="updatemodeldatavalidation.programname"
+                                            placeholder="Please Enter Program Name" name="updatemodeldataprogramname">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group" style="display: grid;">
+                                        <label for="updatemodeldataprojecttype" class="default-lbl">Project Type</label>
+                                        <input type="form-control form-control-sm" type="text"
+                                            [(ngModel)]="updatemodeldatavalidation.projecttype"
+                                            placeholder="Please Enter Project Type" name="updatemodeldataprojecttype">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12" style="height: 20px;"></div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group" style="display: grid;">
+                                        <label for="updatemodeldatapotentialsupplier" class="default-lbl">Potential
+                                            Supplier</label>
+                                        <input type="form-control form-control-sm" type="text"
+                                            [(ngModel)]="updatemodeldatavalidation.potentialsupplier"
+                                            placeholder="Please Enter Potential Supplier"
+                                            name="updatemodeldatapotentialsupplier">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group" style="display: grid;">
+                                        <label for="updatemodeldatabusinessunit" class="default-lbl">Business
+                                            Unit</label>
+                                        <input type="form-control form-control-sm" type="text"
+                                            [(ngModel)]="updatemodeldatavalidation.businessunit"
+                                            placeholder="Please Enter Business Unit" name="updatemodeldatabusinessunit">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group" style="display: grid;">
+                                        <label for="updatemodeldataannualvol" class="default-lbl">Annual Volume</label>
+                                        <input type="form-control form-control-sm" type="text"
+                                            [(ngModel)]="updatemodeldatavalidation.annualvolume"
+                                            placeholder="Please Enter Annual Volume" name="updatemodeldataannualvol"
+                                            (keypress)="keyPressInt($event)">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12" style="height: 20px;"></div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group" style="display: grid;">
+                                        <label for="updatemodeldataenginedisplacement" class="default-lbl">Engine
+                                            Displacement</label>
+                                        <input type="form-control form-control-sm" type="text"
+                                            [(ngModel)]="updatemodeldatavalidation.enginedisplacement"
+                                            placeholder="Please Enter Engine Displacement"
+                                            name="updatemodeldataenginedisplacement">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group" style="display: grid;">
+                                        <label for="updatemodeldatasupplierquote" class="default-lbl">Supplier Quote
+                                            (USD)</label>
+                                        <input type="form-control form-control-sm" type="text"
+                                            [(ngModel)]="updatemodeldatavalidation.supplierquote"
+                                            placeholder="Please Enter Supplier Quote"
+                                            name="updatemodeldatasupplierquote" (keypress)="keyPressDecimal($event)">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="row" style="width: 100%;">
+                            <div class="col-md-8 Remark_nopadding">
+                                <b>Remarks : </b>
+                                <ol type="1">
+                                    <li>Annual Volume update is only for reference, should cost will not change unless
+                                        user updates in user added cost.</li>
+                                </ol>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <button type="button" class="btn btn-sm btn-default default-btn_popup"
+                                    (click)="updatemodeldetails()" [disabled]="!hasAnyUpdateData()"
+                                    style="font-size: 16px !important;">
+                                    {{txt_btn}}
+                                </button>
+                                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismis="modal"
+                                    (click)="closeopenupdatemodal()"
+                                    style="font-size: 16px !important; margin-left:30px; ">Close</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <!-- pop up on add user  end-->
 
     </div>
 

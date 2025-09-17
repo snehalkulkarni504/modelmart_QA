@@ -822,10 +822,12 @@
                             </fieldset>
                             <br>
 
-                            <fieldset class="border rounded-3 p-3" *ngIf="ManufacturingProcess.length > 0">
+                            <fieldset class="border rounded-3 p-3"
+                                *ngIf="groupedMainT1.length > 0 || groupedMainT2.length > 0">
                                 <legend
                                     class="w-auto labelDetailsheader d-flex align-items-center justify-content-between">
-                                    <span class="title-corner-badge">NEW</span> <span>Manufacturing Process</span>
+                                    <span class="title-corner-badge">NEW</span>
+                                    <span>Manufacturing Process</span>
                                     <button type="button" class="btn btn-sm btn-link p-0 ms-2"
                                         (click)="isExpanded = !isExpanded"
                                         [ngbTooltip]="isExpanded ? 'Collapse' : 'Expand'">
@@ -839,17 +841,61 @@
                                         </svg>
                                     </button>
                                 </legend>
+
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="mfg-process-container" [ngClass]="{ collapsed: !isExpanded }">
-                                            <ng-container *ngFor="let val of ManufacturingProcess">
-                                                <div class="manufacturingProcessName-container">
-                                                    <div class="manufacturingProcessName-tail"></div>
-                                                    <div class="manufacturingProcessName-box">
-                                                        <span
-                                                            class="manufacturingProcessName-text">{{val.manufacturingProcessName.split('/')[0].trim()
-                                                            }}</span>
+                                        <div class="mfg-process-container" [ngClass]="{ collapsed: !isExpanded }"
+                                            style="display: flex; flex-direction: column; gap: 2rem;">
+                                            <ng-container *ngFor="let part of groupedMainT1">
+                                                <div class="part-block"
+                                                    style="display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;">
+                                                    <div class="manufacturingProcessName-container">
+                                                        <div class="partNumber-tail"></div>
+                                                        <div class="partNumber-box">
+                                                            <span style="color: white; font-weight: bold;">
+                                                                {{ part.partNumber }}
+                                                            </span>
+                                                        </div>
                                                     </div>
+                                                    <ng-container *ngFor="let process of part.processes">
+                                                        <div class="manufacturingProcessName-container">
+                                                            <div class="manufacturingProcessName-tail"></div>
+                                                            <div class="manufacturingProcessName-box">
+                                                                <span class="manufacturingProcessName-text">
+                                                                    {{
+                                                                    process.manufacturingProcessName.split('/')[0].trim()
+                                                                    }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+
+                                            <ng-container *ngFor="let part of groupedMainT2">
+                                                <div class="part-block"
+                                                    style="display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;">
+
+                                                    <div class="manufacturingProcessName-container">
+                                                        <div class="partNumber-tail"></div>
+                                                        <div class="partNumber-box">
+                                                            <span style="color: white; font-weight: bold;">
+                                                                {{ part.partNumber }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <ng-container *ngFor="let process of part.processes">
+                                                        <div class="manufacturingProcessName-container">
+                                                            <div class="manufacturingProcessName-tail"></div>
+                                                            <div class="manufacturingProcessName-box">
+                                                                <span class="manufacturingProcessName-text">
+                                                                    {{
+                                                                    process.manufacturingProcessName.split('/')[0].trim()
+                                                                    }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </ng-container>
                                                 </div>
                                             </ng-container>
                                         </div>

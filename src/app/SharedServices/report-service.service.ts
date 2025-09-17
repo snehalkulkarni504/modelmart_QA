@@ -124,9 +124,12 @@ export class ReportServiceService {
     );
   }
 
-  insertDPVavedetails(Vavelist: any): Observable<any> {
+  insertDPVavedetails(Vavelist: any, DTCPSCReportId:any): Observable<any> {
     const formdata = new FormData();
     formdata.append('vavelist', JSON.stringify(Vavelist));
+    formdata.append('DTCPSCReportId', DTCPSCReportId);
+
+    
     return this.http.post<FormData>(this.apiUrl + `InsertDPVavedetails`, formdata);
   }
 

@@ -4,6 +4,9 @@
             <div style="width: 50%;">
                 <h2>User Master</h2>
             </div>
+            <div class="text-end" style="width: 50%;">
+                <button class="btnbackLeft" (click)="backToPreviousPage()">Back</button>
+            </div>
         </div>
         <div class="MasterHeaderlable">
 
@@ -15,9 +18,10 @@
                 </div>
             </div>
 
-            <div style="width: 50%;" class="text-end" >
+            <div style="width: 50%;" class="text-end">
                 <button type="button" class="btn btn-sm default-btn" id='add-btn' data-toggle="tooltip"
-                    data-placement="top" title="Add Data" (click)="editModal=false" (click)="openModal()">Add User</button>
+                    data-placement="top" title="Add Data" (click)="editModal=false" (click)="openModal()">Add
+                    User</button>
             </div>
         </div>
 
@@ -94,7 +98,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="userUnitName" class="default-lbl"> User Name <span
-                                        style="color: red;">*</span></label>
+                                            style="color: red;">*</span></label>
                                     <input class="form-control form-control-sm" type="text" value="{{userUnitName}}"
                                         placeholder="Please Enter User Name" name="userUnitName"
                                         (blur)="userNameOnBlur($event)">
@@ -109,11 +113,11 @@
                                     (blur)="FullNameOnBlur($event)">
                                 <div class="error-message" *ngIf="showError2"> Please Enter Full Name.</div>
                             </div>
-                           <div class="col-md-12" style="height: 20px;"></div>
+                            <div class="col-md-12" style="height: 20px;"></div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="exampleInput" class="default-lbl">Email Address <span
-                                        style="color: red;">*</span></label>
+                                            style="color: red;">*</span></label>
                                     <input class="form-control form-control-sm" type="text"
                                         value="{{userUnitName}}@cummins.com" placeholder="Please enter email id"
                                         name="emailId" disabled>
@@ -122,7 +126,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="exampleInput" class="default-lbl">Team <span
-                                        style="color: red;">*</span></label>
+                                            style="color: red;">*</span></label>
                                     <input class="form-control form-control-sm" type="text" value="{{Team}}"
                                         placeholder="Please Enter Team" name="Team" (blur)="TeamOnBlur($event)">
                                     <div class="error-message" *ngIf="showError3"> Please Enter Team.</div>
@@ -132,7 +136,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="exampleInput" class="default-lbl">Organization Name <span
-                                        style="color: red;">*</span></label>
+                                            style="color: red;">*</span></label>
                                     <input class="form-control form-control-sm" type="text" value="{{OrganizationName}}"
                                         placeholder="Please Enter Organization Name" name="OrganizationName"
                                         (blur)="OrgNameOnBlur($event)">
