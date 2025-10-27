@@ -99,12 +99,12 @@
                                     <div class="header-line"></div>
                                 </div>
                             </th>
-                            <th class="header-box header-box-selection">
+                            <!-- <th class="header-box header-box-selection">
                                 <div class="header-content">
                                     Feasibility
                                     <div class="header-line"></div>
                                 </div>
-                            </th>
+                            </th> -->
                             <th class="header-box header-box-selection">
                                 <div class="header-content">
                                     Select
@@ -142,11 +142,11 @@
                                 <input type="text" class="column-search" placeholder="Owner..." title="Search Owner..."
                                     [(ngModel)]="searchFilters.ideaOwner" (input)="applyFilter()">
                             </td>
-                            <td>
+                            <!-- <td>
                                 <input type="text" class="column-search" placeholder="Feasibility..."
                                     title="Search feasibility..." [(ngModel)]="searchFilters.feasibility"
                                     (input)="applyFilter()" />
-                            </td>
+                            </td> -->
                             <td>
                             </td>
                         </tr>
@@ -170,9 +170,9 @@
                             <td style="text-align: start;" title="{{row.potentialSavingsPerPieceMDO}}">{{
                                 row.potentialSavingsPerPieceMDO | number:'0.0-2' }}</td>
                             <td style="text-align: center;" title="{{row.ideaOwner}}">{{row.ideaOwner}}</td>
-                            <td style="text-align: center" title="{{ row.feasibility }}">
+                            <!-- <td style="text-align: center" title="{{ row.feasibility }}">
                                 {{ row.feasibility }}
-                            </td>
+                            </td> -->
 
                             <td style="text-align: center;" class="idSelection">
                                 <input type="checkbox" class="select-checkbox" [(ngModel)]="row.ideaSelected"

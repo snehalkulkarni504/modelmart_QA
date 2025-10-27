@@ -130,3 +130,81 @@ textarea, input[type="text"],input[type="file"]{
     font-size: 12px;
     color: #da291c;
 }
+
+ /* -------  confirm pop up -------------- - */
+ 
+/* changes */
+
+.custom-confirm-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.custom-confirm-popup-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 500px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.custom-confirm-popup-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.custom-confirm-popup-icon {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.custom-confirm-popup-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #da291c;
+}
+
+.custom-confirm-warning-msg {
+  font-size: 13px;
+  line-height: 1.4;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.custom-confirm-popup-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.custom-confirm-btn,
+.custom-cancel-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.custom-confirm-btn {
+  background-color: #da291c;
+  color: white;
+}
+
+.custom-cancel-btn {
+  background-color: #6c757d;
+  color: white;
+}

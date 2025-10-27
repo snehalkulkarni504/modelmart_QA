@@ -30,7 +30,6 @@
                 <thead>
                     <tr>
                         <th hidden>ID</th>
-                        <th>Sr. No</th>
                         <th>User Name</th>
                         <th>Full Name</th>
                         <th>Email Id</th>
@@ -47,7 +46,6 @@
                     <tr
                         *ngFor="let data of userUnitMaster  | search: textsearch:filterMetadata | paginate: { itemsPerPage: 10, currentPage: page }  let i=index">
                         <td hidden>{{data.Id}}</td>
-                        <td>{{(page - 1) * 10 + i + 1}}</td>
                         <td class="text-start">{{data.UserName}}</td>
                         <td class="text-start">{{data.FullName}}</td>
                         <td class="text-start">{{data.EmailId}}</td>
@@ -92,7 +90,7 @@
                         </svg>
                     </label>
                 </div>
-                <div class="modal-body">
+                <!-- <div class="modal-body">
                     <form>
                         <div class="row">
                             <div class="col-md-6">
@@ -146,6 +144,109 @@
                         </div>
                     </form>
 
+                </div> -->
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <!-- User Name -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="userUnitName" class="default-lbl">User Name <span
+                                            style="color: red;">*</span></label>
+                                    <input class="form-control form-control-sm" type="text" [(ngModel)]="userUnitName"
+                                        placeholder="Please Enter User Name" name="userUnitName"
+                                        (blur)="userNameOnBlur($event)">
+                                    <div class="error-message" *ngIf="showError1"> Please Enter User Name.</div>
+                                </div>
+                            </div>
+
+                            <!-- Full Name -->
+                            <div class="col-md-6">
+                                <label for="FullName" class="default-lbl">Full Name <span
+                                        style="color: red;">*</span></label>
+                                <input class="form-control form-control-sm" type="text" [(ngModel)]="FullName"
+                                    placeholder="Please Enter Full Name" name="FullName"
+                                    (blur)="FullNameOnBlur($event)">
+                                <div class="error-message" *ngIf="showError2"> Please Enter Full Name.</div>
+                            </div>
+
+                            <div class="col-md-12" style="height: 20px;"></div>
+
+                            <!-- Email -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="emailId" class="default-lbl">Email Address <span
+                                            style="color: red;">*</span></label>
+                                    <input class="form-control form-control-sm" type="text"
+                                        [value]="userUnitName + '@cummins.com'" placeholder="Please enter email id"
+                                        name="emailId" disabled>
+                                </div>
+                            </div>
+
+                            <!-- Team Dropdown -->
+                            <div class="col-md-6">
+                                <div class="form-group custom-select-wrapper">
+                                    <label for="Team" class="default-lbl">Team <span
+                                            style="color: red;">*</span></label>
+                                    <div class="custom-select-container">
+                                        <select class="form-control form-control-sm custom-select" name="Team"
+                                            [(ngModel)]="Team" (blur)="TeamOnBlur($event)">
+                                            <option value="" disabled>Please Select Team</option>
+                                            <option value="Category Sourcing">Category Sourcing</option>
+                                            <option value="Engineering">Engineering</option>
+                                            <option value="Indirect Purchasing">Indirect Purchasing</option>
+                                            <option value="Manufacturing">Manufacturing</option>
+                                            <option value="Sourcing COE">Sourcing COE</option>
+                                            <option value="Supply Continuity">Supply Continuity</option>
+                                            <option value="VPI Sourcing">VPI Sourcing</option>
+                                            <option value="Aftermarket">Aftermarket</option>
+                                            <option value="Environmental Sustainability and Compliance Strategy">Environmental Sustainability and Compliance Strategy</option>
+
+                                        </select>
+                                        <span class="custom-select-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray"
+                                                class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <div class="error-message" *ngIf="showError3"> Please Enter Team.</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12" style="height: 20px;"></div>
+
+                            <!-- Organization Name Dropdown -->
+                            <div class="col-md-6">
+                                <div class="form-group custom-select-wrapper">
+                                    <label for="OrganizationName" class="default-lbl">Organization Name <span
+                                            style="color: red;">*</span></label>
+                                    <div class="custom-select-container">
+                                        <select class="form-control form-control-sm custom-select"
+                                            name="OrganizationName" [(ngModel)]="OrganizationName"
+                                            (blur)="OrgNameOnBlur($event)">
+                                            <option value="" disabled>Please Select Organization</option>
+                                            <option value="Corporate">Corporate</option>
+                                            <option value="Cummins Components and Software">Cummins Components and
+                                                Software</option>
+                                            <option value="Engine Business">Engine Business</option>
+                                            <option value="Power Systems Business">Power Systems Business</option>
+                                            <option value="Accelera Business">Accelera Business</option>
+                                        </select>
+                                        <span class="custom-select-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray"
+                                                class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <div class="error-message" *ngIf="showError4"> Please Enter Organization Name.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-secondary" data-bs-dismis="modal"

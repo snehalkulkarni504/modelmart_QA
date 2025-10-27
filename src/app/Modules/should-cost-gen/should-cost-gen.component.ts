@@ -92,7 +92,7 @@ export class ShouldCostGenComponent implements OnInit {
   IsCESmodel: boolean = false;
   ModelwiseNote: any;
   additional_Information: any;
-
+  Platform: any;
   manufacturing_mainT1: any[] = [];
   manufacturing_mainT2: any[] = [];
   groupedMainT1: any[] = [];
@@ -102,6 +102,9 @@ export class ShouldCostGenComponent implements OnInit {
 
   YellowModel_MarketBenchmark = true;
 
+  IsPlatform = true;
+  IsEngineDisplacement = true;
+  EngineDisplacement_Lable = 'Engine Displacement';
 
   ngOnInit(): void {
 
@@ -217,11 +220,41 @@ export class ShouldCostGenComponent implements OnInit {
       this.AnnualVolume = data.projectDetails[0].annualVolume;
       this.RoleId = data.projectDetails[0].roleId;
       this.UniqueId = data.projectDetails[0].uniqueId;
-      this.EngineDisplacement = data.projectDetails[0].engineDisplacement;
+      //this.EngineDisplacement = data.projectDetails[0].engineDisplacement;
 
       this.modelTypes_Id = data.projectDetails[0].modelTypes_Id;
       this.ModelTypeName = data.projectDetails[0].modelTypes_Desc;
       this.additional_Information = data.projectDetails[0].additional_Information;
+
+      this.Platform = data.projectDetails[0].plat_form;
+
+      this.IsPlatform = false;
+      
+      switch (this.BusinessUnit) {
+        case 'EBU':
+          this.EngineDisplacement_Lable = 'Engine Displacement';
+          this.IsPlatform = true; 
+          this.EngineDisplacement = data.projectDetails[0].engineDisplacement;
+          break;
+        case 'PSBU':
+          this.EngineDisplacement_Lable = 'Engine Displacement';
+          this.EngineDisplacement = data.projectDetails[0].engineDisplacement;
+          break;
+        case 'CBU-CTT':
+          this.EngineDisplacement_Lable = 'Model';
+          this.EngineDisplacement = data.projectDetails[0].frameSize;
+          this.IsPlatform = true; 
+          break;
+        case 'CBU-CES':
+          this.EngineDisplacement_Lable = 'Substrate Size';
+          this.EngineDisplacement = data.projectDetails[0].sizeOfAfterTreatment;
+          break;
+        default:
+          this.EngineDisplacement_Lable = 'Engine Displacement';
+          this.EngineDisplacement = data.projectDetails[0].engineDisplacement;
+      }
+
+ 
 
       this.manufacturing_mainT1 = data.manufacturingProcessMain.filter((item: any) => item.supplyLevel === 'T1');
       this.manufacturing_mainT2 = data.manufacturingProcessMain.filter((item: any) => item.supplyLevel === 'T2');
@@ -591,9 +624,9 @@ export class ShouldCostGenComponent implements OnInit {
 
   @ViewChild('printsection') printsection!: ElementRef;
   async DownloadReport() {
-    //debugger;
+    debugger;
     var id = this.UniqueId;
-    var staticUrl = environment.apiUrl_Search + 'DownloadPDF?Id=' + id + '&modelTypes_Id=' + this.modelTypes_Id;
+    var staticUrl = environment.apiUrl_Search + 'DownloadPDF?uniqueId=' + id + '&modelTypes_Id=' + this.modelTypes_Id + '&userId=' + this.userId;
 
     var PartNo = '';
     var PartNm = '';
@@ -776,7 +809,7 @@ export class ShouldCostGenComponent implements OnInit {
     for (var i = 0; i < this.shouldCostBreakdownList.length; i++) {
       if (i <= 2) {
         this.TotalMaterailDetails.push(
-          { label: this.shouldCostBreakdownList[i].particular, y: Number(this.shouldCostBreakdownList[i].usdValue.toFixed(2)), origanlY:Number(this.shouldCostBreakdownList[i].usdValue.toFixed(2)), color: "#78B3CE" },
+          { label: this.shouldCostBreakdownList[i].particular, y: Number(this.shouldCostBreakdownList[i].usdValue.toFixed(2)), origanlY: Number(this.shouldCostBreakdownList[i].usdValue.toFixed(2)), color: "#78B3CE" },
         );
       }
       if (i == 3) {
@@ -852,7 +885,7 @@ export class ShouldCostGenComponent implements OnInit {
       axisX: {
         interval: 1,
         labelFontSize: 8,
-        includeZero: true, 
+        includeZero: true,
       },
       axisY: {
         valueFormatString: "00.00",

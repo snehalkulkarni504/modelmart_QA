@@ -88,8 +88,8 @@
                                 <div [hidden]="!IsGensetOuputPower" class="col-md-4">
                                     <label for="dropdown5" class="default-lbl">Genset Ouput Power (KVA)</label>
                                     <ng-select [ngModelOptions]="{standalone: true}" [searchable]="true"
-                                        [multiple]="false" [(ngModel)]='selectedGensetoutputpower'  (change)="GetEngineBaseOnPlatform()"
-                                        placeholder="Please select">
+                                        [multiple]="false" [(ngModel)]='selectedGensetoutputpower'
+                                        (change)="GetEngineBaseOnPlatform()" placeholder="Please select">
                                         <ng-option *ngFor="let item of Gensetoutputpower_DTC"
                                             [value]="item.gensetoutputpower">{{item.gensetoutputpower}}</ng-option>
                                     </ng-select>
@@ -532,6 +532,13 @@
                             <label id="AnnualVolume"> <b>{{ChekNull(t.toolingCostModeller | number:'1.2-2')}}</b> <br>
                                 Tooling
                                 Cost ($)</label>
+                        </div>
+                        <div class="lablessCC">
+                            <label class="labletestCC">
+                                {{t.engineDisplacement_Lable}}<b>{{ChekNull(t.platform_Engine_Combination)}}</b></label><br>
+                            <label class="labletestCC2">Process :
+                                <b>{{ChekNull(t.highLevelProcess_Codes)}}</b></label><br>
+                            <label class="labletestCC">Material : <b>{{ChekNull(t.materialType)}}</b></label>
                         </div>
                         <!-- <div class="prdDescription_div4">
                             <label id="AnnualVolume"> <b>{{ChekNull('B-10L')}} </b> </label>

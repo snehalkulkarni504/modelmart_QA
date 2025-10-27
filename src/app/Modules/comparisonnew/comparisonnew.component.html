@@ -169,7 +169,7 @@
 
     <!-- Should Cost Volume -->
     <div class="d-flex justify-content-center setimage " id="tableShouldCostVolume">
-        <table class="table table-bordered ShouldCostVolume">
+        <!-- <table class="table table-bordered ShouldCostVolume">
             <tr>
                 <th rowspan="8" class="text-center mainpart">Should Cost Volume and Location</th>
                 <th hidden class="particular">csHeaderId</th>
@@ -184,10 +184,10 @@
                     {{i.invoice | number:'1.2-2'}}
                 </td>
             </tr>
-            <tr>
+           <tr>
                 <th class="particular">Annual Volume</th>
                 <td class="right" *ngFor="let i of this.shouldCostVolume">
-                    {{i.annualVolume}}
+                    {{i.annualVolume | number:'1.0-0'}}
                 </td>
             </tr>
             <tr>
@@ -197,7 +197,7 @@
                         {{i.estimatedSpend}}
                     </span>
                     <span style="padding: 0px; margin: 0px ;" *ngIf="i.length != '-'">
-                        {{i.estimatedSpend | number:'1.2-2'}}
+                        {{i.estimatedSpend | number:'1.0-0'}}
                     </span>
                 </td>
             </tr>
@@ -231,12 +231,87 @@
                     {{i.shouldCost_kg | number:'1.2-2'}}
                 </td>
             </tr>
-        </table>
+        </table> -->
+        <table class="table table-bordered ShouldCostVolume">
+            <tr>
+              <th rowspan="8" class="text-center mainpart">Should Cost Volume and Location</th>
+              <th hidden class="particular">csHeaderId</th>
+              <td hidden class="right" *ngFor="let i of shouldCostVolume">
+                {{ i.csHeaderId ? i.csHeaderId : 'N/A OR Not Available' }}
+                {{ i.scReportId ? i.scReportId : 'N/A OR Not Available' }}
+              </td>
+            </tr>
+          
+            <tr>
+              <th class="particular">Invoice/Quoted Price ($)</th>
+              <td class="right" *ngFor="let i of shouldCostVolume">
+                {{ i.invoice != null ? (i.invoice | number:'1.2-2') : 'N/A OR Not Available' }}
+              </td>
+            </tr>
+          
+            <tr>
+              <th class="particular">Annual Volume</th>
+              <td class="right" *ngFor="let i of shouldCostVolume">
+                {{ i.annualVolume != null ? (i.annualVolume | number:'1.0-0') : 'N/A OR Not Available' }}
+              </td>
+            </tr>
+          
+            <tr>
+              <th class="particular">Estimated Spend ($)</th>
+              <td class="right" *ngFor="let i of shouldCostVolume">
+                <span style="padding: 0px; margin: 0px ;" *ngIf="i.estimatedSpend === '-'">
+                  {{ i.estimatedSpend }}
+                </span>
+                <span style="padding: 0px; margin: 0px ;" *ngIf="i.estimatedSpend !== '-' && i.estimatedSpend != null">
+                  {{ i.estimatedSpend | number:'1.0-0' }}
+                </span>
+                <span style="padding: 0px; margin: 0px ;" *ngIf="!i.estimatedSpend">
+                  N/A OR Not Available
+                </span>
+              </td>
+            </tr>
+          
+            <tr>
+              <th class="particular">Supplier Manufcaturing Location</th>
+              <td class="right" *ngFor="let i of shouldCostVolume">
+                {{ i.mfgRegion ? i.mfgRegion : 'N/A OR Not Available' }}
+              </td>
+            </tr>
+          
+            <tr>
+              <th class="particular">Supplier</th>
+              <td class="right" *ngFor="let i of shouldCostVolume">
+                {{ i.supplier ? i.supplier : 'N/A OR Not Available' }}
+              </td>
+            </tr>
+          
+            <tr hidden>
+              <th class="particular">finishWeight</th>
+              <td class="right" *ngFor="let i of shouldCostVolume">
+                {{ i.finishWeight != null ? (i.finishWeight | number:'1.2-2') : 'N/A OR Not Available' }}
+              </td>
+            </tr>
+          
+            <tr>
+              <th class="particular">Invoice Price (per/kg)</th>
+              <td class="right" *ngFor="let i of shouldCostVolume">
+                {{ i.invoicePrice_kg != null ? (i.invoicePrice_kg | number:'1.2-2') : 'N/A OR Not Available' }}
+              </td>
+            </tr>
+          
+            <tr>
+              <th class="particular">Should Cost (per/kg)</th>
+              <td class="right" *ngFor="let i of shouldCostVolume">
+                {{ i.shouldCost_kg != null ? (i.shouldCost_kg | number:'1.2-2') : 'N/A OR Not Available' }}
+              </td>
+            </tr>
+          </table>
+          
     </div>
 
     <!-- Technical Parameters -->
     <div class="d-flex justify-content-center setimage ">
-        <table class="table table-bordered tableTechnicalParameters">
+        <!-- <table class="table table-bordered tableTechnicalParameters">
             <tr>
                 <th  [rowSpan]="TechnicalParametersrowspan"  class="text-center mainpart">Technical Parameters</th>
                 <th hidden class="particular">csHeaderId</th>
@@ -276,7 +351,7 @@
                     {{i.plat_form}}
                 </td>
             </tr>
-            <tr [hidden]="!IsGensetOuputPower">
+             <tr [hidden]="!IsGensetOuputPower">
                 <th class="particular">Genset Ouput Power (KVA)</th>
                 <td class="right" *ngFor="let i of this.technicalParatameters">
                     {{i.gensetoutputpower}}
@@ -326,7 +401,7 @@
                     class="text-center mainpart hideCommericalDetailsShouldCost"
                     (click)="IsTechnicalParameterDetailed = !IsTechnicalParameterDetailed">
                     Part Attributes
-                    <!-- Technical Parameters Detailed -->
+                   
                     <i *ngIf="IsTechnicalParameterDetailed" class="bi-chevron-down showhiderowstier2"></i>
                     <i *ngIf="!IsTechnicalParameterDetailed" class="bi-chevron-right showhiderowstier2"></i>
                 </th>
@@ -351,7 +426,172 @@
                 </tr>
                 
             </ng-container>
-        </table>
+        </table> -->
+        <table class="table table-bordered tableTechnicalParameters">
+            <tr>
+              <th [rowSpan]="TechnicalParametersrowspan" class="text-center mainpart">Technical Parameters</th>
+              <th hidden class="particular">csHeaderId</th>
+              <td hidden class="right" *ngFor="let i of technicalParatameters">
+                {{ i.csHeaderId ? i.csHeaderId : 'N/A OR Not Available' }}
+                {{ i.scReportId ? i.scReportId : 'N/A OR Not Available' }}
+              </td>
+            </tr>
+          
+            <tr>
+              <th class="particular">Finish Weight (kg)</th>
+              <td class="right" *ngFor="let i of technicalParatameters">
+                {{ i.finishWeight ? i.finishWeight : 'N/A OR Not Available' }}
+              </td>
+            </tr>
+          
+            <tr>
+              <th class="particular">Dimension (LxWxH) mm</th>
+              <td class="right" *ngFor="let i of technicalParatameters">
+                <span style="padding: 0px; margin: 0px ;"  *ngIf="i.length && i.width && i.height">
+                  {{ i.length | number:'1.2-2' }} X {{ i.width | number:'1.2-2' }} X {{ i.height | number:'1.2-2' }}
+                </span>
+                <span style="padding: 0px; margin: 0px ;"  *ngIf="!i.length || !i.width || !i.height">
+                  N/A OR Not Available
+                </span>
+              </td>
+            </tr>
+          
+            <tr [hidden]="!IsEngineDisplacement">
+              <th class="particular">Engine Displacement</th>
+              <td class="right" *ngFor="let i of technicalParatameters">
+                {{ i.engineDisplacement ? i.engineDisplacement : 'N/A OR Not Available' }}
+              </td>
+            </tr>
+          
+            <tr [hidden]="!IsPlatform">
+              <th class="particular">Platform</th>
+              <td class="right" *ngFor="let i of technicalParatameters">
+                {{ i.plat_form ? i.plat_form : 'N/A OR Not Available' }}
+              </td>
+            </tr>
+             <tr [hidden]="!IsGensetOuputPower">
+                <th class="particular">Genset Ouput Power (KVA)</th>
+                <td class="right" *ngFor="let i of this.technicalParatameters">
+                    {{i.gensetoutputpower}}
+                </td>
+            </tr>
+          
+            <tr [hidden]="!IsFrameSize">
+              <th class="particular">Model</th>
+              <td class="right" *ngFor="let i of technicalParatameters">
+                {{ i.frameSize ? i.frameSize : 'N/A OR Not Available' }}
+              </td>
+            </tr>
+          
+            <tr [hidden]="!IsSizeofAftertreatment">
+              <th class="particular">Substrate Size</th>
+              <td class="right" *ngFor="let i of technicalParatameters">
+                {{ i.sizeOfAfterTreatment ? i.sizeOfAfterTreatment : 'N/A OR Not Available' }}
+              </td>
+            </tr>
+          
+            <tr>
+              <th class="particular">No of Cores</th>
+              <td class="right" *ngFor="let i of technicalParatameters">
+                {{ i.no_of_Cores ? i.no_of_Cores : 'N/A OR Not Available' }}
+              </td>
+            </tr>
+          
+            <tr>
+              <th class="particular">No of Cavities</th>
+              <td class="right" *ngFor="let i of technicalParatameters">
+                {{ i.no_of_Cavities ? i.no_of_Cavities : 'N/A OR Not Available' }}
+              </td>
+            </tr>
+          
+            <tr>
+              <th class="particular">Yield</th>
+              <td class="right" *ngFor="let i of technicalParatameters">
+                <span style="padding: 0px; margin: 0px;" *ngIf="i.yield > 0">{{ i.yield | number:'1.0-0' }}%</span>
+                <span style="padding: 0px; margin: 0px;" *ngIf="!i.yield || i.yield <= 0">N/A OR Not Available</span>
+              </td>
+            </tr>
+          
+          
+            <tr>
+              <th class="particular">Avg Wall Thickness</th>
+              <td class="right" *ngFor="let i of technicalParatameters">
+                {{ i.avg_Wall_Thickness ? i.avg_Wall_Thickness : 'N/A OR Not Available' }}
+              </td>
+            </tr>
+            
+            <tr>
+                <th class="particular">Type Code</th>
+                <td class="right" *ngFor="let i of technicalParatameters">
+                  {{ i.type_Code ? i.type_Code : 'N/A OR Not Available' }}
+                </td>
+            </tr>
+          
+            <tr>
+              <th [rowSpan]="TechnicalParameterDetailed.length + 1"
+                  class="text-center mainpart hideCommericalDetailsShouldCost"
+                  (click)="IsTechnicalParameterDetailed = !IsTechnicalParameterDetailed">
+                Part Attributes
+                <i *ngIf="IsTechnicalParameterDetailed" class="bi-chevron-down showhiderowstier2"></i>
+                <i *ngIf="!IsTechnicalParameterDetailed" class="bi-chevron-right showhiderowstier2"></i>
+              </th>
+            </tr>
+          
+            <ng-container *ngIf="IsTechnicalParameterDetailed">
+                <!-- <tr *ngFor="let i of TechnicalParameterDetailed">
+
+                     <td *ngIf="partDetails.length&& i.id != 100" class="right">
+                    {{ i.type_Code }}
+                  </td>
+                </tr> -->
+                
+
+              <tr *ngFor="let i of TechnicalParameterDetailed">
+                
+                <th *ngIf="i.id != 100" class="particular">
+                  {{ i.particular ? i.particular : 'N/A OR Not Available' }}
+                </th>
+                <td *ngIf="partDetails.length >= 1 && i.id != 100" class="right">
+                  {{ i.details1 ? i.details1 : 'N/A OR Not Available' }}
+                </td>
+                <td *ngIf="partDetails.length >= 2 && i.id != 100" class="right">
+                  {{ i.details2 ? i.details2 : 'N/A OR Not Available' }}
+                </td>
+                <td *ngIf="partDetails.length >= 3 && i.id != 100" class="right">
+                  {{ i.details3 ? i.details3 : 'N/A OR Not Available' }}
+                </td>
+                <td *ngIf="partDetails.length >= 4 && i.id != 100" class="right">
+                  {{ i.details4 ? i.details4 : 'N/A OR Not Available' }}
+                </td>
+              </tr>
+            </ng-container>
+            <!-- <ng-container *ngIf="IsTechnicalParameterDetailed">
+                <ng-container *ngFor="let group of groupedTechnicalParameters">
+                  
+                  <tr *ngFor="let i of group.items">
+                    <th *ngIf="i.id != 100" class="particular">
+                      {{ i.particular ? i.particular : 'N/A OR Not Available' }}
+                    </th>
+                    <td *ngIf="partDetails.length >= 1 && i.id != 100" class="right">
+                      {{ i.details1 ? i.details1 : 'N/A OR Not Available' }}
+                    </td>
+                    <td *ngIf="partDetails.length >= 2 && i.id != 100" class="right">
+                      {{ i.details2 ? i.details2 : 'N/A OR Not Available' }}
+                    </td>
+                    <td *ngIf="partDetails.length >= 3 && i.id != 100" class="right">
+                      {{ i.details3 ? i.details3 : 'N/A OR Not Available' }}
+                    </td>
+                    <td *ngIf="partDetails.length >= 4 && i.id != 100" class="right">
+                      {{ i.details4 ? i.details4 : 'N/A OR Not Available' }}
+                    </td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+               -->
+
+              
+          </table>
+          
     </div>
 
     <!-- Technical Parameters material Main -->
@@ -370,7 +610,8 @@
             <tr>
                 <th class="particular">Material (Main)</th>
                 <td class="right" *ngFor="let i of this.material_Main">
-                    {{i.materialType}}
+                    <!-- {{i.materialType}} -->
+                    {{ i.materialType ? i.materialType : 'N/A OR Not Available' }}
                 </td>
             </tr>
             <tr>
@@ -386,7 +627,8 @@
                         <table class="setimage" style="width: 100%;">
                             <tr *ngFor="let i of this.material_Detailed">
                                 <td style="border: 1px solid #80808041" *ngIf="i.details1 && i.id != 1 ">
-                                    {{i.details1}}
+                                    <!-- {{i.details1}} -->
+                                    {{ i.details1 ? i.details1 : 'N/A OR Not Available' }}
                                 </td>
                             </tr>
                         </table>
@@ -395,7 +637,9 @@
                         <table class="setimage" style="width: 100%;">
                             <tr *ngFor="let i of this.material_Detailed">
                                 <td style="border: 1px solid #80808041" *ngIf="i.details2  && i.id != 1">
-                                    {{i.details2}}
+                                    <!-- {{i.details2}} -->
+                                    {{ i.details2 ? i.details2 : 'N/A OR Not Available' }}
+                                    
                                 </td>
                             </tr>
                         </table>
@@ -404,7 +648,8 @@
                         <table class="setimage" style="width: 100%;">
                             <tr *ngFor="let i of this.material_Detailed">
                                 <td style="border: 1px solid #80808041" *ngIf="i.details3  && i.id != 1">
-                                    {{i.details3}}
+                                    <!-- {{i.details3}} -->
+                                    {{ i.details3 ? i.details3 : 'N/A OR Not Available' }}
                                 </td>
                             </tr>
                         </table>
@@ -413,7 +658,8 @@
                         <table class="setimage" style="width: 100%;">
                             <tr *ngFor="let i of this.material_Detailed">
                                 <td style="border: 1px solid #80808041" *ngIf="i.details4  && i.id != 1">
-                                    {{i.details4}}
+                                    <!-- {{i.details4}} -->
+                                    {{ i.details4 ? i.details4 : 'N/A OR Not Available' }}
                                 </td>
                             </tr>
                         </table>
@@ -580,7 +826,7 @@
                     </td>
                 </ng-container>
             </tr>
-            <tr>
+            <!-- <tr>
                 <th class="particular mainpart">Total Cost ($)</th>
                 <ng-container *ngFor="let i of this.CommericalDetailsSupplierCost">
                     <td *ngIf="this.partDetails.length >= 1 && i.id == 22 " class="right TotalCostData">
@@ -596,7 +842,25 @@
                         {{i.details4}}
                     </td>
                 </ng-container>
+            </tr> -->
+            <tr>
+                <th class="particular mainpart">Total Cost ($)</th>
+                <ng-container *ngFor="let i of this.CommericalDetailsSupplierCost">
+                    <td *ngIf="this.partDetails.length >= 1 && i.id == 22" class="right TotalCostData">
+                        {{ i.details1 ? i.details1 : 'TCO Not Available' }}
+                    </td>
+                    <td *ngIf="this.partDetails.length >= 2 && i.id == 22" class="right TotalCostData">
+                        {{ i.details2 ? i.details2 : 'TCO Not Available' }}
+                    </td>
+                    <td *ngIf="this.partDetails.length >= 3 && i.id == 22" class="right TotalCostData">
+                        {{ i.details3 ? i.details3 : 'TCO Not Available' }}
+                    </td>
+                    <td *ngIf="this.partDetails.length >= 4 && i.id == 22" class="right TotalCostData">
+                        {{ i.details4 ? i.details4 : 'TCO Not Available' }}
+                    </td>
+                </ng-container>
             </tr>
+            
             <ng-container *ngIf="IsCommericalDetailsSupplierCost">
                 <tr *ngFor="let i of this.CommericalDetailsSupplierCost">
                     <th *ngIf=" i.id >= 6 && i.id <= 21" class="particular">

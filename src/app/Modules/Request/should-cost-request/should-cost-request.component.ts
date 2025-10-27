@@ -42,6 +42,7 @@ export class ShouldCostRequestComponent implements OnInit {
   Origin: any;
 
   @ViewChild('myFile') myInputFile!: ElementRef;
+  showConfirmationPopup: boolean = false
 
   constructor(public adminservice: AdminService,
     public searchservice: SearchService,
@@ -69,7 +70,7 @@ export class ShouldCostRequestComponent implements OnInit {
     console.log(this.RequestId);
   }
 
-  UploadSheetcomments :any;
+  UploadSheetcomments: any;
   IsDTCRequest = false;
 
   ngOnInit() {
@@ -181,6 +182,7 @@ export class ShouldCostRequestComponent implements OnInit {
   }
 
   cmd: any;
+  DTCSCReportId: any;
   async upload() {
     debugger;
     console.log("Select File " + this.selectedFiles.length);
@@ -202,7 +204,7 @@ export class ShouldCostRequestComponent implements OnInit {
     let MMID: any = 0
     if (this.Btn_Text == 'Submit') {
       if (this.UniqueId == ':request') {
-        MMID = null
+        MMID = 0
         this.Origin = 0
       }
       else if (this.Origin == 'RFM') {
@@ -213,10 +215,14 @@ export class ShouldCostRequestComponent implements OnInit {
         MMID = this.UniqueId
         this.Origin = 2
       }
-      this.SpinnerService.show('spinner');
       debugger;
-      const data = await this.adminservice.SendShouldCostRequest(this.selectedFiles, this.userId, this.cmd, this.FolderLink, MMID, localStorage.getItem('DTCSCReportId'), this.Origin).toPromise();
-        
+      // this.SpinnerService.show('spinner');
+      // if (localStorage.getItem('DTCSCReportId') == undefined || localStorage.getItem('DTCSCReportId') == null) {
+      //   this.DTCSCReportId = 0;
+      // }
+
+      const data = await this.adminservice.SendShouldCostRequest(this.selectedFiles, this.userId, this.cmd, this.FolderLink, MMID, 0, this.Origin).toPromise();
+
       if (data == true) {
         this.toastr.success("Should Cost Request Sent successfully");
         this.SpinnerService.hide('spinner');
@@ -229,7 +235,7 @@ export class ShouldCostRequestComponent implements OnInit {
       console.log(this.FolderLink);
 
       if (data == true) {
-        const da = await this.adminservice.SendMail(this.userId, this.cmd, this.FolderLink,'SC').toPromise();
+        const da = await this.adminservice.SendMail(this.userId, this.cmd, this.FolderLink, 'SC').toPromise();
         if (da) {
           this.toastr.success("Mail Sent successfully");
         }
@@ -270,7 +276,6 @@ export class ShouldCostRequestComponent implements OnInit {
       this.clear();
       this.SpinnerService.hide('spinner');
 
-
     }
 
   }
@@ -295,11 +300,21 @@ export class ShouldCostRequestComponent implements OnInit {
 
   }
 
-
   backToPreviousPage() {
     this.location.back();
   }
 
+  confirmUpload() {
+    this.showConfirmationPopup = false;
+    this.upload();
+  }
+
+  cancelUpload() {
+    this.showConfirmationPopup = false;
+  }
+  
+  showPopup() {
+    this.showConfirmationPopup = true;
+  }
 
 }
-

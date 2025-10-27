@@ -16,7 +16,7 @@ import { AdminService } from 'src/app/SharedServices/admin.service';
   standalone: false,
   // imports: [],
   templateUrl: './designtocost-step4.component.html',
-  styleUrl: './designtocost-step4.component.css'
+  styleUrls: ['./designtocost-step4.component.css']
 })
 export class DesigntocostStep4Component {
 
@@ -24,6 +24,7 @@ export class DesigntocostStep4Component {
   DebriefDateFormated: any;
   ForexRegion: any;
   locale: any;
+  showConfirmationPopup: boolean = false
 
   constructor(private route: ActivatedRoute,
     public searchservice: SearchService,
@@ -106,7 +107,6 @@ export class DesigntocostStep4Component {
 
     this.CSHeaderId = localStorage.getItem("DTCComapredId"); // ---  CSHeaderId 
     this.SCReportId = localStorage.getItem("DTCSCReportId");
-
     this.ProjectName = localStorage.getItem("DTCProjectName");
     this.ProjectTitle = localStorage.getItem("DTCProjecttitle");
     this.UniqueId = localStorage.getItem("DTCUniqueId");
@@ -149,12 +149,10 @@ export class DesigntocostStep4Component {
           (pd.partNumber != null ? pd.partNumber : pd.par_PartNumber);
       }
 
-
       try {
         debugger;
         const data2 = await this.reportservice.GetDTCVavedata(this.VaveIdea).toPromise();
         this.Vavedetails = data2;
-
 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -380,7 +378,6 @@ export class DesigntocostStep4Component {
   }
 
   projectRows: any = [];
-
   newPDF() {
     debugger;
 
@@ -422,8 +419,8 @@ export class DesigntocostStep4Component {
         }
         else {
           //const partImgNew = '../.../../../assets/2021000001/ISO.jpg';
-          const partImg = '../../../../assets/No-Image.png';
-          // const partImg = this.hh;
+          //const partImg = '../../../../assets/No-Image.png';
+          const partImg = this.hh;
           doc.addImage(partImg, 70, 120, 70, 70);
         }
 
@@ -459,7 +456,6 @@ export class DesigntocostStep4Component {
     let finalYDetails = (doc as any).lastAutoTable.finalY;
 
     debugger;
-
 
     var forex = this.ProductDetail[0].forex.toFixed(2);
     var currentForex = this.ProductDetail[0].currentYearForex.toFixed(2);
@@ -1060,7 +1056,6 @@ export class DesigntocostStep4Component {
       vavelist.push({ CSHeaderId: this.CSHeaderId, IdeaId: 0, PSavings: 0, CreatedBy: this.userId })
     }
 
-
     if (this.SCReportId > 0) {
       this.reportservice.insertDPVavedetails(vavelist, this.SCReportId).subscribe({
         next: async (_res: any) => {
@@ -1202,8 +1197,9 @@ export class DesigntocostStep4Component {
   cmd: any;
   async upload() {
     debugger;
+
     var flag = false;
-    // console.log("Select File " + this.selectedFiles.length);
+    console.log("Select File " + this.selectedFiles.length);
     // if (this.Status != 'Rejected') {
     //   if (this.selectedFiles.length <= 0) {
     //     this.toastr.warning("Please Select File");
@@ -1238,7 +1234,6 @@ export class DesigntocostStep4Component {
       else {
         this.toastr.error("Should Cost Request not Sent");
         this.SpinnerService.hide('spinner');
-
 
       }
 
@@ -1331,6 +1326,20 @@ export class DesigntocostStep4Component {
       link.click();
     });
 
+  }
+
+
+  confirmUpload() {
+    this.showConfirmationPopup = false;
+    this.upload();
+  }
+
+  cancelUpload() {
+    this.showConfirmationPopup = false;
+  }
+
+  showPopup() {
+    this.showConfirmationPopup = true;
   }
 
 

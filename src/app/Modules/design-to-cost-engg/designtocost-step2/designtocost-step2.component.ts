@@ -571,7 +571,7 @@ export class DesigntocostStep2Component implements OnInit {
   async DownloadReport() {
     //debugger;
     var id = this.UniqueId;
-    var staticUrl = environment.apiUrl_Search + 'DownloadPDF?Id=' + id + '&modelTypes_Id=' + this.modelTypes_Id;
+    var staticUrl =  environment.apiUrl_Search + 'DownloadPDF?uniqueId=' + id + '&modelTypes_Id=' + this.modelTypes_Id + '&userId=' + this.userId;
 
     var PartNo = '';
     var PartNm = '';

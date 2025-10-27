@@ -1082,7 +1082,7 @@ input[type=checkbox][_ngcontent-ng-c1223772666] {
   cursor: pointer;
   border-radius: 5px;
   width: 100px;
-  height: 30px;
+  height: 30px; 
   margin-left: 810px;
 }
 
@@ -1322,4 +1322,31 @@ th.sortable.descending::after {
   font-size: 13px;
   color: #222;
 }
+
+
+.custom-legend {
+  font-family: Helvetica, Arial ;
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+}
+
+.color-box {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  border: 1px solid #ccc;
+}
+
+.hidden-rule {
+  display: none;
+}
+
 

@@ -327,7 +327,8 @@ export class DesigntocostStep1Component implements OnInit {
           this.IsPlatform = true; this.IsEngineDisplacement = true;
           break;
         case 'PSBU':
-          this.IsEngineDisplacement = true; this.IsGensetOuputPower = true;
+          this.IsEngineDisplacement = true; 
+          this.IsGensetOuputPower = true;
           break;
         case 'CBU-CTT':
           this.IsPlatform = true; this.IsFrameSize = true;
@@ -464,12 +465,12 @@ export class DesigntocostStep1Component implements OnInit {
       this.filters.Platform = '';
     }
 
-    if (this.selectedGensetoutputpower != null || this.selectedGensetoutputpower != undefined) {
-      this.filters.Gensetoutputpower = this.selectedGensetoutputpower;
-    }
-    else {
-      this.filters.Gensetoutputpower = '';
-    }
+    // if (this.selectedGensetoutputpower != null || this.selectedGensetoutputpower != undefined) {
+    //   this.filters.Gensetoutputpower = this.selectedGensetoutputpower;
+    // }
+    // else {
+    //   this.filters.Gensetoutputpower = '';
+    // }
 
     if (this.selectedFrameSize != null || this.selectedFrameSize != undefined) {
       this.filters.FrameSize = this.selectedFrameSize.trim();
@@ -1439,6 +1440,25 @@ export class DesigntocostStep1Component implements OnInit {
       debugger;
       //console.log(data);
       this.SearchList = data;
+      for (var i = 0; i < this.SearchList.length; i++) {
+        switch (this.SearchList[i].businessUnit) {
+          case 'EBU':
+           this.SearchList[i].engineDisplacement_Lable = 'Platform - Eng Disp.: ';
+            break;
+          case 'PSBU':
+            this.SearchList[i].engineDisplacement_Lable = 'Platform - Eng Disp.: ';
+            break;
+          case 'CBU-CTT':
+            this.SearchList[i].engineDisplacement_Lable = 'Model : ';
+            break;
+          case 'CBU-CES':
+            this.SearchList[i].engineDisplacement_Lable = 'Substrate Size : ';
+            break;
+          default:
+            this.SearchList[i].engineDisplacement_Lable = 'Platform - Eng Disp.: ';
+        }
+      }
+      
       this.flag = false;
 
       this.ModelCount = this.SearchList.length;

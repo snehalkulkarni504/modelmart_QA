@@ -16,7 +16,7 @@ import { Filters } from '../../Model/filters';
   standalone: false,
   // imports: [],
   templateUrl: './bomdetails.component.html',
-  styleUrl: './bomdetails.component.css'
+  styleUrls: ['./bomdetails.component.css']
 })
 
 export class BomdetailsComponent {
@@ -58,7 +58,7 @@ export class BomdetailsComponent {
   allprogramdata:any;
   programdata:any;
   cartname:any
-  totalprice:any
+  totalprice:any;
   modalcart = false;
   programdelete=false;
   programid:any;
@@ -142,8 +142,10 @@ closeModel12(){
 async fetchprogramnames()
 {
   debugger;
+  this.SpinnerService.show('spinner');
   const data=await this.bomservice.fetchprogramname(parseInt(this.userId)).toPromise();
   this.allprogramdata=data;
+  this.SpinnerService.hide('spinner');
   if(this.getrouteprogramid==null){
   this.toggleviewchild(this.allprogramdata[0]);
   }
@@ -191,21 +193,26 @@ selectprogram(event:any)
 
 async addcartname()
 {
+  if(parseFloat(this.totalprice)>0)
+  {}
+  else{
+    this.totalprice=0;
+  }
   debugger;
   const data= await this.bomservice.addcartname(this.programdata.programid,this.cartname,parseInt(this.userId),parseFloat(this.totalprice)).toPromise();
   if(data==1)
   {
     this.modalcart=false;
-    this.toastr.success("Cart added Successfully");
+    this.toastr.success("Simulation added Successfully");
     this.getcartname(this.programdata.programid);
   }
   else if(data==0)
   {
-    this.toastr.warning("Cart already exist");
+    this.toastr.warning("Simulation already exist");
   }
   else
   {
-    this.toastr.error("Failed to add Cart");
+    this.toastr.error("Failed to add Simulation");
   }
  
   this.cartname='';
@@ -220,13 +227,13 @@ async updatetotalcost()
   if(data==1)
   {
     this.opentotalprice=false;
-    this.toastr.success("Target Cost Updated Successfully");
+    this.toastr.success("Total Price added Successfully");
     this.getcartname(this.programdata.programid);
   }
   
   else
   {
-    this.toastr.error("Failed to Target Cost Updated");
+    this.toastr.error("Failed to Update Simulation");
   }
  
   this.cartname='';
@@ -274,7 +281,7 @@ async getcartname(programId: string) {
         this.cartlists[programId] = data;
         this.cartlist = data;
     } catch (error) {
-        console.error("Error fetching cart names:", error);
+        console.error("Error fetching simulation names:", error);
     }
 }
 
@@ -299,11 +306,11 @@ async copycart()
   this.copycartmodal=false;
   if(data==0)
   {
-    this.toastr.error("Failed to copy cart");
+    this.toastr.error("Failed to copy Simulation");
   }
   else
   {
-    this.toastr.success("Cart Copied Sucessfully");
+    this.toastr.success("Simulation Copied Sucessfully");
     this.getcartname(this.selectedprogramid);
   }
 }
@@ -363,12 +370,12 @@ async deletecart(cartid:any)
   const data =await this.bomservice.DeleteBomCart(cartid).toPromise();
   if(data)
   {
-    this.toastr.success("cart deleted successfully");
+    this.toastr.success("Simulation deleted successfully");
     this.getcartname(this.selectedprogramid);
   }
   else
   {
-    this.toastr.error("unable to delete cart")
+    this.toastr.error("unable to delete simulation")
   }
 
 }
@@ -418,8 +425,6 @@ downloadExcelFile(filePath : string,filename : string): void {
 backToPreviousPage() {
   this.location.back();
 }
-
-
 
 }
 

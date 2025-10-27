@@ -45,11 +45,11 @@ export class ComparisonnewComponent implements OnInit {
   TotalInUSD: number = 0;
 
   IsPlatform = false;
-  IsEngineDisplacement = false;
   IsGensetOuputPower = false;
+  IsEngineDisplacement = false;
   IsFrameSize = false;
   IsSizeofAftertreatment = false;
-  TechnicalParametersrowspan = 7;
+  TechnicalParametersrowspan = 8;
 
   ngOnInit(): void {
     //debugger;
@@ -155,8 +155,8 @@ export class ComparisonnewComponent implements OnInit {
 
 
     this.IsPlatform = false;
+    this.IsGensetOuputPower =  false;
     this.IsEngineDisplacement = false;
-    this.IsGensetOuputPower = false;
     this.IsFrameSize = false;
     this.IsSizeofAftertreatment = false;
 
@@ -176,17 +176,17 @@ export class ComparisonnewComponent implements OnInit {
           break;
         default:
           this.IsPlatform = true; this.IsEngineDisplacement = true;
-
       }
     }
 
+    
     if (this.IsPlatform) {
       this.TechnicalParametersrowspan = Number(this.TechnicalParametersrowspan) + 1;
     }
-    if (this.IsEngineDisplacement) {
+     if (this.IsGensetOuputPower) {
       this.TechnicalParametersrowspan = Number(this.TechnicalParametersrowspan) + 1;
     }
-    if (this.IsGensetOuputPower) {
+    if (this.IsEngineDisplacement) {
       this.TechnicalParametersrowspan = Number(this.TechnicalParametersrowspan) + 1;
     }
     if (this.IsFrameSize) {

@@ -53,7 +53,7 @@
                                 <div class="tab" [ngClass]="{'active-tab': showTab2}" (click)="showTabs('Tab2')"> VAVE
                                     Design Ideas <span class="title-corner-badge">NEW</span> </div>
                             </div>
-                            
+
                         </div>
 
                         <div *ngIf="showTab1" class="page dataPanel">
@@ -125,12 +125,17 @@
                                             </tr>
                                             <tr>
 
-                                                <td> <label for="EngineDisplacement" class="default-lbl">Engine
-                                                        Displacement
+                                                <td> <label for="EngineDisplacement"
+                                                        class="default-lbl">{{EngineDisplacement_Lable}}
                                                         :</label></td>
                                                 <td> <label for="EngineDisplacement"
                                                         class="default-lblvalue">{{ChekNull(EngineDisplacement)}}</label>
                                                 </td>
+                                                <td [hidden]="!IsPlatform"><label for="EstimatedSpend"
+                                                        class="default-lbl">Platform
+                                                        :</label></td>
+                                                <td [hidden]="!IsPlatform"><label for="EstimatedSpend"
+                                                        class="default-lblvalue">{{ChekNull(Platform)}} </label></td>
                                             </tr>
 
 

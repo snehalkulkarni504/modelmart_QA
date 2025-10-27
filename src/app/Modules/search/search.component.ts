@@ -347,7 +347,7 @@ export class SearchComponent implements OnInit {
 
 
   setvalue(v: any) {
-    debugger;
+    //debugger;
     this.setvalueFlag = false;
     localStorage.removeItem("childCategory");
 
@@ -1160,10 +1160,29 @@ export class SearchComponent implements OnInit {
       this.userId = localStorage.getItem("userId");
       //console.log('search Userid function' + this.userId);
 
+      debugger;
       const data = await this.searchservice.SearchFilters(filters_list, this.userId).toPromise();
-
-      console.log(data);
+ 
       this.SearchList = data;
+       for (var i = 0; i < this.SearchList.length; i++) {
+        switch (this.SearchList[i].businessUnit) {
+          case 'EBU':
+           this.SearchList[i].engineDisplacement_Lable = 'Platform - Eng Disp.: ';
+            break;
+          case 'PSBU':
+            this.SearchList[i].engineDisplacement_Lable = 'Platform - Eng Disp.: ';
+            break;
+          case 'CBU-CTT':
+            this.SearchList[i].engineDisplacement_Lable = 'Model : ';
+            break;
+          case 'CBU-CES':
+            this.SearchList[i].engineDisplacement_Lable = 'Substrate Size : ';
+            break;
+          default:
+            this.SearchList[i].engineDisplacement_Lable = 'Platform - Eng Disp.: ';
+        }
+      }
+
       this.flag = false;
 
       this.NoModelFound = false;
@@ -1367,7 +1386,7 @@ export class SearchComponent implements OnInit {
   }
 
   getShouldeCost(e: any) {
-    debugger;
+    //debugger;
 
     localStorage.setItem("ComapredId", e.csHeaderId);
     if (e.imagePath == null || e.imagePath == "") {
@@ -1417,10 +1436,10 @@ export class SearchComponent implements OnInit {
 
   getComparison() {
 
-    debugger;
+    //debugger;
 
-    if (this.compareIdArray.length <= 0) {
-      this.toastr.error("Please select at least 2 Parts for Compare");
+    if (this.compareIdArray.length <= 1) {
+      this.toastr.warning("Please select at least 2 Parts for Compare");
       return
     }
 
@@ -1439,10 +1458,12 @@ export class SearchComponent implements OnInit {
       console.log(this.compareIdArray);
     }
 
+    //debugger;
+
     this.compareIds.push(
       {
-        "M": this.Productvalue,
-        "S": this.SimulatedProductvalue
+        "M": this.Productvalue.sort((a: number, b: number) => a - b) ,
+        "S": this.SimulatedProductvalue.sort((a: number, b: number) => a - b)
       }
     )
 
@@ -1460,7 +1481,7 @@ export class SearchComponent implements OnInit {
   comparePartName = "";
 
   getPartId(e: any, model: any, event: any) {
-    debugger;
+    //debugger;
     if (this.comparePartName == "" || this.compareIdArraylength == 0 ) {
       this.comparePartName = e.partName;
     }
@@ -1498,7 +1519,7 @@ export class SearchComponent implements OnInit {
       }
 
       if (model == "M") {
-        debugger;
+        //debugger;
         if (event.currentTarget.checked) {
           if (this.compareIdArray.find((element: { csHeaderId: any; }) => element.csHeaderId == event.currentTarget.id)) {
 
@@ -1558,7 +1579,7 @@ export class SearchComponent implements OnInit {
 
 
   RemoveModelfromCompare(arr: any, index: any) {
-    debugger;
+    //debugger;
 
     // -- main models
     const comparecheckbox = document.getElementsByClassName("SearchCheckbox") as any;
@@ -1594,7 +1615,7 @@ export class SearchComponent implements OnInit {
   }
 
   async ShowSimulatedPopup() {
-    debugger;
+    //debugger;
     this.SpinnerService.show('spinner');
     if (this.SearchListSimulated == undefined) {
       const data = await this.searchservice.SearchSimulated(this.userId).toPromise();
@@ -1736,7 +1757,7 @@ export class SearchComponent implements OnInit {
   }
 
   viewReport(val: any) {
-    debugger;
+    //debugger;
     const Params = {
       param_CSHeaderId: val.csHeaderId,
       param_SCReportId: val.scReportId

@@ -408,8 +408,7 @@
             <div class="row setOpacity" id="SearchFilters">
                 <!-- <div *ngFor="let t of SearchList  | paginate: { itemsPerPage: 100, currentPage: page }"
                     class="prodDetails2"> -->
-                <div *ngFor="let t of SearchList  | paginate: { itemsPerPage: 100, currentPage: page }"
-                 [ngClass]="{'prodDetails': t.modelTypes_Id ===1 || t.modelTypes_Id ===4 ,
+                <div *ngFor="let t of SearchList  | paginate: { itemsPerPage: 100, currentPage: page }" [ngClass]="{'prodDetails': t.modelTypes_Id ===1 || t.modelTypes_Id ===4 ,
                     'prodDetailsYellow': t.modelTypes_Id ===2 || t.modelTypes_Id ===3|| t.modelTypes_Id ===5}">
                     <!-- class="prodDetails"> -->
                     <div class="prdImgDesc" (click)="getShouldeCost(t)">
@@ -445,6 +444,12 @@
                                 Tooling
                                 Cost ($)</label>
                         </div>
+
+                         <div class="lablessCC">
+                            <label class="labletestCC"> {{t.engineDisplacement_Lable}}<b>{{ChekNull(t.platform_Engine_Combination)}}</b></label><br>
+                            <label class="labletestCC2">Process : <b>{{ChekNull(t.highLevelProcess_Codes)}}</b></label><br>
+                            <label class="labletestCC">Material : <b>{{ChekNull(t.materialType)}}</b></label>
+                        </div> 
                     </div>
                     <div>
                         <input #Comparecheckbox class="form-check-input" type="checkbox"
@@ -656,7 +661,7 @@
                                             *ngFor="let t of SearchListSimulated  | search: textsearch:filterMetadata ; let i=index">
                                             <td class="text-end">{{i + 1}}</td>
                                             <td class="text-center">
-                                                 
+
                                                 <input type="button" class="btn btn-primary btn-sm btnAdd"
                                                     (click)="getPartId(t,'S',$event)" value="Add" Name="Add">
 

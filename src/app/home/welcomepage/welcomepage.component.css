@@ -995,13 +995,13 @@ body {
   text-align: center;
   margin-top: 40px;
   position: relative;
-  height: 150px;
+  height: 220px;
   width: 100%;
   overflow: hidden;
 }
 
 .logindivNameImg {
-  width: 65%;
+  width: 75%;
   height: auto;
   overflow: hidden;
   object-fit: cover;
@@ -1010,8 +1010,7 @@ body {
 
 .loginbtn {
   width: 100%;
-  margin-top: 25%;
-
+ margin-top: 5%;
 }
  
 .VPNNote{

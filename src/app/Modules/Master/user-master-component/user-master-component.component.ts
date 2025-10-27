@@ -5,7 +5,7 @@ import { UserMaster } from 'src/app/Model/user-master';
 import { Location } from '@angular/common';
 import { MasterServiceService } from 'src/app/SharedServices/master-service.service';
 import { ToastrService } from 'ngx-toastr';
-
+ 
 @Component({
   selector: 'app-user-master-component',
   templateUrl: './user-master-component.component.html',
@@ -62,8 +62,8 @@ export class UserMasterComponentComponent implements OnInit {
 
     if (localStorage.getItem("userName") == null) {
       this.router.navigate(['/welcome']);
-
     }
+
     this.GetRoleData()
 
     this.userUnitMasterForm = new FormGroup({

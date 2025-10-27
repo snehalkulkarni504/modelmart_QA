@@ -171,7 +171,7 @@
                                 <th>Tooling Should Cost</th>
                                 <th>Cost Type</th>
                                 <th hidden>CSHeaderID</th>
-
+                                <th hidden >platform</th>
                                 <th>Iterations</th>
                                 <th *ngIf="IsHopperValide">Action</th>
                             </tr>
@@ -196,6 +196,8 @@
                                 <td>{{data.costType}}</td>
                                 <td hidden *ngIf="getUArr[i]">{{ getUArr[i].csHeaderID }}</td>
                                 <td hidden *ngIf="!getUArr[i]"></td>
+
+                                <td hidden >{{data.platform}}</td>
 
                                 <td>{{data.iterationsCount}}</td>
                                 <td

@@ -153,3 +153,24 @@
     width: 80%;
     margin-left: 10%;
 }
+
+/* --------------------------------- */
+
+.custom-select-container {
+  position: relative;
+}
+
+.custom-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 30px; 
+}
+
+.custom-select-icon {
+position:   absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}

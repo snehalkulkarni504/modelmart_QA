@@ -21,6 +21,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './tco-upload.component.html',
   styleUrl: './tco-upload.component.css'
 })
+
 export class TcoUploadComponent {
   requestID: any;
   UniqueID: any;

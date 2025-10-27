@@ -36,7 +36,7 @@
       </div>
       <div class="col-md-6">
         <label>Requested Date :</label>
-        <span style="margin-left: 10px;">{{CreatedDate | date: 'dd-MMM-YYYY  HH:MM:SS'}}</span>
+        <span style="margin-left: 10px;">{{CreatedDate | date: 'dd-MMM-YYYY HH:MM:SS'}}</span>
       </div>
       <div class="col-md-6">
         <label>Request ID:</label>
@@ -57,7 +57,7 @@
         <br>
         <label for="floatingTextarea" class="default-lbl"><b style="color: #ff0000;">*</b>Input Request Form¹</label>
         <input #myFile type="file" id="myFile" (change)="onChange($event)" class="form-control"
-        accept=".xlsx, .xls, .xlsm"> 
+          accept=".xlsx, .xls, .xlsm">
         <span class="remark">{{UploadSheetcomments}}</span>
       </div>
       <div class="col-md-2">
@@ -83,21 +83,23 @@
     <div class="row ">
       <div class="col-md-10">
         <label for="floatingTextarea" class="default-lbl"><b style="color: #ff0000;">*</b>Comments</label>
-        <span  [hidden]="!IsRefresModelComments" style="color: #000; font-size: 12px; padding-left: 10px;"> <br> {{RefresModelComments}}</span>
-        
+        <span [hidden]="!IsRefresModelComments" style="color: #000; font-size: 12px; padding-left: 10px;"> <br>
+          {{RefresModelComments}}</span>
+
         <textarea class="form-control" [(ngModel)]="Comments" placeholder="Comments...."
           id="floatingTextarea"></textarea>
       </div>
       <div class="col-md-2 text-center">
-        <button (click)="upload()" type="button" class="btn btn-sm default-btn" style="margin-top: 40px;"
+        <button (click)="showPopup()" type="button" class="btn btn-sm default-btn" style="margin-top: 40px;"
           data-bs-dismis="modal">{{Btn_Text}}</button>
 
       </div>
     </div>
-<br>
+    <br>
     <div class="row " [hidden]="ResubmitRequest">
       <div class="col-md-12">
-        <h6 style="color: #ff0000; font-family: Helvetica, Arial;">Please update the request based on COE team suggestion and resubmit the form for
+        <h6 style="color: #ff0000; font-family: Helvetica, Arial;">Please update the request based on COE team
+          suggestion and resubmit the form for
           further processing by COE team.</h6>
       </div>
     </div>
@@ -126,6 +128,40 @@
       <!-- <div class="col-md-6">
         <button (click)="upload()" type="button" class="btn btn-sm default-btn" style="margin-top: 0px;" data-bs-dismis="modal">Upload</button>
       </div> -->
+    </div>
+  </div>
+</div>
+
+<!-- -------  confirm pop up -------------- -->
+<!-- pop up component logic -->
+
+<div class="custom-confirm-popup-overlay" *ngIf="showConfirmationPopup">
+  <div class="custom-confirm-popup-box">
+    <div class="custom-confirm-popup-header">
+      <div class="custom-confirm-popup-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="#da291c" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="#da291c" stroke-width="2" fill="none" />
+          <line x1="12" y1="7" x2="12" y2="13" stroke="#da291c" stroke-width="2" stroke-linecap="round" />
+          <circle cx="12" cy="17" r="1.5" fill="#da291c" />
+        </svg>
+      </div>
+      <h3 class="custom-confirm-popup-title">Export Control Notice</h3>
+    </div>
+
+    <p class="custom-confirm-warning-msg">
+      Please confirm if the parts being requested for should costing are not export controlled.
+      <br>
+      <br>
+
+      <a href="https://secure-web.cisco.com/1bL3u9qInxMCJR9kaOkHSzP9Aw8b6VXQfctePJWLcGxHi14X757PU3eXjN7exSpuBleYDW5oXWXfXef_pVtvIAHWNXkW1m0zjuSZoWjTM6yRIpyKY7ktpiiqZ22LEqPpvydzThSLnDRIeS_dZVhy9ACnfkGyLhQuqNiJZgJbfFlC4zPYW-YkHtFJXS7IrgQqWqSHVtFKmfyU7Yl2Knt1Qj9yrotPe-TE927cWZVawXb17TeUWxM1hbgiAd31s7xSHHemnikGr0J6BF5uW_BMgfCaEORi3dm-kRwQwU_rf-vMO6pHng0hPMTL6ECPcNzP_0JO3NspartNNldu--qBGyvKuC9IotWUyLMgFBDUXfpMWeVKTuTzDKTcemKM0DsxwvxL904YFJFKGVASuMs3H0C-R4SQrBoSVZ9EHGJu5gyGftckvoJWoF0HVp3k9FNfVmZZWtLGgGkE035zlf_uDn8vB624LQLFIdxYrMcEVJ5c/https%3A%2F%2Fcummins365.sharepoint.com%2Fsites%2FCS16269%2FSitePages%2FCummins-List-of-Controlled-Items-%28CLoCI%29.aspx"
+        target="_blank" style="color: #da291c; text-decoration: underline;">
+        Click here to view the Cummins List of Controlled Items (CLoCI)
+      </a>
+    </p>
+
+    <div class="custom-confirm-popup-actions">
+      <button class="custom-confirm-btn" (click)="confirmUpload()">Confirm</button>
+      <button class="custom-cancel-btn" (click)="cancelUpload()">Cancel</button>
     </div>
   </div>
 </div>

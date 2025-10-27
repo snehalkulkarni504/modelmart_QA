@@ -6,6 +6,7 @@ import { WelcomepageComponent } from './home/welcomepage/welcomepage.component';
 import { LoginComponent } from './home/login/login.component';
 import { ForgotpasswordComponent } from './home/forgotpassword/forgotpassword.component';
 import { MaintenanceComponent } from './home/maintenance/maintenance.component';
+import { TrainingPopupComponent } from './home/training-popup/training-popup.component';
  
 const routes: Routes = [
    
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'invaliduser', component: ForgotpasswordComponent },
   { path: 'maintenance', component: MaintenanceComponent },
   { path: 'welcomeuser', component: WelcomeuserComponent },
+  { path: 'training-popup', component: TrainingPopupComponent },
 
   
   { path: '', redirectTo:'/welcome', pathMatch:'full'},

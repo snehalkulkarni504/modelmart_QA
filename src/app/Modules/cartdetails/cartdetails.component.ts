@@ -15,7 +15,7 @@ import { DatePipe, Location, DecimalPipe } from '@angular/common';
 @Component({
   selector: 'app-cartdetails',
   templateUrl: './cartdetails.component.html',
-  styleUrl: './cartdetails.component.css',
+  styleUrls: ['./cartdetails.component.css'],
   providers: [DecimalPipe, DatePipe]
 })
 export class CartdetailsComponent {
@@ -269,8 +269,10 @@ export class CartdetailsComponent {
     this.GetTotalPrice(this.getroutecartid);
     try {
 
+      debugger;
       this.SpinnerService.show('spinner');
       const data = await this.bomService.GetLandingPageForCartView(flag, CategoryID, this.userId).toPromise();
+      debugger;
       if (flag != 3) {
 
         //this.SearchProductList = data;
@@ -664,8 +666,9 @@ export class CartdetailsComponent {
     this.bomqty = 0;
     this.fcost = 0;
     this.uniqeqty = this.SearchProductList.length;
+    let r = 0;
 
-    this.SearchProductList.forEach((item: any) => {
+    this.SearchProductList.forEach((item: any, index: any) => {
       // if (!this.totalScostByParentCategory[item.parentCategory]) {
       //  this.totalScostByParentCategory[item.parentCategory] = 0;
       //}
@@ -675,24 +678,55 @@ export class CartdetailsComponent {
       //else{
       //this.totalScostByParentCategory[item.parentCategory] += item.scost;
       //}
-      if (item.categoryId > 0) {
-        this.matchraw = this.matchraw + 1;
 
-        if (parseFloat(item.gbpaCost) <= 0 || item.gbpaCost == null) {
-          this.wrostcost = this.wrostcost + ((item.scost / .75) * item.excelitemcount);
-          this.probablecost = this.probablecost + ((item.scost / .80) * item.excelitemcount);
-        }
-        else {
-          this.probablecost = this.probablecost + (parseFloat(item.gbpaCost) * item.excelitemcount);
-          this.wrostcost = this.wrostcost + (parseFloat(item.gbpaCost) * item.excelitemcount)
+      r = 0;
+      if (index <= this.SearchProductList.length - 1) {
+        if (item.categoryId > 0) {
+          debugger;
+          this.matchraw = this.matchraw + 1;
+          if (item.gbpaCost != null && item.gbpaCost != '0') {
+
+            // var rr = item.gbpaCost.split(',', 1);
+            // r = parseFloat(rr[0].split(':')[1]);
+            // if(Number.isNaN(Number(r))){
+            //   r = 0;
+            // }
+
+            var rr = item.gbpaCost.split(',')[3];
+            r = parseFloat(rr.split('$')[1]);
+            if (Number.isNaN(Number(r))) {
+              r = 0;
+            }
+          }
+
+          console.log(item.gbpaCost);
+          debugger;
+          if (r <= 0 || r == null) {
+            this.wrostcost = this.wrostcost + ((item.scost / .75) * item.excelitemcount);
+            this.probablecost = this.probablecost + ((item.scost / .80) * item.excelitemcount);
+          }
+          else {
+            this.probablecost = this.probablecost + (r * item.excelitemcount);
+            this.wrostcost = this.wrostcost + (r * item.excelitemcount)
+          }
+
+          console.log(this.probablecost);
+
+          if (item.ucost > 0) {
+            this.bestcost = this.bestcost + (item.ucost * item.excelitemcount);
+          }
+          else {
+            this.bestcost = this.bestcost + (item.scost * item.excelitemcount);
+          }
 
         }
-        this.bestcost = this.bestcost + (item.scost * item.excelitemcount);
+
+        this.bomqty = this.bomqty + item.excelitemcount;
+        this.fcost = this.fcost + item.totalCost;
+        if (item.modyfyDate != null)
+          this.lastsumulate = item.modyfyDate
+
       }
-      this.bomqty = this.bomqty + item.excelitemcount;
-      this.fcost = this.fcost + item.totalCost;
-      if (item.modyfyDate != null)
-        this.lastsumulate = item.modyfyDate
 
     });
 
@@ -704,6 +738,7 @@ export class CartdetailsComponent {
       { label: 'Worst Cost', value: this.wrostcost.toFixed(2) }
     ];
   }
+
   get sortedPoints() {
     return [...this.milestones].sort((a, b) => a.value - b.value);
   }
@@ -1180,34 +1215,66 @@ export class CartdetailsComponent {
   exportToExcel() {
     if (this.SearchProductList && this.SearchProductList.length > 0) {
       const modifiedData = this.SearchProductList.map((item: any, index: number) => ({
+
+
+
         'Sr. No.': index + 1,
-        'Part Number': item.excelpartno,
         'Part Name': item.excelname,
-        'Displacement': item.excelenginedisplacement,
-        'Material': item.excelmeterial,
-        'Weight': item.excelweight,
-        'Parent Part No': item.excelparentpartid,
+        'Displacement (L) \ Model \ Substrate Size': item.excelenginedisplacement,
+        'Bom Qty': item.excelitemcount,
         'Platform': item.excelPlatform,
-        'BomQuantity': item.excelitemcount,
-        'Name': item.name,
+        'Part Number': item.excelpartno,
+        'Current Program': item.excelcurrentprogram,
+        'Parent Part Number': item.excelparentpartid,
+        'Parent Program': item.excelparentprogram,
+        'Material': item.excelmeterial,
+        'Weight (lbs)': item.excelweight,
+        'Mfg Loc': item.excelcostregion,
+        'Representative Platform': item.platform,
         'ModelMart Id': item.categoryId,
         'Representative Part Number': item.partNumber,
         'Representative Part Name': item.partName,
-        'Representative Platform': item.platform,
         'Representative Program': item.projectName,
         'Representative Region': item.mfgRegion,
-        'Representative Should Cost': item.scost,
-        'Representative Gbpa': item.gbpaCost,
-        'Representative Invoice': item.invoice,
-        'Representative Displacement': item.engineDisplacement,
-        'Representative Model.Type': 'Original',
-        'Representative Weight(lbs)': this.decimalPipe.transform(item.weight * 2.20462, '1.2-2'),
+        'Representative SC ($)': item.scost,
+        'Representative Gbpa Cost ($)': item.gbpaCost,
+        'Representative Simulated Cost ($)': item.ucost,
+        'Final Cost ($)': item.ucost <= 0 ? item.scost : item.ucost,
+        'Extended Cost ($)': item.totalCost,
+        'Representative Model Type': item.ucost <= 0 && item.categoryId > 0 ? 'Original' : item.ucost > 0 ? 'Simulated' : '',
+        'Representative Dimensions (mm)': item.height != null && item.length != null && item.width != null ? this.decimalPipe.transform(item.height, '1.2-2') + ' X ' + this.decimalPipe.transform(item.length, '1.2-2') + ' X ' + this.decimalPipe.transform(item.width, '1.2-2') : '',
+        'Representative Weight (lbs)': this.decimalPipe.transform(item.weight * 2.20462, '1.2-2'),
         'Representative Raw Material': item.rowmaterial,
+        // 'Representative Invoice': item.invoice,
+        'Representative Engine Displacement (L)': item.engineDisplacement,
         'Representative Mfg Process': item.mfgProcess,
-        'Representative Supplier Name': item.supplierName
-        // 'Representative Cost Type':item.costType
-        //'Representative DebriefDate': this.formatDate(item.DebriefDate)//new Date(item.DebriefDate).toLocaleDateString('en-US') ,
+        'Representative Supplier Name': item.supplierName,
+        'Representative Cost Type ($)': item.costType,
+        'Representative Debrief Date': this.datePipe.transform(item.dbdate, 'dd-MMM-yyyy'),
 
+        // 'Part Number': item.excelpartno,
+        // 'Part Name': item.excelname,
+        // 'Displacement': item.excelenginedisplacement,
+        // 'Material': item.excelmeterial,
+        // 'Weight': item.excelweight,
+        // 'Parent Part No': item.excelparentpartid,
+        // 'Platform': item.excelPlatform,
+        // 'BomQuantity': item.excelitemcount,
+        // 'Name': item.name,
+        // 'ModelMart Id': item.categoryId,
+        // 'Representative Part Number': item.partNumber,
+        // 'Representative Part Name': item.partName,
+        // 'Representative Platform': item.platform,
+        // 'Representative Program': item.projectName,
+        // 'Representative Region': item.mfgRegion,
+        // 'Representative Should Cost': item.scost,
+        // 'Representative Gbpa': item.gbpaCost,
+        // 'Representative Displacement': item.engineDisplacement,
+        // 'Representative Model.Type': 'Original',
+        // 'Representative Weight(lbs)': this.decimalPipe.transform(item.weight * 2.20462, '1.2-2'),
+        // 'Representative Raw Material': item.rowmaterial,
+        // 'Representative Mfg Process': item.mfgProcess,
+        // 'Representative Supplier Name': item.supplierName
       }));
 
       const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(modifiedData);
@@ -1278,20 +1345,21 @@ export class CartdetailsComponent {
       excelenginedisplacement: '',
       excelplatform: '',
       excelname: '',
-      //name: '',
-      //categoryId: '',
-      //partNumber: '',
-      //projectName: '',
-      //mfgRegion: '',
-      //scost: 0,
-      //ucost: 0,
-      //invoice: '',
-      //mfgProcess: '',
-      //weight: 0,
-      //rowmaterial: '',
-      //utilization: 0,
-      //costType: '',
-      //dbdate: '',
+
+      name: '',
+      categoryId: '',
+      partNumber: '',
+      projectName: '',
+      mfgRegion: '',
+      scost: 0,
+      ucost: 0,
+      // invoice: '',
+      mfgProcess: '',
+      weight: 0,
+      rowmaterial: '',
+      utilization: 0,
+      costType: '',
+      dbdate: '',
       editable: true,
       isNew: true
     };
@@ -1393,7 +1461,7 @@ export class CartdetailsComponent {
     }
     else {
       this.Ishide2 = false;
-      this.colspanhide2 = 10;
+      this.colspanhide2 = 11;
     }
 
   }
@@ -1406,10 +1474,11 @@ export class CartdetailsComponent {
     }
     else {
       this.Ishide3 = false;
-      this.colspanhide3 = 10;
+      this.colspanhide3 = 9;
     }
 
   }
+
 
   onResizeStart(event: MouseEvent, column: HTMLElement) {
     event.preventDefault();
@@ -1433,6 +1502,8 @@ export class CartdetailsComponent {
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   }
+
+
 
 
 

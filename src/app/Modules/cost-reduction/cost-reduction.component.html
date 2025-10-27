@@ -58,39 +58,18 @@
             <h4 class="col-md-12 Categoryheader">
               <label id="cetegoryname">{{ c.key }}</label>
             </h4>
-            <!-- <div *ngFor="let item of c.value" id="prodDetailsId" class="prodDetails" (click)="toggleSelection(item)">
-              <div class="image-container">
-                <input class="input1" type="checkbox" [value]="item.value" [(ngModel)]="item.selected"
-                  (click)="handleCheckboxClick($event, item)" />
-                <img *ngIf="item.imagePath == ''; else multi" src="assets/No-Image.png" class="prdIcon" />
-                <ng-template #multi>
-                  <img src="{{ item.imagePath }}" class="prdIcon" />
-                </ng-template>
-              </div>
-              <div class="prdDescription">
-                <label id="PartName">{{ item.childCategory }}</label><br />
-              </div>
-            </div> -->
             <div *ngFor="let item of c.value" id="prodDetailsId" class="prodDetails">
               <div class="image-container">
                 <label class="clickable-wrapper">
-                  <input
-                    class="input1"
-                    type="checkbox"
-                    [value]="item.value"
-                    [(ngModel)]="item.selected"
-                    (click)="handleCheckboxClick($event, item)"
-                  />
-                  <img
-                    [src]="item.imagePath || 'assets/No-Image.png'"
-                    class="prdIcon"
-                  />
+                  <input class="input1" type="checkbox" [value]="item.value" [(ngModel)]="item.selected"
+                    (click)="handleCheckboxClick($event, item)" />
+                  <img [src]="item.imagePath || 'assets/No-Image.png'" class="prdIcon" />
                 </label>
               </div>
               <div class="prdDescription">
                 <label id="PartName">{{ item.childCategory }}</label><br />
               </div>
-            </div>            
+            </div>
             <br /><br />
           </div>
         </div>
@@ -102,7 +81,7 @@
 <div *ngIf="showcostinsights" style="text-align: center; padding: 20px;">
   <div class="row">
     <div class="col-12">
-      <h1>Welcome to Category Management <button class="btnback" (click)="backToCat3()"
+      <h1>Welcome to Cost Insights<button class="btnback" (click)="backToCat3()"
           style="float: right; margin-right: 20px;">Back</button></h1>
     </div>
 
@@ -122,12 +101,12 @@
       </div>
     </div>
 
-    <div class="col-12" *ngIf="activeButton !== 'design' && activeButton !== 'manufacturing'">
+    <div class="col-12" *ngIf="activeButton !== 'design' && activeButton !== 'manufacturing' && activeButton !== 'regional'">
       <p>Your current SC Attainment is <strong>{{ totalAttainment }}</strong></p>
     </div>
 
 
-    <div class="col-12" *ngIf="activeButton !== 'design' && activeButton !== 'manufacturing'">
+    <div class="col-12" *ngIf="activeButton !== 'design' && activeButton !== 'manufacturing' && activeButton !== 'regional'">
       <p>You have current opportunities worth <strong>{{ totalVariation }}</strong></p>
     </div>
 
@@ -165,10 +144,26 @@
     <header style="text-align: center;font-size: 24px;">
       Part Number vs Commercial Arbitrage($)
     </header>
-    <div class="graph">
+    <!-- <div class="graph">
       <div class="chart-box">
         <canvasjs-chart class="canvas-chart" [options]="chartOptions" [styles]="getGraphstyle()"
           id="chartOptionsId"></canvasjs-chart>
+      </div>
+    </div> -->
+    <div class="graph">
+      <div class="chart-box">
+        <!-- Show "No Data Found" if dataPoints array is empty -->
+        <div *ngIf="chartOptions.data[0].dataPoints.length === 0" 
+             class="text-center text-muted p-3" 
+             style="height: 396px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold;font-family: Helvetica, Arial;">
+          No Relevant Data Found
+        </div>
+    
+        <!-- Show chart only if dataPoints exist -->
+        <div *ngIf="chartOptions.data[0].dataPoints.length > 0">
+          <canvasjs-chart class="canvas-chart" [options]="chartOptions" [styles]="getGraphstyle()"
+          id="chartOptionsId"></canvasjs-chart>
+        </div>
       </div>
     </div>
 
@@ -237,7 +232,8 @@
                     class="bi bi-sort-up"></i></span></th>
               <th>User Simulated<br> Cost </th>
               <th>Supplier Quoted/<br>Invoice Price</th>
-              <th>Delta Should Cost<br>- Invoice price</th>
+              <!-- <th>Delta Should Cost<br>- Invoice price</th> -->
+              <th>Cost Delta <br>(Invoice Price-Should Cost)</th>
               <th>SC<br>Attainment <span class="my-icon" (click)="sortBy('SCAttainment',$event)"><i
                     class="bi bi-sort-up"></i></span></th>
               <th>User SC<br> Attainment </th>
@@ -450,12 +446,29 @@
   </header>
   <div class="col-12" style="margin-bottom: 20px; display: flex; justify-content: center;">
 
-    <div class="graph">
+    <!-- <div class="graph">
       <div class="chart-box">
         <canvasjs-chart class="canvas-chart" [options]="RegionchartOptions" [styles]="getChartStyles()"
           id="chartOptionsId"></canvasjs-chart>
       </div>
-    </div>
+    </div> -->
+    <div class="graph">
+      <div class="chart-box">
+        <!-- Show "No Data Found" if dataPoints array is empty -->
+        <div *ngIf="RegionchartOptions.data[0].dataPoints.length === 0" 
+             class="text-center text-muted p-3" 
+             style="height: 396px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold;font-family: Helvetica, Arial;">
+          No Relevant Data Found
+        </div>
+    
+        <!-- Show chart only if dataPoints exist -->
+        <div *ngIf="RegionchartOptions.data[0].dataPoints.length > 0">
+          <canvasjs-chart class="canvas-chart" [options]="RegionchartOptions" [styles]="getChartStyles()"
+            id="chartOptionsId">
+          </canvasjs-chart>
+        </div>
+      </div>
+    </div>    
 
   </div>
 
@@ -682,270 +695,94 @@
   style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
   <div class="row" style="width: 100%; display: flex; justify-content: center">
     <header style="text-align: center;font-size: 24px;">
-      Region vs Cost per Kg Difference($)
+      Cluster Id vs Cost Per Kg($)
     </header>
+
     <div class="graph">
       <div class="chart-box">
-        <canvasjs-chart class="Mfgcanvas-chart" [options]="MfgchartOptions"
-          id="chartOptionsId"></canvasjs-chart>
+        <!-- Show "No Data Found" if dataPoints array is empty -->
+        <div *ngIf="ClusterChartOptions.data[0].dataPoints.length === 0" 
+             class="text-center text-muted p-3" 
+             style="height: 396px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold;font-family: Helvetica, Arial;">
+          No Relevant Data Found
+        </div>
+    
+        <!-- Show chart only if dataPoints exist -->
+        <div *ngIf="ClusterChartOptions.data[0].dataPoints.length > 0">
+          <canvasjs-chart class="canvas-chart" [options]="ClusterChartOptions" [styles]="getMfgGraphstyle()"
+          id="chartOptionsId">
+        </canvasjs-chart>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="custom-legend" style="max-width: 90%;">
+      <div *ngFor="let item of clusterLegendData" class="legend-item">
+        <span class="color-box" [style.background]="item.color"></span>
+        <span class="legend-text">
+          {{ item.region }} / {{ item.process }}
+          <!-- Cluster {{ item.cluster }} — {{ item.region }} / {{ item.process }} -->
+        </span>
       </div>
     </div>
 
-    <div class="filterlabel" style="display: flex; flex-wrap: wrap; gap: 15px;">
-
-      <!-- Select Range -->
-      <div style="display: flex; flex-direction: column;">
-        <label for="date-range">Select:</label>
-        <select id="date-range" [(ngModel)]="selectedRangeMfg" (change)="onDateRangeChangeMfg()" class="custom-input"
-          style="padding: 5px">
-          <option value="">Select Range</option>
-          <option value="3">Last 3 Months</option>
-          <option value="6">Last 6 Months</option>
-          <option value="12">Last 1 Year</option>
-          <option value="24">Last 2 Year</option>
-          <option value="ALL">Select All</option>
-          <option value="CUSTOM">Custom</option>
-        </select>
-      </div>
-
-      <!-- From Date -->
-      <div style="display: flex; flex-direction: column;">
-        <label for="from-date">From Date:</label>
-        <input type="date" id="from-date" [(ngModel)]="fromDateMfg" [disabled]="selectedRangeMfg !== 'CUSTOM'"
-          [attr.min]="minDateMfg" [attr.max]="maxDateMfg" class="custom-input" style="padding: 5px" />
-      </div>
-
-      <!-- To Date -->
-      <div style="display: flex; flex-direction: column;">
-        <label for="to-date">To Date:</label>
-        <input type="date" id="to-date" [(ngModel)]="toDateMfg" [disabled]="selectedRangeMfg !== 'CUSTOM'"
-          [attr.min]="minDateMfg" [attr.max]="maxDateMfg" class="custom-input" style="padding: 5px" />
-      </div>
-
-      <!-- Status Filter -->
-      <div style="display: flex; flex-direction: column;">
-        <label for="status-filter">Status:</label>
-        <select id="status-filter" [(ngModel)]="selectedStatus_mfg" class="custom-input" style="padding: 5px;">
-          <option value="">All</option>
-          <option value="Open">Open</option>
-          <option value="Close">Close</option>
-          <option value="WIP">WIP</option>
-        </select>
-      </div>
-
-      <!-- Action Buttons -->
-      <div style="display: flex; align-items: flex-start; gap: 10px; margin-top: 25px;">
-        <button class="btn view-btn" (click)="onViewClickMfg()">View</button>
-        <button class="btn view-btn" (click)="ClearAllMfg()">Clear</button>
-        <img src="../../../../assets/exportexcel.png" class="exportToExcel" (click)="exportMfgTableToExcel()"
+    <div class="col-md-6" style="max-width: 100%; width: 90%; margin-bottom: 10px;">
+      <!-- Export Icon Positioned Top-Right of Table -->
+      <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-bottom: 5px;">
+        <img src="../../../../assets/exportexcel.png" class="exportToExcel" (click)="  exportMfgTableToExcel()"
           ngbTooltip="Export to Excel">
       </div>
-
     </div>
+
 
     <div class="col-md-6" style="max-width: 90%; width: 100%; overflow-x: auto; margin-bottom: 60px">
       <div class="table-responsive" style="border: 1px solid #808080">
-        <table class="table table-bordered table-hover table-striped" style="width: 100%; table-layout: 100%">
+        <table class="table table-bordered table-hover table-striped" style="width: 100%; table-layout: 100">
           <thead>
             <tr>
-              <th style="position: sticky; left:0px; top:-1px; z-index: 4;">Sr<br />no</th>
-              <th style="position: sticky; left: 32px; top: -1px;  z-index: 4;">Part Number1</th>
-              <th>Part Number2</th>
+              <th style="position: sticky; left:0px; top:-1px; z-index: 4;">Sr<br>no</th>
+              <th style="position: sticky; left: 32px; top: -1px;  z-index: 4;" container="body">Part Number</th>
               <th>Part Name</th>
               <th>MMID</th>
               <th>Program Name</th>
-              <th>CAT4</th>
-              <th>Supplier Mfg Location(Part1)</th>
-              <th>Supplier Mfg Location(Part2)</th>
-              <th>Process1 Tooling Cost</th>
-              <th>Process2 Tooling Cost</th>
-              <th>Process1 Invoice Cost</th>
-              <th>Process2 Invoice Cost</th>
-
-              <th>Process1 Annual Volume</th>
-              <th>Process2 Annual Volume</th>
-              <!-- <th>Supplier Quoted/Invoice<br />Price (USD) 
-                 <i (click)="MfgSortBy('TargetQuote')" class="my-icon bi bi-sort-up"></i>
-                </th> -->
-
-
+              <th>Mfg Region</th>
               <th>Debrief Date</th>
-              <th>Process1 Quote/Should Cost <span class="my-icon" (click)="MfgSortBy('Col2_First',$event)"><i
-                    class="bi bi-sort-up"></i></span> </th>
-              <th>Process1 Name</th>
-              <th>Process2 Quote/Should Cost <span class="my-icon" (click)="MfgSortBy('Col2_Second',$event)"><i
-                    class="bi bi-sort-up"></i></span></th>
-              <th>Process2 Name</th>
-              <th>Should Cost Variation in the Process <span class="my-icon"
-                  (click)="MfgSortBy('Col2_First-Col2_Second',$event)"><i class="bi bi-sort-up"></i></span> </th>
-              <th>Invoice Cost Variation</th>
-              <th>High Level Process </th>
-
-              <th>Weight(Part1)</th>
-              <th>Weight(Part2)</th>
-              <th>Cost Per Kg(Part1)</th>
-              <th>Cost Per Kg(Part2)</th>
-              <th>Cost Per Kg <br> Difference </th>
-              <th>User<br />Activity</th>
-
-              <th>Comments</th>
-              <th>Submitted By</th>
-              <th>Project Status</th>
-              <th style="position: sticky; right: 0px; z-index: 4">Action</th>
-
+              <th>High Level Process</th>
+              <th>Should Cost</th>
+              <th>Finish Weight</th>
+              <th>Should Cost Per Kg</th>
+              <th>Cluster ID</th>
             </tr>
           </thead>
           <tbody>
-            <tr
-              *ngFor="let data of mgfprocess | search: textsearch:filterMetadata  | paginate: { itemsPerPage: 25, currentPage: page }; let i = index">
 
+              <tr *ngFor="let data of mgfprocessComparison | paginate: { itemsPerPage: 25, currentPage: page };  let i=index">
               <td style="position: sticky; left:0px;">{{ (page - 1) * pageSize + i + 1 }}</td>
-              <!-- <td style="position: sticky; left: 31px;">{{ data.PartNumber }}</td> -->
-              <td style="position: sticky; left: 32px;">
-                <span ngbTooltip="{{data.PartNumber}}"> {{data.PartNumber.length > 10 ? data.PartNumber.slice(0, 10) +
-                  '...' : data.PartNumber}} </span>
-              </td>
-              <td>{{data.Part2}}</td>
+
+              <td style="position: sticky; left: 32px;"> <span ngbTooltip="{{data.PartNumber}}">
+                  {{data.PartNumber.length
+                  > 10 ? data.PartNumber.slice(0, 10) + '...' : data.PartNumber}} </span></td>
               <td>{{ data.PartName }}</td>
-              <td> <a (click)="navigateToDetails(data.CSHeaderID)" class="text-underlinecolour">{{ data.UniqueId }} </a>
-              </td>
+              <!-- <td>{{ data.MMID }}</td> -->
+              <td> <a (click)="navigateToDetails(data.CSHeaderID)" class="text-underlinecolour">{{ data.MMID }} </a>
               <td>{{ data.ProgramName }}</td>
-              <td>{{data.CAT4}}</td>
               <td>{{ data.MfgRegion }}</td>
-              <td>{{ data.Part2_region }}</td>
-              <td>{{ data.Process1_ToolingCost ? ('$' + roundToTwoDecimalPlaces(data.Process1_ToolingCost)) : '' }}</td>
-              <td>{{ data.Process2_ToolingCost ? ('$' + roundToTwoDecimalPlaces(data.Process2_ToolingCost)) : '' }}</td>
-              <td>{{ data.Process1_InvoiceCost ? ('$' + roundToTwoDecimalPlaces(data.Process1_InvoiceCost)) : '' }}</td>
-              <td>{{ data.Process2_InvoiceCost ? ('$' + roundToTwoDecimalPlaces(data.Process2_InvoiceCost)) : '' }}</td>
-
-              <td>{{ data.Process1_AnnualVolume ? ('$' + roundToTwoDecimalPlaces(data.Process1_AnnualVolume)) : '' }}
-              </td>
-              <td>{{ data.Process2_AnnualVolume ? ('$' + roundToTwoDecimalPlaces(data.Process2_AnnualVolume)) : '' }}
-              </td>
-
-              <td>{{ data.DebriefDate?.split('T')[0] }}</td>
-
-              <td>{{ data.Col2_First ? ('$' + data.Col2_First.toFixed(2)) : '' }}</td>
-              <td>{{ data.HighLevelProcess_First }}</td>
-              <td>{{ data.Col2_Second ? ('$' + data.Col2_Second.toFixed(2)) : '' }}</td>
-              <td>{{ data.HighLevelProcess_Second }}</td>
-              <td>{{ (data.Col2_First && data.Col2_Second) ? ('$' + getAbsoluteDifferenceMfg(data.Col2_First,
-                data.Col2_Second).toFixed(2)) : '' }}</td>
-
-              <td>{{ getInvoiceCostVariation(data) }}</td>
-              <td>{{ data.ProcessFlow }}</td>
-              <td>{{data.Part1_weight}}</td>
-              <td>{{data.Part2_weight}}</td>
-              <td>{{data.FromCostPerKg}}</td>
-              <td>{{data.ToCostPerKg}}</td>
-              <td>{{data.CostPerKgDifference}}</td>
-              <td style="text-align: center">
-                <i class="bi bi-cloud-upload-fill" (click)="openUploadPopupMfg(data.Mfg_ArtibageID)"
-                  style="color: #185ca4; font-size: 17px; cursor: pointer" ngbTooltip="Upload Document">
-                </i>
-                <i class="bi bi-download" (click)="downloadArbitrageZip(data.Mfg_ArtibageID,data.PartNumber,'mfg')"
-                  style="color: #2fa365;font-size: 17px;cursor: pointer;margin-left: 10px;"
-                  ngbTooltip="Download Document"></i>
-              </td>
-
-
-              <td>
-                <span (click)="openCommentsPopupMfg(data.Comments, i)" style="cursor: pointer; color: #ef7659">
-                  {{ data.Comments && data.Comments.length > 12 ? (data.Comments | slice : 0 : 12) + "..." :
-                  data.Comments || "Add Comment"}}
-                </span>
-              </td>
-
-              <td>{{ data.ModifiedBy }}</td>
-              <td>
-                <select [(ngModel)]="data.ProjectStatus" [disabled]="editingIndexMfg !== i" class="form-select"
-                  style=" width: 100%; height: 25px; font-size: 9px; font-weight: bold;">
-                  <option class="ttt" value="Open" selected>Open</option>
-                  <option value="WIP">WIP</option>
-                  <option value="Close">Close</option>
-                  <option value="Reject">Reject</option>
-                </select>
-              </td>
-              <td style="position: sticky; right: 0px; text-align: center">
-                <ng-container *ngIf="editingIndexMfg === i; else editIcon">
-                  <i class="bi bi-check-circle-fill" (click)="saveChangesMfg(data)"
-                    style="color: #2fa365; font-size: 17px; cursor: pointer" ngbTooltip="Save"></i>
-                  <i class="bi bi-x-circle-fill" (click)="cancelEditingMfg()"
-                    style=" color: #da291c;font-size: 17px;cursor: pointer;margin-left: 10px; " title="Cancel"></i>
-                </ng-container>
-                <ng-template #editIcon>
-                  <i class="bi bi-pencil-fill" style="color: #da291c; font-size: larger; cursor: pointer"
-                    (click)="editRowMfg(i)" ngbTooltip="Edit"></i>
-                </ng-template>
-              </td>
-              <!-- <td >{{ data.DebriefDate }}</td> -->
-
+              <td>{{ data.DebriefDate }}</td>
+              <td>{{ data.HighLevelProcess }}</td>
+              <!-- <td>{{ data.ShouldCost }}</td> -->
+              <td>{{ data.ShouldCost != null ? ('$ ' + data.ShouldCost.toFixed(2)) : '' }}</td>
+              <td>{{ data.FinishWeight }}</td>
+              <!-- <td>{{ data.ShouldCostPerKg }}</td> -->
+              <td>{{ data.ShouldCostPerKg != null ? ('$ ' + data.ShouldCostPerKg.toFixed(2)) : '' }}</td>
+              <td>{{ data.ClusterNumber }}</td>
             </tr>
           </tbody>
         </table>
-
-        <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ show: showModalMfg }" style="display: block"
-          *ngIf="showModalMfg">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Edit Comment</h5>
-                <label class="close modal-close-icn" (click)="closeCommentsPopupMfg()">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
-                    viewBox="0 0 16 16">
-                    <path
-                      d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                  </svg>
-                </label>
-              </div>
-              <div class="modal-body">
-                <textarea [(ngModel)]="selectedCommentMfg" rows="4" style="width: 100%"></textarea>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" (click)="saveCommentMfg()"> Save </button>
-                <button type="button" class="btn btn-sm btn-default default-btn_popup"
-                  (click)="closeCommentsPopupMfg()"> Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="modal" tabindex="-1" role="dialog" [ngClass]="{ show: showTcoUploadModalMfg }"
-          style="display: block" *ngIf="showTcoUploadModalMfg">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Upload Documents</h5>
-                <label class="close modal-close-icn" (click)="closeUploadPopupMfg()">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000" class="bi bi-x"
-                    viewBox="0 0 16 16">
-                    <path
-                      d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                  </svg>
-                </label>
-              </div>
-              <div class="modal-body">
-                <div class="input-group custom-file-button" *ngIf="showFileUploadMfg"
-                  style="margin-top: 10px; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto; display: flex; gap: 10px; align-items: center;">
-                  <label for="fileInput" class="input-group-text" style="flex-shrink: 0;">Select File</label>
-                  <input type="file" class="form-control" style="flex: 1;" (change)="handleFileSelectionMfg($event)"
-                    multiple />
-                  <button type="button" class="btn btn-sm default-btn" (click)="handleUpload('mfg',selectedMfgId)">
-                    Upload </button>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-sm  btn-default default-btn_popup" data-bs-dismis="modal"
-                  (click)="closeUploadPopupMfg()">Close</button>
-                <!-- <button type="button" class="btn btn-sm  btn-default default-btn_popup">Save</button> -->
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
       <div class="d-flex justify-content-between p-2 pagination">
 
-        <ngb-pagination [collectionSize]="filterMetadata.count" [(page)]="page" [pageSize]="pageSize" [rotate]="true"
+        <ngb-pagination [collectionSize]="mgfprocessComparison.length" [(page)]="page" [pageSize]="pageSize" [rotate]="true"
           [boundaryLinks]="true" [maxSize]="5" size="sm">
           <ng-template ngbPaginationPrevious>Prev</ng-template>
           <ng-template ngbPaginationNext>Next</ng-template>
@@ -954,61 +791,30 @@
       </div>
     </div>
 
-    <div class="col-md-6" style="max-width: 90%; width: 100%; overflow-x: auto; margin-bottom: 60px">
-      <div class="table-responsive" style="border: 1px solid #808080">
-        <table class="table table-bordered table-hover table-striped" style="width: 100%; table-layout: 100%">
-          <thead>
-            <tr>
-              <th style="position: sticky; left:0px; top:-1px; z-index: 4;">Sr<br />no</th>
-              <th style="position: sticky; left: 32px; top: -1px; z-index: 4;">Part Number</th>
-              <th>Part Name</th>
-              <th>MMID</th>
-              <th>Program Name</th>
-              <th>Supp Mfg <br>Location</th>
-              <th>Debrief Date</th>
-              <th>High Level Process</th>
-              <th>Should Cost</th>
-              <th>Finish Weight (kg)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let data of mgfprocessComparison 
-                        | paginate: { itemsPerPage: pageSizeComparison, currentPage: pageComparison }; 
-                        let i = index">
-              <td style="position: sticky; left:0px;">
-                {{ (pageComparison - 1) * pageSizeComparison + i + 1 }}
-              </td>
-              <td style="position: sticky; left: 32px;">
-                <span ngbTooltip="{{data.PartNumber}}">
-                  {{ data.PartNumber.length > 10 ? data.PartNumber.slice(0, 10) + '...' : data.PartNumber }}
-                </span>
-              </td>
-              <td>{{ data.PartName }}</td>
-              <td class="align-center"> <a (click)="navigateToDetails(data.CSHeaderID)"
-                  class="text-underlinecolour">{{data.MMID}} </a> </td>
-              <td>{{ data.ProgramName }}</td>
-              <td>{{ data.MfgRegion }}</td>
-              <td>{{ data.DebriefDate}}</td>
-              <td>{{ data.HighLevelProcess }}</td>
-              <td>$ {{ data.ShouldCost | number:'1.2-2' }}</td>
-              <td>{{ data.FinishWeight }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-
-      <div class="d-flex justify-content-between p-2 pagination">
-        <ngb-pagination [collectionSize]="mgfprocessComparison.length" [(page)]="pageComparison"
-          [pageSize]="pageSizeComparison" [rotate]="true" [boundaryLinks]="true" [maxSize]="5" size="sm">
-          <ng-template ngbPaginationPrevious>Prev</ng-template>
-          <ng-template ngbPaginationNext>Next</ng-template>
-        </ngb-pagination>
-      </div>
-    </div>
-
   </div>
 </div>
+
+
+<div class="warning-popup_design" *ngIf="showMfgWarning">
+  <div class="popup-content_design">
+    <h3 class="warning-title_design">
+      <span class="icon_design">
+        <svg fill="#fb0e0e" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+          <path d="M23,23H1c-0.4,0-0.7-0.2-0.9-0.5c-0.2-0.3-0.2-0.7,0-1l11-20c0.4-0.6,1.4-0.6,1.8,0l11,20c0.2,0.3,0.2,0.7,0,1
+          C23.7,22.8,23.4,23,23,23z M2.7,21h18.6L12,4.1L2.7,21z" />
+          <path d="M12,16c-0.6,0-1-0.4-1-1v-5c0-0.6,0.4-1,1-1s1,0.4,1,1v5C13,15.6,12.6,16,12,16z" />
+          <circle cx="12" cy="18" r="1" />
+        </svg>
+      </span>
+      Warning
+    </h3>
+    <p class="warning-msg">Please select only one category at a time for Manufacturing view.</p>
+    <div class="popup-actions_design">
+      <button class="proceed-btn_design" (click)="backToCat3()">Proceed</button>
+    </div>
+  </div>
+</div>
+
 
 <!------------------------------------------------end of mfg process Arbitrage --------------------------->
 
@@ -1019,113 +825,151 @@
   style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;">
 
   <div class="row" style="width: 100%; display: flex; justify-content: center; ">
-    <div class="graph">
+
+    <header style="text-align: center;font-size: 24px;">
+      Cluster Id vs Cost Per Kg($)
+    </header>
+
+
+    <!-- <div class="graph">
       <div class="chart-box">
         <canvasjs-chart class="canvas-chart" [options]="Designchartoptions"
-          [styles]="{ width: '100%', height: '400px', display: 'block' }" id="designChartContainer">
+          [styles]="{ width: '100%', height: '396px', display: 'block' }" id="designChartContainer">
         </canvasjs-chart>
+      </div>
+    </div> -->
+    <div class="graph">
+      <div class="chart-box">
+        <!-- Show "No Data Found" if dataPoints array is empty -->
+        <div *ngIf="Designchartoptions.data[0].dataPoints.length === 0" 
+             class="text-center text-muted p-3" 
+             style="height: 396px; display: flex; align-items: center; justify-content: center;font-size: 32px; font-weight: bold;font-family: Helvetica, Arial;">
+          No Relevant Data Found
+        </div>
+    
+        <!-- Show chart only if dataPoints exist -->
+        <div *ngIf="Designchartoptions.data[0].dataPoints.length > 0">
+          <canvasjs-chart class="canvas-chart" [options]="Designchartoptions"[styles]="getDesignGraphstyle()"
+            id="designChartContainer">
+          </canvasjs-chart>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="custom-legend" style="max-width: 90%; margin-bottom: 5px; justify-content: center;">
+      <div *ngFor="let item of designLegendData" class="legend-item">
+        <span class="color-box" [style.background]="item.color"></span>
+        <span class="legend-text">{{ item.region }}</span>
       </div>
     </div>
 
+
     <div class="col-md-6" style="max-width: 100%; width: 90%; margin-bottom: 20px">
       <fieldset class="border rounded-3 p-3">
-        <legend class="w-auto labelDetailsheader" style="margin-top:0px;">Rules Details</legend>
-          <div>
-            <table style="width: 100%;">
-              <tr *ngFor="let rule of attributeRules">
-                <td colspan="4">
-                  <div style="margin-top: 10px;"> 
-                  <!-- Fixed Rule Parameters in 3-column layout -->
-                  <table style="width: 100%;" class="fixed-table">
-                    <tr>
-                      <td style="width: 15%;"><label class="default-lbl">Part Name :</label></td>
-                      <td style="width: 18%;"><label class="default-lblvalue">{{ChekNull(rule.PartName)}}</label></td>
-                      <td style="width: 15%;"><label class="default-lbl">Length Rule :</label></td>
-                      <td style="width: 18%;"><label class="default-lblvalue">{{ChekNull(rule.LengthRule)}}</label></td>
-                      <td style="width: 15%;"><label class="default-lbl">Width Rule :</label></td>
-                      <td style="width: 18%;"><label class="default-lblvalue">{{ChekNull(rule.WidthRule)}}</label></td>
-                    </tr>
-                    <tr>
-                      <td><label class="default-lbl">Height Rule :</label></td>
-                      <td><label class="default-lblvalue">{{ChekNull(rule.HeightRule)}}</label></td>
-                      <td><label class="default-lbl">Weight Rule :</label></td>
-                      <td><label class="default-lblvalue">{{ChekNull(rule.WeightRule)}}</label></td>
-                      <td><label class="default-lbl">Material Grade Rule :</label></td>
-                      <td><label class="default-lblvalue">{{ChekNull(rule.MaterialTypeGradeRule)}}</label></td>
-                    </tr>
-                    <tr>
-                      <td><label class="default-lbl">Region Rule :</label></td>
-                      <td><label class="default-lblvalue">{{ChekNull(rule.RegionRule)}}</label></td>
-                      <td><label class="default-lbl">Debrief Date Rule :</label></td>
-                      <td><label class="default-lblvalue">{{ChekNull(rule.DebriefDateRule)}}</label></td>
-                      <td><label class="default-lbl">Type Code :</label></td>
-                      <td><label class="default-lblvalue">{{ChekNull(rule.TypeCode)}}</label></td>
-                    </tr>
-                  </table>
-                  </div>
-            
-                  <!-- Dynamic Parameters Table -->
-                  <label class="labelDetails" style="margin-top: 10px; margin-bottom: 3px;">Parameters Details</label>
-                  <table style="width: 100%; margin-top: 10px;" class="dynamic-table">
-                    <thead>
-                      <tr>
-                        <th *ngFor="let header of rule.paramHeaders1">{{ header }}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td *ngFor="let header of rule.paramHeaders1">
-                          {{ SafeValue(rule.paramMap[header]) }}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </td>
-              </tr>
-            </table>            
-           
-          </div>
-
-          <div class="row mt-3">
+        <legend class="w-auto labelDetailsheader d-flex align-items-center justify-content-between" style="margin-top:0px;">
+          <span>Rules Details</span>
+          <button type="button" class="btn btn-sm btn-link p-0 ms-2" (click)="toggleRules()" [ngbTooltip]="isRulesExpanded ? 'Collapse' : 'Expand'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#da291c"
+              class="bi bi-caret-down-square-fill"
+              [style.transform]="'rotate(' + rotationAngleRules + 'deg)'"
+              style="transition: transform 0.3s ease;" viewBox="0 0 16 16">
+              <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm4 4a.5.5 0 0 0-.374.832l4 4.5a.5.5 0 0 0 .748 0l4-4.5A.5.5 0 0 0 12 6z" />
+            </svg>
+          </button>
+        </legend>
+    
+        <ng-container *ngIf="attributeRules.length > 0">
+          <table style="width: 100%;">
+            <ng-container *ngFor="let rule of attributeRules; let i = index">
+              <ng-container *ngIf="isRulesExpanded && i >= 0">
+                <tr>
+                  <td colspan="4">
+                    <div style="margin-top: 10px;">
+                      <table style="width: 100%;" class="fixed-table">
+                        <tr>
+                          <td style="width: 15%;"><label class="default-lbl">Part Name :</label></td>
+                          <td style="width: 18%;"><label class="default-lblvalue">{{ChekNull(rule.PartName)}}</label></td>
+                          <td style="width: 15%;"><label class="default-lbl">Length :</label></td>
+                          <td style="width: 18%;"><label class="default-lblvalue">{{ChekNull(rule.LengthRule)}}</label></td>
+                          <td style="width: 15%;"><label class="default-lbl">Width :</label></td>
+                          <td style="width: 18%;"><label class="default-lblvalue">{{ChekNull(rule.WidthRule)}}</label></td>
+                        </tr>
+                        <tr>
+                          <td><label class="default-lbl">Height :</label></td>
+                          <td><label class="default-lblvalue">{{ChekNull(rule.HeightRule)}}</label></td>
+                          <td><label class="default-lbl">Weight :</label></td>
+                          <td><label class="default-lblvalue">{{ChekNull(rule.WeightRule)}}</label></td>
+                          <td><label class="default-lbl">Material Grade :</label></td>
+                          <td><label class="default-lblvalue">{{ChekNull(rule.MaterialTypeGradeRule)}}</label></td>
+                        </tr>
+                        <tr>
+                          <td><label class="default-lbl">Region :</label></td>
+                          <td><label class="default-lblvalue">{{ChekNull(rule.RegionRule)}}</label></td>
+                          <td><label class="default-lbl">Debrief Date :</label></td>
+                          <td><label class="default-lblvalue">{{ChekNull(rule.DebriefDateRule)}}</label></td>
+                          <td><label class="default-lbl">Type Code :</label></td>
+                          <td><label class="default-lblvalue">{{ChekNull(rule.TypeCode)}}</label></td>
+                        </tr>
+                      </table>
+                    </div>
+    
+                    <label class="labelDetails" style="margin-top: 10px; margin-bottom: 3px;">Parameters Details</label>
+                    <table style="width: 100%; margin-top: 10px;" class="dynamic-table">
+                      <thead>
+                        <tr>
+                          <th *ngFor="let header of rule.paramHeaders1">{{ header }}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td *ngFor="let header of rule.paramHeaders1">
+                            {{ SafeValue(rule.paramMap[header]) }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </table>
+    
+          <!--  Legend collapses with rules -->
+          <div *ngIf="isRulesExpanded" class="row mt-3">
             <div class="col-md-12">
               <label class="labelDetails" style="font-size: 12px;">Legend:</label>
               <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px; font-size: 12px;">
                 <div style="display: flex; align-items: center;">
-                  <img src="assets/dashboard_icon.png" alt="R20 Icon" style="width: 12px; height: 12px; margin-right: 6px;" />
+                  <img src="assets/dashboard_icon.png" alt="R20" style="width: 12px; height: 12px; margin-right: 6px;" />
                   <span>R20: Parameter should be within ±20%</span>
                 </div>
-      
                 <div style="display: flex; align-items: center;">
-                  <img src="assets/dashboard_icon.png" alt="R10 Icon" style="width: 12px; height: 12px; margin-right: 6px;" />
+                  <img src="assets/dashboard_icon.png" alt="R10" style="width: 12px; height: 12px; margin-right: 6px;" />
                   <span>R10: Parameter should be within ±10%</span>
                 </div>
-      
                 <div style="display: flex; align-items: center;">
-                  <img src="assets/dashboard_icon.png" alt="Optional Icon" style="width: 12px; height: 12px; margin-right: 6px;" />
+                  <img src="assets/dashboard_icon.png" alt="Optional" style="width: 12px; height: 12px; margin-right: 6px;" />
                   <span>O: Optional</span>
                 </div>
-      
                 <div style="display: flex; align-items: center;">
-                  <img src="assets/dashboard_icon.png" alt="Exact Icon" style="width: 12px; height: 12px; margin-right: 6px;" />
-                  <span>E: Exact value only</span>
+                  <img src="assets/dashboard_icon.png" alt="Exact" style="width: 12px; height: 12px; margin-right: 6px;" />
+                  <span>E: Exact Match</span>
                 </div>
               </div>
-            </div>
+            </div> 
           </div>
+        </ng-container>
       </fieldset>
     </div>
-    <!-- <div class="filterlabel" style="display: flex; flex-wrap: wrap; gap: 15px;"> -->
-      <!-- Action Buttons -->
-      
-    <!-- </div> -->
 
     <div class="col-md-6" style="max-width: 100%; width: 90%; margin-bottom: 10px;">
       <!-- Export Icon Positioned Top-Right of Table -->
       <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-bottom: 5px;">
         <img src="../../../../assets/exportexcel.png" class="exportToExcel" (click)="  exportDesignTableToExcel()"
-             ngbTooltip="Export to Excel">
+          ngbTooltip="Export to Excel">
       </div>
-      </div>
+    </div>
 
     <div class="col-md-6" style="max-width: 100%;width: 90%; overflow-x: auto;margin-bottom: 60px;  ">
       <div class="table-responsive" style="border: 1px solid #808080;">
@@ -1133,20 +977,13 @@
           style="width: 100%; table-layout: auto; font-size: 7px;">
           <thead>
             <tr>
-              <!-- Static Headers -->
-              <th>Sr<br>no</th>
+              <th style="position: sticky; left:0px; top:-1px; z-index: 4;">Sr<br>no</th>
+              <th style="position: sticky; left: 32px; top: -1px;  z-index: 4;" container="body">Part Number</th>
               <th>Part Name</th>
-              <th>Part Number</th>
-              <!-- <th>Part Number2</th> -->
+              <th>MMID</th>
               <th>Should Cost</th>
-              <!-- <th>Should Cost(Part2)</th> -->
-              <!-- <th>Should Cost Diff</th> -->
-
               <th>Cost Per Kg</th>
-              <!-- <th>Cost PerKg(Part2)</th> -->
-              <!-- <th>Cost PerKg Diff</th> -->
               <th>Weight</th>
-              <!-- <th>Weight(Part2)</th> -->
               <th>Platform</th>
               <th>Type Code</th>
               <th>Length</th>
@@ -1160,27 +997,25 @@
               <ng-container *ngFor="let header of parameterHeaders">
                 <th>{{ header || '-' }}</th>
               </ng-container>
-              <!-- <th>Design Remarks</th> -->
 
             </tr>
           </thead>
 
           <tbody>
-            <tr *ngFor="let data of design; let i = index">
-              <!-- Static Data -->
-              <td>{{ i + 1 }}</td>
-              <td>{{ data.PartName }}</td>
-              <td>{{ data.PartNumber }}</td>
-              <!-- <td>{{ data.ToPart }}</td> -->
-              <td>${{ data.ArbitrageValue.toFixed(2) }}</td>
-              <!-- <td>${{ data.ToCost.toFixed(2) }}</td> -->
-              <!-- <td>${{ data.ArbitrageValue.toFixed(2) }}</td> -->
 
-              <td>${{ data.FromCostPerKg.toFixed(2) }}</td>
-              <!-- <td>${{ data.ToCostPerKg.toFixed(2) }}</td> -->
-              <!-- <td>${{ data.CostPerKgDifference.toFixed(2) }}</td> -->
+              <tr *ngFor="let data of design | paginate: { itemsPerPage: 25, currentPage: page };  let i=index">
+                <td style="position: sticky; left:0px;">{{ (page - 1) * pageSize + i + 1 }}</td>
+              <td style="position: sticky; left: 32px;"> <span ngbTooltip="{{data.PartNumber}}">
+                  {{data.PartNumber.length > 10 ? data.PartNumber.slice(0, 10) + '...' : data.PartNumber}} </span></td>
+              <td>{{ data.PartName }}</td>
+              <td class="align-center"> <a (click)="navigateToDetails(data.CSHeaderID)"
+                class="text-underlinecolour">{{data.ModelMartId}} </a> </td>
+              <!-- <td>${{ data.ArbitrageValue.toFixed(2) }}</td>
+              <td>${{ data.FromCostPerKg.toFixed(2) }}</td> -->
+              <td>${{ data.ArbitrageValue != null ? data.ArbitrageValue.toFixed(2) : '0.00' }}</td>
+            <td>${{ data.FromCostPerKg != null ? data.FromCostPerKg.toFixed(2) : '0.00' }}</td>
+
               <td>{{ data.FromPartWeight }}</td>
-              <!-- <td>{{ data.ToPartWeight }}</td> -->
               <td>{{ data.Plat_form}}</td>
               <td>{{ data.Type_Code }}</td>
               <td>{{ data.Length }}</td>
@@ -1198,12 +1033,21 @@
                   </div>
                 </td>
               </ng-container>
-              <!-- <td>{{ data.DesignRemarks }}</td> -->
             </tr>
           </tbody>
         </table>
 
       </div>
+      <div class="d-flex justify-content-between p-2 pagination">
+
+        <ngb-pagination [collectionSize]="design.length" [(page)]="page" [pageSize]="pageSize" [rotate]="true"
+          [boundaryLinks]="true" [maxSize]="5" size="sm">
+          <ng-template ngbPaginationPrevious>Prev</ng-template>
+          <ng-template ngbPaginationNext>Next</ng-template>
+        </ngb-pagination>
+        <br>
+      </div>
+
     </div>
   </div>
   <!-- </div> -->
@@ -1234,10 +1078,4 @@
     </div>
   </div>
 </div>
-
-
-
-
-
-
 <!------------------------------------------------end of design Arbitrage --------------------------->

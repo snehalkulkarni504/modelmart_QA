@@ -468,7 +468,20 @@ td {
 }
 
 .collapsed2 {
+  min-width: 120px;
+  position: relative;
   background-color: #67729a !important;
+}
+
+.collapsed2 .resizer {
+  width: 5px;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  cursor: col-resize;
+  user-select: none;
+  z-index: 10;
 }
 
 /* .collapsed3 {
@@ -531,13 +544,17 @@ td:last-child {
 
 .table-container {
   /* height: 450px;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  width: 100%;
   border-radius: 12px;
   border: 1px solid #ddd;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   position: relative;
   text-align: center;
   margin-top: 7px; */
+
   height: 450px;
   overflow-x: auto;
   white-space: nowrap;
@@ -767,6 +784,8 @@ thead th.sticky-part-name {
 
 
 
+
+
 /* Optional: Tooltip indication */
 .popup-table-container .popup-table th[title],
 .popup-table-container .popup-table td[title] {
@@ -884,20 +903,19 @@ thead th.sticky-part-name {
   border-radius: 8px;
 }
 
+.point-label {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
 .point-value {
-  font-size: 14px;
+  font-size: 11px;
   font-weight: bold;
   margin-top: 4px;
   color: #0d6efd;
 }
-
-
-.fancy-card ul li {
-  margin: 10px 0;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
 
 
 

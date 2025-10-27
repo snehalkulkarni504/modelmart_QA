@@ -11,10 +11,10 @@ import { AdminService } from 'src/app/SharedServices/admin.service';
 })
 export class AppComponent implements OnInit {
   title = 'Model Mart';
-  previousUrl: string = '';
+  previousUrl: string | null = '';
   currentUrl: string = '';
   newArr: any = {};
-  previouspage: string = '';
+  previouspage: string | null = '';
   currentpage: string = '';
   UserId: any;
   SessionId: any;
@@ -23,18 +23,23 @@ export class AppComponent implements OnInit {
 
   constructor(private router: Router, public admin: AdminService, private elementRef: ElementRef) { }
 
-
-
   ngOnInit() {
 
     this.UserId = localStorage.getItem("userId");
     this.SessionId = localStorage.getItem("sessionId");
 
-    this.router.events.subscribe(event => {
+     this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
         this.previousUrl = this.currentUrl; // Store the previous page
         this.previouspage = this.getpagename(this.previousUrl)
-        if (this.previouspage != '') {
+
+        if (this.previouspage === 'Cost Insights' && localStorage.getItem("CIArbitrage") != undefined) {
+          this.previouspage = localStorage.getItem("CIArbitrage")
+        }
+        
+        const shouldSkip = this.previousUrl?.includes('home/designtocost/step') && event.url.includes('home/designtocost/step');
+
+        if (this.previouspage != '' && !shouldSkip) {
           this.admin.updatepageexit(localStorage.getItem("userId"), localStorage.getItem("sessionId"), this.previouspage).subscribe({
             next: (_res: any) => {
             },
@@ -49,7 +54,9 @@ export class AppComponent implements OnInit {
         this.currentUrl = event.urlAfterRedirects; // Store the new page
         console.log(`Navigated from: ${this.previousUrl} to ${this.currentUrl}`);
         this.currentpage = this.getpagename(this.currentUrl)
-        if (this.currentpage != '') {
+        const shouldSkip = this.previousUrl?.includes('home/designtocost/step') && this.currentUrl.includes('home/designtocost/step');
+
+        if (this.currentpage != '' && !shouldSkip) {
           this.admin.insertpageentry(localStorage.getItem("userId"), localStorage.getItem("sessionId"), this.currentpage).subscribe({
             next: (_res: any) => {
             },
@@ -88,7 +95,7 @@ export class AppComponent implements OnInit {
       return 'CAT3 Management'
     }
     else if (url == '/home/costinsights') {
-      return 'Category Management Page - Exhaust Manifolds'
+       return 'Cost Insights'
     }
     else if (url == '/home/toolingcost') {
       return 'Cost Details'
@@ -132,6 +139,12 @@ export class AppComponent implements OnInit {
     }
     else if (url == '/home/comparison') {
       return 'Comparison'
+    }
+    else if (url.includes('home/designtocost/step')) {
+      return 'Design for Manufacturing Assembly & Cost (DfMAC)'
+    }
+    else if (url.includes(' /home/cartdetails')) {
+      return 'Bom Simulation'
     }
 
     return ''

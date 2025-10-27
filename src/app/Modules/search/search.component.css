@@ -796,6 +796,22 @@ input[type=checkbox] {
     margin-left: 5px;
 }
 
+
+.lablessCC {
+    text-align: left;
+    font-size: 10px;
+    font-family: Helvetica, Arial !important;
+}
+
+.labletestCC {
+    margin-left: 5px;
+}
+.labletestCC2 {
+    margin-left: 5px;
+    border-bottom: 1px solid #da291c70 ;
+    border-top: 1px solid #da291c70 ;
+}
+
 .NoModelFound {
     width: 80%;
     margin-left: 10%;
@@ -1183,7 +1199,7 @@ input[type="text"]:focus {
     cursor: pointer;
 }
 
-.modal-close-icn{
+.modal-close-icn {
     position: absolute;
     top: 15px;
 }

@@ -199,6 +199,12 @@ export class SendRequestComponent implements OnInit {
       this.fileUploadService.GetFilteredHopperData(excelData).subscribe(
         (_result: any[]) => {
           this.getArr = _result;
+
+          this.IsNullDebriefDate = false;
+          this.IsNullCostType = false;
+          this.IsNullShouldCostModeller = false;
+          this.IsHopperValide = true;
+
           //console.log("view data", this.getArr)
           const UData: UpdateSendRequest = {
             // requestHeaderID: this.selectedID,
@@ -611,6 +617,7 @@ export class SendRequestComponent implements OnInit {
                 AnnualVolume: this.getArr[this.editRowIndex].annualVolume,
                 ShoudeCost: Number(this.getArr[this.editRowIndex].shouldCost).toFixed(4),
                 SourcingManagerEmail: this.getArr[this.editRowIndex].sourcingManagerEmail,
+                Platform: this.getArr[this.editRowIndex].platform,
               }
 
               //console.log('insert array', this.sendRequest);
@@ -1011,8 +1018,8 @@ export class SendRequestComponent implements OnInit {
       ModifiedBy: this.userId,
       ModelTypesID: this.modelTypesID,
       ShoudeCost: Number(this.getArr[this.editRowIndex].shouldCost).toFixed(4),
-      SourcingManagerEmail: this.getArr[this.editRowIndex].sourcingManagerEmail
-
+      SourcingManagerEmail: this.getArr[this.editRowIndex].sourcingManagerEmail,
+      Platform: this.getArr[this.editRowIndex].platform
     }
 
     this.fileUploadService.UpdateLWHandPW(this.UpdateSendRequest).subscribe({

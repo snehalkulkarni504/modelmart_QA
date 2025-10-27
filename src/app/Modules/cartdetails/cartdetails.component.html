@@ -96,17 +96,19 @@
                                 </div>
                             </ng-container>
                         </div>
+
+                        <label style="color: #da291c;margin-top: 5%;font-size:small; text-align: center;">Estimates
+                            based on {{matchraw}} matched records</label>
                     </div>
                 </div>
-
                 <!-- Formula Section -->
                 <div class="col-md-4">
                     <div class="card fancy-card">
                         <h6 class="fw-bold text-center">Cost Calculation</h6>
                         <ul class="list-unstyled small">
-                            <li><strong> Best Cost</strong> = Σ Should Cost × BOM Qty</li>
-                            <li><strong> Probable Cost</strong> = [Σ GBPA OR (Should/80%)] × BOM Qty</li>
-                            <li><strong> Worst Cost</strong> = [Σ GBPA OR (Should/75%)] × BOM Qty</li>
+                            <li style="font-size: 13px !important; margin-top: 10px;"><strong> Best Cost</strong> = Σ Should Cost OR Simulated Cost × BOM Qty</li>
+                            <li style="font-size: 13px !important; margin-top: 15px"><strong> Probable Cost</strong> = [Σ GBPA OR (Should/80%)] × BOM Qty</li>
+                            <li style="font-size: 13px !important; margin-top: 15px"><strong> Worst Cost</strong> = [Σ GBPA OR (Should/75%)] × BOM Qty</li>
                         </ul>
                     </div>
                 </div>
@@ -267,7 +269,7 @@
                             <div class="resizer" (mousedown)="onResizeStart($event, resizableColumn)"></div>
                         </th>
                         <!-- <th class="collapsed1 sticky-part-number">Displacement (L)</th> -->
-                        <th class="collapsed1">Displacement (L)</th>
+                        <th class="collapsed1" style="width: 100px !important;">Displacement (L) \ Model \ Substrate Size</th>
                         <th class="collapsed1">Bom Qty</th>
                         <th class="collapsed1" [hidden]="Ishide1">Platform </th>
                         <th class="collapsed1" [hidden]="Ishide1">Part Number</th>
@@ -292,6 +294,11 @@
                         <th [hidden]="Ishide2" class="collapsed2">Representative Program</th>
                         <th [hidden]="Ishide2" class="collapsed2">Representative Region</th>
                         <th [hidden]="Ishide2" class="collapsed2">Representative SC ($)</th>
+                        <!-- <th [hidden]="Ishide2" class="collapsed2">Representative Gbpa Cost ($)</th> -->
+                         <th [hidden]="Ishide2" class="collapsed2" #resizableGbpaCost>
+                            Representative Gbpa Cost ($)
+                            <div class="resizer" (mousedown)="onResizeStart($event, resizableGbpaCost)"></div>
+                        </th>
                         <th [hidden]="Ishide2" class="collapsed2">Representative Simulated Cost ($)</th>
                         <th [hidden]="Ishide2" class="collapsed2">Final Cost ($)</th>
                         <th [hidden]="Ishide2" class="collapsed2">Extended Cost ($)</th>
@@ -307,19 +314,19 @@
                             Representative Raw Material
                             <div class="resizer" (mousedown)="onResizeStart($event, resizableRawMaterial)"></div>
                         </th>
-                        <th class="collapsed3" [hidden]="Ishide3">Representative Invoice</th>
-                        <th [hidden]="Ishide3" class="collapsed3">Representative Engine Displacement (L)</th>
-                        <!-- <th [hidden]="Ishide3" class="collapsed3">Representative Mfg Process </th> -->
+                        <!-- <th class="collapsed3" [hidden]="Ishide3">Representative Invoice</th> -->
+                        <th [hidden]="Ishide3" class="collapsed3">Representative Engine Displacement (L) \ Model \ Substrate Size</th>
                         <th class="collapsed3" [hidden]="Ishide3" #resizableMfgProcess>
                             Representative Mfg Process
                             <div class="resizer" (mousedown)="onResizeStart($event, resizableMfgProcess)"></div>
                         </th>
+
                         <!-- <th [hidden]="Ishide3" class="collapsed3">Utilization</th> -->
-                        <!-- <th [hidden]="Ishide3" class="collapsed3">Representative Supplier Name</th> -->
                         <th class="collapsed3" [hidden]="Ishide3" #resizableSupplierName>
                             Representative Supplier Name
                             <div class="resizer" (mousedown)="onResizeStart($event, resizableSupplierName)"></div>
                         </th>
+
                         <th [hidden]="Ishide3" class="collapsed3">Representative Cost Type ($)</th>
                         <th [hidden]="Ishide3" class="collapsed3">Representative Debrief Date</th>
                     </tr>
@@ -374,8 +381,6 @@
                         </td>
 
 
-
-
                         <td [hidden]="Ishide1">
                             <span *ngIf="!row.editable">{{ row.excelmeterial }}</span>
                             <input *ngIf="row.editable" [(ngModel)]="row.excelmeterial" value="{{row.excelmeterial}}"
@@ -399,12 +404,6 @@
                             <input *ngIf="row.editable" [(ngModel)]="row.excelcosttype" value="{{row.excelcosttype}}"
                                 class="editable-input" />
                         </td> -->
-
-
-
-
-
-
                         <td [hidden]="Ishide2">{{row.platform}}</td>
                         <td>{{row.categoryId}}</td>
                         <td>{{row.partNumber}}</td>
@@ -412,6 +411,7 @@
                         <td [hidden]="Ishide2">{{row.projectName}}</td>
                         <td [hidden]="Ishide2">{{row.mfgRegion}}</td>
                         <td [hidden]="Ishide2">{{row.scost}}</td>
+                        <td [hidden]="Ishide2">{{row.gbpaCost}}</td>
                         <td [hidden]="Ishide2">{{row.ucost}}</td>
                         <td [hidden]="Ishide2" *ngIf="row.ucost <= 0">
                             <!-- <span *ngIf="!row.editable">{{row.scost}}</span>
@@ -420,8 +420,6 @@
                         </td>
                         <td [hidden]="Ishide2" *ngIf="row.ucost > 0">{{row.ucost}}</td>
                         <td [hidden]="Ishide2">{{row.totalCost}}</td>
-
-
 
                         <td [hidden]="Ishide3" *ngIf="row.ucost <= 0 && row.categoryId>0">Original</td>
                         <td [hidden]="Ishide3" *ngIf="row.ucost <= 0 && row.categoryId<=0"></td>
@@ -434,7 +432,7 @@
                         <td *ngIf="row.weight > 0">{{row.weight * 2.20462 | number:'1.2-2' }} lbs</td>
                         <td *ngIf="row.weight <=0"></td>
                         <td title="{{row.rowmaterial}}">{{row.rowmaterial}}</td>
-                        <td [hidden]="Ishide3">{{row.invoice}}</td>
+                        <!-- <td [hidden]="Ishide3">{{row.invoice}}</td> -->
                         <td [hidden]="Ishide3">{{row.engineDisplacement}}</td>
                         <td [hidden]="Ishide3">{{row.mfgProcess}}</td>
                         <!-- <td [hidden]="Ishide3">{{row.utilization}}</td> -->
@@ -452,7 +450,7 @@
                             <i class="bi bi-repeat" style="color: #da291c; font-size: medium; padding: 0 10px;"
                                 *ngIf="row.editable && !row.isNew" (click)="matchconfirmnew=false"
                                 (click)="openMatchModal(row)" ngbTooltip="Re-Run" container="body"></i>
-                            <i class="bi bi-repeat" style="color: #da291c; font-size: medium; padding-right:10px;"
+                            <i class="bi bi-repeat" style="color: #da291c; font-size: medium; padding: 0 10px;"
                                 *ngIf="row.isNew" (click)="matchconfirm=false" (click)="openMatchModalnew(row)"
                                 ngbTooltip="Re-Run" container="body"></i>
                             <i class="bi bi-x-circle-fill" style="color: #da291c; font-size: medium;"
@@ -462,7 +460,7 @@
                             <i class="bi bi-layers-fill" style="color: #da291c; font-size: medium; padding: 0 10px;"
                                 (click)="matchconfirmnew=false" (click)="matchconfirm=false" (click)="Override(row)"
                                 ngbTooltip="Override" container="body"></i>
-                            <i class="bi bi-trash-fill" style="color: #da291c; font-size: medium;"
+                            <i class="bi bi-trash-fill" style="color: #da291c; font-size: medium; padding: 0 10px;"
                                 (click)="deletepop(row.bomId)" *ngIf="!row.isNew" ngbTooltip="Delete"
                                 container="body"></i>
 
@@ -695,7 +693,7 @@
                                     </svg>
                                 </label>
                             </div>
-                            <div class="modal-body" style="padding: 0 2%;">
+                           <div class="modal-body" style="padding: 0 2%;">
                                 <div class="modal-body">
                                     <div class="popup-table-container">
                                         <table class="table table-bordered table-striped">
@@ -720,13 +718,14 @@
                                                     <th>Dimensions</th>
                                                     <th>Weight</th>
                                                     <th>Raw Material</th>
-                                                    <th>Engine Displacement</th>
+                                                    <th>Engine Displacement \ Model \ Substrate Size</th>
                                                     <th>Platform</th>
                                                     <th>Mfg Process </th>
                                                     <!-- <th>Utilization</th> -->
                                                     <th>Supplier Name</th>
                                                     <!-- <th>Cost Type</th> -->
                                                     <th>Debrief Date</th>
+                                                     <th hidden>Utilization</th>
 
 
                                                 </tr>
@@ -771,6 +770,7 @@
                                                     <td>{{row.supplierName}}</td>
                                                     <!-- <td>{{row.costType}}</td> -->
                                                     <td>{{row.dbdate | date:'dd/MM/yyyy'}}</td>
+                                                     <td hidden>{{row.utilization}}</td>
                                                     <!-- <td style="position: sticky; right: 5%; background:white;z-index: 2;"> -->
 
 
